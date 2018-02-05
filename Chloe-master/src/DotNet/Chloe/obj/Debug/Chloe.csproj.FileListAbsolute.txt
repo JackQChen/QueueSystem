@@ -1,0 +1,9 @@
+D:\SourceCode\Chloe-master\src\DotNet\Chloe\bin\Debug\Chloe.dll
+D:\SourceCode\Chloe-master\src\DotNet\Chloe\bin\Debug\Chloe.pdb
+D:\SourceCode\Chloe-master\src\DotNet\Chloe\obj\Debug\Chloe.dll
+D:\SourceCode\Chloe-master\src\DotNet\Chloe\obj\Debug\Chloe.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe\bin\Debug\Chloe.dll
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe\bin\Debug\Chloe.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe\obj\Debug\Chloe.dll
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe\obj\Debug\Chloe.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe\obj\Debug\Chloe.csprojResolveAssemblyReference.cache

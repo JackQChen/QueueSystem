@@ -1,0 +1,66 @@
+System.DllNotFoundException: 无法加载 DLL“SocketLib.dll”: 找不到指定的模块。 (异常来自 HRESULT:0x8007007E)。
+   在 Sdk.Create_HP_TcpClientListener()
+   在 MessageLib.TcpClient.CreateListener()
+   在 MessageLib.TcpClient..ctor()
+   在 MessageClient.Client..ctor() 位置 D:\SourceCode\QueueSystem\MessageService\MessageClient\Client.cs:行号 18
+   在 CallSystem.frmMain..ctor() 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\frmMain.cs:行号 39
+   在 CallSystem.Program.Main() 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\Program.cs:行号 20
+   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading.ThreadHelper.ThreadStart()System.DllNotFoundException: 无法加载 DLL“SocketLib.dll”: 找不到指定的模块。 (异常来自 HRESULT:0x8007007E)。
+   在 Sdk.Create_HP_TcpClientListener()
+   在 MessageLib.TcpClient.CreateListener()
+   在 MessageLib.TcpClient..ctor()
+   在 MessageClient.Client..ctor() 位置 D:\SourceCode\QueueSystem\MessageService\MessageClient\Client.cs:行号 18
+   在 CallSystem.frmMain..ctor() 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\frmMain.cs:行号 39
+   在 CallSystem.Program.Main() 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\Program.cs:行号 20
+   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading.ThreadHelper.ThreadStart()System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CallSystem.frmMain.frmMain_Load(Object sender, EventArgs e) 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\frmMain.cs:行号 84
+   在 System.Windows.Forms.Form.OnLoad(EventArgs e)
+   在 System.Windows.Forms.Form.OnCreateControl()
+   在 System.Windows.Forms.Control.CreateControl(Boolean fIgnoreVisible)
+   在 System.Windows.Forms.Control.CreateControl()
+   在 System.Windows.Forms.Control.WmShowWindow(Message& m)
+   在 System.Windows.Forms.Control.WndProc(Message& m)
+   在 System.Windows.Forms.Form.WmShowWindow(Message& m)
+   在 System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)System.InvalidOperationException: 线程间操作无效: 从不是创建控件“listView1”的线程访问它。
+   在 System.Windows.Forms.Control.get_Handle()
+   在 System.Windows.Forms.Control.SendMessage(Int32 msg, Int32 wparam, Int32 lparam)
+   在 System.Windows.Forms.ListView.InsertItemsNative(Int32 index, ListViewItem[] items)
+   在 System.Windows.Forms.ListView.InsertItems(Int32 displayIndex, ListViewItem[] items, Boolean checkHosting)
+   在 System.Windows.Forms.ListView.ListViewNativeItemCollection.Add(ListViewItem value)
+   在 System.Windows.Forms.ListView.ListViewItemCollection.Add(ListViewItem value)
+   在 System.Windows.Forms.ListView.ListViewItemCollection.Add(String text, Int32 imageIndex)
+   在 CallSystem.frmMain.CallNo(Int32 adress) 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\frmMain.cs:行号 256
+   在 CallSystem.frmMain.serialPort_DataReceived(Object sender, SerialDataReceivedEventArgs e) 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\frmMain.cs:行号 154
+   在 System.IO.Ports.SerialPort.CatchReceivedEvents(Object src, SerialDataReceivedEventArgs e)
+   在 System.IO.Ports.SerialStream.EventLoopRunner.CallReceiveEvents(Object state)
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   在 System.Threading.ThreadPoolWorkQueue.Dispatch()System.InvalidOperationException: 线程间操作无效: 从不是创建控件“listView1”的线程访问它。
+   在 System.Windows.Forms.Control.get_Handle()
+   在 System.Windows.Forms.Control.SendMessage(Int32 msg, Int32 wparam, Int32 lparam)
+   在 System.Windows.Forms.ListView.InsertItemsNative(Int32 index, ListViewItem[] items)
+   在 System.Windows.Forms.ListView.InsertItems(Int32 displayIndex, ListViewItem[] items, Boolean checkHosting)
+   在 System.Windows.Forms.ListView.ListViewNativeItemCollection.Add(ListViewItem value)
+   在 System.Windows.Forms.ListView.ListViewItemCollection.Add(ListViewItem value)
+   在 System.Windows.Forms.ListView.ListViewItemCollection.Add(String text, Int32 imageIndex)
+   在 CallSystem.frmMain.CallNo(Int32 adress) 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\frmMain.cs:行号 256
+   在 CallSystem.frmMain.serialPort_DataReceived(Object sender, SerialDataReceivedEventArgs e) 位置 D:\SourceCode\QueueSystem\CallSystem\CallSystem\frmMain.cs:行号 154
+   在 System.IO.Ports.SerialPort.CatchReceivedEvents(Object src, SerialDataReceivedEventArgs e)
+   在 System.IO.Ports.SerialStream.EventLoopRunner.CallReceiveEvents(Object state)
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   在 System.Threading.ThreadPoolWorkQueue.Dispatch()

@@ -1,0 +1,13 @@
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\SoundPlayer.exe
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\SoundPlayer.pdb
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\obj\Debug\SoundPlayer.FrmMain.resources
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\obj\Debug\SoundPlayer.csproj.GenerateResource.Cache
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\obj\Debug\SoundPlayer.exe
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\obj\Debug\SoundPlayer.pdb
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\MessageClient.dll
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\MessageLib.dll
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\QueueMessage.dll
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\QueueMessage.pdb
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\SoundPlayer.exe.config
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\MessageClient.pdb
+D:\SourceCode\QueueSystem\SoundPlayer\SoundPlayer\bin\Debug\log4net.dll

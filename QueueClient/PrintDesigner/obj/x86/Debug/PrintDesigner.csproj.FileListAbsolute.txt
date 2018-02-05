@@ -1,0 +1,7 @@
+D:\SourceCode\QueueSystem\QueueClient\QueueClient\bin\Debug\PrintDesigner.exe
+D:\SourceCode\QueueSystem\QueueClient\QueueClient\bin\Debug\PrintDesigner.pdb
+D:\SourceCode\QueueSystem\QueueClient\PrintDesigner\obj\x86\Debug\PrintDesigner.csprojResolveAssemblyReference.cache
+D:\SourceCode\QueueSystem\QueueClient\PrintDesigner\obj\x86\Debug\PrintDesigner.Properties.Resources.resources
+D:\SourceCode\QueueSystem\QueueClient\PrintDesigner\obj\x86\Debug\PrintDesigner.csproj.GenerateResource.Cache
+D:\SourceCode\QueueSystem\QueueClient\PrintDesigner\obj\x86\Debug\PrintDesigner.exe
+D:\SourceCode\QueueSystem\QueueClient\PrintDesigner\obj\x86\Debug\PrintDesigner.pdb

@@ -1,0 +1,14 @@
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\bin\Debug\ReportManager.dll
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\bin\Debug\ReportManager.pdb
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\bin\Debug\FastReport.Bars.dll
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\bin\Debug\FastReport.dll
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\bin\Debug\FastReport.Editor.dll
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\obj\Debug\ReportManager.FrmPreview.resources
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\obj\Debug\ReportManager.PreviewControlEx.resources
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\obj\Debug\ReportManager.Properties.Resources.resources
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\obj\Debug\ReportManager.csproj.GenerateResource.Cache
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\obj\Debug\ReportManager.dll
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\obj\Debug\ReportManager.pdb
+D:\SourceCode\QueueSystem\QueueClient\QueueClient\bin\Debug\ReportManager.dll
+D:\SourceCode\QueueSystem\QueueClient\QueueClient\bin\Debug\ReportManager.pdb
+D:\SourceCode\QueueSystem\QueueClient\ReportManager\obj\Debug\ReportManager.csprojResolveAssemblyReference.cache

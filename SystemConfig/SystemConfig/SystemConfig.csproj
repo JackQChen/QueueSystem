@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BBF946AE-4613-487A-9A58-1FE4735A69CE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SystemConfig</RootNamespace>
+    <AssemblyName>SystemConfig</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BLL">
+      <HintPath>..\..\Service\BLL\bin\Debug\BLL.dll</HintPath>
+    </Reference>
+    <Reference Include="IrisSkin2">
+      <HintPath>..\..\Lib\IrisSkin2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Model">
+      <HintPath>..\..\Service\BLL\bin\Debug\Model.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AsyncWork.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\IDataGrid.cs" />
+    <Compile Include="DataGrids\IExtension.cs" />
+    <Compile Include="DataGrids\ucTBusinessAttributeGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTBusinessAttributeGrid.Designer.cs">
+      <DependentUpon>ucTBusinessAttributeGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTBusinessGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTBusinessGrid.Designer.cs">
+      <DependentUpon>ucTBusinessGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTLedControllerGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTLedControllerGrid.Designer.cs">
+      <DependentUpon>ucTLedControllerGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTLedWindowGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTLedWindowGrid.Designer.cs">
+      <DependentUpon>ucTLedWindowGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTUnitGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTUnitGrid.Designer.cs">
+      <DependentUpon>ucTUnitGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTUserGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTUserGrid.Designer.cs">
+      <DependentUpon>ucTUserGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTWindowBusinessGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTWindowBusinessGrid.Designer.cs">
+      <DependentUpon>ucTWindowBusinessGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTWindowGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTWindowGrid.Designer.cs">
+      <DependentUpon>ucTWindowGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTWindowAreaGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTWindowAreaGrid.Designer.cs">
+      <DependentUpon>ucTWindowAreaGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ucTWindowUserGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGrids\ucTWindowUserGrid.Designer.cs">
+      <DependentUpon>ucTWindowUserGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\Controls\ValueTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Editor\ICheckData.cs" />
+    <Compile Include="Editor\Controls\NumericTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Editor\Search\SearchDataGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Editor\Search\SearchPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTLedControllerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTLedControllerEditor.Designer.cs">
+      <DependentUpon>ucTLedControllerEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTBusinessAttributeEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTBusinessAttributeEditor.Designer.cs">
+      <DependentUpon>ucTBusinessAttributeEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTBusinessEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTBusinessEditor.Designer.cs">
+      <DependentUpon>ucTBusinessEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTLedWindowEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTLedWindowEditor.Designer.cs">
+      <DependentUpon>ucTLedWindowEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTUnitEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTUnitEditor.Designer.cs">
+      <DependentUpon>ucTUnitEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTUserEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTUserEditor.Designer.cs">
+      <DependentUpon>ucTUserEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTWindowAreaEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTWindowAreaEditor.Designer.cs">
+      <DependentUpon>ucTWindowAreaEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTWindowBusinessEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTWindowBusinessEditor.Designer.cs">
+      <DependentUpon>ucTWindowBusinessEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTWindowEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTWindowEditor.Designer.cs">
+      <DependentUpon>ucTWindowEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ucTWindowUserEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\ucTWindowUserEditor.Designer.cs">
+      <DependentUpon>ucTWindowUserEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmEditor.Designer.cs">
+      <DependentUpon>FrmEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLogQuery.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLogQuery.Designer.cs">
+      <DependentUpon>FrmLogQuery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMain.Designer.cs">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DataGrids\ucTBusinessAttributeGrid.resx">
+      <DependentUpon>ucTBusinessAttributeGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTBusinessGrid.resx">
+      <DependentUpon>ucTBusinessGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTLedControllerGrid.resx">
+      <DependentUpon>ucTLedControllerGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTLedWindowGrid.resx">
+      <DependentUpon>ucTLedWindowGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTUnitGrid.resx">
+      <DependentUpon>ucTUnitGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTUserGrid.resx">
+      <DependentUpon>ucTUserGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTWindowBusinessGrid.resx">
+      <DependentUpon>ucTWindowBusinessGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTWindowGrid.resx">
+      <DependentUpon>ucTWindowGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTWindowAreaGrid.resx">
+      <DependentUpon>ucTWindowAreaGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGrids\ucTWindowUserGrid.resx">
+      <DependentUpon>ucTWindowUserGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Search\SearchPanel.resx">
+      <DependentUpon>SearchPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTLedControllerEditor.resx">
+      <DependentUpon>ucTLedControllerEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTBusinessAttributeEditor.resx">
+      <DependentUpon>ucTBusinessAttributeEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTBusinessEditor.resx">
+      <DependentUpon>ucTBusinessEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTLedWindowEditor.resx">
+      <DependentUpon>ucTLedWindowEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTUnitEditor.resx">
+      <DependentUpon>ucTUnitEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTUserEditor.resx">
+      <DependentUpon>ucTUserEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTWindowAreaEditor.resx">
+      <DependentUpon>ucTWindowAreaEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTWindowBusinessEditor.resx">
+      <DependentUpon>ucTWindowBusinessEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTWindowEditor.resx">
+      <DependentUpon>ucTWindowEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\ucTWindowUserEditor.resx">
+      <DependentUpon>ucTWindowUserEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmEditor.resx">
+      <DependentUpon>FrmEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLogQuery.resx">
+      <DependentUpon>FrmLogQuery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Resources\skin.ssk" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\取消.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\确认.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\刷新.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\修改.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\增加.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\作废.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\查找.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PropertiesIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\保存.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\打印.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\复制.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\列表.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\停止.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\新增.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\粘贴.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

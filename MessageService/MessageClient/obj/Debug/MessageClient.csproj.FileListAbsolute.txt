@@ -1,0 +1,13 @@
+D:\SourceCode\QueueSystem\MessageService\MessageClient\bin\Debug\MessageClient.dll
+D:\SourceCode\QueueSystem\MessageService\MessageClient\bin\Debug\MessageClient.pdb
+D:\SourceCode\QueueSystem\MessageService\MessageClient\bin\Debug\MessageLib.dll
+D:\SourceCode\QueueSystem\MessageService\MessageClient\bin\Debug\QueueMessage.dll
+D:\SourceCode\QueueSystem\MessageService\MessageClient\bin\Debug\QueueMessage.pdb
+D:\SourceCode\QueueSystem\Bin\MessageClient.dll
+D:\SourceCode\QueueSystem\Bin\MessageClient.pdb
+D:\SourceCode\QueueSystem\MessageService\MessageClient\obj\Debug\MessageClient.MessageIndicator.resources
+D:\SourceCode\QueueSystem\MessageService\MessageClient\obj\Debug\MessageClient.Properties.Resources.resources
+D:\SourceCode\QueueSystem\MessageService\MessageClient\obj\Debug\MessageClient.csproj.GenerateResource.Cache
+D:\SourceCode\QueueSystem\MessageService\MessageClient\obj\Debug\MessageClient.dll
+D:\SourceCode\QueueSystem\MessageService\MessageClient\obj\Debug\MessageClient.pdb
+D:\SourceCode\QueueSystem\MessageService\MessageClient\obj\Debug\MessageClient.csprojResolveAssemblyReference.cache

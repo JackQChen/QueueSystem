@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{539C4F77-3868-4C18-A78E-75B7F45841B7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ChloeDemo</RootNamespace>
+    <AssemblyName>ChloeDemo</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>..\lib\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\lib\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConsoleHelper.cs" />
+    <Compile Include="DbCommandInterceptor.cs" />
+    <Compile Include="DbHelper.cs" />
+    <Compile Include="MsSqlDemo.cs" />
+    <Compile Include="MySqlConnectionFactory.cs" />
+    <Compile Include="MySqlDemo.cs" />
+    <Compile Include="OracleConnectionFactory.cs" />
+    <Compile Include="OracleDemo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterMappingTypeDemo.cs" />
+    <Compile Include="SQLiteConnectionFactory.cs" />
+    <Compile Include="SQLiteDemo.cs" />
+    <Compile Include="TestEntity.cs" />
+    <Compile Include="User.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Chloe.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chloe.Extension\Chloe.Extension.csproj">
+      <Project>{d86e8ba3-41db-4cdd-a84b-b3919974fdac}</Project>
+      <Name>Chloe.Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chloe.MySql\Chloe.MySql.csproj">
+      <Project>{d2f4970b-35ba-4855-befa-75adb44bc196}</Project>
+      <Name>Chloe.MySql</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chloe.Oracle\Chloe.Oracle.csproj">
+      <Project>{ae9ac627-1674-47c9-9de4-a80664c5ee0a}</Project>
+      <Name>Chloe.Oracle</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chloe.SQLite\Chloe.SQLite.csproj">
+      <Project>{a89888e2-7ee1-4490-b860-d6dbf5601958}</Project>
+      <Name>Chloe.SQLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chloe.SqlServer\Chloe.SqlServer.csproj">
+      <Project>{c77e3e54-36cf-4ae9-bad7-6c5c524fffcf}</Project>
+      <Name>Chloe.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chloe\Chloe.csproj">
+      <Project>{251cae99-2279-4b09-afe1-123c69030457}</Project>
+      <Name>Chloe</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="chloe-mssql.sql" />
+    <Content Include="chloe-mysql.sql" />
+    <Content Include="chloe-oracle.sql" />
+    <Content Include="x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

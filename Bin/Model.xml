@@ -1,0 +1,868 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Model</name>
+    </assembly>
+    <members>
+        <member name="P:Model.TLineUpMaxNoModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLineUpMaxNoModel.unitSeq">
+            <summary>
+            部门编码
+            </summary>
+        </member>
+        <member name="P:Model.TLineUpMaxNoModel.busiSeq">
+            <summary>
+            业务编码
+            </summary>
+        </member>
+        <member name="P:Model.TLineUpMaxNoModel.areaSeq">
+            <summary>
+            区域编码
+            </summary>
+        </member>
+        <member name="P:Model.TLineUpMaxNoModel.lineDate">
+            <summary>
+            日期
+            </summary>
+        </member>
+        <member name="P:Model.TLineUpMaxNoModel.maxNo">
+            <summary>
+            当天最大号
+            </summary>
+        </member>
+        <member name="T:Model.TGetCardModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.custCardId">
+            <summary>
+            身份证
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.controlSeq">
+            <summary>
+            业务流水号
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.outCardTime">
+            <summary>
+            出证时间
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.unitSeq">
+            <summary>
+            办理单位编码
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.unitName">
+            <summary>
+            办理单位
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.busTypeSeq">
+            <summary>
+            业务类型编码
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.busTypeName">
+            <summary>
+            业务类型名称
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.type">
+            <summary>
+            类型（0：取票机评价 1：评价器评价）
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.custCardId">
+            <summary>
+            身份证号码
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.controlSeq">
+            <summary>
+            评价流水号
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.approveSeq">
+            <summary>
+            业务流水号
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.approveName">
+            <summary>
+            业务名称
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.unitSeq">
+            <summary>
+            部门ID
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.unitName">
+            <summary>
+            部门名称
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.handId">
+            <summary>
+            业务处理ID
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.windowUser">
+            <summary>
+            窗口操作员
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.windowNumber">
+            <summary>
+            窗口号
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.qNumber">
+            <summary>
+            排队号
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.handleTime">
+            <summary>
+            处理时间
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.evaluateResult">
+            <summary>
+            评价结果（0默认1不满意3满意 4非常满意）
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.evaluateAttitude">
+            <summary>
+            服务态度 1-5分
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.evaluateQuality">
+            <summary>
+            完成质量1-5分
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.evaluateEfficiency">
+            <summary>
+            处理效率1-5分
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.evaluateHonest">
+            <summary>
+            廉洁自律1-5分
+            </summary>
+        </member>
+        <member name="T:Model.TWindowUserModel">
+            <summary>
+            窗口用户对应
+            </summary>
+        </member>
+        <member name="P:Model.TWindowUserModel.ID">
+            <summary>
+            ID
+            </summary> 
+        </member>
+        <member name="P:Model.TWindowUserModel.WindowID">
+            <summary>
+            窗口ID
+            </summary>
+        </member>
+        <member name="P:Model.TWindowUserModel.UserID">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:Model.TWindowUserModel.CreateDateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:Model.TUnitModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TUnitModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TUnitModel.unitSeq">
+            <summary>
+            单位编码
+            </summary>
+        </member>
+        <member name="P:Model.TUnitModel.unitName">
+            <summary>
+            单位名称
+            </summary>
+        </member>
+        <member name="P:Model.TUnitModel.orderNum">
+            <summary>
+            排序号
+            </summary>
+        </member>
+        <member name="T:Model.TRegisterModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.custCardId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.userCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.paassword">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.mobilePhone">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.registerDateTime">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.registerAddress">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Model.TWindowAreaModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TWindowAreaModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TWindowAreaModel.areaName">
+            <summary>
+            区域名称
+            </summary>
+        </member>
+        <member name="P:Model.TWindowAreaModel.remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:Model.TBusinessModel">
+            <summary>
+            业务操作
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.unitName">
+            <summary>
+            业务所属部门名称
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.unitSeq">
+            <summary>
+            业务所属部门ID
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.busiSeq">
+            <summary>
+            预约业务流水号
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.busiCode">
+            <summary>
+            预约业务编号
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.busiName">
+            <summary>
+            预约业务名称
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.busiType">
+            <summary>
+            预约类型。1-简单；2-详细
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.acceptBusi">
+            <summary>
+            是否可预约办件
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.getBusi">
+            <summary>
+            是否可预约领件
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.askBusi">
+            <summary>
+            是否可预约咨询
+            </summary>
+        </member>
+        <member name="P:Model.TWindowBusinessModel.ID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TWindowBusinessModel.WindowID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TWindowBusinessModel.unitSeq">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TWindowBusinessModel.busiSeq">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TWindowBusinessModel.priorityLevel">
+            <summary>
+            优先级
+            </summary>
+        </member>
+        <member name="T:Model.TQueueModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.idCard">
+            <summary>
+            身份证号
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.qNmae">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.qNumber">
+            <summary>
+            排队号
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.ticketNumber">
+            <summary>
+            票号
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.ticketTime">
+            <summary>
+            排队时间
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.busTypeSeq">
+            <summary>
+            业务类型编码
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.busTypeName">
+            <summary>
+            业务类型名称
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.windowNumber">
+            <summary>
+            窗口号
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.windowName">
+            <summary>
+            窗口名称
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.unitName">
+            <summary>
+            单位名称
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.unitSeq">
+            <summary>
+            单位编码
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.vipLever">
+            <summary>
+            vip级别
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.state">
+            <summary>
+            处理状态(排队0、其他1)
+            </summary>
+        </member>
+        <member name="T:Model.TDictionaryModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TDictionaryModel.ID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TDictionaryModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:Model.TDictionaryModel.Group">
+            <summary>
+            分组
+            </summary>
+        </member>
+        <member name="P:Model.TDictionaryModel.Value">
+            <summary>
+            项目值
+            </summary>
+        </member>
+        <member name="P:Model.TDictionaryModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:Model.TAppointmentModel">
+            <summary>
+            预约实体
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.type">
+            <summary>
+            类型： 0 预约 1 申办
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.custCardId">
+            <summary>
+            身份证号
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.reserveSeq">
+            <summary>
+            预约号/
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.busiCode">
+            <summary>
+            预约业务编号
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.busiName">
+            <summary>
+            预约业务名称
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.userName">
+            <summary>
+            用户姓名
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.paperType">
+            <summary>
+            证件类型
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.paperCode">
+            <summary>
+            证件号码
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.mobilePhone">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.comName">
+            <summary>
+            企业名称
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.reserveDate">
+            <summary>
+            预约日期
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.reserveStartTime">
+            <summary>
+            预约开始时间
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.reserveEndTime">
+            <summary>
+            预约结束时间
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.isTake">
+            <summary>
+            预约状态
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.queueCode">
+            <summary>
+            排队号
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.approveSeq">
+            <summary>
+            事件流水号
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.approveName">
+            <summary>
+            事项名称
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.unitCode">
+            <summary>
+            单位流水号
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.unitName">
+            <summary>
+            单位名称
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.controlSeq">
+            <summary>
+            申办业务流水号
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.custName">
+            <summary>
+            申办企业名称
+            </summary>
+        </member>
+        <member name="P:Model.TLedControllerModel.ID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLedControllerModel.IP">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLedControllerModel.Port">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLedControllerModel.DeviceAddress">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLedControllerModel.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Model.DictionaryString">
+            <summary>
+            字典表字段
+            </summary>
+        </member>
+        <member name="F:Model.DictionaryString.WorkState">
+            <summary>
+            工作状态
+            </summary>
+        </member>
+        <member name="F:Model.DictionaryString.UserSex">
+            <summary>
+            人员性别
+            </summary>
+        </member>
+        <member name="F:Model.DictionaryString.AppointmentType">
+            <summary>
+            预约类型
+            </summary>
+        </member>
+        <member name="T:Model.TWindowModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.ID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.Name">
+            <summary>
+            窗口名称
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.Number">
+            <summary>
+            窗口号
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.Type">
+            <summary>
+            窗口业务类型
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.State">
+            <summary>
+            窗口状态
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.CallNumber">
+            <summary>
+            呼叫器编号
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.AreaName">
+            <summary>
+            区域名称
+            </summary>
+        </member>
+        <member name="P:Model.TLedWindowModel.ID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLedWindowModel.ControllerID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLedWindowModel.WindowNumber">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLedWindowModel.DisplayText">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TLedWindowModel.Position">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Model.TUserModel">
+            <summary>
+            用户实体
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.Sex">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.Code">
+            <summary>
+            工号
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.State">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.Photo">
+            <summary>
+            照片
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.handleId">
+            <summary>
+            处理业务编号
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.idCard">
+            <summary>
+            身份证号码
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.qNmae">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.qId">
+            <summary>
+            排队编号
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.ticketNumber">
+            <summary>
+            票号
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.ticketTime">
+            <summary>
+            出票日期
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.busiSeq">
+            <summary>
+            业务编号
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.unitSeq">
+            <summary>
+            部门编号
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.windowNumber">
+            <summary>
+            窗口号
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.state">
+            <summary>
+            状态（已弃号-1,、已叫号0、已完成1）
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.windowUser">
+            <summary>
+            当前操作员
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.handleTime">
+            <summary>
+            处理时间
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.unitSeq">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.busiSeq">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.busiCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.handleStartTime">
+            <summary>
+            处理开始时间(时分秒)
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.handleEndTime">
+            <summary>
+            处理结束时间(时分秒)
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.lineUpMax">
+            <summary>
+            单日排队最多大数
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.lineUpWarningMax">
+            <summary>
+            等候人数预警值
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.ticketPrefix">
+            <summary>
+            该业务票号前缀
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.remark">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.timeInterval">
+            <summary>
+            出票时间段（一个时间区间中间用逗号，多个时间段用竖线| 时间需要标准时间格式[HH:mm:ss]）
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.ticketRestriction">
+            <summary>
+            按业务类型限制出票（需要和timeInterval分段对应，中间用逗号分隔）
+            </summary>
+        </member>
+    </members>
+</doc>

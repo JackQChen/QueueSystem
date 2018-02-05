@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>ChloeDemo</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>ChloeDemo</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chloe.Extension\Chloe.Extension.csproj" />
+    <ProjectReference Include="..\Chloe.Oracle\Chloe.Oracle.csproj" />
+    <ProjectReference Include="..\Chloe\Chloe.csproj" />
+    <ProjectReference Include="..\Chloe.MySql\Chloe.MySql.csproj" />
+    <ProjectReference Include="..\Chloe.SQLite\Chloe.SQLite.csproj" />
+    <ProjectReference Include="..\Chloe.SqlServer\Chloe.SqlServer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="1.0.1" />
+    <PackageReference Include="Mono.Data.OracleClientCore" Version="1.0.0" />
+    <!--<PackageReference Include="MySql.Data.Core" Version="7.0.4-IR-191" />-->
+    <PackageReference Include="MySqlConnector" Version="0.26.5" />
+  </ItemGroup>
+
+</Project>

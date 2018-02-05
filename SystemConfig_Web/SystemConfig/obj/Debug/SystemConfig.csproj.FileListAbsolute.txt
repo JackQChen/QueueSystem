@@ -1,0 +1,5 @@
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\SystemConfig.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\SystemConfig.pdb
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\obj\Debug\SystemConfig.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\obj\Debug\SystemConfig.pdb
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\obj\Debug\SystemConfig.csprojResolveAssemblyReference.cache

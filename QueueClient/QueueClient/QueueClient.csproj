@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\QueueClient.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\QueueClient.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>queue.ico</ApplicationIcon>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{37ED6160-5DE2-43A8-969F-E59C51A4081E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QueueClient</RootNamespace>
+    <AssemblyName>QueueClient</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BLL">
+      <HintPath>..\..\Service\BLL\bin\Debug\BLL.dll</HintPath>
+    </Reference>
+    <Reference Include="FastReport, Version=1.8.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\FastReport.dll</HintPath>
+    </Reference>
+    <Reference Include="FastReport.Bars, Version=1.8.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\FastReport.Bars.dll</HintPath>
+    </Reference>
+    <Reference Include="FastReport.Editor, Version=1.8.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\FastReport.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Model">
+      <HintPath>..\..\Service\Model\bin\Debug\Model.dll</HintPath>
+    </Reference>
+    <Reference Include="Register">
+      <HintPath>..\..\Lib\Register.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppointmentCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AppointmentCard.Designer.cs">
+      <DependentUpon>AppointmentCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AsyncWork.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BoShiPrinter.cs" />
+    <Compile Include="BusyType.cs" />
+    <Compile Include="CardIdentity.cs" />
+    <Compile Include="CVRSDK.cs" />
+    <Compile Include="EvaluateCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EvaluateCard.Designer.cs">
+      <DependentUpon>EvaluateCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMsg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMsg.Designer.cs">
+      <DependentUpon>frmMsg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form3.Designer.cs">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMessage.Designer.cs">
+      <DependentUpon>frmMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMsg2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMsg2.Designer.cs">
+      <DependentUpon>frmMsg2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HttpHelper.cs" />
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="PageLocation.cs" />
+    <Compile Include="Person.cs" />
+    <Compile Include="TxPrn.cs" />
+    <Compile Include="ucpnAppointment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucpnAppointment.Designer.cs">
+      <DependentUpon>ucpnAppointment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucpnCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucpnCard.Designer.cs">
+      <DependentUpon>ucpnCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucpnEvaluate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucpnEvaluate.Designer.cs">
+      <DependentUpon>ucpnEvaluate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucpnMain.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucpnMain.Designer.cs">
+      <DependentUpon>ucpnMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucpnPwd.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucpnPwd.Designer.cs">
+      <DependentUpon>ucpnPwd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucpnReadCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucpnReadCard.Designer.cs">
+      <DependentUpon>ucpnReadCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PrintHelper.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="frmMain2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain2.Designer.cs">
+      <DependentUpon>frmMain2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain3.Designer.cs">
+      <DependentUpon>frmMain3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucpnSelectBusy.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucpnSelectBusy.Designer.cs">
+      <DependentUpon>ucpnSelectBusy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucpnSelectUnit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucpnSelectUnit.Designer.cs">
+      <DependentUpon>ucpnSelectUnit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VirtualControlContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="frmThankMsg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmThankMsg.Designer.cs">
+      <DependentUpon>frmThankMsg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTimeMsg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTimeMsg.Designer.cs">
+      <DependentUpon>frmTimeMsg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRePrint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRePrint.Designer.cs">
+      <DependentUpon>frmRePrint.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AppointmentCard.resx">
+      <DependentUpon>AppointmentCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AsyncWork.resx">
+      <DependentUpon>AsyncWork.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EvaluateCard.resx">
+      <DependentUpon>EvaluateCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMsg.resx">
+      <DependentUpon>frmMsg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form3.resx">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMessage.resx">
+      <DependentUpon>frmMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMsg2.resx">
+      <DependentUpon>frmMsg2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucpnAppointment.resx">
+      <DependentUpon>ucpnAppointment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucpnCard.resx">
+      <DependentUpon>ucpnCard.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucpnEvaluate.resx">
+      <DependentUpon>ucpnEvaluate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucpnMain.resx">
+      <DependentUpon>ucpnMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucpnPwd.resx">
+      <DependentUpon>ucpnPwd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucpnReadCard.resx">
+      <DependentUpon>ucpnReadCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="frmMain2.resx">
+      <DependentUpon>frmMain2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain3.resx">
+      <DependentUpon>frmMain3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucpnSelectBusy.resx">
+      <DependentUpon>ucpnSelectBusy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucpnSelectUnit.resx">
+      <DependentUpon>ucpnSelectUnit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmThankMsg.resx">
+      <DependentUpon>frmThankMsg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTimeMsg.resx">
+      <DependentUpon>frmTimeMsg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRePrint.resx">
+      <DependentUpon>frmRePrint.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="bin\Debug\msyhbd.ttf" />
+    <None Include="bin\Debug\reports\排队小票.frx" />
+    <None Include="bin\Debug\TxPrnMod.lib" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Resources\按钮.png" />
+    <None Include="Resources\提示框1.png" />
+    <None Include="Resources\背景.jpg" />
+    <None Include="Resources\边框123.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\按键3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\按键890.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\按键lol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\img\title.png" />
+    <Content Include="bin\Debug\sdtapi.dll" />
+    <Content Include="bin\Debug\termb.dll" />
+    <Content Include="bin\Debug\TxPrnMod.dll" />
+    <Content Include="bin\Debug\UnPack.dll" />
+    <Content Include="bin\Debug\wrapper.dll" />
+    <Content Include="queue.ico" />
+    <None Include="Resources\银色-点击后1.png" />
+    <None Include="Resources\蓝色-点击前1.png" />
+    <None Include="Resources\数字按钮2.png" />
+    <None Include="Resources\数字按钮.png" />
+    <None Include="Resources\确认按钮2.png" />
+    <None Include="Resources\确认按钮.png" />
+    <None Include="Resources\请输入身份证号码.png" />
+    <None Include="Resources\点击后 灰色方框.png" />
+    <None Include="Resources\弹窗确认按钮.png" />
+    <None Include="Resources\弹窗背景.png" />
+    <None Include="Resources\弹窗确认按钮2.png" />
+    <None Include="Resources\首页按钮2.png" />
+    <None Include="Resources\返回按钮2.png" />
+    <None Include="Resources\部门下一页 蓝色.png" />
+    <None Include="Resources\部门蓝色背景 拷贝 11.png" />
+    <None Include="Resources\部门下一页.png" />
+    <None Include="Resources\预约下一页点击后.png" />
+    <None Include="Resources\预约下一页.png" />
+    <None Include="Resources\预约未选中.png" />
+    <None Include="Resources\预约提交.png" />
+    <None Include="Resources\预约提交 蓝色按钮.png" />
+    <None Include="Resources\预约勾选框1.png" />
+    <None Include="Resources\预约勾选框.png" />
+    <None Include="Resources\预约背景.png" />
+    <None Include="Resources\预约选中.png" />
+    <None Include="Resources\感谢您的评价.png" />
+    <None Include="Resources\下一页.png" />
+    <None Include="Resources\未选中.png" />
+    <None Include="Resources\评价背景.png" />
+    <None Include="Resources\满意蓝色按钮.png" />
+    <None Include="Resources\满意灰色按钮.png" />
+    <None Include="Resources\下一页点击后.png" />
+    <None Include="Resources\刷卡区域.png" />
+    <None Include="Resources\矩形.png" />
+    <None Include="Resources\返回按钮.png" />
+    <None Include="Resources\首页按钮.png" />
+    <None Include="Resources\办事指南.png" />
+    <None Include="Resources\办事.png" />
+    <None Include="Resources\title.png" />
+    <None Include="Resources\咨询.png" />
+    <None Include="Resources\请选择您要办理的类型.png" />
+    <None Include="Resources\评价.png" />
+    <None Include="Resources\领证.png" />
+    <None Include="Resources\底部黑色.png" />
+    <None Include="Resources\勾选框2.png" />
+    <None Include="Resources\确认 button1.png" />
+    <None Include="Resources\确认 button2.png" />
+    <None Include="Resources\勾选框.png" />
+    <None Include="Resources\对勾.png" />
+    <None Include="Resources\上一页 button1.png" />
+    <None Include="Resources\background_ev.png" />
+    <None Include="Resources\button_read.png" />
+    <None Include="Resources\button normal.png" />
+    <None Include="Resources\button active.png" />
+    <None Include="Resources\条框.png" />
+    <None Include="Resources\提交 button2.png" />
+    <None Include="Resources\提交 button1.png" />
+    <None Include="Resources\评价界面效果图.jpg" />
+    <None Include="Resources\button_1.png" />
+    <None Include="Resources\button 2.png" />
+    <None Include="Resources\buttonok1.png" />
+    <None Include="Resources\buttonok2.png" />
+    <None Include="Resources\button_2.png" />
+    <None Include="Resources\button_11.png" />
+    <None Include="Resources\button_21.png" />
+    <None Include="Resources\buttonmain1.png" />
+    <None Include="Resources\buttonmain2.png" />
+    <None Include="Resources\home button 2.png" />
+    <None Include="Resources\home button 1.png" />
+    <None Include="Resources\back button2.png" />
+    <None Include="Resources\back button1.png" />
+    <None Include="Resources\background.png" />
+    <None Include="Resources\nubmer button 2.png" />
+    <None Include="Resources\nubmer button 1.png" />
+    <None Include="Resources\弹窗新 %281%29.png" />
+    <None Include="Resources\弹窗新.png" />
+    <None Include="Resources\提示框新.png" />
+    <None Include="Resources\数字新.png" />
+    <None Include="Resources\数字按键.png" />
+    <None Include="Resources\提示框2.png" />
+    <None Include="Resources\loading-0.gif" />
+    <None Include="Resources\loading361.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\log\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReportManager\ReportManager.csproj">
+      <Project>{d2e27729-8b36-40a2-af65-d9b2d02131a7}</Project>
+      <Name>ReportManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

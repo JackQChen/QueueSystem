@@ -1,0 +1,13 @@
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\bin\Debug\MessageClientTest.exe
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\bin\Debug\MessageClientTest.pdb
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\bin\Debug\MessageClient.dll
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\bin\Debug\MessageLib.dll
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\bin\Debug\QueueMessage.dll
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\bin\Debug\MessageClient.pdb
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\bin\Debug\QueueMessage.pdb
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\obj\x86\Debug\MessageClientTest.csprojResolveAssemblyReference.cache
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\obj\x86\Debug\MessageClientTest.Form1.resources
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\obj\x86\Debug\MessageClientTest.Properties.Resources.resources
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\obj\x86\Debug\MessageClientTest.csproj.GenerateResource.Cache
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\obj\x86\Debug\MessageClientTest.exe
+D:\SourceCode\QueueSystem\MessageService\MessageClientTest\obj\x86\Debug\MessageClientTest.pdb

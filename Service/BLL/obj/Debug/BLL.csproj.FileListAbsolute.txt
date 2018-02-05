@@ -1,0 +1,13 @@
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\Model.xml
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\BLL.dll
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\BLL.pdb
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\DAL.dll
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\Model.dll
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\Chloe.dll
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\Chloe.MySql.dll
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\MySql.Data.dll
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\DAL.pdb
+D:\SourceCode\QueueSystem\Service\BLL\bin\Debug\Model.pdb
+D:\SourceCode\QueueSystem\Service\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+D:\SourceCode\QueueSystem\Service\BLL\obj\Debug\BLL.dll
+D:\SourceCode\QueueSystem\Service\BLL\obj\Debug\BLL.pdb

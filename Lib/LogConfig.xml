@@ -1,0 +1,138 @@
+﻿<log4net>
+  <root>
+    <level value="ALL" />
+    <appender-ref ref="LogFileAppender" />
+  </root>
+  <!--调试-->
+  <logger name="DebugLogger">
+    <level value="DEBUG" />
+    <appender-ref ref="DebugAppender" />
+  </logger>
+  <appender name="DebugAppender" type="log4net.Appender.RollingFileAppender">
+    <!--日志路径-->
+    <File value="Log\Debug\Debug_" />
+    <!--是否覆盖，默认是追加true-->
+    <AppendToFile value="true" />
+    <!--文件名称-->
+    <DatePattern value="yyyyMMdd&quot;.log&quot;" />
+    <!--设置无限备份=-1 ，最大备份数为1000-->
+    <MaxSizeRollBackups value="-1" />
+    <!--每个文件的最大50MB-->
+    <MaximumFileSize value="50MB" />
+    <!--名称是否可以更改为false为可以更改-->
+    <param name="StaticLogFileName" value="false" />
+    <layout type="log4net.Layout.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %-5p %n%m%n" />
+    </layout>
+  </appender>
+  <!--错误-->
+  <logger name="ErrorLogger">
+    <level value="ERROR" />
+    <appender-ref ref="ErrorAppender" />
+  </logger>
+  <appender name="ErrorAppender" type="log4net.Appender.RollingFileAppender">
+    <!--日志路径-->
+    <File value="Log\Error\Error_" />
+    <!--是否覆盖，默认是追加true-->
+    <AppendToFile value="true" />
+    <!--文件名称-->
+    <DatePattern value="yyyyMMdd&quot;.log&quot;" />
+    <!--设置无限备份=-1 ，最大备份数为1000-->
+    <MaxSizeRollBackups value="-1" />
+    <!--每个文件的最大50MB-->
+    <MaximumFileSize value="50MB" />
+    <!--名称是否可以更改为false为可以更改-->
+    <param name="StaticLogFileName" value="false" />
+    <layout type="log4net.Layout.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %-5p %n%m%n" />
+    </layout>
+  </appender>
+  <!--致命错误-->
+  <logger name="FatalLogger">
+    <level value="FATAL" />
+    <appender-ref ref="FatalAppender" />
+  </logger>
+  <appender name="FatalAppender" type="log4net.Appender.RollingFileAppender">
+    <!--日志路径-->
+    <File value="Log\Fatal\Fatal_" />
+    <!--是否覆盖，默认是追加true-->
+    <AppendToFile value="true" />
+    <!--文件名称-->
+    <DatePattern value="yyyyMMdd&quot;.log&quot;" />
+    <!--设置无限备份=-1 ，最大备份数为1000-->
+    <MaxSizeRollBackups value="-1" />
+    <!--每个文件的最大50MB-->
+    <MaximumFileSize value="50MB" />
+    <!--名称是否可以更改为false为可以更改-->
+    <param name="StaticLogFileName" value="false" />
+    <layout type="log4net.Layout.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %-5p %n%m%n" />
+    </layout>
+  </appender>
+  <!--信息-->
+  <logger name="InfoLogger">
+    <level value="INFO" />
+    <appender-ref ref="InfoAppender" />
+  </logger>
+  <appender name="InfoAppender" type="log4net.Appender.RollingFileAppender">
+    <!--日志路径-->
+    <File value="Log\Info\Info_" />
+    <!--是否覆盖，默认是追加true-->
+    <AppendToFile value="true" />
+    <!--文件名称-->
+    <DatePattern value="yyyyMMdd&quot;.log&quot;" />
+    <!--设置无限备份=-1 ，最大备份数为1000-->
+    <MaxSizeRollBackups value="-1" />
+    <!--每个文件的最大50MB-->
+    <MaximumFileSize value="50MB" />
+    <!--名称是否可以更改为false为可以更改-->
+    <param name="StaticLogFileName" value="false" />
+    <layout type="log4net.Layout.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %-5p %n%m%n" />
+    </layout>
+  </appender>
+  <!--警告-->
+  <logger name="WarnLogger">
+    <level value="WARN" />
+    <appender-ref ref="WarnAppender" />
+  </logger>
+  <appender name="WarnAppender" type="log4net.Appender.RollingFileAppender">
+    <!--日志路径-->
+    <File value="Log\Warn\Warn_" />
+    <!--是否覆盖，默认是追加true-->
+    <AppendToFile value="true" />
+    <!--文件名称-->
+    <DatePattern value="yyyyMMdd&quot;.log&quot;" />
+    <!--设置无限备份=-1 ，最大备份数为1000-->
+    <MaxSizeRollBackups value="-1" />
+    <!--每个文件的最大50MB-->
+    <MaximumFileSize value="50MB" />
+    <!--名称是否可以更改为false为可以更改-->
+    <param name="StaticLogFileName" value="false" />
+    <layout type="log4net.Layout.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %-5p %n%m%n" />
+    </layout>
+  </appender>
+  <!--数据访问-->
+  <logger name="DataAccessLogger">
+    <level value="Info" />
+    <appender-ref ref="DataAccessAppender" />
+  </logger>
+  <appender name="DataAccessAppender" type="log4net.Appender.RollingFileAppender">
+    <!--日志路径-->
+    <File value="Log\DataAccess\DataAccess_" />
+    <!--是否覆盖，默认是追加true-->
+    <AppendToFile value="true" />
+    <!--文件名称-->
+    <DatePattern value="yyyyMMdd&quot;.log&quot;" />
+    <!--设置无限备份=-1 ，最大备份数为1000-->
+    <MaxSizeRollBackups value="-1" />
+    <!--每个文件的最大50MB-->
+    <MaximumFileSize value="50MB" />
+    <!--名称是否可以更改为false为可以更改-->
+    <param name="StaticLogFileName" value="false" />
+    <layout type="log4net.Layout.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %-5p %n%m%n" />
+    </layout>
+  </appender>
+</log4net>

@@ -1,0 +1,7 @@
+D:\SourceCode\QueueSystem\CodeGenerator\CodeGenerator\obj\Debug\CodeGenerator.FrmMain.resources
+D:\SourceCode\QueueSystem\CodeGenerator\CodeGenerator\obj\Debug\CodeGenerator.csproj.GenerateResource.Cache
+D:\SourceCode\QueueSystem\CodeGenerator\CodeGenerator\bin\Debug\MySql.Data.dll
+D:\SourceCode\QueueSystem\CodeGenerator\CodeGenerator\bin\Debug\CodeGenerator.exe
+D:\SourceCode\QueueSystem\CodeGenerator\CodeGenerator\bin\Debug\CodeGenerator.pdb
+D:\SourceCode\QueueSystem\CodeGenerator\CodeGenerator\obj\Debug\CodeGenerator.exe
+D:\SourceCode\QueueSystem\CodeGenerator\CodeGenerator\obj\Debug\CodeGenerator.pdb

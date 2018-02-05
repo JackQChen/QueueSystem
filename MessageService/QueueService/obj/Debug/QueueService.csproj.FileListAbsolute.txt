@@ -1,0 +1,7 @@
+D:\SourceCode\QueueSystem\Bin\QueueService.dll
+D:\SourceCode\QueueSystem\Bin\QueueService.pdb
+D:\SourceCode\QueueSystem\MessageService\QueueService\obj\Debug\QueueService.FrmService.resources
+D:\SourceCode\QueueSystem\MessageService\QueueService\obj\Debug\QueueService.csproj.GenerateResource.Cache
+D:\SourceCode\QueueSystem\MessageService\QueueService\obj\Debug\QueueService.dll
+D:\SourceCode\QueueSystem\MessageService\QueueService\obj\Debug\QueueService.pdb
+D:\SourceCode\QueueSystem\MessageService\QueueService\obj\Debug\QueueService.csprojResolveAssemblyReference.cache

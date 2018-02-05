@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="11/28/2013 14:54:06" ReportInfo.Modified="01/12/2018 09:52:55" ReportInfo.CreatorVersion="1.8.30.0" PrintSettings.ShowDialog="false">
+  <Dictionary>
+    <TableDataSource Name="QueueBill" ReferenceName="QueueBill" DataType="System.Int32" Enabled="true">
+      <Column Name="patientName" Enabled="false" DataType="System.String"/>
+      <Column Name="QueueNo" DataType="System.Int32"/>
+      <Column Name="waitCount" DataType="System.Int32"/>
+      <Column Name="Examine" Enabled="false" DataType="System.String"/>
+      <Column Name="office" Enabled="false" DataType="System.String"/>
+      <Column Name="sex" Enabled="false" DataType="System.String"/>
+      <Column Name="registerType" Enabled="false" DataType="System.String"/>
+      <Column Name="registerPurpose" Enabled="false" DataType="System.String"/>
+      <Column Name="registerdate" Enabled="false" DataType="System.String"/>
+      <Column Name="queuedate" Enabled="false" DataType="System.String"/>
+      <Column Name="registerId" Enabled="false" DataType="System.String"/>
+      <Column Name="area" DataType="System.String"/>
+      <Column Name="unitName" DataType="System.String"/>
+      <Column Name="busyName" DataType="System.String"/>
+      <Column Name="ticketNumber" DataType="System.String"/>
+      <Column Name="reserveSeq" DataType="System.String"/>
+      <Column Name="Column" Enabled="false" DataType="System.Int32" Calculated="true" Expression=""/>
+      <Column Name="Column1" Alias="windowStr" DataType="System.Int32" Calculated="true" Expression=""/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="90" PaperHeight="100" LeftMargin="2" TopMargin="2" Guides="378">
+    <ReportTitleBand Name="ReportTitle1" Width="294.84">
+      <TextObject Name="Text1" Left="9.45" Top="-94.5" Width="47.25" Height="18.9" Text="住院" Font="宋体, 16pt, style=Bold"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="4" Width="294.84" Height="226.8" Guides="28.35" DataSource="QueueBill">
+      <TextObject Name="Text2" Left="85.05" Top="113.4" Width="151.2" Height="28.35" Text="[QueueBill.waitCount]" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text6" Left="56.7" Top="-9.45" Width="207.9" Height="37.8" Text="阳江市排队取号系统" HorzAlign="Center" VertAlign="Center" Font="微软雅黑, 14.25pt"/>
+      <TextObject Name="Text7" Left="85.05" Top="56.7" Width="179.55" Height="18.9" Text="[QueueBill.busyName]" VertAlign="Center" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text8" Left="-9.45" Top="56.7" Width="94.5" Height="18.9" Text="业务名称：" HorzAlign="Right" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text12" Left="-9.45" Top="113.4" Width="94.5" Height="18.9" Text="等待人数：" HorzAlign="Right" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text14" Left="85.05" Top="28.35" Width="189" Height="18.9" Text="[QueueBill.unitName]" VertAlign="Center" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text15" Left="-9.45" Top="28.35" Width="94.5" Height="18.9" Text="部门名称：" HorzAlign="Right" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text19" Left="-9.45" Top="141.75" Width="94.5" Height="18.9" Text="票号：" HorzAlign="Right" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text20" Left="85.05" Top="141.75" Width="151.2" Height="37.8" Text="[QueueBill.ticketNumber]" Font="微软雅黑, 20pt"/>
+      <TextObject Name="Text21" Left="-9.45" Top="189" Width="94.5" Height="18.9" Text="排队区域：" HorzAlign="Right" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text22" Left="85.05" Top="189" Width="198.45" Height="37.8" Text="请在[QueueBill.windowStr]等候" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text23" Left="85.05" Top="85.05" Width="151.2" Height="28.35" Text="[QueueBill.reserveSeq]" Font="微软雅黑, 10.5pt"/>
+      <TextObject Name="Text24" Left="-9.45" Top="85.05" Width="94.5" Height="18.9" Text="预约号：" HorzAlign="Right" Font="微软雅黑, 10.5pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="234.8" Width="294.84" Height="66.15">
+      <TextObject Name="Text18" Left="141.75" Top="37.8" Width="94.5" Height="28.35" Text="[Date]" Format="Custom" Format.Format="HH:mm:ss" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text4" Left="28.35" Top="37.8" Width="113.4" Height="28.35" Text="[Date]" Format="Custom" Format.Format="yyyy年MM月dd日" HorzAlign="Right" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text11" Left="-9.45" Top="9.45" Width="264.6" Height="28.35" Text="请您耐心等候，注意大屏及语音提示消息。" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

@@ -1,0 +1,13 @@
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.Extension.dll
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.Extension.pdb
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.dll
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.pdb
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.Extension\obj\Debug\Chloe.Extension.dll
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.Extension\obj\Debug\Chloe.Extension.pdb
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.Extension\obj\Debug\Chloe.Extension.csprojResolveAssemblyReference.cache
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.Extension.dll
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.Extension.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.dll
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\obj\Debug\Chloe.Extension.dll
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\obj\Debug\Chloe.Extension.pdb

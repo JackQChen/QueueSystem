@@ -1,0 +1,14 @@
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.SQLite\bin\Debug\Chloe.SQLite.dll
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.SQLite\bin\Debug\Chloe.SQLite.pdb
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.SQLite\bin\Debug\Chloe.dll
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.SQLite\bin\Debug\Chloe.pdb
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.SQLite\obj\Debug\Chloe.SQLite.csprojResolveAssemblyReference.cache
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.SQLite\obj\Debug\Chloe.SQLite.dll
+D:\SourceCode\Chloe-master\src\DotNet\Chloe.SQLite\obj\Debug\Chloe.SQLite.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SQLite\bin\Debug\Chloe.SQLite.dll
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SQLite\bin\Debug\Chloe.SQLite.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SQLite\bin\Debug\Chloe.dll
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SQLite\bin\Debug\Chloe.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SQLite\obj\Debug\Chloe.SQLite.csprojResolveAssemblyReference.cache
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SQLite\obj\Debug\Chloe.SQLite.dll
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SQLite\obj\Debug\Chloe.SQLite.pdb
