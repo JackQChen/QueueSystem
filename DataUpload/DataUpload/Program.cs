@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Configuration;
-using System.Runtime.Remoting;
+using System.IO;
 
-namespace LEDDisplay
+namespace DataUpload
 {
     static class Program
     {
@@ -21,7 +19,7 @@ namespace LEDDisplay
             {
                 if (File.Exists(updatePath))
                 {
-                    System.Diagnostics.Process.Start(updatePath, "LEDDisplay.exe");
+                    System.Diagnostics.Process.Start(updatePath, "DataUpload.exe");
                     return;
                 }
             }
@@ -33,14 +31,10 @@ namespace LEDDisplay
                     File.Delete(updatePath);
                     File.Move(newUpdatePath, updatePath);
                 }
-                //var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "RemotingConfig.xml";
                 //有新的更新内容
                 //if (bool.Parse(args[2]))
                 //{
-                //    var config = File.ReadAllText(remotingConfigPath).Replace("0.0.0.0:0000", ConfigurationManager.AppSettings["RemotingConfig"]);
-                //    File.WriteAllText(remotingConfigPath, config);
                 //}
-                //RemotingConfiguration.Configure(remotingConfigPath, false);
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
