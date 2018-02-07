@@ -1,7 +1,0 @@
-D:\SourceCode\QueueSystem\Bin\RateService.dll
-D:\SourceCode\QueueSystem\Bin\RateService.pdb
-D:\SourceCode\QueueSystem\MessageService\RateService\obj\Debug\RateService.FrmService.resources
-D:\SourceCode\QueueSystem\MessageService\RateService\obj\Debug\RateService.csproj.GenerateResource.Cache
-D:\SourceCode\QueueSystem\MessageService\RateService\obj\Debug\RateService.dll
-D:\SourceCode\QueueSystem\MessageService\RateService\obj\Debug\RateService.pdb
-D:\SourceCode\QueueSystem\MessageService\RateService\obj\Debug\RateService.csprojResolveAssemblyReference.cache

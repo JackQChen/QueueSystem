@@ -1,5 +1,0 @@
-D:\SourceCode\QueueSystem\MessageService\QueueMessage\bin\Debug\QueueMessage.dll
-D:\SourceCode\QueueSystem\MessageService\QueueMessage\bin\Debug\QueueMessage.pdb
-D:\SourceCode\QueueSystem\MessageService\QueueMessage\obj\Debug\QueueMessage.dll
-D:\SourceCode\QueueSystem\MessageService\QueueMessage\obj\Debug\QueueMessage.pdb
-D:\SourceCode\QueueSystem\MessageService\QueueMessage\obj\Debug\QueueMessage.csprojResolveAssemblyReference.cache

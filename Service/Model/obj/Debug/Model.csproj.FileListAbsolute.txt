@@ -1,7 +1,0 @@
-D:\SourceCode\QueueSystem\Service\Model\bin\Debug\Model.dll
-D:\SourceCode\QueueSystem\Service\Model\bin\Debug\Model.pdb
-D:\SourceCode\QueueSystem\Service\Model\bin\Debug\Chloe.dll
-D:\SourceCode\QueueSystem\Service\Model\obj\Debug\Model.dll
-D:\SourceCode\QueueSystem\Service\Model\obj\Debug\Model.pdb
-D:\SourceCode\QueueSystem\Service\Model\bin\Debug\Model.XML
-D:\SourceCode\QueueSystem\Service\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
