@@ -59,7 +59,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BLL">
+      <HintPath>..\..\Service\BLL\bin\Debug\BLL.dll</HintPath>
+    </Reference>
+    <Reference Include="DAL">
+      <HintPath>..\..\Service\BLL\bin\Debug\DAL.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Model">
+      <HintPath>..\..\Service\BLL\bin\Debug\Model.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -75,6 +84,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebFramework">
+      <HintPath>..\..\Lib\WebFramework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\avatars\avatar.png" />
@@ -173,10 +185,20 @@
     <Content Include="assets\js\typeahead-bs2.min.js" />
     <Content Include="assets\js\x-editable\ace-editable.min.js" />
     <Content Include="assets\js\x-editable\bootstrap-editable.min.js" />
-    <Content Include="editor.html" />
+    <Content Include="Editor\editor.html" />
     <Content Include="error-404.html" />
     <Content Include="error-500.html" />
-    <Content Include="grid.html" />
+    <Content Include="Grid\grid.html" />
+    <Content Include="Grid\gridTBusiness.html" />
+    <Content Include="Grid\gridTBusinessAttribute.html" />
+    <Content Include="Grid\gridTLedController.html" />
+    <Content Include="Grid\gridTLedWindow.html" />
+    <Content Include="Grid\gridTUnit.html" />
+    <Content Include="Grid\gridTUser.html" />
+    <Content Include="Grid\gridTWindow.html" />
+    <Content Include="Grid\gridTWindowArea.html" />
+    <Content Include="Grid\gridTWindowBusiness.html" />
+    <Content Include="Grid\gridTWindowUser.html" />
     <Content Include="index.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -187,15 +209,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="process\GridData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\font\font.woff2" />
     <None Include="assets\font\fontawesome-webfont.woff" />
     <Content Include="Handler.ashx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="process\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>

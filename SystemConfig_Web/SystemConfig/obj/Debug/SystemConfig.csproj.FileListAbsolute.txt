@@ -2,4 +2,15 @@ D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\SystemConfig.dll
 D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\SystemConfig.pdb
 D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\obj\Debug\SystemConfig.dll
 D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\obj\Debug\SystemConfig.pdb
-D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\obj\Debug\SystemConfig.csprojResolveAssemblyReference.cache
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\BLL.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\DAL.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\Model.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\WebFramework.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\Chloe.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\Chloe.MySql.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\MySql.Data.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\log4net.dll
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\BLL.pdb
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\DAL.pdb
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\Model.pdb
+D:\SourceCode\QueueSystem\SystemConfig_Web\SystemConfig\bin\Model.xml
