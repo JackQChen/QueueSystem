@@ -10,9 +10,8 @@
 })(jQuery);
 //封装ajax请求
 (function ($) {
-    var mask = multiLine(function () {
-        /*!
-        <div id="divLoading" style="
+    var mask = multiLine(function () {/*!
+        <div class="handle-loading" count=0 style="
         background-image: url(data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAANSURBVBhXY/j3798WAAmnA6/CpVb7AAAAAElFTkSuQmCC);
         position: absolute;
         z-index: 999;
@@ -34,25 +33,25 @@
         </div>
         */
     });
-    var count = 0;
     var showMask = function (pCtl) {
-        count++;
-        if ($('#divLoading').length == 0) {
+        var loading = pCtl.find('.handle-loading');
+        if (loading.length == 0) {
             if (pCtl == null)
-                $('body').append(mask);
-            else
-                pCtl.append(mask);
-            var loading = $('#divLoading');
-            var parent = loading.parent();
-            loading.offset(parent.offset());
-            loading.width(parent.width());
-            loading.height(parent.height());
+                pCtl = $('body');
+            pCtl.append(mask);
+            loading = pCtl.find('.handle-loading');
+            loading.offset(pCtl.offset());
+            loading.width(pCtl.width());
+            loading.height(pCtl.height());
         }
+        loading.attr('count', Number(loading.attr('count')) + 1);
     };
-    var removeMask = function () {
-        count--;
+    var removeMask = function (pCtl) {
+        var loading = pCtl.find('.handle-loading');
+        var count = Number(loading.attr('count')) - 1;
+        loading.attr('count', count);
         if (count == 0)
-            $('#divLoading').remove();
+            loading.remove();
     }
     $.handle = function (arg) {
         showMask(arg.mask);
@@ -66,10 +65,11 @@
         });
         var c = arg.complete;
         arg.complete = function () {
-            removeMask();
+            removeMask(arg.mask);
             if (c != null)
                 c();
-        };
+        }
+        ;
         var s = arg.success;
         arg.success = function (data) {
             if (data.action != null)
@@ -78,7 +78,8 @@
                 if (s != null)
                     s(data);
             }
-        };
+        }
+        ;
         if (arg.error == null)
             arg.error = function (XMLHttpRequest, textStatus, thrownError) {
                 if (thrownError != '') {
@@ -86,7 +87,8 @@
                 }
             }
         $.ajax(arg);
-    };
+    }
+    ;
 })(jQuery);
 //多行字符串
 function multiLine(fn) {
@@ -102,8 +104,7 @@ String.prototype.format = function (args) {
                 var reg = new RegExp("({" + key + "})", "g");
                 result = result.replace(reg, args[key] == undefined ? '' : args[key]);
             }
-        }
-        else {
+        } else {
             for (var i = 0; i < arguments.length; i++) {
                 if (arguments[i] != undefined) {
                     var reg = new RegExp("({)" + i + "(})", "g");
@@ -122,35 +123,43 @@ function DateConvert(dateString) {
 //时间格式化
 Date.prototype.dateFormat = function (fmt) {
     var o = {
-        "M+": this.getMonth() + 1, //月份
-        "d+": this.getDate(), //日
-        "H+": this.getHours(), //小时
-        "m+": this.getMinutes(), //分
-        "s+": this.getSeconds(), //秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        "f+": this.getMilliseconds() //毫秒
+        "M+": this.getMonth() + 1,
+        //月份
+        "d+": this.getDate(),
+        //日
+        "H+": this.getHours(),
+        //小时
+        "m+": this.getMinutes(),
+        //分
+        "s+": this.getSeconds(),
+        //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        //季度
+        "f+": this.getMilliseconds()//毫秒
     };
-    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
     for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
 //表格赋值
-$.fn.extend({ SetForm: function (data) {
-    for (var name in data) {
-        if (data[name] == null)
-            continue;
-        var ctl = this.find("[name=" + name + "]");
-        if (ctl.length == 0)
-            continue;
-        if (ctl.attr("type") == "radio" || ctl.attr("type") == "checkbox") {
-            var val = data[name].split(',');
-            for (var i = 0; i < ctl.length; i++) {
-                ctl[i].checked = $.inArray(ctl[i].value, val) > -1;
-            }
+$.fn.extend({
+    SetForm: function (data) {
+        for (var name in data) {
+            if (data[name] == null)
+                continue;
+            var ctl = this.find("[name=" + name + "]");
+            if (ctl.length == 0)
+                continue;
+            if (ctl.attr("type") == "radio" || ctl.attr("type") == "checkbox") {
+                var val = data[name].split(',');
+                for (var i = 0; i < ctl.length; i++) {
+                    ctl[i].checked = $.inArray(ctl[i].value, val) > -1;
+                }
+            } else
+                ctl.val(data[name]);
         }
-        else
-            ctl.val(data[name]);
     }
-}
 });
