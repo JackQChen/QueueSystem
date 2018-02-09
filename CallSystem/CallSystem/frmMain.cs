@@ -451,6 +451,7 @@ namespace CallSystem
                         try
                         {
                             wModel[adress].state = 1;
+                            wModel[adress].sysFlag = 1;
                             cBll.Update(wModel[adress]);
                             wState[adress] = WorkState.Evaluate;
                             client.SendMessage(new RateMessage() //发送评价请求
@@ -500,6 +501,7 @@ namespace CallSystem
                         {
                             string mess = wModel[adress].ticketNumber + "号已弃号。";
                             wModel[adress].state = -1;
+                            wModel[adress].sysFlag = 1;
                             cBll.Update(wModel[adress]);
                             wState[adress] = WorkState.Evaluate;
                             this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
@@ -589,6 +591,7 @@ namespace CallSystem
                             wHang.Add(adress, wModel[adress]);
                         }
                         wHang[adress].state = 3;
+                        wHang[adress].sysFlag = 1;
                         cBll.Update(wHang[adress]);
                         var callString = wModel[adress].ticketNumber + "号已挂起";
                         this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
@@ -622,6 +625,7 @@ namespace CallSystem
                             else
                                 wModel.Add(adress, model);
                             model.state = 0;
+                            model.sysFlag = 1;
                             cBll.Update(model);
                             var callString = wModel[adress].ticketNumber + "号回呼";
                             client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = wNum[adress], AreaNo = wArea[wNum[adress]], IsLEDMessage = true, IsSoundMessage = true });
@@ -787,7 +791,8 @@ namespace CallSystem
                 oprateType = "叫号端",
                 oprateClassifyType = otype,
                 oprateTime = DateTime.Now,
-                oprateLog = text
+                oprateLog = text,
+                sysFlag =0
             });
         }
 

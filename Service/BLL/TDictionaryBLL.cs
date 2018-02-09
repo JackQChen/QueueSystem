@@ -4,15 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
-    public class TDictionaryBLL:IUploadData
+    public class TDictionaryBLL : IUploadData
     {
         public TDictionaryBLL()
         {
         }
 
         #region CommonMethods
+
 
         public List<TDictionaryModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TDictionaryModel GetModel(int id)
         {
             return new TDictionaryDAL().GetModel(id);
+        }
+
+        public TDictionaryModel GetModel(Expression<Func<TDictionaryModel, bool>> predicate)
+        {
+            return new TDictionaryDAL().GetModel(predicate);
         }
 
         public TDictionaryModel Insert(TDictionaryModel model)
@@ -51,14 +58,14 @@ namespace BLL
             return new TDictionaryDAL().GetModelList(name);
         }
 
-   
+
 
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public bool ProcessInsertData(int areaCode,  string targetDbName)
+        public bool ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -69,9 +76,13 @@ namespace BLL
                     s.areaId = s.ID;
                 });
                 var dal = new TDictionaryDAL(targetDbName);
+                var odal = new TDictionaryDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.ID = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }
@@ -81,12 +92,12 @@ namespace BLL
             }
         }
 
-        public bool ProcessUpdateData(int areaCode,   string targetDbName)
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
         {
             return true;
         }
 
-        public bool ProcessDeleteData(int areaCode,  string targetDbName)
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
         {
             return true;
         }

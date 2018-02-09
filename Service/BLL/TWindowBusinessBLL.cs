@@ -4,15 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
-    public class TWindowBusinessBLL : IGridData,IUploadData
+    public class TWindowBusinessBLL : IGridData, IUploadData
     {
         public TWindowBusinessBLL()
         {
         }
 
         #region CommonMethods
+
 
         public List<TWindowBusinessModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TWindowBusinessModel GetModel(int id)
         {
             return new TWindowBusinessDAL().GetModel(id);
+        }
+
+        public TWindowBusinessModel GetModel(Expression<Func<TWindowBusinessModel, bool>> predicate)
+        {
+            return new TWindowBusinessDAL().GetModel(predicate);
         }
 
         public TWindowBusinessModel Insert(TWindowBusinessModel model)
@@ -79,9 +86,13 @@ namespace BLL
                     s.areaId = s.ID;
                 });
                 var dal = new TWindowBusinessDAL(targetDbName);
+                var odal = new TWindowBusinessDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.ID = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }

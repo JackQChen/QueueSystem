@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
     public class TLineUpMaxNoBLL : IUploadData
@@ -13,6 +14,7 @@ namespace BLL
         }
 
         #region CommonMethods
+
 
         public List<TLineUpMaxNoModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TLineUpMaxNoModel GetModel(int id)
         {
             return new TLineUpMaxNoDAL().GetModel(id);
+        }
+
+        public TLineUpMaxNoModel GetModel(Expression<Func<TLineUpMaxNoModel, bool>> predicate)
+        {
+            return new TLineUpMaxNoDAL().GetModel(predicate);
         }
 
         public TLineUpMaxNoModel Insert(TLineUpMaxNoModel model)
@@ -46,14 +53,12 @@ namespace BLL
 
         #endregion
 
-
-
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public bool ProcessInsertData(int areaCode,  string targetDbName)
+        public bool ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -64,9 +69,13 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TLineUpMaxNoDAL(dbKey: targetDbName);
+                var odal = new TLineUpMaxNoDAL(dbKey: areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }
@@ -76,12 +85,12 @@ namespace BLL
             }
         }
 
-        public bool ProcessUpdateData(int areaCode,  string targetDbName)
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
         {
             return true;
         }
 
-        public bool ProcessDeleteData(int areaCode,  string targetDbName)
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
         {
             return true;
         }

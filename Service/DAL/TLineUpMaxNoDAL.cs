@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
-using System;
 
 namespace DAL
 {
@@ -39,6 +41,11 @@ namespace DAL
         public TLineUpMaxNoModel GetModel(int id)
         {
             return db.Query<TLineUpMaxNoModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TLineUpMaxNoModel GetModel(Expression<Func<TLineUpMaxNoModel, bool>> predicate)
+        {
+            return db.Query<TLineUpMaxNoModel>().Where(predicate).FirstOrDefault();
         }
 
         public TLineUpMaxNoModel Insert(TLineUpMaxNoModel model)

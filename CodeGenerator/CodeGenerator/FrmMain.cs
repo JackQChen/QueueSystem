@@ -147,7 +147,10 @@ namespace DAL
         private void button3_Click(object sender, EventArgs e)
         {
             var tableName = this.txtTableName.Text;
-            string strCode = string.Format(@"using System.Collections.Generic;
+            string strCode = string.Format(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using DAL;
 using Model;
 

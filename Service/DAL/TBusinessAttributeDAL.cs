@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
-using System;
 
 namespace DAL
 {
@@ -14,9 +16,9 @@ namespace DAL
             this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TBusinessAttributeDAL(string dbName)
+        public TBusinessAttributeDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -36,6 +38,11 @@ namespace DAL
             return db.Query<TBusinessAttributeModel>().Where(p => p.id == id).FirstOrDefault();
         }
 
+        public TBusinessAttributeModel GetModel(Expression<Func<TBusinessAttributeModel, bool>> predicate)
+        {
+            return db.Query<TBusinessAttributeModel>().Where(predicate).FirstOrDefault();
+        }
+
         public TBusinessAttributeModel Insert(TBusinessAttributeModel model)
         {
             return db.Insert(model);
@@ -52,6 +59,7 @@ namespace DAL
         }
 
         #endregion
+
         public void ResetIndex()
         {
             this.db.Session.ExecuteNonQuery("alter table t_businessattribute AUTO_INCREMENT=1", new DbParam[] { });

@@ -1,21 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
-using System;
 
 namespace DAL
 {
     public class TBusinessDAL
     {
         DbContext db;
+
         public TBusinessDAL()
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TBusinessDAL(string dbName)
+
+        public TBusinessDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -33,6 +37,11 @@ namespace DAL
         public TBusinessModel GetModel(int id)
         {
             return db.Query<TBusinessModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TBusinessModel GetModel(Expression<Func<TBusinessModel, bool>> predicate)
+        {
+            return db.Query<TBusinessModel>().Where(predicate).FirstOrDefault();
         }
 
         public TBusinessModel Insert(TBusinessModel model)

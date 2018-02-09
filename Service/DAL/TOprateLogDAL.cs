@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using Chloe;
-using Model;
-using System;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Chloe;
+using Model;
 
 namespace DAL
 {
@@ -14,9 +15,10 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TOprateLogDAL(string dbName)
+
+        public TOprateLogDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -34,6 +36,11 @@ namespace DAL
         public TOprateLogModel GetModel(int id)
         {
             return db.Query<TOprateLogModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TOprateLogModel GetModel(Expression<Func<TOprateLogModel, bool>> predicate)
+        {
+            return db.Query<TOprateLogModel>().Where(predicate).FirstOrDefault();
         }
 
         public TOprateLogModel Insert(TOprateLogModel model)

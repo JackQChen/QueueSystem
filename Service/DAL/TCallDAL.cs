@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq;
-using System;
-using System.Linq.Expressions;
 
 namespace DAL
 {
@@ -14,9 +15,10 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TCallDAL(string dbName)
+
+        public TCallDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -34,6 +36,11 @@ namespace DAL
         public TCallModel GetModel(int id)
         {
             return db.Query<TCallModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TCallModel GetModel(Expression<Func<TCallModel, bool>> predicate)
+        {
+            return db.Query<TCallModel>().Where(predicate).FirstOrDefault();
         }
 
         public TCallModel Insert(TCallModel model)
@@ -71,6 +78,7 @@ namespace DAL
                 if (line == null)
                     return null;
                 line.state = 1;
+                line.sysFlag = 1;
                 new TQueueDAL(this.db).Update(line);
                 var call = new TCallModel();
                 call.busiSeq = line.busTypeSeq;
@@ -85,6 +93,7 @@ namespace DAL
                 call.unitSeq = line.unitSeq;
                 call.windowNumber = windowNumber;
                 call.windowUser = windowUser;
+                call.sysFlag = 0;
                 var ret = this.Insert(call);
                 this.db.Session.CommitTransaction();
                 return ret;
@@ -127,6 +136,7 @@ namespace DAL
                 else
                     line = lineFirst;
                 line.state = 1;
+                line.sysFlag = 1;
                 new TQueueDAL(this.db).Update(line);
                 var call = new TCallModel();
                 call.busiSeq = line.busTypeSeq;
@@ -141,6 +151,7 @@ namespace DAL
                 call.unitSeq = line.unitSeq;
                 call.windowNumber = windowNumber;
                 call.windowUser = windowUser;
+                call.sysFlag = 0;
                 var ret = this.Insert(call);
                 this.db.Session.CommitTransaction();
                 return ret;
@@ -170,12 +181,14 @@ namespace DAL
                 foreach (var q in lineQueue)
                 {
                     q.state = 1;
+                    q.sysFlag = 1;
                     qDal.Update(q);
                 }
                 var list = db.Query<TCallModel>().Where(q => (q.state == 0 || q.state == 3)).ToList();
                 foreach (var l in list)
                 {
                     l.state = -1;
+                    l.sysFlag = 1;
                     this.Update(l);
                     tList.Add(l);
                 }
@@ -278,10 +291,12 @@ namespace DAL
             {
                 this.db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                 call.state = 2;
+                call.sysFlag = 1;
                 this.Update(call);
                 TQueueDAL dal = new TQueueDAL(this.db);
                 var model = dal.GetModel(call.qId);
                 model.state = 0;
+                model.sysFlag = 1;
                 dal.Update(model);
                 this.db.Session.CommitTransaction();
                 return true;

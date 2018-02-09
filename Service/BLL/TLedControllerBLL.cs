@@ -4,15 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
-    public class TLedControllerBLL : IGridData,IUploadData
+    public class TLedControllerBLL : IGridData, IUploadData
     {
         public TLedControllerBLL()
         {
         }
 
         #region CommonMethods
+
 
         public List<TLedControllerModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TLedControllerModel GetModel(int id)
         {
             return new TLedControllerDAL().GetModel(id);
+        }
+
+        public TLedControllerModel GetModel(Expression<Func<TLedControllerModel, bool>> predicate)
+        {
+            return new TLedControllerDAL().GetModel(predicate);
         }
 
         public TLedControllerModel Insert(TLedControllerModel model)
@@ -56,13 +63,13 @@ namespace BLL
             return new TLedControllerDAL().GetGridData();
         }
 
-        
+
         public bool IsBasic
         {
             get { return true; }
         }
 
-        public bool ProcessInsertData(int areaCode,  string targetDbName)
+        public bool ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -73,9 +80,13 @@ namespace BLL
                     s.areaId = s.ID;
                 });
                 var dal = new TLedControllerDAL(targetDbName);
+                var odal = new TLedControllerDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.ID = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }
@@ -85,7 +96,7 @@ namespace BLL
             }
         }
 
-        public bool ProcessUpdateData(int areaCode,  string targetDbName)
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -113,7 +124,7 @@ namespace BLL
             }
         }
 
-        public bool ProcessDeleteData(int areaCode,  string targetDbName)
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
         {
             return true;
         }

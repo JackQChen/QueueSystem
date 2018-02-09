@@ -1,21 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
-using System;
 
 namespace DAL
 {
     public class TGetCardDAL
     {
         DbContext db;
+
         public TGetCardDAL()
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TGetCardDAL(string dbName)
+
+        public TGetCardDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -33,6 +37,11 @@ namespace DAL
         public TGetCardModel GetModel(int id)
         {
             return db.Query<TGetCardModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TGetCardModel GetModel(Expression<Func<TGetCardModel, bool>> predicate)
+        {
+            return db.Query<TGetCardModel>().Where(predicate).FirstOrDefault();
         }
 
         public TGetCardModel Insert(TGetCardModel model)

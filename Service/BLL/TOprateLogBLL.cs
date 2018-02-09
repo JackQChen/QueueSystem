@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using DAL;
-using Model;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using DAL;
+using Model;
+
 namespace BLL
 {
     public class TOprateLogBLL : IUploadData
@@ -13,6 +14,7 @@ namespace BLL
         }
 
         #region CommonMethods
+
 
         public List<TOprateLogModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TOprateLogModel GetModel(int id)
         {
             return new TOprateLogDAL().GetModel(id);
+        }
+
+        public TOprateLogModel GetModel(Expression<Func<TOprateLogModel, bool>> predicate)
+        {
+            return new TOprateLogDAL().GetModel(predicate);
         }
 
         public TOprateLogModel Insert(TOprateLogModel model)
@@ -56,13 +63,13 @@ namespace BLL
             return new TOprateLogDAL().Query(tType, tName, oType, dtStart, dtEnd, log);
         }
 
-        
+
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public bool ProcessInsertData(int areaCode,  string targetDbName)
+        public bool ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -73,9 +80,13 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TOprateLogDAL(targetDbName);
+                var odal = new TOprateLogDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }
@@ -85,12 +96,12 @@ namespace BLL
             }
         }
 
-        public bool ProcessUpdateData(int areaCode,  string targetDbName)
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
         {
             return true;
         }
 
-        public bool ProcessDeleteData(int areaCode,  string targetDbName)
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
         {
             return true;
         }

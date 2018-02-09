@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
-using System;
 
 namespace DAL
 {
@@ -13,10 +15,12 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TRegisterDAL(string dbName)
+
+        public TRegisterDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
+
         #region CommonMethods
 
         public List<TRegisterModel> GetModelList()
@@ -32,6 +36,11 @@ namespace DAL
         public TRegisterModel GetModel(int id)
         {
             return db.Query<TRegisterModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TRegisterModel GetModel(Expression<Func<TRegisterModel, bool>> predicate)
+        {
+            return db.Query<TRegisterModel>().Where(predicate).FirstOrDefault();
         }
 
         public TRegisterModel Insert(TRegisterModel model)

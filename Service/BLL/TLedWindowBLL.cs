@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
     public class TLedWindowBLL : IGridData, IUploadData
@@ -13,6 +14,7 @@ namespace BLL
         }
 
         #region CommonMethods
+
 
         public List<TLedWindowModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TLedWindowModel GetModel(int id)
         {
             return new TLedWindowDAL().GetModel(id);
+        }
+
+        public TLedWindowModel GetModel(Expression<Func<TLedWindowModel, bool>> predicate)
+        {
+            return new TLedWindowDAL().GetModel(predicate);
         }
 
         public TLedWindowModel Insert(TLedWindowModel model)
@@ -78,9 +85,13 @@ namespace BLL
                     s.areaId = s.ID;
                 });
                 var dal = new TLedWindowDAL(targetDbName);
+                var odal = new TLedWindowDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.ID = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }

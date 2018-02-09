@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Configuration;
-using System.Linq.Expressions;
 
 namespace DAL
 {
@@ -15,9 +16,9 @@ namespace DAL
             this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TAppointmentDAL(string dbName)
+        public TAppointmentDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -37,9 +38,14 @@ namespace DAL
             return db.Query<TAppointmentModel>().Where(p => p.id == id).FirstOrDefault();
         }
 
+        public TAppointmentModel GetModel(Expression<Func<TAppointmentModel, bool>> predicate)
+        {
+            return db.Query<TAppointmentModel>().Where(predicate).FirstOrDefault();
+        }
+
         public TAppointmentModel Insert(TAppointmentModel model)
         {
-            return this.db.Insert(model);
+            return db.Insert(model);
         }
 
         public int Update(TAppointmentModel model)

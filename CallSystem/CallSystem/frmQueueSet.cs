@@ -53,6 +53,7 @@ namespace CallSystem
             object item = listView1.SelectedItems[0].Tag;
             var call = item as TCallModel;
             call.state = -1;
+            call.sysFlag = 1;
             cBll.Update(call);
             btnQuery_Click(null, null);
         }
@@ -62,6 +63,7 @@ namespace CallSystem
             object item = listView1.SelectedItems[0].Tag;
             var call = item as TCallModel;
             call.state = 1;
+            call.sysFlag = 1;
             cBll.Update(call);
             btnQuery_Click(null, null);
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
     public class TUserBLL : IGridData, IUploadData
@@ -13,6 +14,7 @@ namespace BLL
         }
 
         #region CommonMethods
+
 
         public List<TUserModel> GetModelList()
         {
@@ -24,9 +26,14 @@ namespace BLL
             return new TUserDAL().GetModelList(predicate);
         }
 
-        public TUserModel GetModel(int ID)
+        public TUserModel GetModel(int id)
         {
-            return new TUserDAL().GetModel(ID);
+            return new TUserDAL().GetModel(id);
+        }
+
+        public TUserModel GetModel(Expression<Func<TUserModel, bool>> predicate)
+        {
+            return new TUserDAL().GetModel(predicate);
         }
 
         public TUserModel Insert(TUserModel model)
@@ -56,13 +63,13 @@ namespace BLL
             return new TUserDAL().GetGridData();
         }
 
-       
+
         public bool IsBasic
         {
             get { return true; }
         }
 
-        public bool ProcessInsertData(int areaCode,  string targetDbName)
+        public bool ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -73,9 +80,13 @@ namespace BLL
                     s.areaId = s.ID;
                 });
                 var dal = new TUserDAL(targetDbName);
+                var odal = new TUserDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.ID = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }
@@ -85,7 +96,7 @@ namespace BLL
             }
         }
 
-        public bool ProcessUpdateData(int areaCode,  string targetDbName)
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -113,7 +124,7 @@ namespace BLL
             }
         }
 
-        public bool ProcessDeleteData(int areaCode,  string targetDbName)
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
         {
             return true;
         }

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
-using System;
 
 namespace DAL
 {
@@ -13,9 +15,10 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TEvaluateDAL(string dbName)
+
+        public TEvaluateDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -33,6 +36,11 @@ namespace DAL
         public TEvaluateModel GetModel(int id)
         {
             return db.Query<TEvaluateModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TEvaluateModel GetModel(Expression<Func<TEvaluateModel, bool>> predicate)
+        {
+            return db.Query<TEvaluateModel>().Where(predicate).FirstOrDefault();
         }
 
         public TEvaluateModel Insert(TEvaluateModel model)

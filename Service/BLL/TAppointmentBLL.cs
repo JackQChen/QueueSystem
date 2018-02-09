@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
     public class TAppointmentBLL : IUploadData
@@ -13,6 +14,7 @@ namespace BLL
         }
 
         #region CommonMethods
+
 
         public List<TAppointmentModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TAppointmentModel GetModel(int id)
         {
             return new TAppointmentDAL().GetModel(id);
+        }
+
+        public TAppointmentModel GetModel(Expression<Func<TAppointmentModel, bool>> predicate)
+        {
+            return new TAppointmentDAL().GetModel(predicate);
         }
 
         public TAppointmentModel Insert(TAppointmentModel model)
@@ -46,7 +53,6 @@ namespace BLL
 
         #endregion
 
-
         public bool IsBasic
         {
             get { return false; }
@@ -63,10 +69,15 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TAppointmentDAL(targetDbName);
+                var odal = new TAppointmentDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
+
                 return true;
             }
             catch

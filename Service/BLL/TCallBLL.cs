@@ -4,15 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
-    public class TCallBLL: IUploadData
+    public class TCallBLL : IUploadData
     {
         public TCallBLL()
         {
         }
 
         #region CommonMethods
+
 
         public List<TCallModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TCallModel GetModel(int id)
         {
             return new TCallDAL().GetModel(id);
+        }
+
+        public TCallModel GetModel(Expression<Func<TCallModel, bool>> predicate)
+        {
+            return new TCallDAL().GetModel(predicate);
         }
 
         public TCallModel Insert(TCallModel model)
@@ -95,14 +102,14 @@ namespace BLL
             return new TCallDAL().Transfer(call);
         }
 
-       
+
 
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public bool ProcessInsertData(int areaCode,  string targetDbName)
+        public bool ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -113,9 +120,13 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TCallDAL(targetDbName);
+                var odal = new TCallDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }
@@ -125,7 +136,7 @@ namespace BLL
             }
         }
 
-        public bool ProcessUpdateData(int areaCode,  string targetDbName)
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -153,7 +164,7 @@ namespace BLL
             }
         }
 
-        public bool ProcessDeleteData(int areaCode,  string targetDbName)
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
         {
             return true;
         }

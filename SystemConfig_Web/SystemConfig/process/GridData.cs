@@ -12,8 +12,8 @@ namespace SystemConfig.process
         public string GetGridData(string bllName)
         {
             var tp = Type.GetType("BLL." + bllName + "BLL,BLL");
-            var obj = Activator.CreateInstance(tp);
-            var strResult = tp.GetMethod("GetGridData").Invoke(obj, null).ToJsonString();
+            var obj = Activator.CreateInstance(tp) as IGridData;
+            var strResult = obj.GetGridData().ToJsonString();
             return strResult;
         }
     }

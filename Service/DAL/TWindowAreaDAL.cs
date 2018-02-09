@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
-using System;
 
 namespace DAL
 {
@@ -13,9 +15,10 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TWindowAreaDAL(string dbName)
+
+        public TWindowAreaDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -33,6 +36,11 @@ namespace DAL
         public TWindowAreaModel GetModel(int id)
         {
             return db.Query<TWindowAreaModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TWindowAreaModel GetModel(Expression<Func<TWindowAreaModel, bool>> predicate)
+        {
+            return db.Query<TWindowAreaModel>().Where(predicate).FirstOrDefault();
         }
 
         public TWindowAreaModel Insert(TWindowAreaModel model)

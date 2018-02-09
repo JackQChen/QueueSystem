@@ -1,21 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
-using System;
 
 namespace DAL
 {
     public class TLedControllerDAL
     {
         DbContext db;
+
         public TLedControllerDAL()
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TLedControllerDAL(string dbName)
+        public TLedControllerDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -33,6 +36,11 @@ namespace DAL
         public TLedControllerModel GetModel(int id)
         {
             return db.Query<TLedControllerModel>().Where(p => p.ID == id).FirstOrDefault();
+        }
+
+        public TLedControllerModel GetModel(Expression<Func<TLedControllerModel, bool>> predicate)
+        {
+            return db.Query<TLedControllerModel>().Where(predicate).FirstOrDefault();
         }
 
         public TLedControllerModel Insert(TLedControllerModel model)

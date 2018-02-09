@@ -351,6 +351,7 @@ namespace QueueClient
                 frm.ShowDialog();
                 return false;
             }
+            ev.sysFlag = 0;
             eBll.Insert(ev);
             return true;
         }
@@ -847,7 +848,8 @@ namespace QueueClient
                 oprateType = "排队端",
                 oprateClassifyType = "补打",
                 oprateTime = DateTime.Now,
-                oprateLog = strLog
+                oprateLog = strLog,
+                sysFlag = 0
             });
             Print(queue, area, windowStr, waitNo, "补打");
         }
@@ -1113,6 +1115,7 @@ namespace QueueClient
                             app.unitName = unitName;
                             app.userName = userName;
                             app.isCheck = false;
+                            app.sysFlag = 0;
                             appList.Add(app);
                         }
                         #endregion
@@ -1198,6 +1201,7 @@ namespace QueueClient
                                 model.busTypeName = busiName;
                                 model.custCardId = idNo;
                                 model.outCardTime = DateTime.Now;
+                                model.sysFlag = 0;
                                 if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq))
                                 {
                                     pbReturn_Click(null, null);
@@ -1457,7 +1461,7 @@ namespace QueueClient
                                 var unitSeq = data["unitCode"] == null ? "" : data["unitCode"].ToString();
                                 var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
                                 var sortNum = data["sortNum"] == null ? "999" : data["sortNum"].ToString();
-                                TUnitModel unit = new TUnitModel { unitSeq = unitSeq, unitName = unitName, orderNum = Convert.ToInt32(sortNum) };
+                                TUnitModel unit = new TUnitModel { unitSeq = unitSeq, unitName = unitName, orderNum = Convert.ToInt32(sortNum), sysFlag = 0 };
                                 if (unitList.Where(u => u.unitSeq == unitSeq && u.unitName == unitName).Count() == 0)
                                 {
                                     uBll.Insert(unit);
@@ -1503,6 +1507,7 @@ namespace QueueClient
                             getBusi = Convert.ToBoolean(Convert.ToInt32(getBusi)),
                             unitSeq = unitSeq,
                             unitName = unitName,
+                            sysFlag = 0
                         };
                         tbList.Add(buss);
                     }
@@ -1679,7 +1684,8 @@ namespace QueueClient
                 oprateType = "排队端",
                 oprateClassifyType = "出票",
                 oprateTime = DateTime.Now,
-                oprateLog = strLog
+                oprateLog = strLog,
+                sysFlag =0
             });
             Print(queue, area, windowStr, waitNo, "");
             //}
@@ -1749,6 +1755,7 @@ namespace QueueClient
             var line = qBll.QueueLine(selectBusy, selectUnit, ticketStart, idCard, qNmae, reserveSeq);
             if (app != null)
             {
+                app.sysFlag = 0;
                 aBll.Insert(app);
                 var updateStr = UpdateAppoint.Replace("@reserveSeq", app.reserveSeq);
                 var jsonString = http.HttpGet(updateStr, "");

@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+using System.Collections;
+
 namespace BLL
 {
     public class TQueueBLL : IUploadData
@@ -14,6 +15,7 @@ namespace BLL
         }
 
         #region CommonMethods
+
 
         public List<TQueueModel> GetModelList()
         {
@@ -28,6 +30,11 @@ namespace BLL
         public TQueueModel GetModel(int id)
         {
             return new TQueueDAL().GetModel(id);
+        }
+
+        public TQueueModel GetModel(Expression<Func<TQueueModel, bool>> predicate)
+        {
+            return new TQueueDAL().GetModel(predicate);
         }
 
         public TQueueModel Insert(TQueueModel model)
@@ -111,9 +118,13 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TQueueDAL(dbKey: targetDbName);
+                var odal = new TQueueDAL(dbKey: areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }

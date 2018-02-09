@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
     public class TBusinessBLL : IGridData, IUploadData
@@ -13,6 +14,7 @@ namespace BLL
         }
 
         #region CommonMethods
+
 
         public List<TBusinessModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TBusinessModel GetModel(int id)
         {
             return new TBusinessDAL().GetModel(id);
+        }
+
+        public TBusinessModel GetModel(Expression<Func<TBusinessModel, bool>> predicate)
+        {
+            return new TBusinessDAL().GetModel(predicate);
         }
 
         public TBusinessModel Insert(TBusinessModel model)
@@ -73,9 +80,13 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TBusinessDAL(targetDbName);
+                var odal = new TBusinessDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }

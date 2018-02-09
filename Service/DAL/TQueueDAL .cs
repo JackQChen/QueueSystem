@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System;
-using System.Data;
-using System.Linq;
-using System.Collections;
-using System.Linq.Expressions;
 
 namespace DAL
 {
@@ -42,6 +41,11 @@ namespace DAL
         public TQueueModel GetModel(int id)
         {
             return db.Query<TQueueModel>().Where(p => p.id == id).FirstOrDefault();
+        }
+
+        public TQueueModel GetModel(Expression<Func<TQueueModel, bool>> predicate)
+        {
+            return db.Query<TQueueModel>().Where(predicate).FirstOrDefault();
         }
 
         public TQueueModel Insert(TQueueModel model)
@@ -220,6 +224,7 @@ namespace DAL
                 line.windowNumber = "";
                 line.idCard = idCard;
                 line.qNmae = name;
+                line.sysFlag = 0;
                 if (app != null)
                 {
                     line.appType = app.appType;
@@ -236,6 +241,7 @@ namespace DAL
                     maxNo.lineDate = DateTime.Now;
                     maxNo.maxNo = 1;
                     maxNo.unitSeq = selectUnit.unitSeq;
+                    maxNo.sysFlag = 0;
                     new TLineUpMaxNoDAL(this.db).Insert(maxNo);
                 }
                 else
@@ -245,6 +251,7 @@ namespace DAL
                     else
                         maxNo.maxNo = maxNo.maxNo + 1;
                     maxNo.lineDate = DateTime.Now;
+                    maxNo.sysFlag = 1;
                     new TLineUpMaxNoDAL(this.db).Update(maxNo);
                 }
                 this.db.Session.CommitTransaction();

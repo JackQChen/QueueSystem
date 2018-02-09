@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
-using System.Linq.Expressions;
 
 namespace DAL
 {
@@ -13,9 +15,10 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
-        public TUserDAL(string dbName)
+
+        public TUserDAL(string dbKey)
         {
-            this.db = Factory.Instance.CreateDbContext(dbName);
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         #region CommonMethods
@@ -30,14 +33,19 @@ namespace DAL
             return db.Query<TUserModel>().Where(predicate).ToList();
         }
 
-        public TUserModel GetModel(int ID)
+        public TUserModel GetModel(int id)
         {
-            return db.Query<TUserModel>().Where(p => p.ID == ID).FirstOrDefault();
+            return db.Query<TUserModel>().Where(p => p.ID == id).FirstOrDefault();
+        }
+
+        public TUserModel GetModel(Expression<Func<TUserModel, bool>> predicate)
+        {
+            return db.Query<TUserModel>().Where(predicate).FirstOrDefault();
         }
 
         public TUserModel Insert(TUserModel model)
         {
-            return this.db.Insert(model);
+            return db.Insert(model);
         }
 
         public int Update(TUserModel model)

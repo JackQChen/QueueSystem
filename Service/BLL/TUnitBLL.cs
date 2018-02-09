@@ -15,6 +15,7 @@ namespace BLL
 
         #region CommonMethods
 
+
         public List<TUnitModel> GetModelList()
         {
             return new TUnitDAL().GetModelList();
@@ -25,9 +26,14 @@ namespace BLL
             return new TUnitDAL().GetModelList(predicate);
         }
 
-        public TUnitModel GetModel(int ID)
+        public TUnitModel GetModel(int id)
         {
-            return new TUnitDAL().GetModel(ID);
+            return new TUnitDAL().GetModel(id);
+        }
+
+        public TUnitModel GetModel(Expression<Func<TUnitModel, bool>> predicate)
+        {
+            return new TUnitDAL().GetModel(predicate);
         }
 
         public TUnitModel Insert(TUnitModel model)
@@ -76,9 +82,13 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TUnitDAL(targetDbName);
+                var odal = new TUnitDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }

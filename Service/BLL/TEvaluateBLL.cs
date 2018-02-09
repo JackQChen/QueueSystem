@@ -4,15 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
-    public class TEvaluateBLL: IUploadData
+    public class TEvaluateBLL : IUploadData
     {
         public TEvaluateBLL()
         {
         }
 
         #region CommonMethods
+
 
         public List<TEvaluateModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TEvaluateModel GetModel(int id)
         {
             return new TEvaluateDAL().GetModel(id);
+        }
+
+        public TEvaluateModel GetModel(Expression<Func<TEvaluateModel, bool>> predicate)
+        {
+            return new TEvaluateDAL().GetModel(predicate);
         }
 
         public TEvaluateModel Insert(TEvaluateModel model)
@@ -46,13 +53,12 @@ namespace BLL
 
         #endregion
 
-
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public bool ProcessInsertData(int areaCode,  string targetDbName)
+        public bool ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -63,9 +69,13 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TEvaluateDAL(targetDbName);
+                var odal = new TEvaluateDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }
@@ -75,12 +85,12 @@ namespace BLL
             }
         }
 
-        public bool ProcessUpdateData(int areaCode,  string targetDbName)
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
         {
             return true;
         }
 
-        public bool ProcessDeleteData(int areaCode,  string targetDbName)
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
         {
             return true;
         }

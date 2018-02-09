@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+
 namespace BLL
 {
     public class TBusinessAttributeBLL : IGridData, IUploadData
@@ -13,6 +14,7 @@ namespace BLL
         }
 
         #region CommonMethods
+
 
         public List<TBusinessAttributeModel> GetModelList()
         {
@@ -27,6 +29,11 @@ namespace BLL
         public TBusinessAttributeModel GetModel(int id)
         {
             return new TBusinessAttributeDAL().GetModel(id);
+        }
+
+        public TBusinessAttributeModel GetModel(Expression<Func<TBusinessAttributeModel, bool>> predicate)
+        {
+            return new TBusinessAttributeDAL().GetModel(predicate);
         }
 
         public TBusinessAttributeModel Insert(TBusinessAttributeModel model)
@@ -66,7 +73,7 @@ namespace BLL
             return new TBusinessAttributeDAL().GetGridDetailData(unitSeq, busiSeq);
         }
 
-       
+
         public bool IsBasic
         {
             get { return true; }
@@ -83,9 +90,13 @@ namespace BLL
                     s.areaId = s.id;
                 });
                 var dal = new TBusinessAttributeDAL(targetDbName);
+                var odal = new TBusinessAttributeDAL(areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
+                    s.id = s.areaId;
+                    s.sysFlag = 2;
+                    odal.Update(s);
                 }
                 return true;
             }
@@ -95,7 +106,7 @@ namespace BLL
             }
         }
 
-        public bool ProcessUpdateData(int areaCode,  string targetDbName)
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -123,7 +134,7 @@ namespace BLL
             }
         }
 
-        public bool ProcessDeleteData(int areaCode,  string targetDbName)
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
         {
             return true;
         }
