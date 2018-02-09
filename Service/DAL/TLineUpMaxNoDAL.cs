@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Chloe;
 using Model;
+using System.Linq.Expressions;
+using System;
 
 namespace DAL
 {
@@ -12,15 +14,26 @@ namespace DAL
             this.db = Factory.Instance.CreateDbContext();
         }
 
+        public TLineUpMaxNoDAL(string dbKey)
+        {
+            this.db = Factory.Instance.CreateDbContext(dbKey);
+        }
+
         public TLineUpMaxNoDAL(DbContext db)
         {
             this.db = db;
         }
+
         #region CommonMethods
 
         public List<TLineUpMaxNoModel> GetModelList()
         {
             return db.Query<TLineUpMaxNoModel>().ToList();
+        }
+
+        public List<TLineUpMaxNoModel> GetModelList(Expression<Func<TLineUpMaxNoModel, bool>> predicate)
+        {
+            return db.Query<TLineUpMaxNoModel>().Where(predicate).ToList();
         }
 
         public TLineUpMaxNoModel GetModel(int id)

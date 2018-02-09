@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Chloe;
 using Model;
+using System.Linq.Expressions;
+using System;
 
 namespace DAL
 {
@@ -11,12 +13,21 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
+        public TEvaluateDAL(string dbName)
+        {
+            this.db = Factory.Instance.CreateDbContext(dbName);
+        }
 
         #region CommonMethods
 
         public List<TEvaluateModel> GetModelList()
         {
             return db.Query<TEvaluateModel>().ToList();
+        }
+
+        public List<TEvaluateModel> GetModelList(Expression<Func<TEvaluateModel, bool>> predicate)
+        {
+            return db.Query<TEvaluateModel>().Where(predicate).ToList();
         }
 
         public TEvaluateModel GetModel(int id)

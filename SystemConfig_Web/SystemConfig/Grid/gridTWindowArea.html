@@ -6,6 +6,7 @@
             text-decoration: none;
             outline: none;
         }
+        
         .ui-dialog-titlebar-close
         {
             outline: none;
@@ -14,7 +15,9 @@
 </head>
 <body>
     <div class="page-header" style="margin: 0px">
-	 <h1><small class="blue"><i class="icon-list-alt"></i>&nbsp;区域维护</small></h1>
+        <h1>
+            <small class="blue"><i class="icon-list-alt"></i>&nbsp;区域维护 </small>
+        </h1>
     </div>
     <!-- /.page-header -->
     <div>
@@ -27,7 +30,9 @@
         </div>
         <!-- #dialog-message -->
         <script type="text/javascript">
+
             var $path_base = "/"; //this will be used in gritter alerts containing images
+        
         </script>
         <!-- PAGE CONTENT ENDS -->
     </div>
@@ -39,7 +44,8 @@
     <script src="assets/js/jquery-ui-1.10.3.full.min.js"></script>
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
-    //override dialog's title function to allow for HTML titles
+            
+                //override dialog's title function to allow for HTML titles
 				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
 					_title: function(title) {
 						var $title = this.options.title || '&nbsp;'
@@ -48,6 +54,22 @@
 						else title.text($title);
 					}
 				}));
+            //replace icons with FontAwesome icons like above
+            function updatePagerIcons(table) {
+                var replacement =
+                {
+                    'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+                    'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+                    'ui-icon-seek-next': 'icon-angle-right bigger-140',
+                    'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+                };
+                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                    var icon = $(this);
+                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+                })
+            }
+
     function showEditor()
     { 
                     $('#dialog-message').load("editor.html");
@@ -75,43 +97,21 @@
 							}
 						]
 					});
-    }
-        var grid_data =
-        [
-            { id: "1", name: "Desktop Computer", note: "note", stock: "Yes", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "2", name: "Laptop", note: "Long text ", stock: "Yes", ship: "InTime", sdate: "2007-12-03" },
-            { id: "3", name: "LCD Monitor", note: "note3", stock: "Yes", ship: "TNT", sdate: "2007-12-03" },
-            { id: "4", name: "Speakers", note: "note", stock: "No", ship: "ARAMEX", sdate: "2007-12-03" },
-            { id: "5", name: "Laser Printer", note: "note2", stock: "Yes", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "6", name: "Play Station", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "7", name: "Mobile Telephone", note: "note", stock: "Yes", ship: "ARAMEX", sdate: "2007-12-03" },
-            { id: "8", name: "Server", note: "note2", stock: "Yes", ship: "TNT", sdate: "2007-12-03" },
-            { id: "9", name: "Matrix Printer", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "10", name: "Desktop Computer", note: "note", stock: "Yes", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "11", name: "Laptop", note: "Long text ", stock: "Yes", ship: "InTime", sdate: "2007-12-03" },
-            { id: "12", name: "LCD Monitor", note: "note3", stock: "Yes", ship: "TNT", sdate: "2007-12-03" },
-            { id: "13", name: "Speakers", note: "note", stock: "No", ship: "ARAMEX", sdate: "2007-12-03" },
-            { id: "14", name: "Laser Printer", note: "note2", stock: "Yes", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "15", name: "Play Station", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "16", name: "Mobile Telephone", note: "note", stock: "Yes", ship: "ARAMEX", sdate: "2007-12-03" },
-            { id: "17", name: "Server", note: "note2", stock: "Yes", ship: "TNT", sdate: "2007-12-03" },
-            { id: "18", name: "Matrix Printer", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "19", name: "Matrix Printer", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "20", name: "Desktop Computer", note: "note", stock: "Yes", ship: "FedEx", sdate: "2007-12-03" },
-            { id: "21", name: "Laptop", note: "Long text ", stock: "Yes", ship: "InTime", sdate: "2007-12-03" },
-            { id: "22", name: "LCD Monitor", note: "note3", stock: "Yes", ship: "TNT", sdate: "2007-12-03" },
-            { id: "23", name: "Speakers", note: "note", stock: "No", ship: "ARAMEX", sdate: "2007-12-03" }
-        ];
+    } 
 
-        jQuery(function ($) {
-            var grid_selector = "#grid-table";
+        $(function () {
+           $.handle({ 
+                mask: $('#divContent'),
+                invoke: "SystemConfig.process.GridData,SystemConfig|GetGridData",
+                param: ['TWindowArea'],
+                success: function (grid_data) { 
+                      var grid_selector = "#grid-table";
             var pager_selector = "#grid-pager";
-
             jQuery(grid_selector).jqGrid({
                 data: grid_data,
                 datatype: "local",
                 height: $(window).height() - 234,
-                colNames: ['','ID', 'Last Sales', 'Name', 'Stock', 'Ship via', 'Notes'],
+                colNames: ['','ID', '单位编号', '单位名称', '排序号', 'Ship via', 'Notes'],
                 colModel: [ 
                     {
                     label: '操作', name: '', width: 40,sortable: false,
@@ -122,9 +122,9 @@
                         return view+modify + del  ;
                     }},
                     { name: 'id', index: 'id', width: 60, sorttype: "int", editable: true },
-                    { name: 'sdate', index: 'sdate', width: 90, editable: true, sorttype: "date"},
-                    { name: 'name', index: 'name', width: 150, editable: true, editoptions: { size: "20", maxlength: "30" } },
-                    { name: 'stock', index: 'stock', width: 70, editable: true, edittype: "checkbox", editoptions: { value: "Yes:No" } },
+                    { name: 'unitSeq', index: 'sdate', width: 90, editable: true, sorttype: "date"},
+                    { name: 'unitName', index: 'name', width: 150, editable: true, editoptions: { size: "20", maxlength: "30" } },
+                    { name: 'orderNum', index: 'stock', width: 70, editable: true, edittype: "checkbox", editoptions: { value: "Yes:No" } },
                     { name: 'ship', index: 'ship', width: 90, editable: true, edittype: "select", editoptions: { value: "FE:FedEx;IN:InTime;TN:TNT;AR:ARAMEX" } },
                     { name: 'note', index: 'note', width: 150, sortable: false, editable: true, edittype: "textarea", editoptions: { rows: "2", cols: "10" } }
                 ],
@@ -139,22 +139,10 @@
                     }, 0);
                 },
             });
+                }
+            });
 
-            //replace icons with FontAwesome icons like above
-            function updatePagerIcons(table) {
-                var replacement =
-                {
-                    'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
-                    'ui-icon-seek-prev': 'icon-angle-left bigger-140',
-                    'ui-icon-seek-next': 'icon-angle-right bigger-140',
-                    'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
-                };
-                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-                    var icon = $(this);
-                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-                })
-            }
+
         });
     </script>
 </body>

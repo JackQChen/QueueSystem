@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chloe;
 using Model;
+using System.Linq.Expressions;
 
 namespace DAL
 {
@@ -12,12 +13,21 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
+        public TUnitDAL(string dbName)
+        {
+            this.db = Factory.Instance.CreateDbContext(dbName);
+        }
 
         #region CommonMethods
 
         public List<TUnitModel> GetModelList()
         {
             return db.Query<TUnitModel>().ToList();
+        }
+
+        public List<TUnitModel> GetModelList(Expression<Func<TUnitModel, bool>> predicate)
+        {
+            return db.Query<TUnitModel>().Where(predicate).ToList();
         }
 
         public TUnitModel GetModel(int id)
@@ -59,6 +69,11 @@ namespace DAL
             })
             .OrderBy(k => k.id)
             .ToList();
+        }
+
+        public TUnitModel GetModel(int areaCode, int areaId)
+        {
+            return db.Query<TUnitModel>().Where(p => p.areaCode == areaCode && p.areaId == areaId).FirstOrDefault();
         }
     }
 }

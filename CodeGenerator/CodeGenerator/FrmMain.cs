@@ -82,7 +82,11 @@ namespace Model
         private void button2_Click(object sender, EventArgs e)
         {
             var tableName = this.txtTableName.Text;
-            string strCode = string.Format(@"using System.Collections.Generic;
+            string strCode = string.Format(@"using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Chloe;
 using Model;
 
@@ -103,9 +107,19 @@ namespace DAL
             return db.Query<{1}>().ToList();
         }}
 
+        public List<{1}> GetModelList(Expression<Func<{1}, bool>> predicate)
+        {{
+            return db.Query<{1}>().Where(predicate).ToList();
+        }}
+
         public {1} GetModel(int id)
         {{
             return db.Query<{1}>().Where(p => p.id == id).FirstOrDefault();
+        }}
+
+        public {1} GetModel(Expression<Func<{1}, bool>> predicate)
+        {{
+            return db.Query<{1}>().Where(predicate).FirstOrDefault();
         }}
 
         public {1} Insert({1} model)
@@ -147,14 +161,25 @@ namespace BLL
 
         #region CommonMethods
 
+
         public List<{2}> GetModelList()
         {{
             return new {1}().GetModelList();
         }}
 
+        public List<{2}> GetModelList(Expression<Func<{2}, bool>> predicate)
+        {{
+            return new {1}().GetModelList(predicate);
+        }}
+
         public {2} GetModel(int id)
         {{
             return new {1}().GetModel(id);
+        }}
+
+        public {2} GetModel(Expression<Func<{2}, bool>> predicate)
+        {{
+            return new {1}().GetModel(predicate);
         }}
 
         public {2} Insert({2} model)

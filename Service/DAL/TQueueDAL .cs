@@ -5,6 +5,7 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Collections;
+using System.Linq.Expressions;
 
 namespace DAL
 {
@@ -14,6 +15,11 @@ namespace DAL
         public TQueueDAL()
         {
             this.db = Factory.Instance.CreateDbContext();
+        }
+
+        public TQueueDAL(string dbKey)
+        {
+            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
         public TQueueDAL(DbContext db)
@@ -26,6 +32,11 @@ namespace DAL
         public List<TQueueModel> GetModelList()
         {
             return db.Query<TQueueModel>().ToList();
+        }
+
+        public List<TQueueModel> GetModelList(Expression<Func<TQueueModel, bool>> predicate)
+        {
+            return db.Query<TQueueModel>().Where(predicate).ToList();
         }
 
         public TQueueModel GetModel(int id)
@@ -215,7 +226,7 @@ namespace DAL
                     line.reserveSeq = app.reserveSeq;
                     line.reserveStartTime = app.reserveStartTime;
                     line.reserveEndTime = app.reserveEndTime;
-                }  
+                }
                 line = this.Insert(line);
                 if (maxNo == null)
                 {

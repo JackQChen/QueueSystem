@@ -6,6 +6,7 @@
             text-decoration: none;
             outline: none;
         }
+        
         .ui-dialog-titlebar-close
         {
             outline: none;
@@ -15,7 +16,8 @@
 <body>
     <div class="page-header" style="margin: 0px">
         <h1>
-            <small class="blue"><i class="icon-list-alt"></i>&nbsp;业务维护</small></h1>
+            <small class="blue"><i class="icon-list-alt"></i>&nbsp;业务维护 </small>
+        </h1>
     </div>
     <!-- /.page-header -->
     <div>
@@ -28,7 +30,9 @@
         </div>
         <!-- #dialog-message -->
         <script type="text/javascript">
+
             var $path_base = "/"; //this will be used in gritter alerts containing images
+        
         </script>
         <!-- PAGE CONTENT ENDS -->
     </div>
@@ -40,7 +44,8 @@
     <script src="assets/js/jquery-ui-1.10.3.full.min.js"></script>
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
-    //override dialog's title function to allow for HTML titles
+            
+                //override dialog's title function to allow for HTML titles
 				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
 					_title: function(title) {
 						var $title = this.options.title || '&nbsp;'
@@ -49,6 +54,22 @@
 						else title.text($title);
 					}
 				}));
+            //replace icons with FontAwesome icons like above
+            function updatePagerIcons(table) {
+                var replacement =
+                {
+                    'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+                    'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+                    'ui-icon-seek-next': 'icon-angle-right bigger-140',
+                    'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+                };
+                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                    var icon = $(this);
+                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+                })
+            }
+
     function showEditor()
     { 
                     $('#dialog-message').load("editor.html");
@@ -76,20 +97,16 @@
 							}
 						]
 					});
-    }
-        var grid_data = null;
-            $.handle({
-                async:false,
-                mask: $('#grid-table'),
+    } 
+
+        $(function () {
+           $.handle({ 
+                mask: $('#divContent'),
                 invoke: "SystemConfig.process.GridData,SystemConfig|GetGridData",
                 param: ['TBusiness'],
-                success: function (data) {    grid_data = data;    }
-            });
-
-        jQuery(function ($) {
-            var grid_selector = "#grid-table";
+                success: function (grid_data) { 
+                      var grid_selector = "#grid-table";
             var pager_selector = "#grid-pager";
-
             jQuery(grid_selector).jqGrid({
                 data: grid_data,
                 datatype: "local",
@@ -122,22 +139,10 @@
                     }, 0);
                 },
             });
+                }
+            });
 
-            //replace icons with FontAwesome icons like above
-            function updatePagerIcons(table) {
-                var replacement =
-                {
-                    'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
-                    'ui-icon-seek-prev': 'icon-angle-left bigger-140',
-                    'ui-icon-seek-next': 'icon-angle-right bigger-140',
-                    'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
-                };
-                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-                    var icon = $(this);
-                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-                })
-            }
+
         });
     </script>
 </body>

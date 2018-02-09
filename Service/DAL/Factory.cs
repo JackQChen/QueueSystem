@@ -22,6 +22,11 @@ namespace DAL
             return this.CreateDbContext("MySQL", ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString);
         }
 
+        public DbContext CreateDbContext(string dbKey)
+        {
+            return this.CreateDbContext("MySQL", ConfigurationManager.ConnectionStrings[dbKey].ConnectionString);
+        }
+
         public DbContext CreateDbContext(string dbType, string connString)
         {
             switch (dbType)

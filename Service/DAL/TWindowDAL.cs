@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Chloe;
 using Model;
+using System.Linq.Expressions;
+using System;
 
 namespace DAL
 {
@@ -11,12 +13,21 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
+        public TWindowDAL(string dbName)
+        {
+            this.db = Factory.Instance.CreateDbContext(dbName);
+        }
 
         #region CommonMethods
 
         public List<TWindowModel> GetModelList()
         {
             return db.Query<TWindowModel>().ToList();
+        }
+
+        public List<TWindowModel> GetModelList(Expression<Func<TWindowModel, bool>> predicate)
+        {
+            return db.Query<TWindowModel>().Where(predicate).ToList();
         }
 
         public TWindowModel GetModel(int id)

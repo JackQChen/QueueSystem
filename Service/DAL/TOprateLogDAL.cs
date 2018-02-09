@@ -3,6 +3,7 @@ using Chloe;
 using Model;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DAL
 {
@@ -13,12 +14,21 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext();
         }
+        public TOprateLogDAL(string dbName)
+        {
+            this.db = Factory.Instance.CreateDbContext(dbName);
+        }
 
         #region CommonMethods
 
         public List<TOprateLogModel> GetModelList()
         {
             return db.Query<TOprateLogModel>().ToList();
+        }
+
+        public List<TOprateLogModel> GetModelList(Expression<Func<TOprateLogModel, bool>> predicate)
+        {
+            return db.Query<TOprateLogModel>().Where(predicate).ToList();
         }
 
         public TOprateLogModel GetModel(int id)

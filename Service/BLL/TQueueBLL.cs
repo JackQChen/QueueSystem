@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using DAL;
 using Model;
-using System;
-using System.Linq;
-using System.Collections;
-
 namespace BLL
 {
-    public class TQueueBLL
+    public class TQueueBLL : IUploadData
     {
         public TQueueBLL()
         {
@@ -18,6 +18,11 @@ namespace BLL
         public List<TQueueModel> GetModelList()
         {
             return new TQueueDAL().GetModelList();
+        }
+
+        public List<TQueueModel> GetModelList(Expression<Func<TQueueModel, bool>> predicate)
+        {
+            return new TQueueDAL().GetModelList(predicate);
         }
 
         public TQueueModel GetModel(int id)
@@ -80,12 +85,75 @@ namespace BLL
 
         public bool IsCanQueue(string idCard, string busiSeq, string unitSeq)
         {
-            return new TQueueDAL().IsCanQueue(idCard, busiSeq,unitSeq);
+            return new TQueueDAL().IsCanQueue(idCard, busiSeq, unitSeq);
         }
 
         public ArrayList IsCanQueueO(string idCard, string busiSeq, string unitSeq)
         {
             return new TQueueDAL().IsCanQueueO(idCard, busiSeq, unitSeq);
+        }
+
+
+
+        public bool IsBasic
+        {
+            get { return false; }
+        }
+
+        public bool ProcessInsertData(int areaCode, string targetDbName)
+        {
+            try
+            {
+                var sList = new TQueueDAL(dbKey: areaCode.ToString()).GetModelList(c => c.sysFlag == 0).ToList();
+                sList.ForEach(s =>
+                {
+                    s.areaCode = areaCode;
+                    s.areaId = s.id;
+                });
+                var dal = new TQueueDAL(dbKey: targetDbName);
+                foreach (var s in sList)
+                {
+                    dal.Insert(s);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool ProcessUpdateData(int areaCode, string targetDbName)
+        {
+            try
+            {
+                var sdal = new TQueueDAL(dbKey: areaCode.ToString());
+                var tdal = new TQueueDAL(dbKey: targetDbName);
+                var sList = sdal.GetModelList(p => p.sysFlag == 1);
+                foreach (var s in sList)
+                {
+                    var id = s.id;
+                    var nData = tdal.GetModelList(p => p.areaCode == areaCode && p.areaId == s.id).FirstOrDefault();
+                    var data = s;
+                    data.id = nData.id;
+                    data.areaCode = nData.areaCode;
+                    data.areaId = nData.areaId;
+                    tdal.Update(data);
+                    s.sysFlag = 2;
+                    s.id = id;
+                    sdal.Update(s);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool ProcessDeleteData(int areaCode, string targetDbName)
+        {
+            return true;
         }
     }
 }
