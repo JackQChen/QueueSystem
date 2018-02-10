@@ -27,7 +27,6 @@ namespace DataUpload
         Dictionary<int, string> dicClient;
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            this.Close();
             this.notifyIcon1.ShowBalloonTip(3000);
             var tps = typeof(TUserBLL).Assembly.GetTypes().Where(p => { return p.GetInterface("IUploadData") != null; });
             basicListBll = new List<IUploadData>();
@@ -65,21 +64,24 @@ namespace DataUpload
                     foreach (var instance in basicListBll)
                     {
                         var type = instance.GetType().Name;
-                        if (!instance.ProcessInsertData(key.Key, "Server"))
+                        type = "T_" + type.Substring(1, type.Length - 4);
+                        var insert = instance.ProcessInsertData(key.Key, "Server");
+                        var update = instance.ProcessUpdateData(key.Key, "Server");
+                        if (insert >= 0)
                         {
-                            WriterLog("区域【" + key.Key + "】表【" + type + "】新增同步出错!");
+                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】新增同步完成，已同步【" + insert.ToString() + "】条!");
                         }
                         else
                         {
-                            WriterLog("区域【" + key.Key + "】表【" + type + "】新增同步完成!");
+                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】新增同步出错!");
                         }
-                        if (!instance.ProcessUpdateData(key.Key, "Server"))
+                        if (update < 0)
                         {
-                            WriterLog("区域【" + key.Key + "】表【" + type + "】更新同步出错!");
+                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】更新同步出错!");
                         }
                         else
                         {
-                            WriterLog("区域【" + key.Key + "】表【" + type + "】更新同步完成!");
+                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】更新同步完成，已同步【" + update.ToString() + "】条!");
                         }
                         //if (!instance.ProcessDeleteData(key.Key, "Server"))
                         //{
@@ -104,21 +106,24 @@ namespace DataUpload
                     foreach (var instance in busyListBll)
                     {
                         var type = instance.GetType().Name;
-                        if (!instance.ProcessInsertData(key.Key, "Server"))
+                        type = "T_" + type.Substring(1, type.Length - 4);
+                        var insert = instance.ProcessInsertData(key.Key, "Server");
+                        var update = instance.ProcessUpdateData(key.Key, "Server");
+                        if (insert >= 0)
                         {
-                            WriterLog("区域【" + key.Key + "】表【" + type + "】新增同步出错!");
+                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】新增同步完成，已同步【" + insert.ToString() + "】条!");
                         }
                         else
                         {
-                            WriterLog("区域【" + key.Key + "】表【" + type + "】新增同步完成!");
+                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】新增同步出错!");
                         }
-                        if (!instance.ProcessUpdateData(key.Key, "Server"))
+                        if (update < 0)
                         {
-                            WriterLog("区域【" + key.Key + "】表【" + type + "】更新同步出错!");
+                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】更新同步出错!");
                         }
                         else
                         {
-                            WriterLog("区域【" + key.Key + "】表【" + type + "】更新同步完成!");
+                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】更新同步完成，已同步【" + update.ToString() + "】条!");
                         }
                     }
                 }
@@ -155,7 +160,7 @@ namespace DataUpload
 
         private void WriterLog(string text)
         {
-            this.Invoke(new Action(() => { this.txtSoundMesInfo.AppendText( DateTime .Now .ToString("yyyy-MM-dd HH:mm:ss")+" : "+ text + "\r\n"); }));
+            this.Invoke(new Action(() => { this.txtSoundMesInfo.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " : " + text + "\r\n"); }));
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Upload_Exception.txt", DateTime.Now + " : " + text + "\r\n");
         }
     }

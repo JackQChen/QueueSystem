@@ -13,9 +13,9 @@ namespace BLL
 
     public interface IUploadData
     {
-        bool ProcessInsertData(int areaCode, string targetDbName);
-        bool ProcessUpdateData(int areaCode, string targetDbName);
-        bool ProcessDeleteData(int areaCode, string targetDbName);
+        int ProcessInsertData(int areaCode, string targetDbName);
+        int ProcessUpdateData(int areaCode, string targetDbName);
+        int ProcessDeleteData(int areaCode, string targetDbName);
         bool IsBasic { get; }
     }
 }

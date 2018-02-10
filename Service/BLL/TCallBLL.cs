@@ -102,14 +102,14 @@ namespace BLL
             return new TCallDAL().Transfer(call);
         }
 
-
+       
 
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public bool ProcessInsertData(int areaCode, string targetDbName)
+        public int ProcessInsertData(int areaCode,  string targetDbName)
         {
             try
             {
@@ -128,15 +128,15 @@ namespace BLL
                     s.sysFlag = 2;
                     odal.Update(s);
                 }
-                return true;
+                return sList.Count;
             }
             catch
             {
-                return false;
+                return -1;
             }
         }
 
-        public bool ProcessUpdateData(int areaCode, string targetDbName)
+        public int ProcessUpdateData(int areaCode,  string targetDbName)
         {
             try
             {
@@ -156,17 +156,17 @@ namespace BLL
                     s.id = id;
                     sdal.Update(s);
                 }
-                return true;
+                return sList.Count;
             }
             catch
             {
-                return false;
+                return -1;
             }
         }
 
-        public bool ProcessDeleteData(int areaCode, string targetDbName)
+        public int ProcessDeleteData(int areaCode,  string targetDbName)
         {
-            return true;
+            return 0;
         }
     }
 }

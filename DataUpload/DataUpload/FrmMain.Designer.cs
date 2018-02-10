@@ -73,19 +73,21 @@ namespace DataUpload
             // 
             // txtSoundMesInfo
             // 
+            this.txtSoundMesInfo.BackColor = System.Drawing.Color.White;
             this.txtSoundMesInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSoundMesInfo.Location = new System.Drawing.Point(0, 0);
             this.txtSoundMesInfo.Multiline = true;
             this.txtSoundMesInfo.Name = "txtSoundMesInfo";
+            this.txtSoundMesInfo.ReadOnly = true;
             this.txtSoundMesInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtSoundMesInfo.Size = new System.Drawing.Size(474, 417);
+            this.txtSoundMesInfo.Size = new System.Drawing.Size(583, 614);
             this.txtSoundMesInfo.TabIndex = 0;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 417);
+            this.ClientSize = new System.Drawing.Size(583, 614);
             this.Controls.Add(this.txtSoundMesInfo);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
