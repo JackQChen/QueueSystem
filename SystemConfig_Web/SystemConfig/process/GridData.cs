@@ -9,6 +9,10 @@ namespace SystemConfig.process
 {
     public class GridData : ProcessBase
     {
+        public GridData()
+        {
+        }
+
         public string GetGridData(string bllName)
         {
             var tp = Type.GetType("BLL." + bllName + "BLL,BLL");

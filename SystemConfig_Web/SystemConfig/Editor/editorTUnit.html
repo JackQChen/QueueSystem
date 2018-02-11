@@ -1,0 +1,62 @@
+﻿<html>
+<head>
+    <script>
+        function save() {
+            $.handle({
+                mask: $('.btnSave'),
+                invoke: "SystemConfig.process.EditorData,SystemConfig|SaveEditorData",
+                param: ['TUnit', $('form').serialize()],
+                success: function (data) {
+                    alert(data.result);
+                }
+            });
+        }
+        function init(id) {
+            $.handle({
+                mask: $('.btnSave'),
+                invoke: "SystemConfig.process.EditorData,SystemConfig|GetEditorData",
+                param: ['TUnit', id],
+                success: function (data) {
+                    $("form").SetForm(data);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <form class="form-horizontal" style="margin-top: 30px">
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            ID
+        </label>
+        <div class="col-sm-9">
+            <input readonly type="text" name="id" class="col-xs-10 col-sm-10" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            单位编码
+        </label>
+        <div class="col-sm-9">
+            <input type="text" name="unitSeq" class="col-xs-10 col-sm-10" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            单位名称
+        </label>
+        <div class="col-sm-9">
+            <input type="text" name="unitName" class="col-xs-10 col-sm-10" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            排序号
+        </label>
+        <div class="col-sm-9">
+            <input type="text" name="orderNum" class="col-xs-10 col-sm-10" />
+        </div>
+    </div>
+    </form>
+</body>
+</html>

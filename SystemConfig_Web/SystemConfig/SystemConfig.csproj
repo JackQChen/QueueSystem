@@ -185,10 +185,11 @@
     <Content Include="assets\js\typeahead-bs2.min.js" />
     <Content Include="assets\js\x-editable\ace-editable.min.js" />
     <Content Include="assets\js\x-editable\bootstrap-editable.min.js" />
-    <Content Include="Editor\editor.html" />
+    <Content Include="Editor\editorTBusiness.html" />
+    <Content Include="Editor\editorTUnit.html" />
     <Content Include="error-404.html" />
     <Content Include="error-500.html" />
-    <Content Include="Grid\grid.html" />
+    <Content Include="Grid\Container.html" />
     <Content Include="Grid\gridTBusiness.html" />
     <Content Include="Grid\gridTBusinessAttribute.html" />
     <Content Include="Grid\gridTLedController.html" />
@@ -209,6 +210,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="process\EditorData.cs" />
     <Compile Include="process\GridData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

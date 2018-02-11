@@ -188,21 +188,21 @@
                 </div>
                 <!-- #sidebar-shortcuts -->
                 <ul class="nav nav-list">
-                    <li class="active"><a href="javascript:void(0)" target="Grid/gridTUnit.html"><i class="icon-chevron-right">
+                    <li class="active"><a href="javascript:void(0)" target="gridTUnit.html"><i class="icon-chevron-right">
                     </i><span class="menu-text">单位管理 </span></a></li>
-                    <li><a href="javascript:void(0)" target="Grid/gridTBusiness.html"><i class="icon-chevron-right">
+                    <li><a href="javascript:void(0)" target="gridTBusiness.html"><i class="icon-chevron-right">
                     </i><span class="menu-text">业务维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="Grid/gridTWindowArea.html"><i class="icon-chevron-right">
+                    <li><a href="javascript:void(0)" target="gridTWindowArea.html"><i class="icon-chevron-right">
                     </i><span class="menu-text">区域维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="Grid/gridTUser.html"><i class="icon-chevron-right">
+                    <li><a href="javascript:void(0)" target="gridTUser.html"><i class="icon-chevron-right">
                     </i><span class="menu-text">用户维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="Grid/gridTWindow.html"><i class="icon-chevron-right">
+                    <li><a href="javascript:void(0)" target="gridTWindow.html"><i class="icon-chevron-right">
                     </i><span class="menu-text">窗口维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="Grid/gridTBusinessAttribute.html"><i class="icon-chevron-right">
+                    <li><a href="javascript:void(0)" target="gridTBusinessAttribute.html"><i class="icon-chevron-right">
                     </i><span class="menu-text">业务属性扩展 </span></a></li>
-                    <li><a href="javascript:void(0)" target="Grid/gridTLedController.html"><i class="icon-chevron-right">
+                    <li><a href="javascript:void(0)" target="gridTLedController.html"><i class="icon-chevron-right">
                     </i><span class="menu-text">LED控制卡维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="Grid/gridTLedWindow.html"><i class="icon-chevron-right">
+                    <li><a href="javascript:void(0)" target="gridTLedWindow.html"><i class="icon-chevron-right">
                     </i><span class="menu-text">LED屏幕维护 </span></a></li>
                     <li><a href="#" class="dropdown-toggle"><i class="icon-file-alt"></i><span class="menu-text">
                         其他页面 <span class="badge badge-primary ">5</span> </span><b class="arrow icon-angle-down">
@@ -352,7 +352,9 @@
                     lastTarget = target;
                 $('.nav-list li.active').removeClass('active');
                 obj.parent().addClass('active');
-                $("#divContent").load(target);
+                $("#divContent").load("Grid/Container.html", function () {
+                    $("#gridContainer").load("Grid/" + target);
+                });
             });
         });
     </script>

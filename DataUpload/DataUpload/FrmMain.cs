@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using System.Configuration;
+using System.Text;
 
 namespace DataUpload
 {
@@ -59,6 +60,8 @@ namespace DataUpload
         {
             while (isBasic)
             {
+                DateTime start = DateTime.Now;
+                StringBuilder logText = new StringBuilder();
                 foreach (var key in dicClient)
                 {
                     foreach (var instance in basicListBll)
@@ -67,32 +70,15 @@ namespace DataUpload
                         type = "T_" + type.Substring(1, type.Length - 4);
                         var insert = instance.ProcessInsertData(key.Key, "Server");
                         var update = instance.ProcessUpdateData(key.Key, "Server");
-                        if (insert >= 0)
-                        {
-                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】新增同步完成，已同步【" + insert.ToString() + "】条!");
-                        }
-                        else
-                        {
-                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】新增同步出错!");
-                        }
-                        if (update < 0)
-                        {
-                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】更新同步出错!");
-                        }
-                        else
-                        {
-                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】更新同步完成，已同步【" + update.ToString() + "】条!");
-                        }
-                        //if (!instance.ProcessDeleteData(key.Key, "Server"))
-                        //{
-                        //    WriterLog("区域【" + key.Key + "】表【" + type + "】删除同步出错!");
-                        //}
-                        //else
-                        //{
-                        //    WriterLog("区域【" + key.Key + "】表【" + type + "】删除同步完成!");
-                        //}
+                        string area = "                      区域编码【" + key.Key + "】表【" + type + "】同步：";
+                        area += (insert < 0 ? "新增出错；" : insert == 0 ? "本次无新增；" : "新增【" + insert.ToString() + "】条；");
+                        area += (update < 0 ? "更新出错；" : update == 0 ? "本次无更新；" : "更新【" + update.ToString() + "】条；");
+                        logText.Append(area + "\r\n");
                     }
                 }
+                TimeSpan ts = DateTime.Now - start;
+                WriterLog("基础数据同步\r\n" + logText.ToString());
+                WriterLog("本次基础数据同步完成：共同步【" + dicClient.Count + "】个客户端，用时【" + ts.Minutes + "】分【" + ts.Seconds + "】秒。\r\n*****************************************************************************");
                 Thread.Sleep(BasicInterval * 1000);
             }
         }
@@ -101,6 +87,8 @@ namespace DataUpload
         {
             while (isBusy)
             {
+                StringBuilder logText = new StringBuilder();
+                DateTime start = DateTime.Now;
                 foreach (var key in dicClient)
                 {
                     foreach (var instance in busyListBll)
@@ -109,25 +97,17 @@ namespace DataUpload
                         type = "T_" + type.Substring(1, type.Length - 4);
                         var insert = instance.ProcessInsertData(key.Key, "Server");
                         var update = instance.ProcessUpdateData(key.Key, "Server");
-                        if (insert >= 0)
-                        {
-                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】新增同步完成，已同步【" + insert.ToString() + "】条!");
-                        }
-                        else
-                        {
-                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】新增同步出错!");
-                        }
-                        if (update < 0)
-                        {
-                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】更新同步出错!");
-                        }
-                        else
-                        {
-                            WriterLog("区域编码【" + key.Key + "】表【" + type + "】更新同步完成，已同步【" + update.ToString() + "】条!");
-                        }
+                        string area = "                      区域编码【" + key.Key + "】表【" + type + "】同步：";
+                        area += (insert < 0 ? "新增出错；" : insert == 0 ? "本次无新增；" : "新增【" + insert.ToString() + "】条；");
+                        area += (update < 0 ? "更新出错；" : update == 0 ? "本次无更新；" : "更新【" + update.ToString() + "】条；");
+                        logText.Append(area + "\r\n");
                     }
                 }
+                TimeSpan ts = DateTime.Now - start;
+                WriterLog("业务数据同步明细\r\n" + logText.ToString());
+                WriterLog("本次业务数据同步完成：共同步【" + dicClient.Count + "】个客户端，用时【" + ts.Minutes + "】分【" + ts.Seconds + "】秒。\r\n*****************************************************************************");
                 Thread.Sleep(BusyInterval * 1000);
+
             }
         }
 

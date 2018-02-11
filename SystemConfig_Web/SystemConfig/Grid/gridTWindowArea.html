@@ -1,104 +1,14 @@
 ﻿<html>
 <head>
-    <style>
-        #grid-table a
-        {
-            text-decoration: none;
-            outline: none;
-        }
-        
-        .ui-dialog-titlebar-close
-        {
-            outline: none;
-        }
-    </style>
 </head>
 <body>
-    <div class="page-header" style="margin: 0px">
-        <h1>
-            <small class="blue"><i class="icon-list-alt"></i>&nbsp;区域维护 </small>
-        </h1>
-    </div>
-    <!-- /.page-header -->
     <div>
-        <!-- PAGE CONTENT BEGINS -->
         <table id="grid-table">
         </table>
         <div id="grid-pager">
         </div>
-        <div id="dialog-message" class="hide">
-        </div>
-        <!-- #dialog-message -->
-        <script type="text/javascript">
-
-            var $path_base = "/"; //this will be used in gritter alerts containing images
-        
-        </script>
-        <!-- PAGE CONTENT ENDS -->
     </div>
-    <!-- /.row -->
-    <!-- /.main-content -->
-    <!-- page specific plugin scripts -->
-    <script src="assets/js/jqGrid/jquery.jqGrid.min.js"></script>
-    <script src="assets/js/jqGrid/i18n/grid.locale-en.js"></script>
-    <script src="assets/js/jquery-ui-1.10.3.full.min.js"></script>
-    <!-- inline scripts related to this page -->
-    <script type="text/javascript">
-            
-                //override dialog's title function to allow for HTML titles
-				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-					_title: function(title) {
-						var $title = this.options.title || '&nbsp;'
-						if( ("title_html" in this.options) && this.options.title_html == true )
-							title.html($title);
-						else title.text($title);
-					}
-				}));
-            //replace icons with FontAwesome icons like above
-            function updatePagerIcons(table) {
-                var replacement =
-                {
-                    'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
-                    'ui-icon-seek-prev': 'icon-angle-left bigger-140',
-                    'ui-icon-seek-next': 'icon-angle-right bigger-140',
-                    'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
-                };
-                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-                    var icon = $(this);
-                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-                })
-            }
-
-    function showEditor()
-    { 
-                    $('#dialog-message').load("editor.html");
-					var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
-						modal: true,
-                        width : "600",     
-                        height : "500",  
-						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='icon-ok'></i> jQuery UI Dialog</h4></div>",
-						title_html: true,
-						buttons: [ 
-							{
-								text: "OK",
-								"class" : "btn btn-primary btn-xs",
-								click: function() {
-                                    test();
-									$( this ).dialog( "close" ); 
-								} 
-							},
-							{
-								text: "Cancel",
-								"class" : "btn btn-xs",
-								click: function() {
-									$( this ).dialog( "close" ); 
-								} 
-							}
-						]
-					});
-    } 
-
+    <script type="text/javascript"> 
         $(function () {
            $.handle({ 
                 mask: $('#divContent'),
@@ -110,23 +20,12 @@
             jQuery(grid_selector).jqGrid({
                 data: grid_data,
                 datatype: "local",
-                height: $(window).height() - 234,
-                colNames: ['','ID', '单位编号', '单位名称', '排序号', 'Ship via', 'Notes'],
-                colModel: [ 
-                    {
-                    label: '操作', name: '', width: 40,sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
-                        var view = "<a class='blue' href='javascript:void(0)' onclick='showEditor()' title='查看'><i class='icon-zoom-in bigger-130'></i></a>&nbsp;&nbsp;";
-                        var modify = "<a class='green' href='javascript:void(0)' onclick='' title='编辑'><i class='icon-pencil bigger-130'></i></a>&nbsp;&nbsp;";
-                        var del ="<a class='red' href='javascript:void(0)' onclick='' title='删除'><i class='icon-trash bigger-130'></i></a>";
-                        return view+modify + del  ;
-                    }},
-                    { name: 'id', index: 'id', width: 60, sorttype: "int", editable: true },
-                    { name: 'unitSeq', index: 'sdate', width: 90, editable: true, sorttype: "date"},
-                    { name: 'unitName', index: 'name', width: 150, editable: true, editoptions: { size: "20", maxlength: "30" } },
-                    { name: 'orderNum', index: 'stock', width: 70, editable: true, edittype: "checkbox", editoptions: { value: "Yes:No" } },
-                    { name: 'ship', index: 'ship', width: 90, editable: true, edittype: "select", editoptions: { value: "FE:FedEx;IN:InTime;TN:TNT;AR:ARAMEX" } },
-                    { name: 'note', index: 'note', width: 150, sortable: false, editable: true, edittype: "textarea", editoptions: { rows: "2", cols: "10" } }
+                height: gridHeight,
+                colNames: ['ID', '区域名称', '备注'],
+                colModel: [
+                    { name: 'id' , width: 100, sorttype: "int"  },
+                    { name: 'areaName' },
+                    { name: 'remark'  }
                 ],
                 rowNum: 10,
                 rowList: [10, 20, 30],
@@ -140,9 +39,7 @@
                 },
             });
                 }
-            });
-
-
+            }); 
         });
     </script>
 </body>
