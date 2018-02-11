@@ -5,7 +5,7 @@
             $.handle({
                 mask: $('.btnSave'),
                 invoke: "WebApplication1.process.TestProcess,WebApplication1|submit",
-                param: [$('form:eq(1)').serialize()],
+                param: [$('#dialog-message form').serialize()],
                 success: function (data) {
                     if (data.errmsg != null) {
                         alert(data.errmsg);
@@ -20,7 +20,7 @@
                 invoke: "SystemConfig.process.EditorData,SystemConfig|GetEditorData",
                 param: ['TBusiness', id],
                 success: function (data) {
-                    $("form").SetForm(data);
+                    $("#dialog-message form").SetForm(data);
                 }
             });
         }

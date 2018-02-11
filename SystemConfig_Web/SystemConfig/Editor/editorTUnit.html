@@ -5,7 +5,7 @@
             $.handle({
                 mask: $('.btnSave'),
                 invoke: "SystemConfig.process.EditorData,SystemConfig|SaveEditorData",
-                param: ['TUnit', $('form').serialize()],
+                param: ['TUnit', $('#dialog-message form').serialize()],
                 success: function (data) {
                     alert(data.result);
                 }
@@ -17,7 +17,7 @@
                 invoke: "SystemConfig.process.EditorData,SystemConfig|GetEditorData",
                 param: ['TUnit', id],
                 success: function (data) {
-                    $("form").SetForm(data);
+                    $("#dialog-message form").SetForm(data);
                 }
             });
         }
@@ -38,7 +38,7 @@
             单位编码
         </label>
         <div class="col-sm-9">
-            <input type="text" name="unitSeq" class="col-xs-10 col-sm-10" />
+            <input type="text" name="unitSeq" autocomplete="off" class="col-xs-10 col-sm-10" />
         </div>
     </div>
     <div class="form-group">
@@ -46,7 +46,7 @@
             单位名称
         </label>
         <div class="col-sm-9">
-            <input type="text" name="unitName" class="col-xs-10 col-sm-10" />
+            <input type="text" name="unitName" autocomplete="off" class="col-xs-10 col-sm-10" />
         </div>
     </div>
     <div class="form-group">
@@ -54,7 +54,7 @@
             排序号
         </label>
         <div class="col-sm-9">
-            <input type="text" name="orderNum" class="col-xs-10 col-sm-10" />
+            <input type="text" name="orderNum" autocomplete="off" class="col-xs-10 col-sm-10" />
         </div>
     </div>
     </form>
