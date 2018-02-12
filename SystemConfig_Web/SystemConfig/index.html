@@ -347,7 +347,7 @@
                 var obj = $(e.currentTarget);
                 var target = obj.attr('target');
                 if (lastTarget == target)
-                    return;
+                    return false;
                 else
                     lastTarget = target;
                 $('.nav-list li.active').removeClass('active');
@@ -355,6 +355,7 @@
                 $("#divContent").load("Grid/Container.html", function () {
                     $("#gridContainer").load("Grid/" + target);
                 });
+                return false;
             });
         });
     </script>
