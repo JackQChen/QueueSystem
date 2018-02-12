@@ -9,43 +9,61 @@
         </div>
     </div>
     <script type="text/javascript">
-             
-        $(function () {
-            editorTarget = "editorTUnit.html";
-           $.handle({ 
-                mask: $('#divContent'),
-                invoke: "SystemConfig.process.GridData,SystemConfig|GetGridData",
-                param: ['TUnit'],
-                success: function (grid_data) { 
-                      var grid_selector = "#grid-table";
-            var pager_selector = "#grid-pager";
-            jQuery(grid_selector).jqGrid({
-                data: grid_data,
-                datatype: "local",
-                height: gridHeight,
-                colNames: ['ID', '单位编码', '单位名称', '排序号'],
-                colModel: [
-                    { name: 'id' , width: 60, sorttype: "int" },
-                    { name: 'unitSeq' },
-                    { name: 'unitName'},
-                    { name: 'orderNum' }
-                ],
-                rowNum: 10,
-                rowList: [10, 20, 30],
-                pager: pager_selector,
-                autowidth: true,
-                loadComplete: function () {
-                    var table = this;
-                    setTimeout(function () {
-                        updatePagerIcons(table);
-                    }, 0);
-            $(grid_selector).setSelection(grid_data[0].id);
-                },
-            });
-                }
-            }); 
+      editorTarget = "editorTUnit.html";
+      var grid_selector = "#grid-table";
+      var pager_selector = "#grid-pager";
+      function initGridData() {
+        jQuery(grid_selector).jqGrid({
+          datatype: "local",
+          height: gridHeight,
+          colNames: ['ID', '单位编码', '单位名称', '排序号'],
+          colModel: [{
+            name: 'id',
+            width: 60,
+            sorttype: "int"
+          },
+          {
+            name: 'unitSeq'
+          },
+          {
+            name: 'unitName'
+          },
+          {
+            name: 'orderNum'
+          }],
+          rowNum: 10,
+          rowList: [10, 20, 30],
+          pager: pager_selector,
+          autowidth: true,
+          loadComplete: function() {
+            var table = this;
+            setTimeout(function() {
+              updatePagerIcons(table);
+            },
+            0);
+            var rows = $(grid_selector).jqGrid('getRowData');
+            if (rows.length > 0) 
+                $(grid_selector).setSelection(rows[0].id);
+          },
         });
-    
+      }
+      function loadGridData() {
+        $.handle({
+          mask: $('#divContent'),
+          invoke: "SystemConfig.process.GridData,SystemConfig|GetGridData",
+          param: ['TUnit'],
+          success: function(grid_data) {
+            $(grid_selector).jqGrid('setGridParam', {
+              data: grid_data,
+              page: 1
+            }).trigger("reloadGrid");
+          }
+        });
+      }
+      $(function() {
+        initGridData();
+        loadGridData();
+      });
     </script>
 </body>
 </html>
