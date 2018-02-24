@@ -8,14 +8,16 @@
     var pager_selector = "#grid-pager";
 $(function() {
     $(grid_selector).jqGrid({
-        url: "/TUnit/GetGridData",
+        url: "/TUser/GetGridData",
         datatype: "json",
         height: $(document).height() - 127,
         colModel: [
-                { label: 'ID', name: 'id', width: 60, sorttype: "int" }, 
-                { label: '单位编码', name: 'unitSeq' }, 
-                { label: '单位名称', name: 'unitName' }, 
-                { label: '排序号', name: 'orderNum' }
+                { label: 'ID', name: 'ID', width: 60, sorttype: "int" },
+                { label: '姓名', name: 'Name', width: 90 },
+                { label: '工号', name: 'Code', width: 90 },
+                { label: '性别', name: 'Sex', width: 90 },
+                { label: '状态', name: 'State', width: 90 },
+                { label: '备注', name: 'Remark', width: 90 }
         ],
         rowNum: -1,
         pager: pager_selector,

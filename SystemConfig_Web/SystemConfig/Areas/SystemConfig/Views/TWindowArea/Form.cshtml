@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script>
+    function submitForm(callback) {
+        $.submitForm({
+            url: "SubmitForm",
+            data: $('form').serializeForm(),
+            callback: callback
+        });
+    }
+</script>
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" style="margin-top: 30px">
+            <input  type="hidden" name= "id" value="@Model.id" />
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    ID
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input id="txtId" readonly type="text" class="col-xs-10 col-sm-10" />
+                    <script>
+                        var id = $("form input[name='id']").val();
+                        if (id == -1)
+                            $("#txtId").val("新增");
+                        else
+                            $("#txtId").val(id);
+                    </script>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    单位编码
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="unitSeq" value="@Model.unitSeq"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    单位名称
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="unitName" value="@Model.unitName" autocomplete="off" class="col-xs-10 col-sm-10"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    排序号
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="orderNum" value="@Model.orderNum"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

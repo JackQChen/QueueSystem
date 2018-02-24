@@ -114,8 +114,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\SystemConfig\Controllers\TBusinessAttributeController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TBusinessController.cs" />
+    <Compile Include="Areas\SystemConfig\Controllers\TLedControllerController.cs" />
+    <Compile Include="Areas\SystemConfig\Controllers\TLedWindowController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TUnitController.cs" />
+    <Compile Include="Areas\SystemConfig\Controllers\TUserController.cs" />
+    <Compile Include="Areas\SystemConfig\Controllers\TWindowAreaController.cs" />
+    <Compile Include="Areas\SystemConfig\Controllers\TWindowController.cs" />
     <Compile Include="Areas\SystemConfig\SystemConfigAreaRegistration.cs" />
     <Compile Include="Common\Pagination.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -240,6 +246,9 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\SystemConfig\Models\" />
     <Folder Include="Areas\SystemConfig\Views\Shared\" />
+    <Folder Include="Areas\SystemConfig\Views\TBusinessAttribute\" />
+    <Folder Include="Areas\SystemConfig\Views\TLedWindow\" />
+    <Folder Include="Areas\SystemConfig\Views\TWindow\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +264,12 @@
   <ItemGroup>
     <Content Include="Areas\SystemConfig\Views\TBusiness\Form.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TBusiness\Index.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TLedController\Form.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TLedController\Index.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TUser\Form.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TUser\Index.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TWindowArea\Form.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TWindowArea\Index.cshtml" />
     <None Include="Content\font\font.woff2" />
     <None Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Views\Home\Index.cshtml" />
