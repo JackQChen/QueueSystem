@@ -27,6 +27,10 @@
     <!-- ace settings handler -->
     <script src="@Url.Content("~/Content/js/ace-extra.min.js")"></script>
     <style>
+        body
+        {
+            font-family: '微软雅黑';
+        }
         .ui-dialog-titlebar-close
         {
             outline: none;
@@ -193,22 +197,16 @@
                 </div>
                 <!-- #sidebar-shortcuts -->
                 <ul class="nav nav-list">
-                    <li class="active"><a href="javascript:void(0)" target="TUnit"><i class="icon-chevron-right">
-                    </i><span class="menu-text">单位管理 </span></a></li>
-                    <li><a href="javascript:void(0)" target="TBusiness"><i class="icon-chevron-right"></i>
-                        <span class="menu-text">业务维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="gridTWindowArea.html"><i class="icon-chevron-right">
-                    </i><span class="menu-text">区域维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="gridTUser.html"><i class="icon-chevron-right">
-                    </i><span class="menu-text">用户维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="gridTWindow.html"><i class="icon-chevron-right">
-                    </i><span class="menu-text">窗口维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="gridTBusinessAttribute.html"><i class="icon-chevron-right">
-                    </i><span class="menu-text">业务属性扩展 </span></a></li>
-                    <li><a href="javascript:void(0)" target="gridTLedController.html"><i class="icon-chevron-right">
-                    </i><span class="menu-text">LED控制卡维护 </span></a></li>
-                    <li><a href="javascript:void(0)" target="gridTLedWindow.html"><i class="icon-chevron-right">
-                    </i><span class="menu-text">LED屏幕维护 </span></a></li>
+                    @{
+                        foreach (KeyValuePair<string, string> menu in @Model)
+                        {
+                        @Html.Raw("<li><a href='javascript:void(0)' target='");
+                        @menu.Key
+                        @Html.Raw("'><i class='icon-chevron-right'></i><span class='menu-text'>");
+                        @menu.Value
+                        @Html.Raw("</span></a></li>");
+                        }
+                    }
                     <li><a href="#" class="dropdown-toggle"><i class="icon-file-alt"></i><span class="menu-text">
                         其他页面 <span class="badge badge-primary ">5</span> </span><b class="arrow icon-angle-down">
                         </b></a>
@@ -376,6 +374,7 @@
                 $('#frameContent').attr('src', "SystemConfig/" + lastTarget);
                 return false;
             });
+            $('.nav-list li:eq(0)').addClass('active');
             $('#frameContent').attr('src', "SystemConfig/" + lastTarget);
         });
 
