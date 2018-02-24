@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- basic styles -->
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/css/font-awesome.min.css")" rel="stylesheet" />
+    <!--[if IE 7]>
+		  <link rel="stylesheet" href="@Url.Content("~/Content/css/font-awesome-ie7.min.css")" />
+		<![endif]-->
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ui.jqgrid.css")" />
+    <!-- fonts -->
+    <link href="@Url.Content("~/Content/font/font.css")" rel="stylesheet" />
+    <!-- ace styles -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ace.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ace-rtl.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ace-skins.min.css")" />
+    <!--[if lte IE 8]>
+		  <link rel="stylesheet" href="@Url.Content("~/Content/css/ace-ie.min.css")" />
+		<![endif]-->
+    <!-- inline styles related to this page -->
+    <script src="@Url.Content("~/Content/js/jquery-2.0.3.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jqGrid/jquery.jqGrid.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jqGrid/i18n/grid.locale-cn.js")"></script>
+    <script type="text/javascript">
+        if ("ontouchend" in document) document.write("<script src='@Url.Content("~/Content/js/jquery.mobile.custom.min.js")'>" + "</" + "script>"); 
+    </script>
+    <script>
+        //replace icons with FontAwesome icons like above
+        function updatePagerIcons(table) {
+            var replacement = {
+                'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+                'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+                'ui-icon-seek-next': 'icon-angle-right bigger-140',
+                'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+            };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+                if ($class in replacement)
+                    icon.attr('class', 'ui-icon ' + replacement[$class]);
+            })
+        }
+        $.modalOpen = function (opt) {
+            window.parent.modalOpen(opt);
+        };
+        $.modalContent = function () {
+            return $(window.parent.document).find("#dialog-editor iframe")[0].contentWindow;
+        }
+        $.modalConfirm = function (opt) {
+            if (opt.title == null)
+                opt.title = "提示";
+            window.parent.modalConfirm(opt);
+        }
+        $.deleteForm = function (arg) {
+            var btns = $(window.parent.document).find("#dialog-confirm").parent().find(".ui-dialog-buttonpane button");
+            btns.attr('disabled', 'disabled');
+            arg.type = "POST";
+            var token = $("input[name=__RequestVerificationToken]");
+            arg.data = "__RequestVerificationToken=" + token[0].value;
+            if (arg.complete == null)
+                arg.complete = function () {
+                    window.parent.modalConfirmClose();
+                    if (arg.callback != null)
+                        arg.callback();
+                };
+            $.ajax(arg);
+        };
+    </script>
+</head>
+<body style="background: white;">
+    @RenderBody()
+    @Html.AntiForgeryToken()
+</body>
+</html>

@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+$(function() {
+    $(grid_selector).jqGrid({
+        url: "/TBusiness/GetGridData",
+        datatype: "json",
+        height: $(document).height() - 127,    
+        colModel: [
+                    { name: 'id', label:'ID', width: 50, sorttype: "int" },
+                    { name: 'unitSeq',  label:'业务所属部门编码',width: 120 },
+                    { name: 'unitName', label:'业务所属部门名称',width: 120 },
+                    { name: 'busiSeq', label:'预约业务流水号', width: 110 },
+                    { name: 'busiCode', label:'预约业务编号', width: 100 },
+                    { name: 'busiName', label:'预约业务名称', },
+                    { name: 'busiType',  label:'预约类型',width: 70 },
+                    { name: 'acceptBusi', label:'是否可预约办件', width: 110 },
+                    { name: 'getBusi',  label:'是否可预约领件',width: 110 },
+                    { name: 'askBusi', label:'是否可预约咨询', width: 110 },
+                ],
+        rowNum: -1,
+        pager: pager_selector,
+        autowidth: true,
+        loadComplete: function() {
+            var table = this;
+            setTimeout(function() {
+                updatePagerIcons(table);
+            }
+            , 0);
+            //选中第一行
+            var rows = $(grid_selector).jqGrid('getRowData');
+            if (rows.length > 0)
+                $(grid_selector).setSelection(rows[0].id);
+        },
+    });
+}
+);
+
+function Add() 
+{
+    $.modalOpen({
+        title :"业务管理 - 新增",
+        url: "SystemConfig/TBusiness/Form?id=-1" ,
+        callback:function(){  
+            $.modalContent().submitForm(function(){
+                Refresh();
+            });
+        }, 
+     });
+}
+
+function Edit() 
+{
+    var sid = $(grid_selector).jqGrid('getGridParam', 'selrow');
+    if (sid == null) {
+        alert("没有任何选中行！");
+        return;
+    }
+    $.modalOpen({
+        title :"业务管理 - 编辑",
+        url: "SystemConfig/TBusiness/Form?id="+ sid ,
+        callback:function(){  
+            $.modalContent().submitForm(function(){
+                Refresh();
+            });
+        }, 
+     });
+}
+
+function Delete()
+{
+    var sid = $(grid_selector).jqGrid('getGridParam', 'selrow');
+    if (sid == null) {
+        alert("没有任何选中行！");
+        return;
+    }
+    $.modalConfirm({
+    text:"确定删除该记录吗？",
+    callback:function(){
+        $.deleteForm({
+            url: "TBusiness/DeleteForm?id="+ sid,
+            callback:function(){
+                Refresh();
+                }
+            });
+        }
+    });
+}
+
+function View()
+{
+    var sid = $(grid_selector).jqGrid('getGridParam', 'selrow');
+    if (sid == null) {
+        alert("没有任何选中行！");
+        return;
+    }
+    $.modalOpen({
+        title :"业务管理 - 查看",
+        url: "SystemConfig/TBusiness/Form?id="+ sid,
+        view : true
+     });
+}
+
+function Refresh() 
+{
+    $(grid_selector).jqGrid('setGridParam').trigger('reloadGrid');
+}
+
+</script>
+<div>
+    <div class="btn-group">
+        <button class="btn btn-sm btn-primary" onclick="Add()">
+            <i class="icon-plus-sign bigger-110"></i>新增</button>
+        <button class="btn btn-sm btn-success" onclick="Edit()">
+            <i class="icon-pencil bigger-110"></i>编辑</button>
+        <button class="btn btn-sm btn-danger" onclick="Delete()">
+            <i class="icon-minus-sign bigger-110"></i>删除</button>
+        <button class="btn btn-sm btn-yellow" onclick="View()">
+            <i class="icon-zoom-in bigger-110"></i>查看</button>
+        <button class="btn btn-sm btn-info" onclick="Refresh()">
+            <i class="icon-refresh bigger-110"></i>刷新</button>
+    </div>
+    <table id="grid-table">
+    </table>
+    <div id="grid-pager">
+    </div>
+</div>
