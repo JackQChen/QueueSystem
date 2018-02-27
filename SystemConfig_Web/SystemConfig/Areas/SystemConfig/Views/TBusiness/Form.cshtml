@@ -69,16 +69,15 @@
                 </label>
                 <div class="col-sm-9 col-xs-9">
                     <select name="busiType" class="col-xs-10 col-sm-10">
-                        <option value="1" selected>简单</option>
+                        <option value="1">简单</option>
                         <option value="2">详细</option>
                     </select>
-                    <script>
-                    @if (!string.IsNullOrEmpty(Model.busiType))
-                    {
-                        @:$("form select[name='busiType']").val("@Model.busiType");
-                    }
-                    </script>
                 </div>
+                @{
+                    @Html.Raw("<script>$(\"form select[name='busiType']\").val('");
+                    @Html.Raw(string.IsNullOrEmpty(Model.busiType) ? "1" : Model.busiType);
+                    @Html.Raw("');</script>");
+                }
             </div>
             <div class="form-group">
                 <div class="checkbox" style="text-align: center">

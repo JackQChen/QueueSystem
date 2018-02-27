@@ -84,7 +84,7 @@ namespace QueueClient
         TUnitModel selectUnit;
         TBusinessModel selectBusy;
         TAppointmentModel selectAppoomt;
-        string appPhone = "13555555555";
+        string appPhone = "X";
         string appName = "李青云";
         Dictionary<string, Control> uc = new Dictionary<string, Control>();
         Dictionary<string, int> ucTimer = new Dictionary<string, int>();
