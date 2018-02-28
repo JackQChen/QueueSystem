@@ -74,7 +74,7 @@ namespace CallSystem
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            SetConfigValue("AreaNo", "1");
+            SetConfigValue("AreaNo", "1,2");
             areaNo = System.Configuration.ConfigurationManager.AppSettings["AreaNo"];
             clientName = System.Configuration.ConfigurationManager.AppSettings["ClientName"];
             clearTime = System.Configuration.ConfigurationManager.AppSettings["ClearTime"];
