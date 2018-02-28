@@ -69,15 +69,15 @@
                 </label>
                 <div class="col-sm-9 col-xs-9">
                     <select name="busiType" class="col-xs-10 col-sm-10">
-                        <option value="1">简单</option>
-                        <option value="2">详细</option>
+                        @foreach (var item in this.ViewBag.busiType)
+                        {
+                            <option value="@item.Value">@item.Name</option>
+                        }
                     </select>
+                    <script>
+                        $("form select[name='busiType']").val("@(string.IsNullOrEmpty(Model.busiType) ? "1" : Model.busiType)");
+                    </script>
                 </div>
-                @{
-                    @Html.Raw("<script>$(\"form select[name='busiType']\").val('");
-                    @Html.Raw(string.IsNullOrEmpty(Model.busiType) ? "1" : Model.busiType);
-                    @Html.Raw("');</script>");
-                }
             </div>
             <div class="form-group">
                 <div class="checkbox" style="text-align: center">

@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-xs-12">
             <form class="form-horizontal" style="margin-top: 30px">
-            <input  type="hidden" name= "id" value="@Model.id" />
+            <input  type="hidden" name= "ID" value="@Model.ID" />
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
                     ID
@@ -23,7 +23,7 @@
                 <div class="col-sm-9 col-xs-9">
                     <input id="txtId" readonly type="text" class="col-xs-10 col-sm-10" />
                     <script>
-                        var id = $("form input[name='id']").val();
+                        var id = $("form input[name='ID']").val();
                         if (id == -1)
                             $("#txtId").val("新增");
                         else
@@ -33,26 +33,66 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    单位编码
+                    用户姓名
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="unitSeq" value="@Model.unitSeq"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="Name" value="@Model.Name"  autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    单位名称
+                    工号
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="unitName" value="@Model.unitName" autocomplete="off" class="col-xs-10 col-sm-10"/>
+                    <input type="text" name="Code" value="@Model.Code" autocomplete="off" class="col-xs-10 col-sm-10"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    排序号
+                    密码
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="orderNum" value="@Model.orderNum"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="Password" value="@Model.Password"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    性别
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <select name="Sex" class="col-xs-10 col-sm-10">
+                        @foreach (var item in this.ViewBag.Sex)
+                        {
+                            <option value="@item.Value">@item.Name</option>
+                        }
+                    </select>
+                    <script>
+				        $("form select[name='Sex']").val("@(string.IsNullOrEmpty(Model.Sex) ? "3" : Model.Sex)");
+                    </script>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    状态
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <select name="State" class="col-xs-10 col-sm-10">
+                        @foreach (var item in this.ViewBag.State)
+                        { 
+                            <option value="@item.Value">@item.Name</option>
+                        }
+                    </select>
+                    <script>
+                        $("form select[name='State']").val("@(string.IsNullOrEmpty(Model.State) ? "1" : Model.State)"); 
+                    </script>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    备注
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="Remark" value="@Model.Remark"  autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>

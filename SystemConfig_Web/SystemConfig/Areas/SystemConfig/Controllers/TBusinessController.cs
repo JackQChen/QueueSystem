@@ -8,6 +8,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
     public class TBusinessController : Controller
     {
         TBusinessBLL bll = new TBusinessBLL();
+        TDictionaryBLL dicBll = new TDictionaryBLL();
+
         //
         // GET: /SystemConfig/TUnit/
         public ActionResult Index()
@@ -29,6 +31,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             var model = this.bll.GetModel(id);
             if (model == null)
                 model = new TBusinessModel() { id = -1 };
+            this.ViewBag.busiType = dicBll.GetModelList(DictionaryString.AppointmentType);
             return View(model);
         }
 

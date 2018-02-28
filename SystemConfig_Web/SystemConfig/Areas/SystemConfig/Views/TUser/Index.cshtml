@@ -31,7 +31,7 @@ $(function() {
             //选中第一行
             var rows = $(grid_selector).jqGrid('getRowData');
             if (rows.length > 0)
-                $(grid_selector).setSelection(rows[0].id);
+                $(grid_selector).setSelection(rows[0].ID);
         },
     });
 }
@@ -40,8 +40,8 @@ $(function() {
 function Add() 
 {
     $.modalOpen({
-        title :"单位管理 - 新增",
-        url: "SystemConfig/TUnit/Form?id=-1" ,
+        title :"用户管理 - 新增",
+        url: "SystemConfig/TUser/Form?id=-1" ,
         callback:function(){  
             $.modalContent().submitForm(function(){
                 Refresh();
@@ -58,8 +58,8 @@ function Edit()
         return;
     }
     $.modalOpen({
-        title :"单位管理 - 编辑",
-        url: "SystemConfig/TUnit/Form?id="+ sid ,
+        title :"用户管理 - 编辑",
+        url: "SystemConfig/TUser/Form?id="+ sid ,
         callback:function(){  
             $.modalContent().submitForm(function(){
                 Refresh();
@@ -79,7 +79,7 @@ function Delete()
     text:"确定删除该记录吗？",
     callback:function(){
         $.deleteForm({
-            url: "TUnit/DeleteForm?id="+ sid,
+            url: "TUser/DeleteForm?id="+ sid,
             callback:function(){
                 Refresh();
                 }
@@ -96,8 +96,8 @@ function View()
         return;
     }
     $.modalOpen({
-        title :"单位管理 - 查看",
-        url: "SystemConfig/TUnit/Form?id="+ sid,
+        title :"用户管理 - 查看",
+        url: "SystemConfig/TUser/Form?id="+ sid,
         view : true
      });
 }

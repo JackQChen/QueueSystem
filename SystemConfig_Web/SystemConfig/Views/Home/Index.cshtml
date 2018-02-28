@@ -197,15 +197,10 @@
                 </div>
                 <!-- #sidebar-shortcuts -->
                 <ul class="nav nav-list">
-                    @{
-                        foreach (KeyValuePair<string, string> menu in @Model)
-                        {
-                        @Html.Raw("<li><a href='javascript:void(0)' target='");
-                        @menu.Key
-                        @Html.Raw("'><i class='icon-chevron-right'></i><span class='menu-text'>");
-                        @menu.Value
-                        @Html.Raw("</span></a></li>\r\n");
-                        }
+                    @foreach (KeyValuePair<string, string> menu in @Model)
+                    {
+                        <li><a href="javascript:void(0)" target="@menu.Key"><i class="icon-chevron-right"></i>
+                            <span class='menu-text'>@menu.Value</span></a></li>
                     }
                     <li><a href="#" class="dropdown-toggle"><i class="icon-file-alt"></i><span class="menu-text">
                         其他页面 <span class="badge badge-primary ">5</span> </span><b class="arrow icon-angle-down">
