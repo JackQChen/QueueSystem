@@ -20,5 +20,11 @@ namespace SystemConfig
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Server.ClearError();
+            Response.Redirect("~/Error/Error500", true);
+        }
     }
 }

@@ -124,6 +124,7 @@
     <Compile Include="Areas\SystemConfig\Controllers\TWindowController.cs" />
     <Compile Include="Areas\SystemConfig\SystemConfigAreaRegistration.cs" />
     <Compile Include="Common\Pagination.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -273,9 +274,10 @@
     <None Include="Content\font\font.woff2" />
     <None Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
     <Content Include="Views\Shared\_LayoutForm.cshtml" />
     <Content Include="Views\Shared\_LayoutIndex.cshtml" />
+    <Content Include="Views\Error\Error500.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
