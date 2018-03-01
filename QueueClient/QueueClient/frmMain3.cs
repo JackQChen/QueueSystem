@@ -1685,7 +1685,7 @@ namespace QueueClient
                 oprateClassifyType = "出票",
                 oprateTime = DateTime.Now,
                 oprateLog = strLog,
-                sysFlag =0
+                sysFlag = 0
             });
             Print(queue, area, windowStr, waitNo, "");
             //}
@@ -1752,7 +1752,7 @@ namespace QueueClient
             string idCard = person == null ? "" : person.idcard;
             string qNmae = person == null ? "" : person.name;
             string reserveSeq = app == null ? "" : app.reserveSeq;
-            var line = qBll.QueueLine(selectBusy, selectUnit, ticketStart, idCard, qNmae, reserveSeq);
+            var line = qBll.QueueLine(selectBusy, selectUnit, ticketStart, idCard, qNmae, app);
             if (app != null)
             {
                 app.sysFlag = 0;

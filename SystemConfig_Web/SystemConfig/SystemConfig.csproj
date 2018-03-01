@@ -249,7 +249,6 @@
     <Folder Include="Areas\SystemConfig\Views\Shared\" />
     <Folder Include="Areas\SystemConfig\Views\TBusinessAttribute\" />
     <Folder Include="Areas\SystemConfig\Views\TLedWindow\" />
-    <Folder Include="Areas\SystemConfig\Views\TWindow\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +270,8 @@
     <Content Include="Areas\SystemConfig\Views\TUser\Index.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TWindowArea\Form.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TWindowArea\Index.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TWindow\Form.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TWindow\Index.cshtml" />
     <None Include="Content\font\font.woff2" />
     <None Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Views\Home\Index.cshtml" />

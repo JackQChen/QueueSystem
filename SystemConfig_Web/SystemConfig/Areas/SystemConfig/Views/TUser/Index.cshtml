@@ -12,7 +12,7 @@ $(function() {
         datatype: "json",
         height: $(document).height() - 127,
         colModel: [
-                { label: 'ID', name: 'ID', width: 60, sorttype: "int" },
+                { label: 'ID', name: 'ID', width: 60, sorttype: "int", key:true },
                 { label: '姓名', name: 'Name', width: 90 },
                 { label: '工号', name: 'Code', width: 90 },
                 { label: '性别', name: 'Sex', width: 90 },
@@ -46,7 +46,7 @@ function Add()
             $.modalContent().submitForm(function(){
                 Refresh();
             });
-        }, 
+        }
      });
 }
 
@@ -64,7 +64,7 @@ function Edit()
             $.modalContent().submitForm(function(){
                 Refresh();
             });
-        }, 
+        }
      });
 }
 

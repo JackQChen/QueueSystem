@@ -12,7 +12,7 @@ $(function() {
         datatype: "json",
         height: $(document).height() - 127,    
         colModel: [
-                    { name: 'id', label:'ID', width: 50, sorttype: "int" },
+                    { name: 'id', label:'ID', width: 50, sorttype: "int", key:true },
                     { name: 'unitSeq',  label:'业务所属部门编码',width: 120 },
                     { name: 'unitName', label:'业务所属部门名称',width: 120 },
                     { name: 'busiSeq', label:'预约业务流水号', width: 110 },
@@ -50,7 +50,7 @@ function Add()
             $.modalContent().submitForm(function(){
                 Refresh();
             });
-        }, 
+        }
      });
 }
 
@@ -68,7 +68,7 @@ function Edit()
             $.modalContent().submitForm(function(){
                 Refresh();
             });
-        }, 
+        }
      });
 }
 
