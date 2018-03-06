@@ -4,28 +4,22 @@
 }
 <script type="text/javascript">
 
-    var gridWin = "#grid-table";
-    var pagerWin = "#grid-pager";
-    var gridBusi = "#grid-Busi-table";
-    var gridUser = "#grid-User-table";
+    var grid1 = "#grid-table_1";
+    var grid2 = "#grid-table_2";
+    var grid3 = "#grid-table_3";
 
     $(function () {
         initBusiData();
-        initUserData();
-        $(gridWin).jqGrid({
-            url: "/TWindow/GetGridData",
+        initAttrData();
+        $(grid1).jqGrid({
+            url: "/TBusinessAttribute/GetGridData",
             datatype: "json",
-            height: $(document).height() - 131,
+            height: $(document).height() / 2 - 88,
             colModel: [
-                { label: 'ID', name: 'ID', width: 60, sorttype: "int", key: true },
-                { label: '窗口名称', name: 'Name' },
-                { label: '窗口号', name: 'Number' },
-                { label: '窗口状态', name: 'State' },
-                { label: '呼叫器编号', name: 'CallNumber' },
-                { label: '区域名称', name: 'AreaName' }
+                { label: '单位编码', name: 'unitSeq', key: true },
+                { label: '单位名称', name: 'unitName' }
         ],
             rowNum: -1,
-            pager: pagerWin,
             autowidth: true,
             loadComplete: function () {
                 var table = this;
@@ -33,88 +27,101 @@
                     updatePagerIcons(table);
                 }, 0);
                 //选中第一行
-                var rows = $(gridWin).jqGrid('getRowData');
+                var rows = $(grid1).jqGrid('getRowData');
                 if (rows.length > 0)
-                    $(gridWin).setSelection(rows[0].ID);
+                    $(grid1).setSelection(rows[0].unitSeq);
             },
             onSelectRow: function (id) {
-                refreshDetailData(id);
+                $.ajax({
+                    url: "/TBusinessAttribute/GetGridDataByUnitSeq?unitSeq=" + $(grid1).jqGrid('getRowData', id).unitSeq,
+                    dataType: "json",
+                    success: function (data) {
+                        refreshBusiData(data);
+                    }
+                });
             }
         });
     });
 
-    function refreshDetailData(id) {
-        $.ajax({
-            url: "/TWindow/GetGridDetailData?winId=" + id,
-            dataType: "json",
-            success: function (data) {
-                refreshBusiData(data.busiData);
-                refreshUserData(data.userData);
-            }
-        });
-    }
-
     function initBusiData() {
-        $(gridBusi).jqGrid({
+        $(grid2).jqGrid({
             datatype: 'local',
             data: [],
             height: $(document).height() / 2 - 88,
             colModel: [
-                { label: 'ID', name: 'ID', key: true, hidden: true },
-                { label: '所属部门ID', width: 80, name: 'unitSeq' },
-                { label: '所属部门名称', name: 'unitName' },
-                { label: '业务流水号', width: 80, name: 'busiSeq' },
-                { label: '业务名称', name: 'busiName' }
+                { label: '预约业务流水号', name: 'busiSeq', key: true },
+                { label: '预约业务编号', name: 'busiCode' },
+                { label: '预约业务名称', name: 'busiName' },
+                { label: '预约类型', name: 'busiType' },
+                { label: '是否可预约办件', name: 'acceptBusi' },
+                { label: '是否可预约领件', name: 'getBusi' },
+                { label: '是否可预约咨询', name: 'askBusi' }
         ],
-            autowidth: true,
             loadComplete: function () {
                 var table = this;
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
                 //选中第一行
-                var rows = $(gridBusi).jqGrid('getRowData');
+                var rows = $(grid2).jqGrid('getRowData');
                 if (rows.length > 0)
-                    $(gridBusi).setSelection(rows[0].ID);
+                    $(grid2).setSelection(rows[0].busiSeq);
+            },
+            onSelectRow: function (id) {
+                var unitSeq = $(grid1).jqGrid('getGridParam', 'selrow');
+                $.ajax({
+                    url: "/TBusinessAttribute/GetGridDetailData?unitSeq=" + unitSeq + "&busiSeq=" + id,
+                    dataType: "json",
+                    success: function (data) {
+                        refreshAttrData(data);
+                    }
+                });
             }
         });
     }
 
-    function initUserData() {
-        $(gridUser).jqGrid({
+    function initAttrData() {
+        $(grid3).jqGrid({
             datatype: 'local',
             data: [],
-            height: $(document).height() / 2 - 88,
+            height: $(document).height() - 94,
             colModel: [
-                { label: 'ID', name: 'ID', key: true, hidden: true },
-                { label: '用户ID', name: 'UserID', width: 60 },
-                { label: '用户名', name: 'UserName' }
+                { label: 'ID', name: 'id', key: true },
+                { label: '单位编码', name: 'unitSeq' },
+                { label: '单位名称', name: 'unitName' },
+                { label: '业务流水号', name: 'busiSeq' },
+                { label: '业务编号', name: 'busiCode' },
+                { label: '业务名称', name: 'busiName' },
+                { label: '出票时间段', name: 'timeInterval' },
+                { label: '限制取号数量', name: 'ticketRestriction' },
+                { label: '等候人数预警值', name: 'lineUpWarningMax' },
+                { label: '该业务票号前缀', name: 'ticketPrefix' },
+                { label: '备注', name: 'remark' }
         ],
-            autowidth: true,
             loadComplete: function () {
                 var table = this;
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
                 //选中第一行
-                var rows = $(gridUser).jqGrid('getRowData');
+                var rows = $(grid3).jqGrid('getRowData');
                 if (rows.length > 0)
-                    $(gridUser).setSelection(rows[0].ID);
+                    $(grid3).setSelection(rows[0].id);
             }
         });
     }
 
     function refreshBusiData(griddata) {
-        $(gridBusi).jqGrid('clearGridData');
-        $(gridBusi).jqGrid('setGridParam', {
+        $(grid2).jqGrid('clearGridData');
+        $(grid2).jqGrid('setGridParam', {
             datatype: 'local',
             data: griddata
         }).trigger("reloadGrid");
     }
 
-    function refreshUserData(griddata) {
-        $(gridUser).jqGrid('clearGridData');
-        $(gridUser).jqGrid('setGridParam', {
+    function refreshAttrData(griddata) {
+        $(grid3).jqGrid('clearGridData');
+        $(grid3).jqGrid('setGridParam', {
             datatype: 'local',
             data: griddata
         }).trigger("reloadGrid");
@@ -133,7 +140,7 @@
     }
 
     function Edit() {
-        var sid = $(gridWin).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid1).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -150,7 +157,7 @@
     }
 
     function Delete() {
-        var sid = $(gridWin).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid1).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -169,7 +176,7 @@
     }
 
     function View() {
-        var sid = $(gridWin).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid1).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -182,7 +189,7 @@
     }
 
     function Refresh() {
-        $(gridWin).jqGrid('setGridParam').trigger('reloadGrid');
+        $(grid1).jqGrid('setGridParam').trigger('reloadGrid');
     }
 
     //对应业务
@@ -199,7 +206,7 @@
     }
 
     function BusiEdit() {
-        var sid = $(gridBusi).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid2).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -216,7 +223,7 @@
     }
 
     function BusiDelete() {
-        var sid = $(gridBusi).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid2).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -235,7 +242,7 @@
     }
 
     function BusiView() {
-        var sid = $(gridBusi).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid2).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -262,7 +269,7 @@
     }
 
     function UserEdit() {
-        var sid = $(gridUser).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -279,7 +286,7 @@
     }
 
     function UserDelete() {
-        var sid = $(gridUser).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -298,7 +305,7 @@
     }
 
     function UserView() {
-        var sid = $(gridUser).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -313,38 +320,40 @@
 </script>
 <div>
     <div class="col-xs-6" style="padding: 0px; border-right: 10px solid #DCDCDC;">
-        <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="Add()">
-                <i class="icon-plus-sign bigger-110"></i>新增</button>
-            <button class="btn btn-sm btn-success" onclick="Edit()">
-                <i class="icon-pencil bigger-110"></i>编辑</button>
-            <button class="btn btn-sm btn-danger" onclick="Delete()">
-                <i class="icon-minus-sign bigger-110"></i>删除</button>
-            <button class="btn btn-sm btn-yellow" onclick="View()">
-                <i class="icon-zoom-in bigger-110"></i>查看</button>
-            <button class="btn btn-sm btn-info" onclick="Refresh()">
-                <i class="icon-refresh bigger-110"></i>刷新</button>
+        <div>
+            <div class="btn-group">
+                <button class="btn btn-sm btn-primary" onclick="Add()">
+                    <i class="icon-plus-sign bigger-110"></i>新增</button>
+                <button class="btn btn-sm btn-success" onclick="Edit()">
+                    <i class="icon-pencil bigger-110"></i>编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="Delete()">
+                    <i class="icon-minus-sign bigger-110"></i>删除</button>
+                <button class="btn btn-sm btn-yellow" onclick="View()">
+                    <i class="icon-zoom-in bigger-110"></i>查看</button>
+                <button class="btn btn-sm btn-info" onclick="Refresh()">
+                    <i class="icon-refresh bigger-110"></i>刷新</button>
+            </div>
+            <table id="grid-table_1">
+            </table>
         </div>
-        <table id="grid-table">
-        </table>
-        <div id="grid-pager">
+        <div style="border-top: 10px solid #DCDCDC;">
+            <div class="btn-group">
+                <button class="btn btn-sm btn-primary" onclick="BusiAdd()">
+                    <i class="icon-plus-sign bigger-110"></i>新增</button>
+                <button class="btn btn-sm btn-success" onclick="BusiEdit()">
+                    <i class="icon-pencil bigger-110"></i>编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="BusiDelete()">
+                    <i class="icon-minus-sign bigger-110"></i>删除</button>
+                <button class="btn btn-sm btn-yellow" onclick="BusiView()">
+                    <i class="icon-zoom-in bigger-110"></i>查看</button>
+            </div>
+            <div style="overflow-x: auto">
+                <table id="grid-table_2">
+                </table>
+            </div>
         </div>
     </div>
-    <div class="col-xs-6" style="padding: 0px; border-bottom: 10px solid #DCDCDC;">
-        <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="BusiAdd()">
-                <i class="icon-plus-sign bigger-110"></i>新增</button>
-            <button class="btn btn-sm btn-success" onclick="BusiEdit()">
-                <i class="icon-pencil bigger-110"></i>编辑</button>
-            <button class="btn btn-sm btn-danger" onclick="BusiDelete()">
-                <i class="icon-minus-sign bigger-110"></i>删除</button>
-            <button class="btn btn-sm btn-yellow" onclick="BusiView()">
-                <i class="icon-zoom-in bigger-110"></i>查看</button>
-        </div>
-        <table id="grid-Busi-table">
-        </table>
-    </div>
-    <div class="col-xs-6" style="padding: 0px">
+    <div class="col-xs-6" style="padding: 0px;">
         <div class="btn-group">
             <button class="btn btn-sm btn-primary" onclick="UserAdd()">
                 <i class="icon-plus-sign bigger-110"></i>新增</button>
@@ -355,7 +364,9 @@
             <button class="btn btn-sm btn-yellow" onclick="UserView()">
                 <i class="icon-zoom-in bigger-110"></i>查看</button>
         </div>
-        <table id="grid-User-table">
-        </table>
+        <div style="overflow-x: auto">
+            <table id="grid-table_3">
+            </table>
+        </div>
     </div>
 </div>

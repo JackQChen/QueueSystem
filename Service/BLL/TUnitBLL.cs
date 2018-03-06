@@ -9,58 +9,66 @@ namespace BLL
 {
     public class TUnitBLL : IGridData, IUploadData
     {
+
+        private TUnitDAL dal;
+
         public TUnitBLL()
         {
+            this.dal = new TUnitDAL();
+        }
+
+        public TUnitBLL(string dbKey)
+        {
+            this.dal = new TUnitDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TUnitModel> GetModelList()
         {
-            return new TUnitDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TUnitModel> GetModelList(Expression<Func<TUnitModel, bool>> predicate)
         {
-            return new TUnitDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TUnitModel GetModel(int id)
         {
-            return new TUnitDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TUnitModel GetModel(Expression<Func<TUnitModel, bool>> predicate)
         {
-            return new TUnitDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TUnitModel Insert(TUnitModel model)
         {
-            return new TUnitDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TUnitModel model)
         {
-            return new TUnitDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TUnitModel model)
         {
-            return new TUnitDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public void ResetIndex()
         {
-            new TUnitDAL().ResetIndex();
+            this.dal.ResetIndex();
         }
 
         public object GetGridData()
         {
-            return new TUnitDAL().GetGridData();
+            return this.dal.GetGridData();
         }
 
         public bool IsBasic

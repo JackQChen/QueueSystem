@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 
 namespace SystemConfig.Controllers
 {
@@ -14,6 +15,11 @@ namespace SystemConfig.Controllers
 
         public ActionResult Index()
         {
+            var strKey = this.Request["areaNo"];
+            if (string.IsNullOrEmpty(strKey))
+                Response.Redirect("/Error/Error500");
+            else
+                System.Web.HttpContext.Current.Session["areaNo"] = strKey;
             if (dicMenu == null)
             {
                 dicMenu = new Dictionary<string, string>();

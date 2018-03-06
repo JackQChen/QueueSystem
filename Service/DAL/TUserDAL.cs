@@ -67,8 +67,8 @@ namespace DAL
 
         public object GetGridData()
         {
-            var dicState = new TDictionaryDAL().GetModelQuery(this.db, DictionaryString.WorkState);
-            var dicSex = new TDictionaryDAL().GetModelQuery(this.db, DictionaryString.UserSex);
+            var dicState = new TDictionaryDAL(this.db).GetModelQuery(DictionaryString.WorkState);
+            var dicSex = new TDictionaryDAL(this.db).GetModelQuery(DictionaryString.UserSex);
             return db.Query<TUserModel>()
                 .LeftJoin(dicState, (u, d) => u.State == d.Value)
                 .LeftJoin(dicSex, (u, d, s) => u.Sex == s.Value)

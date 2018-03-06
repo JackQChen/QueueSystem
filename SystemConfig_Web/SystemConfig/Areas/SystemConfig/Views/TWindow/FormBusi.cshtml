@@ -5,7 +5,7 @@
 <script>
     function submitForm(callback) {
         $.submitForm({
-            url: "SubmitForm",
+            url: "SubmitBusiForm",
             data: $('form').serializeForm(),
             callback: callback
         });
@@ -33,50 +33,26 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    窗口名称
+                    所属窗口
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="Name" value="@Model.Name"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="WindowID" value="@Model.WindowID"  autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    窗口号
+                    对应单位
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="Number" value="@Model.Number" autocomplete="off" class="col-xs-10 col-sm-10"/>
+                    <input type="text" name="unitSeq" value="@Model.unitSeq" autocomplete="off" class="col-xs-10 col-sm-10"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    窗口状态
+                    对应业务
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <select name="State" class="col-xs-10 col-sm-10">
-                        @foreach (var item in this.ViewBag.State)
-                        { 
-                            <option value="@item.Value">@item.Name</option>
-                        }
-                    </select>
-                    <script>
-                        $("form select[name='State']").val("@(string.IsNullOrEmpty(Model.State) ? "1" : Model.State)"); 
-                    </script>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 col-xs-3">
-                    呼叫器编号
-                </label>
-                <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="CallNumber" value="@Model.CallNumber"  autocomplete="off" class="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 col-xs-3">
-                    区域名称
-                </label>
-                <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="AreaName" value="@Model.AreaName"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="busiSeq" value="@Model.busiSeq"  autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>

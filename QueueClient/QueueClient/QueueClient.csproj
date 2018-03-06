@@ -176,6 +176,12 @@
     <Compile Include="frmMsg2.Designer.cs">
       <DependentUpon>frmMsg2.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTest.Designer.cs">
+      <DependentUpon>frmTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="HttpHelper.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="PageLocation.cs" />
@@ -291,6 +297,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMsg2.resx">
       <DependentUpon>frmMsg2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTest.resx">
+      <DependentUpon>frmTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ucpnAppointment.resx">
       <DependentUpon>ucpnAppointment.cs</DependentUpon>

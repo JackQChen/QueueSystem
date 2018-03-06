@@ -9,46 +9,54 @@ namespace BLL
 {
     public class TCallBLL : IUploadData
     {
+
+        private TCallDAL dal;
+
         public TCallBLL()
         {
+            this.dal = new TCallDAL();
+        }
+
+        public TCallBLL(string dbKey)
+        {
+            this.dal = new TCallDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TCallModel> GetModelList()
         {
-            return new TCallDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TCallModel> GetModelList(Expression<Func<TCallModel, bool>> predicate)
         {
-            return new TCallDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TCallModel GetModel(int id)
         {
-            return new TCallDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TCallModel GetModel(Expression<Func<TCallModel, bool>> predicate)
         {
-            return new TCallDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TCallModel Insert(TCallModel model)
         {
-            return new TCallDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TCallModel model)
         {
-            return new TCallDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TCallModel model)
         {
-            return new TCallDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
@@ -102,14 +110,14 @@ namespace BLL
             return new TCallDAL().Transfer(call);
         }
 
-       
+
 
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public int ProcessInsertData(int areaCode,  string targetDbName)
+        public int ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -136,7 +144,7 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,  string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -164,7 +172,7 @@ namespace BLL
             }
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

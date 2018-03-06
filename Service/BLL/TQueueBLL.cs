@@ -1,55 +1,63 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
-using System.Collections;
 
 namespace BLL
 {
     public class TQueueBLL : IUploadData
     {
+
+        private TQueueDAL dal;
+
         public TQueueBLL()
         {
+            this.dal = new TQueueDAL();
+        }
+
+        public TQueueBLL(string dbKey)
+        {
+            this.dal = new TQueueDAL(dbKey: dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TQueueModel> GetModelList()
         {
-            return new TQueueDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TQueueModel> GetModelList(Expression<Func<TQueueModel, bool>> predicate)
         {
-            return new TQueueDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TQueueModel GetModel(int id)
         {
-            return new TQueueDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TQueueModel GetModel(Expression<Func<TQueueModel, bool>> predicate)
         {
-            return new TQueueDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TQueueModel Insert(TQueueModel model)
         {
-            return new TQueueDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TQueueModel model)
         {
-            return new TQueueDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TQueueModel model)
         {
-            return new TQueueDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion

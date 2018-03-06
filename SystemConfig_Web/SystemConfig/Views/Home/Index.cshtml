@@ -341,20 +341,28 @@
     <script src="@Url.Content("~/Content/js/ace-elements.min.js")"></script>
     <script src="@Url.Content("~/Content/js/ace.min.js")"></script>
     <script>
-        var lastTarget = "TUnit";
-        $(function () {
-            var fc = $('#frameContent');
-            fc.height($(window).height() - fc.offset().top + 4);
+        function showMask(pCtl) {
             var loading = $('#content-Loading');
-            loading.offset($('#frameContent').offset());
-            loading.width(fc.width());
-            var h = fc.height();
+            loading.offset(pCtl.offset());
+            loading.width(pCtl.width());
+            var h = pCtl.height();
             loading.height(h);
             var loadingText = loading.find('h4');
             loadingText.css('margin-top', (h / 2 - 30) + "px");
             loading.css('display', 'block');
+        }
+
+        function removeMask() {
+            $('#content-Loading').css("display", "none");
+        }
+
+        var lastTarget = "TUnit";
+        $(function () {
+            var fc = $('#frameContent');
+            fc.height($(window).height() - fc.offset().top + 4);
+            showMask(fc);
             fc.on('load', function () {
-                $('#content-Loading').css("display", "none");
+                removeMask(fc);
             });
             $('.nav-list li a').on('click', function (e) {
                 var obj = $(e.currentTarget);

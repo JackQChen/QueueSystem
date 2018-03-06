@@ -9,46 +9,54 @@ namespace BLL
 {
     public class TRegisterBLL : IUploadData
     {
+
+        private TRegisterDAL dal;
+
         public TRegisterBLL()
         {
+            this.dal = new TRegisterDAL();
+        }
+
+        public TRegisterBLL(string dbKey)
+        {
+            this.dal = new TRegisterDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TRegisterModel> GetModelList()
         {
-            return new TRegisterDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TRegisterModel> GetModelList(Expression<Func<TRegisterModel, bool>> predicate)
         {
-            return new TRegisterDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TRegisterModel GetModel(int id)
         {
-            return new TRegisterDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TRegisterModel GetModel(Expression<Func<TRegisterModel, bool>> predicate)
         {
-            return new TRegisterDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TRegisterModel Insert(TRegisterModel model)
         {
-            return new TRegisterDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TRegisterModel model)
         {
-            return new TRegisterDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TRegisterModel model)
         {
-            return new TRegisterDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
@@ -58,7 +66,7 @@ namespace BLL
             get { return false; }
         }
 
-        public int ProcessInsertData(int areaCode,  string targetDbName)
+        public int ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -85,12 +93,12 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,  string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             return 0;
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

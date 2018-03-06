@@ -9,46 +9,54 @@ namespace BLL
 {
     public class TLineUpMaxNoBLL : IUploadData
     {
+
+        private TLineUpMaxNoDAL dal;
+
         public TLineUpMaxNoBLL()
         {
+            this.dal = new TLineUpMaxNoDAL();
+        }
+
+        public TLineUpMaxNoBLL(string dbKey)
+        {
+            this.dal = new TLineUpMaxNoDAL(dbKey: dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TLineUpMaxNoModel> GetModelList()
         {
-            return new TLineUpMaxNoDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TLineUpMaxNoModel> GetModelList(Expression<Func<TLineUpMaxNoModel, bool>> predicate)
         {
-            return new TLineUpMaxNoDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TLineUpMaxNoModel GetModel(int id)
         {
-            return new TLineUpMaxNoDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TLineUpMaxNoModel GetModel(Expression<Func<TLineUpMaxNoModel, bool>> predicate)
         {
-            return new TLineUpMaxNoDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TLineUpMaxNoModel Insert(TLineUpMaxNoModel model)
         {
-            return new TLineUpMaxNoDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TLineUpMaxNoModel model)
         {
-            return new TLineUpMaxNoDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TLineUpMaxNoModel model)
         {
-            return new TLineUpMaxNoDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion

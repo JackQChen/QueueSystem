@@ -85,7 +85,7 @@ namespace QueueClient
         TBusinessModel selectBusy;
         TAppointmentModel selectAppoomt;
         string appPhone = "X";
-        string appName = "李青云";
+        string appName = "X";
         Dictionary<string, Control> uc = new Dictionary<string, Control>();
         Dictionary<string, int> ucTimer = new Dictionary<string, int>();
         #region 构造函数，初始化，读卡

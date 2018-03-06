@@ -2,14 +2,21 @@
 using BLL;
 using Model;
 using Newtonsoft.Json;
+using SystemConfig.Controllers;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
-    public class TLedControllerController : Controller
+    public class TLedControllerController : BaseController
     {
-        TLedControllerBLL bll = new TLedControllerBLL();
+        TLedControllerBLL bll;
+
+        public TLedControllerController()
+        {
+            this.bll = new TLedControllerBLL(this.AreaNo);
+        }
+
         //
-        // GET: /SystemConfig/TLedController/
+        // GET: /SystemConfig/TLedController/ 
 
         public ActionResult Index()
         {

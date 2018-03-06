@@ -16,6 +16,11 @@ namespace DAL
             this.db = Factory.Instance.CreateDbContext();
         }
 
+        public TDictionaryDAL(DbContext db)
+        {
+            this.db = db;
+        }
+
         public TDictionaryDAL(string dbKey)
         {
             this.db = Factory.Instance.CreateDbContext(dbKey);
@@ -62,12 +67,7 @@ namespace DAL
 
         public IQuery<TDictionaryModel> GetModelQuery(string name)
         {
-            return this.GetModelQuery(this.db, name);
-        }
-
-        public IQuery<TDictionaryModel> GetModelQuery(DbContext db, string name)
-        {
-            return db.Query<TDictionaryModel>()
+            return this.db.Query<TDictionaryModel>()
                 .Where(p => p.Name == name && p.Group == 0)
                 .LeftJoin<TDictionaryModel>((c, i) => c.ID == i.Group)
                 .Select((c, i) => i);

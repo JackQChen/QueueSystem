@@ -73,6 +73,12 @@
                 };
             $.ajax(arg);
         };
+        $.showMask = function (pCtl) {
+            window.parent.showMask(pCtl);
+        };
+        $.removeMask = function () {
+            window.parent.removeMask();
+        }
     </script>
 </head>
 <body style="background: white;">

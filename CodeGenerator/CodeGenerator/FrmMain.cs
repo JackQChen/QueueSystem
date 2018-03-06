@@ -94,7 +94,9 @@ namespace DAL
 {{
     public class {0}
     {{
-        DbContext db;
+
+        private DbContext db;
+
         public {0}()
         {{
             this.db = Factory.Instance.CreateDbContext();
@@ -158,46 +160,54 @@ namespace BLL
 {{
     public class {0}
     {{
+
+        private {1} dal;
+
         public {0}()
         {{
+            this.dal = new {1}();
+        }}
+
+        public {0}(string dbKey)
+        {{
+            this.dal = new {1}(dbKey);
         }}
 
         #region CommonMethods
 
-
         public List<{2}> GetModelList()
         {{
-            return new {1}().GetModelList();
+            return this.dal.GetModelList();
         }}
 
         public List<{2}> GetModelList(Expression<Func<{2}, bool>> predicate)
         {{
-            return new {1}().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }}
 
         public {2} GetModel(int id)
         {{
-            return new {1}().GetModel(id);
+            return this.dal.GetModel(id);
         }}
 
         public {2} GetModel(Expression<Func<{2}, bool>> predicate)
         {{
-            return new {1}().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }}
 
         public {2} Insert({2} model)
         {{
-            return new {1}().Insert(model);
+            return this.dal.Insert(model);
         }}
 
         public int Update({2} model)
         {{
-            return new {1}().Update(model);
+            return this.dal.Update(model);
         }}
 
         public int Delete({2} model)
         {{
-            return new {1}().Delete(model);
+            return this.dal.Delete(model);
         }}
 
         #endregion

@@ -9,53 +9,61 @@ namespace BLL
 {
     public class TWindowBusinessBLL : IGridData, IUploadData
     {
+
+        private TWindowBusinessDAL dal;
+
         public TWindowBusinessBLL()
         {
+            this.dal = new TWindowBusinessDAL();
+        }
+
+        public TWindowBusinessBLL(string dbKey)
+        {
+            this.dal = new TWindowBusinessDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TWindowBusinessModel> GetModelList()
         {
-            return new TWindowBusinessDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TWindowBusinessModel> GetModelList(Expression<Func<TWindowBusinessModel, bool>> predicate)
         {
-            return new TWindowBusinessDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TWindowBusinessModel GetModel(int id)
         {
-            return new TWindowBusinessDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TWindowBusinessModel GetModel(Expression<Func<TWindowBusinessModel, bool>> predicate)
         {
-            return new TWindowBusinessDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TWindowBusinessModel Insert(TWindowBusinessModel model)
         {
-            return new TWindowBusinessDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TWindowBusinessModel model)
         {
-            return new TWindowBusinessDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TWindowBusinessModel model)
         {
-            return new TWindowBusinessDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public void ResetIndex()
         {
-            new TWindowBusinessDAL().ResetIndex();
+            this.dal.ResetIndex();
         }
 
         public object GetGridData()
@@ -65,17 +73,17 @@ namespace BLL
 
         public object GetGridDetailData(int winId)
         {
-            return new TWindowBusinessDAL().GetGridDetailData(winId);
+            return this.dal.GetGridDetailData(winId);
         }
 
-      
+
 
         public bool IsBasic
         {
             get { return true; }
         }
 
-        public int ProcessInsertData(int areaCode,  string targetDbName)
+        public int ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -102,7 +110,7 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,  string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -130,7 +138,7 @@ namespace BLL
             }
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

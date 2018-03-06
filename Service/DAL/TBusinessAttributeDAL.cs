@@ -78,7 +78,7 @@ namespace DAL
 
         public object GetGridDataByUnitSeq(string unitSeq)
         {
-            var dicType = new TDictionaryDAL().GetModelQuery(this.db, DictionaryString.AppointmentType);
+            var dicType = new TDictionaryDAL(this.db).GetModelQuery(DictionaryString.AppointmentType);
             return db.Query<TBusinessModel>()
                 .LeftJoin(dicType, (m, t) => m.busiType.ToString() == t.Value)
                 .Where((m, t) => m.unitSeq == unitSeq)

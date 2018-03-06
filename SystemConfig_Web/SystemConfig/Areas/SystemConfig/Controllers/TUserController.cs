@@ -2,13 +2,21 @@
 using BLL;
 using Model;
 using Newtonsoft.Json;
+using SystemConfig.Controllers;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
-    public class TUserController : Controller
+    public class TUserController : BaseController
     {
-        TUserBLL bll = new TUserBLL();
-        TDictionaryBLL dicBll = new TDictionaryBLL();
+        TUserBLL bll;
+        TDictionaryBLL dicBll;
+
+        public TUserController()
+        {
+            this.bll = new TUserBLL(this.AreaNo);
+            this.dicBll = new TDictionaryBLL(this.AreaNo);
+        }
+
         //
         // GET: /SystemConfig/TUser/
         public ActionResult Index()

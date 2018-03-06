@@ -2,12 +2,20 @@
 using BLL;
 using Newtonsoft.Json;
 using Model;
+using System.Web.SessionState;
+using SystemConfig.Controllers;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
-    public class TUnitController : Controller
+    public class TUnitController : BaseController
     {
-        TUnitBLL bll = new TUnitBLL();
+        TUnitBLL bll;
+
+        public TUnitController()
+        {
+            this.bll = new TUnitBLL(this.AreaNo);
+        }
+
         //
         // GET: /SystemConfig/TUnit/
         public ActionResult Index()
@@ -19,7 +27,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         {
             var data = new
             {
-                rows = bll.GetGridData()
+                rows = this.bll.GetGridData()
             };
             return Content(JsonConvert.SerializeObject(data));
         }

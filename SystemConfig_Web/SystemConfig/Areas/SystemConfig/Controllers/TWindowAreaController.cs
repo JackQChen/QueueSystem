@@ -2,12 +2,19 @@
 using BLL;
 using Model;
 using Newtonsoft.Json;
+using SystemConfig.Controllers;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
-    public class TWindowAreaController : Controller
+    public class TWindowAreaController : BaseController
     {
-        TWindowAreaBLL bll = new TWindowAreaBLL();
+        TWindowAreaBLL bll;
+
+        public TWindowAreaController()
+        {
+            this.bll = new TWindowAreaBLL(this.AreaNo);
+        }
+
         //
         // GET: /SystemConfig/TWindowArea/
         public ActionResult Index()

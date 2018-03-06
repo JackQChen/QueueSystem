@@ -157,19 +157,32 @@ namespace SystemConfig
                     tpModel.GetProperty(ctl.Tag.ToString()).SetValue(this.Model, data, null);
                 }
             }
+            var asyncProp = this.Model.GetType().GetProperty("sysFlag");
             switch (this.Operate)
             {
                 case OperateType.New:
-                    this.BLL.GetType().GetMethod("Insert").Invoke(this.BLL, new object[] { this.Model });
+                    {
+                        asyncProp.SetValue(this.Model, 0, null);
+                        this.BLL.GetType().GetMethod("Insert").Invoke(this.BLL, new object[] { this.Model });
+                    }
                     break;
                 case OperateType.Edit:
-                    this.BLL.GetType().GetMethod("Update").Invoke(this.BLL, new object[] { this.Model });
+                    {
+                        asyncProp.SetValue(this.Model, 1, null);
+                        this.BLL.GetType().GetMethod("Update").Invoke(this.BLL, new object[] { this.Model });
+                    }
                     break;
                 case OperateType.Save:
                     if (this.FindContentControl("id").Text == "0")
+                    {
+                        asyncProp.SetValue(this.Model, 0, null);
                         this.BLL.GetType().GetMethod("Insert").Invoke(this.BLL, new object[] { this.Model });
+                    }
                     else
+                    {
+                        asyncProp.SetValue(this.Model, 1, null);
                         this.BLL.GetType().GetMethod("Update").Invoke(this.BLL, new object[] { this.Model });
+                    }
                     break;
             }
             this.DialogResult = DialogResult.OK;

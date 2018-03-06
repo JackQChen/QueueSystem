@@ -9,83 +9,91 @@ namespace BLL
 {
     public class TWindowUserBLL : IGridData, IUploadData
     {
+
+        private TWindowUserDAL dal;
+
         public TWindowUserBLL()
         {
+            this.dal = new TWindowUserDAL();
+        }
+
+        public TWindowUserBLL(string dbKey)
+        {
+            this.dal = new TWindowUserDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TWindowUserModel> GetModelList()
         {
-            return new TWindowUserDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TWindowUserModel> GetModelList(Expression<Func<TWindowUserModel, bool>> predicate)
         {
-            return new TWindowUserDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TWindowUserModel GetModel(int id)
         {
-            return new TWindowUserDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TWindowUserModel GetModel(Expression<Func<TWindowUserModel, bool>> predicate)
         {
-            return new TWindowUserDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TWindowUserModel Insert(TWindowUserModel model)
         {
-            return new TWindowUserDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TWindowUserModel model)
         {
-            return new TWindowUserDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TWindowUserModel model)
         {
-            return new TWindowUserDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public TWindowUserModel GetModel(int wid, int uid)
         {
-            return new TWindowUserDAL().GetModel(wid, uid);
+            return this.dal.GetModel(wid, uid);
         }
 
         public void ResetIndex()
         {
-            new TWindowUserDAL().ResetIndex();
+            this.dal.ResetIndex();
         }
 
         public object GetGridData()
         {
-            return new TWindowUserDAL().GetGridData();
+            return this.dal.GetGridData();
         }
 
         public object GetGridDetailData(int winId)
         {
-            return new TWindowUserDAL().GetGridDetailData(winId);
+            return this.dal.GetGridDetailData(winId);
         }
 
         //RateService相关
         public object RS_GetDataList()
         {
-            return new TWindowUserDAL().RS_GetDataList();
+            return this.dal.RS_GetDataList();
         }
         public string RS_GetUserPhoto(string userCode)
         {
-            return new TWindowUserDAL().RS_GetUserPhoto(userCode);
+            return this.dal.RS_GetUserPhoto(userCode);
         }
 
         public TWindowUserModel RS_GetModel(string winNum, string userCode)
         {
-            return new TWindowUserDAL().RS_GetModel(winNum, userCode);
+            return this.dal.RS_GetModel(winNum, userCode);
         }
 
 

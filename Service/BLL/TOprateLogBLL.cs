@@ -9,8 +9,16 @@ namespace BLL
 {
     public class TOprateLogBLL : IUploadData
     {
+        private TOprateLogDAL dal;
+
         public TOprateLogBLL()
         {
+            this.dal = new TOprateLogDAL();
+        }
+
+        public TOprateLogBLL(string dbKey)
+        {
+            this.dal = new TOprateLogDAL(dbKey);
         }
 
         #region CommonMethods
@@ -18,58 +26,58 @@ namespace BLL
 
         public List<TOprateLogModel> GetModelList()
         {
-            return new TOprateLogDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TOprateLogModel> GetModelList(Expression<Func<TOprateLogModel, bool>> predicate)
         {
-            return new TOprateLogDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TOprateLogModel GetModel(int id)
         {
-            return new TOprateLogDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TOprateLogModel GetModel(Expression<Func<TOprateLogModel, bool>> predicate)
         {
-            return new TOprateLogDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TOprateLogModel Insert(TOprateLogModel model)
         {
-            return new TOprateLogDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TOprateLogModel model)
         {
-            return new TOprateLogDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TOprateLogModel model)
         {
-            return new TOprateLogDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public Dictionary<string, List<string>> GetQueryParams()
         {
-            return new TOprateLogDAL().GetQueryParams();
+            return this.dal.GetQueryParams();
         }
 
         public object Query(string tType, string tName, string oType, DateTime dtStart, DateTime dtEnd, string log)
         {
-            return new TOprateLogDAL().Query(tType, tName, oType, dtStart, dtEnd, log);
+            return this.dal.Query(tType, tName, oType, dtStart, dtEnd, log);
         }
 
-        
+
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public int ProcessInsertData(int areaCode,  string targetDbName)
+        public int ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -96,12 +104,12 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,  string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             return 0;
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

@@ -9,71 +9,79 @@ namespace BLL
 {
     public class TBusinessAttributeBLL : IGridData, IUploadData
     {
+
+        private TBusinessAttributeDAL dal;
+
         public TBusinessAttributeBLL()
         {
+            this.dal = new TBusinessAttributeDAL();
+        }
+
+        public TBusinessAttributeBLL(string dbKey)
+        {
+            this.dal = new TBusinessAttributeDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TBusinessAttributeModel> GetModelList()
         {
-            return new TBusinessAttributeDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TBusinessAttributeModel> GetModelList(Expression<Func<TBusinessAttributeModel, bool>> predicate)
         {
-            return new TBusinessAttributeDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TBusinessAttributeModel GetModel(int id)
         {
-            return new TBusinessAttributeDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TBusinessAttributeModel GetModel(Expression<Func<TBusinessAttributeModel, bool>> predicate)
         {
-            return new TBusinessAttributeDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TBusinessAttributeModel Insert(TBusinessAttributeModel model)
         {
-            return new TBusinessAttributeDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TBusinessAttributeModel model)
         {
-            return new TBusinessAttributeDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TBusinessAttributeModel model)
         {
-            return new TBusinessAttributeDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public void ResetIndex()
         {
-            new TBusinessAttributeDAL().ResetIndex();
+            this.dal.ResetIndex();
         }
 
         public object GetGridData()
         {
-            return new TBusinessAttributeDAL().GetGridData();
+            return this.dal.GetGridData();
         }
 
         public object GetGridDataByUnitSeq(string unitSeq)
         {
-            return new TBusinessAttributeDAL().GetGridDataByUnitSeq(unitSeq);
+            return this.dal.GetGridDataByUnitSeq(unitSeq);
         }
 
         public object GetGridDetailData(string unitSeq, string busiSeq)
         {
-            return new TBusinessAttributeDAL().GetGridDetailData(unitSeq, busiSeq);
+            return this.dal.GetGridDetailData(unitSeq, busiSeq);
         }
 
-       
+
         public bool IsBasic
         {
             get { return true; }
@@ -106,7 +114,7 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,  string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -134,7 +142,7 @@ namespace BLL
             }
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

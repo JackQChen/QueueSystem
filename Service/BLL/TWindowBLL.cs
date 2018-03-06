@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,58 +10,66 @@ namespace BLL
 {
     public class TWindowBLL : IGridData, IUploadData
     {
+
+        private TWindowDAL dal;
+
         public TWindowBLL()
         {
+            this.dal = new TWindowDAL();
+        }
+
+        public TWindowBLL(string dbKey)
+        {
+            this.dal = new TWindowDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TWindowModel> GetModelList()
         {
-            return new TWindowDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TWindowModel> GetModelList(Expression<Func<TWindowModel, bool>> predicate)
         {
-            return new TWindowDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TWindowModel GetModel(int id)
         {
-            return new TWindowDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TWindowModel GetModel(Expression<Func<TWindowModel, bool>> predicate)
         {
-            return new TWindowDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TWindowModel Insert(TWindowModel model)
         {
-            return new TWindowDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TWindowModel model)
         {
-            return new TWindowDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TWindowModel model)
         {
-            return new TWindowDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public void ResetIndex()
         {
-            new TWindowDAL().ResetIndex();
+            this.dal.ResetIndex();
         }
 
         public object GetGridData()
         {
-            return new TWindowDAL().GetGridData();
+            return this.dal.GetGridData();
         }
 
 
@@ -69,7 +78,7 @@ namespace BLL
             get { return true; }
         }
 
-        public int ProcessInsertData(int areaCode,  string targetDbName)
+        public int ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -96,7 +105,7 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,  string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -124,7 +133,7 @@ namespace BLL
             }
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

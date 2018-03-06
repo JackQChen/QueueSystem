@@ -9,67 +9,75 @@ namespace BLL
 {
     public class TUserBLL : IGridData, IUploadData
     {
+
+        private TUserDAL dal;
+
         public TUserBLL()
         {
+            this.dal = new TUserDAL();
+        }
+
+        public TUserBLL(string dbKey)
+        {
+            this.dal = new TUserDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TUserModel> GetModelList()
         {
-            return new TUserDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TUserModel> GetModelList(Expression<Func<TUserModel, bool>> predicate)
         {
-            return new TUserDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TUserModel GetModel(int id)
         {
-            return new TUserDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TUserModel GetModel(Expression<Func<TUserModel, bool>> predicate)
         {
-            return new TUserDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TUserModel Insert(TUserModel model)
         {
-            return new TUserDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TUserModel model)
         {
-            return new TUserDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TUserModel model)
         {
-            return new TUserDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public void ResetIndex()
         {
-            new TUserDAL().ResetIndex();
+            this.dal.ResetIndex();
         }
 
         public object GetGridData()
         {
-            return new TUserDAL().GetGridData();
+            return this.dal.GetGridData();
         }
 
-       
+
         public bool IsBasic
         {
             get { return true; }
         }
 
-        public int ProcessInsertData(int areaCode,  string targetDbName)
+        public int ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -96,7 +104,7 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,  string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -124,7 +132,7 @@ namespace BLL
             }
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

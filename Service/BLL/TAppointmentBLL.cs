@@ -9,46 +9,54 @@ namespace BLL
 {
     public class TAppointmentBLL : IUploadData
     {
+
+        TAppointmentDAL dal;
+
         public TAppointmentBLL()
         {
+            this.dal = new TAppointmentDAL();
+        }
+
+        public TAppointmentBLL(string dbKey)
+        {
+            this.dal = new TAppointmentDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TAppointmentModel> GetModelList()
         {
-            return new TAppointmentDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TAppointmentModel> GetModelList(Expression<Func<TAppointmentModel, bool>> predicate)
         {
-            return new TAppointmentDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TAppointmentModel GetModel(int id)
         {
-            return new TAppointmentDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TAppointmentModel GetModel(Expression<Func<TAppointmentModel, bool>> predicate)
         {
-            return new TAppointmentDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TAppointmentModel Insert(TAppointmentModel model)
         {
-            return new TAppointmentDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TAppointmentModel model)
         {
-            return new TAppointmentDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TAppointmentModel model)
         {
-            return new TAppointmentDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion

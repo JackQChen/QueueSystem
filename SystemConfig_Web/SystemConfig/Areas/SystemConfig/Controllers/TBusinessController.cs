@@ -2,13 +2,20 @@
 using BLL;
 using Model;
 using Newtonsoft.Json;
+using SystemConfig.Controllers;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
-    public class TBusinessController : Controller
+    public class TBusinessController : BaseController
     {
-        TBusinessBLL bll = new TBusinessBLL();
-        TDictionaryBLL dicBll = new TDictionaryBLL();
+        TBusinessBLL bll;
+        TDictionaryBLL dicBll;
+
+        public TBusinessController()
+        {
+            bll = new TBusinessBLL(this.AreaNo);
+            dicBll = new TDictionaryBLL(this.AreaNo);
+        }
 
         //
         // GET: /SystemConfig/TUnit/

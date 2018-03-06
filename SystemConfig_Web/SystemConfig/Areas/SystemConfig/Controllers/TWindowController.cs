@@ -3,15 +3,25 @@ using BLL;
 using Model;
 using Newtonsoft.Json;
 using System.Collections;
+using SystemConfig.Controllers;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
-    public class TWindowController : Controller
+    public class TWindowController : BaseController
     {
 
-        TWindowBLL bll = new TWindowBLL();
-        TWindowUserBLL winUserBll = new TWindowUserBLL();
-        TWindowBusinessBLL winBusiBll = new TWindowBusinessBLL();
+        TWindowBLL bll;
+        TWindowUserBLL winUserBll;
+        TWindowBusinessBLL winBusiBll;
+        TDictionaryBLL dicBll;
+
+        public TWindowController()
+        {
+            this.bll = new TWindowBLL(this.AreaNo);
+            this.winUserBll = new TWindowUserBLL(this.AreaNo);
+            this.winBusiBll = new TWindowBusinessBLL(this.AreaNo);
+            this.dicBll = new TDictionaryBLL(this.AreaNo);
+        }
 
         //
         // GET: /SystemConfig/TWindow/
@@ -40,11 +50,13 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             return Content(JsonConvert.SerializeObject(data));
         }
 
+        #region window
         public ActionResult Form(int id)
         {
             var model = this.bll.GetModel(id);
             if (model == null)
                 model = new TWindowModel() { ID = -1 };
+            this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
             return View(model);
         }
 
@@ -67,5 +79,69 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             this.bll.ResetIndex();
             return Content("操作成功！");
         }
+        #endregion
+
+        #region busi
+        public ActionResult BusiForm(int id)
+        {
+            var model = this.winBusiBll.GetModel(id);
+            if (model == null)
+                model = new TWindowBusinessModel() { ID = -1 };
+            return View("FormBusi", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SubmitBusiForm(TWindowBusinessModel model)
+        {
+            if (model.ID == -1)
+                this.winBusiBll.Insert(model);
+            else
+                this.winBusiBll.Update(model);
+            return Content("操作成功！");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteBusiForm(int id)
+        {
+            this.winBusiBll.Delete(this.winBusiBll.GetModel(id));
+            this.winBusiBll.ResetIndex();
+            return Content("操作成功！");
+        }
+        #endregion
+
+        #region user
+        public ActionResult UserForm(int id)
+        {
+            var model = this.winUserBll.GetModel(id);
+            if (model == null)
+                model = new TWindowUserModel() { ID = -1 };
+            this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
+            return View("FormUser", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SubmitUserForm(TWindowUserModel model)
+        {
+            if (model.ID == -1)
+                this.winUserBll.Insert(model);
+            else
+                this.winUserBll.Update(model);
+            return Content("操作成功！");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteUserForm(int id)
+        {
+            this.winUserBll.Delete(this.winUserBll.GetModel(id));
+            this.winUserBll.ResetIndex();
+            return Content("操作成功！");
+        }
+        #endregion
+
+
     }
 }

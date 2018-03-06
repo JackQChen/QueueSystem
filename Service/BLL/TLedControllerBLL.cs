@@ -9,67 +9,75 @@ namespace BLL
 {
     public class TLedControllerBLL : IGridData, IUploadData
     {
+
+        private TLedControllerDAL dal;
+
         public TLedControllerBLL()
         {
+            this.dal = new TLedControllerDAL();
+        }
+
+        public TLedControllerBLL(string dbKey)
+        {
+            this.dal = new TLedControllerDAL(dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TLedControllerModel> GetModelList()
         {
-            return new TLedControllerDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TLedControllerModel> GetModelList(Expression<Func<TLedControllerModel, bool>> predicate)
         {
-            return new TLedControllerDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TLedControllerModel GetModel(int id)
         {
-            return new TLedControllerDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TLedControllerModel GetModel(Expression<Func<TLedControllerModel, bool>> predicate)
         {
-            return new TLedControllerDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TLedControllerModel Insert(TLedControllerModel model)
         {
-            return new TLedControllerDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TLedControllerModel model)
         {
-            return new TLedControllerDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TLedControllerModel model)
         {
-            return new TLedControllerDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public void ResetIndex()
         {
-            new TLedControllerDAL().ResetIndex();
+            this.dal.ResetIndex();
         }
 
         public object GetGridData()
         {
-            return new TLedControllerDAL().GetGridData();
+            return this.dal.GetGridData();
         }
 
-        
+
         public bool IsBasic
         {
             get { return true; }
         }
 
-        public int ProcessInsertData(int areaCode,  string targetDbName)
+        public int ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
@@ -96,7 +104,7 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,  string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             try
             {
@@ -124,7 +132,7 @@ namespace BLL
             }
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

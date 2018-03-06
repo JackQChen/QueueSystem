@@ -67,7 +67,7 @@ namespace DAL
 
         public object GetGridData()
         {
-            var dic = new TDictionaryDAL().GetModelQuery(this.db, DictionaryString.WorkState);
+            var dic = new TDictionaryDAL(this.db).GetModelQuery(DictionaryString.WorkState);
             return this.db.Query<TWindowModel>()
                 .LeftJoin(dic, (w, d) => w.State == d.Value)
                 .LeftJoin<TWindowAreaModel>((w, d, a) => w.AreaName == a.id)

@@ -9,74 +9,80 @@ namespace BLL
 {
     public class TDictionaryBLL : IUploadData
     {
+
+        private TDictionaryDAL dal;
+
         public TDictionaryBLL()
         {
+            this.dal = new TDictionaryDAL();
+        }
+
+        public TDictionaryBLL(string dbKey)
+        {
+            this.dal = new TDictionaryDAL(dbKey: dbKey);
         }
 
         #region CommonMethods
 
-
         public List<TDictionaryModel> GetModelList()
         {
-            return new TDictionaryDAL().GetModelList();
+            return this.dal.GetModelList();
         }
 
         public List<TDictionaryModel> GetModelList(Expression<Func<TDictionaryModel, bool>> predicate)
         {
-            return new TDictionaryDAL().GetModelList(predicate);
+            return this.dal.GetModelList(predicate);
         }
 
         public TDictionaryModel GetModel(int id)
         {
-            return new TDictionaryDAL().GetModel(id);
+            return this.dal.GetModel(id);
         }
 
         public TDictionaryModel GetModel(Expression<Func<TDictionaryModel, bool>> predicate)
         {
-            return new TDictionaryDAL().GetModel(predicate);
+            return this.dal.GetModel(predicate);
         }
 
         public TDictionaryModel Insert(TDictionaryModel model)
         {
-            return new TDictionaryDAL().Insert(model);
+            return this.dal.Insert(model);
         }
 
         public int Update(TDictionaryModel model)
         {
-            return new TDictionaryDAL().Update(model);
+            return this.dal.Update(model);
         }
 
         public int Delete(TDictionaryModel model)
         {
-            return new TDictionaryDAL().Delete(model);
+            return this.dal.Delete(model);
         }
 
         #endregion
 
         public List<TDictionaryModel> GetModelList(string name)
         {
-            return new TDictionaryDAL().GetModelList(name);
+            return this.dal.GetModelList(name);
         }
-
-   
 
         public bool IsBasic
         {
             get { return false; }
         }
 
-        public int ProcessInsertData(int areaCode,  string targetDbName)
+        public int ProcessInsertData(int areaCode, string targetDbName)
         {
             try
             {
-                var sList = new TDictionaryDAL(areaCode.ToString()).GetModelList(c => c.sysFlag == 0).ToList();
+                var sList = new TDictionaryDAL(dbKey: areaCode.ToString()).GetModelList(c => c.sysFlag == 0).ToList();
                 sList.ForEach(s =>
                 {
                     s.areaCode = areaCode;
                     s.areaId = s.ID;
                 });
-                var dal = new TDictionaryDAL(targetDbName);
-                var odal = new TDictionaryDAL(areaCode.ToString());
+                var dal = new TDictionaryDAL(dbKey: targetDbName);
+                var odal = new TDictionaryDAL(dbKey: areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
@@ -92,12 +98,12 @@ namespace BLL
             }
         }
 
-        public int ProcessUpdateData(int areaCode,   string targetDbName)
+        public int ProcessUpdateData(int areaCode, string targetDbName)
         {
             return 0;
         }
 
-        public int ProcessDeleteData(int areaCode,  string targetDbName)
+        public int ProcessDeleteData(int areaCode, string targetDbName)
         {
             return 0;
         }

@@ -16,6 +16,11 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -124,6 +129,7 @@
     <Compile Include="Areas\SystemConfig\Controllers\TWindowController.cs" />
     <Compile Include="Areas\SystemConfig\SystemConfigAreaRegistration.cs" />
     <Compile Include="Common\Pagination.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -247,7 +253,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\SystemConfig\Models\" />
     <Folder Include="Areas\SystemConfig\Views\Shared\" />
-    <Folder Include="Areas\SystemConfig\Views\TBusinessAttribute\" />
     <Folder Include="Areas\SystemConfig\Views\TLedWindow\" />
     <Folder Include="Models\" />
   </ItemGroup>
@@ -272,6 +277,14 @@
     <Content Include="Areas\SystemConfig\Views\TWindowArea\Index.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TWindow\Form.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TWindow\Index.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TWindow\FormBusi.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TWindow\FormUser.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\Form.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\FormBusi.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\FormAttr.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\Index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="Content\font\font.woff2" />
     <None Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Views\Home\Index.cshtml" />
