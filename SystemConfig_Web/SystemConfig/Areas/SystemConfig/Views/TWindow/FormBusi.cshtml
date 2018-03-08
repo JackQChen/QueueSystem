@@ -26,27 +26,34 @@ $(function () {
                     }]
         });
         initSearchControl({
-            id: 'unitSearch',
+            id: 'busiSearch',
             name: 'busiSeq',
             value :@Model.busiSeq,
-            displayText : '@ViewBag.UnitName',
+            displayText : '@ViewBag.BusiName',
             height:280,
-		filter : function(ds,txt){
-		return ds;
-},
-            dataSource: @Html.Raw(this.ViewBag.UnitList),
+            filter : function(ds,txt){
+                var newData = new Array();
+                ds.forEach(function(obj)
+                {
+                    if(obj["unitSeq"]==$('form [name=unitSeq]').val()&&
+                    (obj["busiSeq"].indexOf(txt)>=0||obj["busiCode"].indexOf(txt)>=0||obj["busiName"].indexOf(txt)>=0))
+                    newData.push(obj);
+                });
+                return newData;
+            },
+            dataSource: @Html.Raw(this.ViewBag.BusiList),
             colModel: [{
-                        label: 'ID',
-                        name: 'id',
-                        width: 30,
+                        label: '业务流水号',
+                        name: 'busiSeq',
+                        width: 50,
                         key: true
                     }, {
-                        label: '单位编码',
+                        label: '业务编码',
                         width: 50,
-                        name: 'unitSeq'
+                        name: 'busiCode'
                     }, {
-                        label: '单位名称',
-                        name: 'unitName'
+                        label: '业务名称',
+                        name: 'busiName'
                     }]
         });
     });
@@ -92,7 +99,8 @@ $(function () {
                     对应单位
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" id="unitSearch" displaymember='unitName' valuemember='unitSeq' autocomplete="off" class="col-xs-10 col-sm-10"/>
+                    <input type="text" id="unitSearch" displaymember='unitName' valuemember='unitSeq'
+                        autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             <div class="form-group">
@@ -100,7 +108,8 @@ $(function () {
                     对应业务
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" id="busiSearch" displaymember='busiName' valuemember='unitSeq' autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" id="busiSearch" displaymember='busiName' valuemember='unitSeq'
+                        autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>

@@ -254,7 +254,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\SystemConfig\Models\" />
     <Folder Include="Areas\SystemConfig\Views\Shared\" />
-    <Folder Include="Areas\SystemConfig\Views\TLedWindow\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +285,8 @@
     <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Areas\SystemConfig\Views\TLedWindow\Form.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TLedWindow\Index.cshtml" />
     <None Include="Content\font\font.woff2" />
     <None Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Views\Home\Index.cshtml" />

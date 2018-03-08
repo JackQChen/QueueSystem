@@ -3,32 +3,32 @@
     Layout = "~/Views/Shared/_LayoutForm.cshtml";
 }
 <script>
-$(function () {
+    $(function () {
         initSearchControl({
-            id: 'userSearch',
-            name: 'UserID',
-            value :@Model.UserID,
-            displayText : '@ViewBag.UserName',
+            id: 'winSearch',
+            name: 'WindowNumber',
+            value :@Model.WindowNumber,
+            displayText : '@ViewBag.WinName',
             height:280,
-            dataSource: @Html.Raw(this.ViewBag.UserList),
+            dataSource: @Html.Raw(this.ViewBag.WinList),
             colModel: [{
-                        label: '用户ID',
+                        label: '窗口ID',
                         name: 'ID',
-                        width: 50,
+                        width: 60,
                         key: true
                     }, {
-                        label: '用户姓名',
-                        width: 50,
+                        label: '窗口名称',
+                        width: 120,
                         name: 'Name'
                     }, {
-                        label: '用户性别',
-                        name: 'Sex'
+                        label: '窗口号',
+                        name: 'Number'
                     }]
         });
-});
+    });
     function submitForm(callback) {
         $.submitForm({
-            url: "SubmitUserForm",
+            url: "SubmitForm",
             data: $('form').serializeForm(),
             callback: callback
         });
@@ -54,30 +54,38 @@ $(function () {
                     </script>
                 </div>
             </div>
-            <input  type="hidden" name= "WindowID" value="@Model.WindowID" />
+            <input  type="hidden" name= "ControllerID" value="@Model.ControllerID" />
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    窗口
+                    所属控制器
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" readonly value="@ViewBag.WindowName" autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" readonly value="@ViewBag.ControllerName" autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    用户
+                    对应窗口
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" id="userSearch" displaymember='Name' valuemember='ID' autocomplete="off"
+                    <input type="text" id="winSearch" displaymember='Name' valuemember='Number' autocomplete="off"
                         class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    创建时间
+                    显示文本
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="CreateDateTime" value="@Model.CreateDateTime"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="DisplayText" value="@Model.DisplayText"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    屏幕位置
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="Position" value="@Model.Position"  autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>

@@ -16,6 +16,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         TDictionaryBLL dicBll;
         TWindowAreaBLL areaBll;
         TUnitBLL unitBll;
+        TBusinessBLL busiBll;
+        TUserBLL userBll;
 
         public TWindowController()
         {
@@ -25,6 +27,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             this.dicBll = new TDictionaryBLL(this.AreaNo);
             this.areaBll = new TWindowAreaBLL(this.AreaNo);
             this.unitBll = new TUnitBLL(this.AreaNo);
+            this.busiBll = new TBusinessBLL(this.AreaNo);
+            this.userBll = new TUserBLL(this.AreaNo);
         }
 
         //
@@ -96,9 +100,12 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             this.ViewBag.WindowName = winModel == null ? "" : winModel.Name;
             var unitModel = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq);
             this.ViewBag.UnitName = unitModel == null ? "" : unitModel.unitName;
+            var busiModel = this.busiBll.GetModel(p => p.busiSeq == model.busiSeq);
+            this.ViewBag.BusiName = busiModel == null ? "" : busiModel.busiName;
             if (model == null)
                 model = new TWindowBusinessModel() { ID = -1 };
             this.ViewBag.UnitList = JsonConvert.SerializeObject(this.unitBll.GetModelList());
+            this.ViewBag.BusiList = JsonConvert.SerializeObject(this.busiBll.GetModelList());
             return View("FormBusi", model);
         }
 
@@ -127,9 +134,14 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult UserForm(int id)
         {
             var model = this.winUserBll.GetModel(id);
+            var winModel = this.bll.GetModel(model.WindowID);
+            this.ViewBag.WindowName = winModel == null ? "" : winModel.Name;
+            var userModel = this.userBll.GetModel(p => p.ID == model.UserID);
+            this.ViewBag.UserName = userModel == null ? "" : userModel.Name;
             if (model == null)
                 model = new TWindowUserModel() { ID = -1 };
             this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
+            this.ViewBag.UserList = JsonConvert.SerializeObject(this.userBll.GetModelList());
             return View("FormUser", model);
         }
 
