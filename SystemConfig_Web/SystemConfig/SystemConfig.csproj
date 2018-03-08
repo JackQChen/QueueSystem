@@ -233,6 +233,7 @@
     <Content Include="Content\js\markdown\bootstrap-markdown.min.js" />
     <Content Include="Content\js\markdown\markdown.min.js" />
     <Content Include="Content\js\respond.min.js" />
+    <Content Include="Content\js\search.js" />
     <Content Include="Content\js\select2.min.js" />
     <Content Include="Content\js\typeahead-bs2.min.js" />
     <Content Include="Content\js\x-editable\ace-editable.min.js" />

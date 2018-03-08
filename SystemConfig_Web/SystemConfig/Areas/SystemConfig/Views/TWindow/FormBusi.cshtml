@@ -2,7 +2,54 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_LayoutForm.cshtml";
 }
-<script>
+<script>  
+$(function () {
+        initSearchControl({
+            id: 'unitSearch',
+            name: 'unitSeq',
+            value :@Model.unitSeq,
+            displayText : '@ViewBag.UnitName',
+            height:280,
+            dataSource: @Html.Raw(this.ViewBag.UnitList),
+            colModel: [{
+                        label: 'ID',
+                        name: 'id',
+                        width: 30,
+                        key: true
+                    }, {
+                        label: '单位编码',
+                        width: 50,
+                        name: 'unitSeq'
+                    }, {
+                        label: '单位名称',
+                        name: 'unitName'
+                    }]
+        });
+        initSearchControl({
+            id: 'unitSearch',
+            name: 'busiSeq',
+            value :@Model.busiSeq,
+            displayText : '@ViewBag.UnitName',
+            height:280,
+		filter : function(ds,txt){
+		return ds;
+},
+            dataSource: @Html.Raw(this.ViewBag.UnitList),
+            colModel: [{
+                        label: 'ID',
+                        name: 'id',
+                        width: 30,
+                        key: true
+                    }, {
+                        label: '单位编码',
+                        width: 50,
+                        name: 'unitSeq'
+                    }, {
+                        label: '单位名称',
+                        name: 'unitName'
+                    }]
+        });
+    });
     function submitForm(callback) {
         $.submitForm({
             url: "SubmitBusiForm",
@@ -31,12 +78,13 @@
                     </script>
                 </div>
             </div>
+            <input  type="hidden" name= "WindowID" value="@Model.WindowID" />
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
                     所属窗口
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="WindowID" value="@Model.WindowID"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" readonly value="@ViewBag.WindowName" autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             <div class="form-group">
@@ -44,7 +92,7 @@
                     对应单位
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="unitSeq" value="@Model.unitSeq" autocomplete="off" class="col-xs-10 col-sm-10"/>
+                    <input type="text" id="unitSearch" displaymember='unitName' valuemember='unitSeq' autocomplete="off" class="col-xs-10 col-sm-10"/>
                 </div>
             </div>
             <div class="form-group">
@@ -52,7 +100,7 @@
                     对应业务
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="busiSeq" value="@Model.busiSeq"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" id="busiSearch" displaymember='busiName' valuemember='unitSeq' autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>

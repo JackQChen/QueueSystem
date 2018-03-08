@@ -3,6 +3,26 @@
     Layout = "~/Views/Shared/_LayoutForm.cshtml";
 }
 <script>
+    $(function () {
+        initSearchControl({
+            id: 'areaSearch',
+            name: 'AreaName',
+            value :@Model.AreaName,
+            displayText : '@this.ViewBag.AreaText',
+            height:280,
+            dataSource: @Html.Raw(this.ViewBag.areaList),
+            colModel: [{
+                        label: 'ID',
+                        name: 'id',
+                        width: 30,
+                        key: true
+                    }, {
+                        label: '区域名称',
+                        width: 60,
+                        name: 'areaName'
+                    }]
+        });
+    });
     function submitForm(callback) {
         $.submitForm({
             url: "SubmitForm",
@@ -76,7 +96,7 @@
                     区域名称
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="AreaName" value="@Model.AreaName"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input id="areaSearch" displaymember='areaName' valuemember='id' type="text" autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>

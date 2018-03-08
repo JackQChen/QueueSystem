@@ -12,7 +12,10 @@ namespace SystemConfig.Controllers
         {
             get
             {
-                return System.Web.HttpContext.Current.Session["areaNo"].ToString();
+                var areaNo = System.Web.HttpContext.Current.Session["areaNo"];
+                if (areaNo == null)
+                    System.Web.HttpContext.Current.Session["areaNo"] = this.Request["areaNo"];
+                return areaNo.ToString();
             }
         }
     }

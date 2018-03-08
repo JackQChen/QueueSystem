@@ -10,11 +10,13 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
     {
         TBusinessBLL bll;
         TDictionaryBLL dicBll;
+        TUnitBLL unitBll;
 
         public TBusinessController()
         {
             bll = new TBusinessBLL(this.AreaNo);
             dicBll = new TDictionaryBLL(this.AreaNo);
+            unitBll = new TUnitBLL(this.AreaNo);
         }
 
         //
@@ -36,9 +38,12 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult Form(int id)
         {
             var model = this.bll.GetModel(id);
+            var unitModel = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq);
+            model.unitName = unitModel == null ? "" : unitModel.unitName;
             if (model == null)
                 model = new TBusinessModel() { id = -1 };
             this.ViewBag.busiType = dicBll.GetModelList(DictionaryString.AppointmentType);
+            this.ViewBag.unitList = JsonConvert.SerializeObject(unitBll.GetModelList());
             return View(model);
         }
 

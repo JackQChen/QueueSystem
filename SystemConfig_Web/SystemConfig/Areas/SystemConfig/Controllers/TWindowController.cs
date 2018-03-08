@@ -14,6 +14,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         TWindowUserBLL winUserBll;
         TWindowBusinessBLL winBusiBll;
         TDictionaryBLL dicBll;
+        TWindowAreaBLL areaBll;
+        TUnitBLL unitBll;
 
         public TWindowController()
         {
@@ -21,6 +23,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             this.winUserBll = new TWindowUserBLL(this.AreaNo);
             this.winBusiBll = new TWindowBusinessBLL(this.AreaNo);
             this.dicBll = new TDictionaryBLL(this.AreaNo);
+            this.areaBll = new TWindowAreaBLL(this.AreaNo);
+            this.unitBll = new TUnitBLL(this.AreaNo);
         }
 
         //
@@ -57,6 +61,9 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             if (model == null)
                 model = new TWindowModel() { ID = -1 };
             this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
+            this.ViewBag.areaList = JsonConvert.SerializeObject(this.areaBll.GetModelList());
+            var areaModel = this.areaBll.GetModel(p => p.id == model.AreaName);
+            this.ViewBag.AreaText = areaModel == null ? "" : areaModel.areaName;
             return View(model);
         }
 
@@ -85,8 +92,13 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult BusiForm(int id)
         {
             var model = this.winBusiBll.GetModel(id);
+            var winModel = this.bll.GetModel(model.WindowID);
+            this.ViewBag.WindowName = winModel == null ? "" : winModel.Name;
+            var unitModel = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq);
+            this.ViewBag.UnitName = unitModel == null ? "" : unitModel.unitName;
             if (model == null)
                 model = new TWindowBusinessModel() { ID = -1 };
+            this.ViewBag.UnitList = JsonConvert.SerializeObject(this.unitBll.GetModelList());
             return View("FormBusi", model);
         }
 

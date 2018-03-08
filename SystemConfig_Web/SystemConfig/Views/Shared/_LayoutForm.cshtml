@@ -5,6 +5,7 @@
     <!-- basic styles -->
     <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/css/font-awesome.min.css")" rel="stylesheet" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ui.jqgrid.css")" />
     <!-- fonts -->
     <link href="@Url.Content("~/Content/font/font.css")" rel="stylesheet" />
     <!-- ace styles -->
@@ -35,6 +36,9 @@
         }
     </style>
     <script src="@Url.Content("~/Content/js/jquery-2.0.3.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jqGrid/jquery.jqGrid.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jqGrid/i18n/grid.locale-cn.js")"></script>
+    <script src="@Url.Content("~/Content/js/search.js")"></script>
     <script>
         $.submitForm = function (arg) {
             $('#divLoading').css("display", "block");
