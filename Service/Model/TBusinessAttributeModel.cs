@@ -81,6 +81,11 @@ namespace Model
         /// </summary>
         public int areaId { get; set; }
 
+        /// <summary>
+        /// 是否绿色通道
+        /// </summary>
+        public int isGreenChannel { get; set; }
+
     }
 }
 

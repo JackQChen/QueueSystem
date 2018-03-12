@@ -168,6 +168,75 @@ namespace DAL
         }
 
         /// <summary>
+        /// 叫号 * 加入绿色通道插队
+        /// </summary>
+        /// <param name="wlBusy"></param>
+        /// <param name="gwlBusy"></param>
+        /// <param name="windowNumber"></param>
+        /// <param name="windowUser"></param>
+        /// <returns></returns>
+        public TCallModel CallNo(List<TWindowBusinessModel> wlBusy, List<TWindowBusinessModel> gwlBusy, string windowNumber, string windowUser)
+        {
+            try
+            {
+                if (gwlBusy == null)
+                    gwlBusy = new List<TWindowBusinessModel>();
+                var busyList = wlBusy.Select(w => w.busiSeq).ToList();
+                var unitList = wlBusy.Select(w => w.unitSeq).ToList();
+                var gbList = gwlBusy.Select(w => w.busiSeq).ToList();
+                var guList = gwlBusy.Select(w => w.unitSeq).ToList();
+                this.db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
+                var date = DateTime.Now;
+                 TQueueModel line = null;
+                var lineGreen = db.Query<TQueueModel>().Where(q => gbList.Contains(q.busTypeSeq) && guList.Contains(q.unitSeq) && q.state == 0 && q.ticketTime.Date == date.Date).OrderBy(o => o.id).FirstOrDefault();
+                if (lineGreen == null)
+                {
+                    var lineFirst = db.Query<TQueueModel>().Where(q => busyList.Contains(q.busTypeSeq) && unitList.Contains(q.unitSeq) && q.state == 0 && q.ticketTime.Date == date.Date && q.appType == 1 && q.reserveStartTime <= date && q.reserveEndTime >= date).OrderBy(o => o.id).FirstOrDefault();
+                    if (lineFirst == null)
+                    {
+                        var lineQueue = db.Query<TQueueModel>().Where(q => busyList.Contains(q.busTypeSeq) && unitList.Contains(q.unitSeq) && q.state == 0 && q.ticketTime.Date == date.Date).OrderBy(o => o.id).ToList();//取到当天 窗口业务排队队列
+                        line = lineQueue.FirstOrDefault();
+                        if (line == null)
+                            return null;
+                    }
+                    else
+                        line = lineFirst;
+                }
+                else
+                    line = lineGreen;
+                line.state = 1;
+                line.sysFlag = 1;
+                new TQueueDAL(this.db).Update(line);
+                var call = new TCallModel();
+                call.busiSeq = line.busTypeSeq;
+                call.handleId = DateTime.Now.ToString("yyyyMMddHHmmss");
+                call.handleTime = DateTime.Now;
+                call.idCard = line.idCard;
+                call.qId = line.id;
+                call.qNmae = line.qNmae;
+                call.state = 0;
+                call.ticketNumber = line.ticketNumber;
+                call.ticketTime = line.ticketTime;
+                call.unitSeq = line.unitSeq;
+                call.windowNumber = windowNumber;
+                call.windowUser = windowUser;
+                call.sysFlag = 0;
+                var ret = this.Insert(call);
+                this.db.Session.CommitTransaction();
+                return ret;
+            }
+            catch
+            {
+                this.db.Session.RollbackTransaction();
+                return null;
+            }
+            finally
+            {
+                this.db.Dispose();
+            }
+        }
+
+        /// <summary>
         /// 全部弃号
         /// </summary>
         public List<TCallModel> GiveUpAll()

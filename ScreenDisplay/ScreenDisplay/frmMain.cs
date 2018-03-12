@@ -10,6 +10,7 @@ using System.Threading;
 using Model;
 using BLL;
 using System.Runtime.InteropServices;
+using System.Configuration;
 namespace ScreenDisplay
 {
     public partial class frmMain : Form
@@ -38,6 +39,8 @@ namespace ScreenDisplay
         private string msgFontName = System.Configuration.ConfigurationManager.AppSettings["MsgFontName"];
         private int msgFontSize = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MsgFontSize"]);
         private string ExitPstion = System.Configuration.ConfigurationManager.AppSettings["ExitPstion"];
+        private string strVipColorRGB;
+        private int vipFontSize;
         private Font msgf = null;// new Font("黑体", 65, FontStyle.Bold); //显示字体大小 
         private Color c;//背景颜色
         private PointF p;  //绘制文本的左上角
@@ -50,7 +53,9 @@ namespace ScreenDisplay
         private Color ticket;
         private Color window;
         private Color other;
+        private Color vipColor; 
         private bool ShowError = false;
+        TBusinessAttributeBLL baBll = new TBusinessAttributeBLL();
         public frmMain()
         {
             InitializeComponent();
@@ -72,6 +77,21 @@ namespace ScreenDisplay
             pnMain.BackColor = main;
             c = main;
             this.pnTip.Height = msgHeight;
+        }
+
+        public static void SetConfigValue(string key, string value)
+        {
+            try
+            {
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                if (config.AppSettings.Settings[key] == null)
+                    config.AppSettings.Settings.Add(key, value);
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+            catch
+            {
+            }
         }
 
         private void BindData()
@@ -199,6 +219,12 @@ namespace ScreenDisplay
         public static extern void ShowCursor(int status);
         private void frmMain_Load(object sender, EventArgs e)
         {
+            SetConfigValue("ColorVIPRGB", "255,255,255");
+            SetConfigValue("VIPFontSize", "30");
+            strVipColorRGB = System.Configuration.ConfigurationManager.AppSettings["ColorVIPRGB"];
+            vipFontSize = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["VIPFontSize"]);
+            string[] sVip = strVipColorRGB.Split(',');
+            vipColor = System.Drawing.Color.FromArgb(Convert.ToInt32(sVip[0]), Convert.ToInt32(sVip[1]), Convert.ToInt32(sVip[2]));
             ShowCursor(0);
             BindData();
             bmp = new Bitmap(this.pictureBox1.Width, this.pictureBox1.Height);

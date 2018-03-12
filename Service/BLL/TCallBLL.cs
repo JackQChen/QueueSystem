@@ -71,6 +71,11 @@ namespace BLL
             return new TCallDAL().CallNo(wlBusy, windowNumber, windowUser);
         }
 
+        public TCallModel CallNo(List<TWindowBusinessModel> wlBusy, List<TWindowBusinessModel> gwlBusy, string windowNumber, string windowUser)
+        {
+            return new TCallDAL().CallNo(wlBusy,gwlBusy, windowNumber, windowUser);
+        }
+
         public List<TCallModel> ScreenShow()
         {
             return new TCallDAL().ScreenShow();
@@ -155,14 +160,26 @@ namespace BLL
                 {
                     var id = s.id;
                     var nData = tdal.GetModelList(p => p.areaCode == areaCode && p.areaId == s.id).FirstOrDefault();
-                    var data = s;
-                    data.id = nData.id;
-                    data.areaCode = nData.areaCode;
-                    data.areaId = nData.areaId;
-                    tdal.Update(data);
-                    s.sysFlag = 2;
-                    s.id = id;
-                    sdal.Update(s);
+                    if (nData == null)
+                    {
+                        s.areaCode = areaCode;
+                        s.areaId = s.id;
+                        tdal.Insert(s);
+                        s.id = s.areaId;
+                        s.sysFlag = 2;
+                        sdal.Update(s);
+                    }
+                    else
+                    {
+                        var data = s;
+                        data.id = nData.id;
+                        data.areaCode = nData.areaCode;
+                        data.areaId = nData.areaId;
+                        tdal.Update(data);
+                        s.sysFlag = 2;
+                        s.id = id;
+                        sdal.Update(s);
+                    }
                 }
                 return sList.Count;
             }

@@ -71,7 +71,8 @@ namespace ScreenDisplay
 
         public Color OtherColor
         {
-            get {
+            get
+            {
                 return this.label1.ForeColor;
             }
             set
@@ -82,10 +83,52 @@ namespace ScreenDisplay
             }
         }
 
+        public string VIPText
+        {
+            get { return lblVip.Text; }
+            set { lblVip.Text = value; }
+        }
+
+        public bool VIPVisible
+        {
+            get
+            {
+                return lblVip.Visible;
+            }
+            set
+            {
+                lblVip.Visible = value;
+            }
+        }
+
+        public Color VIPColor
+        {
+            get
+            {
+                return lblVip.ForeColor;
+            }
+            set
+            {
+                lblVip.ForeColor = value;
+            }
+        }
+
+        public Font VIPFont
+        {
+            get
+            {
+                return this.lblVip.Font;
+            }
+            set
+            {
+                lblVip.Font = value;
+            }
+        }
+
         public Color BackColorPage
         {
-            get 
-            { 
+            get
+            {
                 return this.BackColor;
             }
             set
@@ -96,7 +139,7 @@ namespace ScreenDisplay
 
         public int RowHeight
         {
-            get 
+            get
             {
                 return this.Height;
             }
@@ -108,11 +151,11 @@ namespace ScreenDisplay
 
         public Font TextFont
         {
-            get 
+            get
             {
                 return this.lbQNumber.Font;
             }
-            set 
+            set
             {
                 label1.Font = value;
                 lbQNumber.Font = value;

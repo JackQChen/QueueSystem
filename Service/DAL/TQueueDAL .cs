@@ -140,8 +140,13 @@ namespace DAL
         {
             try
             {
-                this.db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
+                this.db.Session.BeginTransaction();
                 var maxNo = new TLineUpMaxNoDAL(this.db).GetModelList().Where(l => l.unitSeq == selectUnit.unitSeq && l.busiSeq == selectBusy.busiSeq).FirstOrDefault();
+                //按照主键对该记录进行行锁确保数据一致性
+                maxNo = this.db.SqlQuery<TLineUpMaxNoModel>(
+                    "select * from T_LineUpMaxNo a where a.id = @id  FOR UPDATE;",
+                    new DbParam[] { new DbParam("id", maxNo == null ? -1 : maxNo.id) }
+                    ).FirstOrDefault();
                 int ticketNo = maxNo == null ? 1 : maxNo.lineDate.Date != DateTime.Now.Date ? 1 : maxNo.maxNo + 1;
                 TQueueModel line = new TQueueModel();
                 line.busTypeName = selectBusy.busiName;

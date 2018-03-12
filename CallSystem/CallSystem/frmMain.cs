@@ -35,6 +35,8 @@ namespace CallSystem
         TQueueBLL qBll = new TQueueBLL();
         TWindowBLL wBll = new TWindowBLL();
         TWindowBusinessBLL wbBll = new TWindowBusinessBLL();
+        TBusinessAttributeBLL baBll = new TBusinessAttributeBLL();
+        List<TBusinessAttributeModel> baList = new List<TBusinessAttributeModel>();
         TCallBLL cBll = new TCallBLL();
         List<TWindowModel> wList;
         List<TWindowBusinessModel> wbList;
@@ -46,6 +48,7 @@ namespace CallSystem
         Dictionary<int, TWindowBusinessModel> wBusy;//呼叫器-窗口业务
         Dictionary<int, Dictionary<string, int>> wReCall;//重呼限制
         Dictionary<int, List<TWindowBusinessModel>> wlBusy;
+        Dictionary<int, List<TWindowBusinessModel>> wbBusy;//属于绿色通道的窗口业务
         Dictionary<int, TCallModel> wHang;//挂起
         Dictionary<string, int> wCall;
         Client client = new Client();
@@ -85,6 +88,7 @@ namespace CallSystem
             portName = ini.ReadString("CallSet", "SerialPort");
             wList = wBll.GetModelList().Where(w => w.State == "1").ToList();
             wbList = wbBll.GetModelList();
+            baList = baBll.GetModelList();
             wArea = new Dictionary<string, string>();
             wState = new Dictionary<int, WorkState>();
             wpState = new Dictionary<int, WorkState>();
@@ -93,6 +97,7 @@ namespace CallSystem
             wCall = new Dictionary<string, int>();
             wBusy = new Dictionary<int, TWindowBusinessModel>();
             wlBusy = new Dictionary<int, List<TWindowBusinessModel>>();
+            wbBusy = new Dictionary<int, List<TWindowBusinessModel>>();
             wReCall = new Dictionary<int, Dictionary<string, int>>();
             wHang = new Dictionary<int, TCallModel>();
             //根据配置分区窗口
@@ -110,6 +115,14 @@ namespace CallSystem
                 {
                     wlBusy.Add(w.CallNumber, busyList);
                     wBusy.Add(w.CallNumber, busy);
+                    var gbList = new List<TWindowBusinessModel>();
+                    foreach (var bs in busyList)
+                    {
+                        var gb = baList.Where(b => b.unitSeq == bs.unitSeq && b.busiSeq == bs.busiSeq && b.isGreenChannel == 1).FirstOrDefault();
+                        if (gb != null)
+                            gbList.Add(bs);
+                    }
+                    wbBusy.Add(w.CallNumber, gbList);
                 }
             }
             serialPort = new SerialPort();
@@ -262,7 +275,7 @@ namespace CallSystem
                         else
                         {
                             WriterLog("发送确定键，但是指令未用，本次操作自动忽略！");
-                            return ;
+                            return;
                         }
                     }
                     else if (data[data.Length - 1] == 0x11)
@@ -369,7 +382,9 @@ namespace CallSystem
 
                         try
                         {
-                            var model = cBll.CallNo(wlBusy[adress], wNum[adress], "");//用户暂时为空
+
+                            var model = cBll.CallNo(wlBusy[adress], wbBusy[adress], wNum[adress], "");//用户暂时为空
+                            //var model = cBll.CallNo(wlBusy[adress], wNum[adress], "");//用户暂时为空
                             //var model = cBll.CallNo(wBusy[adress].unitSeq, wBusy[adress].busiSeq, wNum[adress], "");//用户暂时为空
                             if (model != null)
                             {
@@ -792,7 +807,7 @@ namespace CallSystem
                 oprateClassifyType = otype,
                 oprateTime = DateTime.Now,
                 oprateLog = text,
-                sysFlag =0
+                sysFlag = 0
             });
         }
 

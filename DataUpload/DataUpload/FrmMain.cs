@@ -45,7 +45,7 @@ namespace DataUpload
             {
                 if (x.ElementInformation.LineNumber == 0)
                     continue;
-                if (x.Name != "Server")
+                if (x.Name != "Server" && x.Name != "MySQL")
                 {
                     dicClient.Add(Convert.ToInt32(x.Name), x.ConnectionString);
                 }
@@ -158,7 +158,7 @@ namespace DataUpload
 
         private void WriterLog(string writerLog, string showLog)
         {
-            if(showLog!="")
+            if (showLog != "")
                 this.Invoke(new Action(() => { this.txtSoundMesInfo.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " : " + showLog + "\r\n"); }));
             if (writerLog == "")
                 return;

@@ -116,14 +116,26 @@ namespace BLL
                 {
                     var id = s.ID;
                     var nData = tdal.GetModelList(p => p.areaCode == areaCode && p.areaId == s.ID).FirstOrDefault();
-                    var data = s;
-                    data.ID = nData.ID;
-                    data.areaCode = nData.areaCode;
-                    data.areaId = nData.areaId;
-                    tdal.Update(data);
-                    s.sysFlag = 2;
-                    s.ID = id;
-                    sdal.Update(s);
+                    if (nData == null)
+                    {
+                        s.areaCode = areaCode;
+                        s.areaId = s.ID;
+                        tdal.Insert(s);
+                        s.ID = s.areaId;
+                        s.sysFlag = 2;
+                        sdal.Update(s);
+                    }
+                    else
+                    {
+                        var data = s;
+                        data.ID = nData.ID;
+                        data.areaCode = nData.areaCode;
+                        data.areaId = nData.areaId;
+                        tdal.Update(data);
+                        s.sysFlag = 2;
+                        s.ID = id;
+                        sdal.Update(s);
+                    }
                 }
                 return sList.Count;
             }
