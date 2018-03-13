@@ -11,3 +11,4 @@ D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chlo
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\bin\Debug\Chloe.pdb
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\obj\Debug\Chloe.Extension.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\obj\Debug\Chloe.Extension.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Extension\obj\Debug\Chloe.Extension.csprojResolveAssemblyReference.cache

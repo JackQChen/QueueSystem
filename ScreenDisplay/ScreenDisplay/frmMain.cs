@@ -40,7 +40,6 @@ namespace ScreenDisplay
         private int msgFontSize = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MsgFontSize"]);
         private string ExitPstion = System.Configuration.ConfigurationManager.AppSettings["ExitPstion"];
         private string strVipColorRGB;
-        private int vipFontSize;
         private Font msgf = null;// new Font("黑体", 65, FontStyle.Bold); //显示字体大小 
         private Color c;//背景颜色
         private PointF p;  //绘制文本的左上角
@@ -53,9 +52,16 @@ namespace ScreenDisplay
         private Color ticket;
         private Color window;
         private Color other;
-        private Color vipColor; 
+        private Color vipColor;
         private bool ShowError = false;
         TBusinessAttributeBLL baBll = new TBusinessAttributeBLL();
+        TWindowBLL wBll = new TWindowBLL();
+        List<TWindowModel> wList = new List<TWindowModel>();
+        List<TBusinessAttributeModel> baList = new List<TBusinessAttributeModel>();//
+        TWindowBusinessBLL wbBll = new TWindowBusinessBLL();
+        List<TWindowBusinessModel> wbList = new List<TWindowBusinessModel>();
+        TQueueBLL qBll = new TQueueBLL();
+        string[] areaStrList;
         public frmMain()
         {
             InitializeComponent();
@@ -77,6 +83,7 @@ namespace ScreenDisplay
             pnMain.BackColor = main;
             c = main;
             this.pnTip.Height = msgHeight;
+
         }
 
         public static void SetConfigValue(string key, string value)
@@ -120,12 +127,28 @@ namespace ScreenDisplay
             #region
             foreach (var v in vList)
             {
+                var bam = baList.Where(b => b.busiSeq == v.busiSeq && b.unitSeq == v.unitSeq).FirstOrDefault();
+                var queue = qBll.GetModel(q => q.id == v.qId);
+                string strVip = "";
+                if (bam != null && bam.isGreenChannel == 1)
+                {
+                    strVip = "绿色";
+                }
+                else
+                {
+                    if ((queue != null && queue.appType == 1 && queue.reserveStartTime <= v.handleTime && queue.reserveEndTime >= v.handleTime))
+                    {
+                        strVip = "网约";
+                    }
+                }
                 msInfo ms = new msInfo();
                 ms.Index = (i + 1);
                 ms.RowHeight = rowHeight;
                 ms.TextFont = msgFont;
                 ms.WindowColor = window;
                 ms.TicketColor = ticket;
+                ms.VIPColor = vipColor;
+                ms.VIPText = strVip;
                 ms.OtherColor = other;
                 ms.WindowNumber = v.windowNumber;
                 ms.QueueNumber = v.ticketNumber;
@@ -167,6 +190,7 @@ namespace ScreenDisplay
                         var ctl = pnMain.Controls[j] as msInfo;
                         ctl.WindowNumber = mList[j].WindowNumber;
                         ctl.QueueNumber = mList[j].QueueNumber;
+                        ctl.VIPText = mList[j].VIPText;
                         ctl.Refresh();
                         ctl.Invalidate();
                     }
@@ -175,7 +199,7 @@ namespace ScreenDisplay
                         deleteControl.Add(pnMain.Controls[j]);
                     }
                 }
-                foreach(var con in deleteControl)
+                foreach (var con in deleteControl)
                     pnMain.Controls.Remove(con);
                 pnMain.Refresh();
                 pnMain.Invalidate();
@@ -219,10 +243,8 @@ namespace ScreenDisplay
         public static extern void ShowCursor(int status);
         private void frmMain_Load(object sender, EventArgs e)
         {
-            SetConfigValue("ColorVIPRGB", "255,255,255");
-            SetConfigValue("VIPFontSize", "30");
+            SetConfigValue("ColorVIPRGB", "136,240,146");
             strVipColorRGB = System.Configuration.ConfigurationManager.AppSettings["ColorVIPRGB"];
-            vipFontSize = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["VIPFontSize"]);
             string[] sVip = strVipColorRGB.Split(',');
             vipColor = System.Drawing.Color.FromArgb(Convert.ToInt32(sVip[0]), Convert.ToInt32(sVip[1]), Convert.ToInt32(sVip[2]));
             ShowCursor(0);
@@ -230,6 +252,13 @@ namespace ScreenDisplay
             bmp = new Bitmap(this.pictureBox1.Width, this.pictureBox1.Height);
             timer1.Interval = interval;
             timer2.Interval = refreshInterval * 1000;
+            areaStrList = areaList.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            wList = wBll.GetModelList(w => areaStrList.Contains(w.AreaName.ToString())).ToList();
+            var windowList = wList.Select(s => s.ID).ToList();
+            wbList = wbBll.GetModelList(w => windowList.Contains(w.WindowID)).ToList();
+            var busyList = wbList.Select(w => w.busiSeq).ToList();
+            var unitList = wbList.Select(w => w.unitSeq).ToList();
+            baList = baBll.GetModelList(b => busyList.Contains(b.busiSeq) && unitList.Contains(b.unitSeq)).ToList();
         }
 
         Bitmap bmp;

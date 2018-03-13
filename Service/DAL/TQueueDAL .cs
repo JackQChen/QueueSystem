@@ -209,68 +209,65 @@ namespace DAL
         /// <returns></returns>
         public TQueueModel QueueLine(TBusinessModel selectBusy, TUnitModel selectUnit, string ticketStart, string idCard, string name, TAppointmentModel app)
         {
+            TQueueModel qModel = null;
             try
             {
-
-                this.db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
-                var maxNo = new TLineUpMaxNoDAL(this.db).GetModelList().Where(l => l.unitSeq == selectUnit.unitSeq && l.busiSeq == selectBusy.busiSeq).FirstOrDefault();
-                int ticketNo = maxNo == null ? 1 : maxNo.lineDate.Date != DateTime.Now.Date ? 1 : maxNo.maxNo + 1;
-                TQueueModel line = new TQueueModel();
-                line.busTypeName = selectBusy.busiName;
-                line.busTypeSeq = selectBusy.busiSeq;
-                line.qNumber = ticketNo.ToString();
-                line.state = 0;
-                line.ticketNumber = ticketStart + ticketNo.ToString("000");
-                line.ticketTime = DateTime.Now;
-                line.unitName = selectUnit.unitName;
-                line.unitSeq = selectUnit.unitSeq;
-                line.vipLever = "";
-                line.windowName = "";
-                line.windowNumber = "";
-                line.idCard = idCard;
-                line.qNmae = name;
-                line.sysFlag = 0;
-                if (app != null)
-                {
-                    line.appType = app.appType;
-                    line.reserveSeq = app.reserveSeq;
-                    line.reserveStartTime = app.reserveStartTime;
-                    line.reserveEndTime = app.reserveEndTime;
-                }
-                line = this.Insert(line);
-                if (maxNo == null)
-                {
-                    maxNo = new TLineUpMaxNoModel();
-                    maxNo.areaSeq = "";
-                    maxNo.busiSeq = selectBusy.busiSeq;
-                    maxNo.lineDate = DateTime.Now;
-                    maxNo.maxNo = 1;
-                    maxNo.unitSeq = selectUnit.unitSeq;
-                    maxNo.sysFlag = 0;
-                    new TLineUpMaxNoDAL(this.db).Insert(maxNo);
-                }
-                else
-                {
-                    if (maxNo.lineDate.Date != DateTime.Now.Date)
-                        maxNo.maxNo = 1;
-                    else
-                        maxNo.maxNo = maxNo.maxNo + 1;
-                    maxNo.lineDate = DateTime.Now;
-                    maxNo.sysFlag = 1;
-                    new TLineUpMaxNoDAL(this.db).Update(maxNo);
-                }
-                this.db.Session.CommitTransaction();
-                return line;
+                LockAction.Run(LockKey.Queue, () =>
+                  {
+                      var maxNo = new TLineUpMaxNoDAL(this.db).GetModelList().Where(l => l.unitSeq == selectUnit.unitSeq && l.busiSeq == selectBusy.busiSeq).FirstOrDefault();
+                      int ticketNo = maxNo == null ? 1 : maxNo.lineDate.Date != DateTime.Now.Date ? 1 : maxNo.maxNo + 1;
+                      TQueueModel line = new TQueueModel();
+                      line.busTypeName = selectBusy.busiName;
+                      line.busTypeSeq = selectBusy.busiSeq;
+                      line.qNumber = ticketNo.ToString();
+                      line.state = 0;
+                      line.ticketNumber = ticketStart + ticketNo.ToString("000");
+                      line.ticketTime = DateTime.Now;
+                      line.unitName = selectUnit.unitName;
+                      line.unitSeq = selectUnit.unitSeq;
+                      line.vipLever = "";
+                      line.windowName = "";
+                      line.windowNumber = "";
+                      line.idCard = idCard;
+                      line.qNmae = name;
+                      line.sysFlag = 0;
+                      if (app != null)
+                      {
+                          line.appType = app.appType;
+                          line.reserveSeq = app.reserveSeq;
+                          line.reserveStartTime = app.reserveStartTime;
+                          line.reserveEndTime = app.reserveEndTime;
+                      }
+                      line = this.Insert(line);
+                      if (maxNo == null)
+                      {
+                          maxNo = new TLineUpMaxNoModel();
+                          maxNo.areaSeq = "";
+                          maxNo.busiSeq = selectBusy.busiSeq;
+                          maxNo.lineDate = DateTime.Now;
+                          maxNo.maxNo = 1;
+                          maxNo.unitSeq = selectUnit.unitSeq;
+                          maxNo.sysFlag = 0;
+                          new TLineUpMaxNoDAL(this.db).Insert(maxNo);
+                      }
+                      else
+                      {
+                          if (maxNo.lineDate.Date != DateTime.Now.Date)
+                              maxNo.maxNo = 1;
+                          else
+                              maxNo.maxNo = maxNo.maxNo + 1;
+                          maxNo.lineDate = DateTime.Now;
+                          maxNo.sysFlag = 1;
+                          new TLineUpMaxNoDAL(this.db).Update(maxNo);
+                      }
+                      qModel = line;
+                  });
             }
             catch
             {
-                this.db.Session.RollbackTransaction();
                 return null;
             }
-            finally
-            {
-                this.db.Dispose();
-            }
+            return qModel;
         }
 
 

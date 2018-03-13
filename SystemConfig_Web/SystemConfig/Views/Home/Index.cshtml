@@ -30,6 +30,7 @@
         body
         {
             font-family: '微软雅黑';
+            overflow-y: hidden;
         }
         .ui-dialog-titlebar-close
         {
@@ -41,7 +42,7 @@
         }
     </style>
 </head>
-<body style="overflow-y: hidden">
+<body>
     <div class="navbar navbar-default" id="navbar">
         <script type="text/javascript">
             try { ace.settings.check('navbar', 'fixed') } catch (e) { }
@@ -312,19 +313,14 @@
     </div>
     <!-- /.main-container -->
     <!-- basic scripts -->
-    <!--[if !IE]> -->
-    <!-- <![endif]-->
-    <!--[if IE]>  
-	<!--[if !IE]> -->
     <script type="text/javascript">
         window.jQuery || document.write("<script src='Content/js/jquery-2.0.3.min.js'>" + "<" + "script>");
     </script>
-    <!-- <![endif]-->
     <!--[if IE]>
-<script type="text/javascript">
- window.jQuery || document.write("<script src='Content/js/jquery-1.10.2.min.js'>"+"<"+"script>");
-</script>
-<![endif]-->
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='Content/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+        </script>
+    <![endif]-->
     <script type="text/javascript">
         if ("ontouchend" in document) document.write("<script src='Content/js/jquery.mobile.custom.min.js'>" + "</" + "script>");
     </script>
@@ -359,7 +355,7 @@
         var lastTarget = "TUnit";
         $(function () {
             var fc = $('#frameContent');
-            fc.height($(window).height() - fc.offset().top + 4);
+            fc.height($(window).height() - fc.offset().top);
             showMask(fc);
             fc.on('load', function () {
                 removeMask(fc);

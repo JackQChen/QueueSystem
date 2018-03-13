@@ -14,7 +14,7 @@
         $(gridLC).jqGrid({
             url: "/TLedWindow/GetGridData",
             datatype: "json",
-            height: $(document).height() - 131,
+            height: $(document).height() - 127,
             colModel: [
                 { label: 'ID', name: 'ID', width: 60, sorttype: "int", key: true },
                 { label: 'IP', name: 'IP' },
@@ -54,7 +54,7 @@
         $(gridLed).jqGrid({
             datatype: 'local',
             data: [],
-            height: $(document).height() - 101,
+            height: $(document).height() - 97,
             colModel: [
                 { label: 'ID', name: 'ID', key: true, hidden: true },
                 { label: '窗口号', width: 80, name: 'WindowNumber' },

@@ -89,18 +89,6 @@ namespace ScreenDisplay
             set { lblVip.Text = value; }
         }
 
-        public bool VIPVisible
-        {
-            get
-            {
-                return lblVip.Visible;
-            }
-            set
-            {
-                lblVip.Visible = value;
-            }
-        }
-
         public Color VIPColor
         {
             get
@@ -162,6 +150,7 @@ namespace ScreenDisplay
                 label3.Font = value;
                 lbWNumber.Font = value;
                 label5.Font = value;
+                lblVip.Font = value;
             }
         }
 

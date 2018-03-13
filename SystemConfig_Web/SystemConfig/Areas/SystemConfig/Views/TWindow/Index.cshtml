@@ -10,12 +10,13 @@
     var gridUser = "#grid-User-table";
 
     $(function () {
+        $('body').layout();
         initBusiData();
         initUserData();
         $(gridWin).jqGrid({
             url: "/TWindow/GetGridData",
             datatype: "json",
-            height: $(document).height() - 131,
+            height: $(document).height() - 127,
             colModel: [
                 { label: 'ID', name: 'ID', width: 60, sorttype: "int", key: true },
                 { label: '窗口名称', name: 'Name' },
@@ -311,26 +312,26 @@
     }
 
 </script>
-<div>
-    <div class="col-xs-6" style="padding: 0px; border-right: 10px solid #DCDCDC;">
-        <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="Add()">
-                <i class="icon-plus-sign bigger-110"></i>新增</button>
-            <button class="btn btn-sm btn-success" onclick="Edit()">
-                <i class="icon-pencil bigger-110"></i>编辑</button>
-            <button class="btn btn-sm btn-danger" onclick="Delete()">
-                <i class="icon-minus-sign bigger-110"></i>删除</button>
-            <button class="btn btn-sm btn-yellow" onclick="View()">
-                <i class="icon-zoom-in bigger-110"></i>查看</button>
-            <button class="btn btn-sm btn-info" onclick="Refresh()">
-                <i class="icon-refresh bigger-110"></i>刷新</button>
-        </div>
-        <table id="grid-table">
-        </table>
-        <div id="grid-pager">
-        </div>
+<div class="ui-layout-west">
+    <div class="btn-group">
+        <button class="btn btn-sm btn-primary" onclick="Add()">
+            <i class="icon-plus-sign bigger-110"></i>新增</button>
+        <button class="btn btn-sm btn-success" onclick="Edit()">
+            <i class="icon-pencil bigger-110"></i>编辑</button>
+        <button class="btn btn-sm btn-danger" onclick="Delete()">
+            <i class="icon-minus-sign bigger-110"></i>删除</button>
+        <button class="btn btn-sm btn-yellow" onclick="View()">
+            <i class="icon-zoom-in bigger-110"></i>查看</button>
+        <button class="btn btn-sm btn-info" onclick="Refresh()">
+            <i class="icon-refresh bigger-110"></i>刷新</button>
     </div>
-    <div class="col-xs-6" style="padding: 0px; border-bottom: 10px solid #DCDCDC;">
+    <table id="grid-table">
+    </table>
+    <div id="grid-pager">
+    </div>
+</div>
+<div class="ui-layout-center">
+    <div class="ui-layout-north">
         <div class="btn-group">
             <button class="btn btn-sm btn-primary" onclick="BusiAdd()">
                 <i class="icon-plus-sign bigger-110"></i>新增</button>
@@ -344,7 +345,7 @@
         <table id="grid-Busi-table">
         </table>
     </div>
-    <div class="col-xs-6" style="padding: 0px">
+    <div class="ui-layout-center">
         <div class="btn-group">
             <button class="btn btn-sm btn-primary" onclick="UserAdd()">
                 <i class="icon-plus-sign bigger-110"></i>新增</button>

@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factory.cs" />
+    <Compile Include="LockAction.cs" />
     <Compile Include="MySqlConnectionFactory.cs" />
     <Compile Include="TAppointmentDAL.cs" />
     <Compile Include="TBusinessAttributeDAL.cs" />

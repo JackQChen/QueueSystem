@@ -24,9 +24,23 @@
         body
         {
             font-family: '微软雅黑';
+            background: white;
+            overflow-y: hidden;
+        }
+        .ui-layout-resizer
+        {
+            background: #DDD;
+            border: 1px solid #BBB;
+            border-width: 0;
+        }
+        .ui-layout-toggler
+        {
+            border: 1px solid #BBB;
+            background-color: #BBB;
         }
     </style>
     <script src="@Url.Content("~/Content/js/jquery-2.0.3.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jquery.layout.min.js")"></script>
     <script src="@Url.Content("~/Content/js/jqGrid/jquery.jqGrid.min.js")"></script>
     <script src="@Url.Content("~/Content/js/jqGrid/i18n/grid.locale-cn.js")"></script>
     <script type="text/javascript">
@@ -81,7 +95,7 @@
         }
     </script>
 </head>
-<body style="background: white;">
+<body>
     @RenderBody()
     @Html.AntiForgeryToken()
 </body>
