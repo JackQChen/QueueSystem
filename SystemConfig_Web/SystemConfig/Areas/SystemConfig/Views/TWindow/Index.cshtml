@@ -183,14 +183,24 @@
         $(gridWin).jqGrid('setGridParam').trigger('reloadGrid');
     }
 
+    function RefreshDetail() {
+        var id = $(gridWin).jqGrid('getGridParam', 'selrow');
+        $(gridWin).setSelection(id);
+    }
+
     //对应业务
     function BusiAdd() {
+        var winId = $(gridWin).jqGrid('getGridParam', 'selrow');
+        if (winId == null) {
+            alert("没有选中窗口！");
+            return;
+        }
         $.modalOpen({
             title: "窗口业务对应 - 新增",
-            url: "SystemConfig/TWindow/BusiForm?id=-1",
+            url: "SystemConfig/TWindow/BusiForm?id=-1&winId=" + winId,
             callback: function () {
                 $.modalContent().submitForm(function () {
-                    Refresh();
+                    RefreshDetail();
                 });
             }
         });
@@ -207,7 +217,7 @@
             url: "SystemConfig/TWindow/BusiForm?id=" + sid,
             callback: function () {
                 $.modalContent().submitForm(function () {
-                    Refresh();
+                    RefreshDetail();
                 });
             }
         });
@@ -225,7 +235,7 @@
                 $.deleteForm({
                     url: "TWindow/DeleteBusiForm?id=" + sid,
                     callback: function () {
-                        Refresh();
+                        RefreshDetail();
                     }
                 });
             }
@@ -248,12 +258,17 @@
 
     //对应用户
     function UserAdd() {
+        var winId = $(gridWin).jqGrid('getGridParam', 'selrow');
+        if (winId == null) {
+            alert("没有选中窗口！");
+            return;
+        }
         $.modalOpen({
             title: "窗口用户对应 - 新增",
-            url: "SystemConfig/TWindow/UserForm?id=-1",
+            url: "SystemConfig/TWindow/UserForm?id=-1&winId=" + winId,
             callback: function () {
                 $.modalContent().submitForm(function () {
-                    Refresh();
+                    RefreshDetail();
                 });
             }
         });
@@ -270,7 +285,7 @@
             url: "SystemConfig/TWindow/UserForm?id=" + sid,
             callback: function () {
                 $.modalContent().submitForm(function () {
-                    Refresh();
+                    RefreshDetail();
                 });
             }
         });
@@ -288,7 +303,7 @@
                 $.deleteForm({
                     url: "TWindow/DeleteUserForm?id=" + sid,
                     callback: function () {
-                        Refresh();
+                        RefreshDetail();
                     }
                 });
             }

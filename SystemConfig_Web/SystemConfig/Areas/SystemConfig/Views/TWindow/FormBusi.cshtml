@@ -7,7 +7,7 @@ $(function () {
         initSearchControl({
             id: 'unitSearch',
             name: 'unitSeq',
-            value :@Model.unitSeq,
+            value :'@Model.unitSeq',
             displayText : '@ViewBag.UnitName',
             height:280,
             dataSource: @Html.Raw(this.ViewBag.UnitList),
@@ -28,7 +28,7 @@ $(function () {
         initSearchControl({
             id: 'busiSearch',
             name: 'busiSeq',
-            value :@Model.busiSeq,
+            value :'@Model.busiSeq',
             displayText : '@ViewBag.BusiName',
             height:280,
             filter : function(ds,txt){
@@ -108,7 +108,7 @@ $(function () {
                     对应业务
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" id="busiSearch" displaymember='busiName' valuemember='unitSeq'
+                    <input type="text" id="busiSearch" displaymember='busiName' valuemember='busiSeq'
                         autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>

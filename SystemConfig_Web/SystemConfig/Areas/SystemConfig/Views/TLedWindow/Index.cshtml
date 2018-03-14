@@ -17,7 +17,7 @@
         $(gridLC).jqGrid({
             url: "/TLedWindow/GetGridData",
             datatype: "json",
-            height: $(document).height() - 128,
+            height: $(document).height() - 97,
             colModel: [
                 { label: 'ID', name: 'ID', width: 60, sorttype: "int", key: true },
                 { label: 'IP', name: 'IP' },
@@ -35,14 +35,17 @@
                 $(gridLC).selectFirstRow();
             },
             onSelectRow: function (id) {
-                refreshDetailData(id);
+                refreshDetailData();
             }
         });
     });
 
-    function refreshDetailData(id) {
+    function refreshDetailData() {
+        var ctlId = $(gridLC).jqGrid('getGridParam', 'selrow');
+        if (ctlId == null)
+            ctlId = -1;
         $.ajax({
-            url: "/TLedWindow/GetGridDetailData?controllerId=" + id,
+            url: "/TLedWindow/GetGridDetailData?controllerId=" + ctlId,
             dataType: "json",
             success: function (data) {
                 refreshLedData(data);
@@ -54,7 +57,7 @@
         $(gridLed).jqGrid({
             datatype: 'local',
             data: [],
-            height: $(document).height() - 97,
+            height: $(document).height() - 128,
             colModel: [
                 { label: 'ID', name: 'ID', key: true, hidden: true },
                 { label: '窗口号', width: 80, name: 'WindowNumber' },
@@ -83,9 +86,14 @@
     }
 
     function Add() {
+        var ctlId = $(gridLC).jqGrid('getGridParam', 'selrow');
+        if (ctlId == null) {
+            alert("没有选中控制卡！");
+            return;
+        }
         $.modalOpen({
             title: "LED屏幕 - 新增",
-            url: "SystemConfig/TLedWindow/Form?id=-1",
+            url: "SystemConfig/TLedWindow/Form?id=-1&ctlId=" + ctlId,
             callback: function () {
                 $.modalContent().submitForm(function () {
                     Refresh();
@@ -144,11 +152,17 @@
     }
 
     function Refresh() {
-        $(gridLed).jqGrid('setGridParam').trigger('reloadGrid');
+        refreshDetailData();
     }
 
 </script>
 <div class="ui-layout-west">
+    <table id="grid-table">
+    </table>
+    <div id="grid-pager">
+    </div>
+</div>
+<div class="ui-layout-center">
     <div class="btn-group">
         <button class="btn btn-sm btn-primary" onclick="Add()">
             <i class="icon-plus-sign bigger-110"></i>新增</button>
@@ -161,12 +175,6 @@
         <button class="btn btn-sm btn-info" onclick="Refresh()">
             <i class="icon-refresh bigger-110"></i>刷新</button>
     </div>
-    <table id="grid-table">
-    </table>
-    <div id="grid-pager">
-    </div>
-</div>
-<div class="ui-layout-center">
     <table id="grid-Led-table">
     </table>
     <div id="grid-Led-pager">

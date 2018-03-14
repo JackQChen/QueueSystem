@@ -4,6 +4,7 @@ using Model;
 using Newtonsoft.Json;
 using System.Collections;
 using SystemConfig.Controllers;
+using System;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
@@ -96,14 +97,18 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult BusiForm(int id)
         {
             var model = this.winBusiBll.GetModel(id);
+            if (model == null)
+                model = new TWindowBusinessModel()
+                {
+                    ID = -1,
+                    WindowID = Convert.ToInt32(this.Request["winId"])
+                };
             var winModel = this.bll.GetModel(model.WindowID);
             this.ViewBag.WindowName = winModel == null ? "" : winModel.Name;
             var unitModel = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq);
             this.ViewBag.UnitName = unitModel == null ? "" : unitModel.unitName;
             var busiModel = this.busiBll.GetModel(p => p.busiSeq == model.busiSeq);
             this.ViewBag.BusiName = busiModel == null ? "" : busiModel.busiName;
-            if (model == null)
-                model = new TWindowBusinessModel() { ID = -1 };
             this.ViewBag.UnitList = JsonConvert.SerializeObject(this.unitBll.GetModelList());
             this.ViewBag.BusiList = JsonConvert.SerializeObject(this.busiBll.GetModelList());
             return View("FormBusi", model);
@@ -114,7 +119,15 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult SubmitBusiForm(TWindowBusinessModel model)
         {
             if (model.ID == -1)
-                this.winBusiBll.Insert(model);
+            {
+                if (this.winBusiBll.GetModel(
+                    p => p.WindowID == model.WindowID
+                        && p.unitSeq == model.unitSeq
+                        && p.busiSeq == model.busiSeq) == null)
+                    this.winBusiBll.Insert(model);
+                else
+                    return Content("记录重复！");
+            }
             else
                 this.winBusiBll.Update(model);
             return Content("操作成功！");
@@ -134,12 +147,16 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult UserForm(int id)
         {
             var model = this.winUserBll.GetModel(id);
+            if (model == null)
+                model = new TWindowUserModel()
+                {
+                    ID = -1,
+                    WindowID = Convert.ToInt32(this.Request["winId"])
+                };
             var winModel = this.bll.GetModel(model.WindowID);
             this.ViewBag.WindowName = winModel == null ? "" : winModel.Name;
             var userModel = this.userBll.GetModel(p => p.ID == model.UserID);
             this.ViewBag.UserName = userModel == null ? "" : userModel.Name;
-            if (model == null)
-                model = new TWindowUserModel() { ID = -1 };
             this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
             this.ViewBag.UserList = JsonConvert.SerializeObject(this.userBll.GetModelList());
             return View("FormUser", model);
@@ -150,7 +167,14 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult SubmitUserForm(TWindowUserModel model)
         {
             if (model.ID == -1)
-                this.winUserBll.Insert(model);
+            {
+                if (this.winUserBll.GetModel(
+                    p => p.WindowID == model.WindowID
+                    && p.UserID == model.UserID) == null)
+                    this.winUserBll.Insert(model);
+                else
+                    return Content("记录重复！");
+            }
             else
                 this.winUserBll.Update(model);
             return Content("操作成功！");

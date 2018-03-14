@@ -3,6 +3,7 @@ using BLL;
 using SystemConfig.Controllers;
 using Newtonsoft.Json;
 using Model;
+using System;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
@@ -44,12 +45,16 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult Form(int id)
         {
             var model = this.ledWinBll.GetModel(id);
+            if (model == null)
+                model = new TLedWindowModel()
+                {
+                    ID = -1,
+                    ControllerID = Convert.ToInt32(this.Request["ctlId"])
+                };
             var ctlModel = this.lcBll.GetModel(p => p.ID == model.ControllerID);
             this.ViewBag.ControllerName = ctlModel == null ? "" : ctlModel.Name;
             var winModel = this.windowBll.GetModel(p => p.Number == model.WindowNumber);
             this.ViewBag.WinName = winModel == null ? "" : winModel.Name;
-            if (model == null)
-                model = new TLedWindowModel() { ID = -1 };
             this.ViewBag.WinList = JsonConvert.SerializeObject(this.windowBll.GetModelList());
             return View(model);
         }

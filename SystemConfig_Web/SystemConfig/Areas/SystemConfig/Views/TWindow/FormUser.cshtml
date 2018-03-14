@@ -7,7 +7,7 @@ $(function () {
         initSearchControl({
             id: 'userSearch',
             name: 'UserID',
-            value :@Model.UserID,
+            value :'@Model.UserID',
             displayText : '@ViewBag.UserName',
             height:280,
             dataSource: @Html.Raw(this.ViewBag.UserList),
