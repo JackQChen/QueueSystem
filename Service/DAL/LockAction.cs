@@ -21,6 +21,7 @@ namespace DAL
             {
                 try
                 {
+                    db.Session.CommandTimeout = 60;
                     db.Session.BeginTransaction();
                     db.Session.ExecuteScalar(@"
                     select `key` from t_lock where `key` = @key FOR UPDATE;",
