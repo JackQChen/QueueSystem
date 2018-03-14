@@ -28,10 +28,7 @@ $(function() {
                 updatePagerIcons(table);
             }
             , 0);
-            //选中第一行
-            var rows = $(grid_selector).jqGrid('getRowData');
-            if (rows.length > 0)
-                $(grid_selector).setSelection(rows[0].ID);
+            $(grid_selector).selectFirstRow();
         },
     });
 }

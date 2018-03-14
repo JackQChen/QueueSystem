@@ -10,11 +10,14 @@
     var pagerLed = "#grid-Led-pager";
 
     $(function () {
+        $('body').layout({
+            west__size: 0.4
+        });
         initLedData();
         $(gridLC).jqGrid({
             url: "/TLedWindow/GetGridData",
             datatype: "json",
-            height: $(document).height() - 127,
+            height: $(document).height() - 128,
             colModel: [
                 { label: 'ID', name: 'ID', width: 60, sorttype: "int", key: true },
                 { label: 'IP', name: 'IP' },
@@ -29,10 +32,7 @@
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
-                //选中第一行
-                var rows = $(gridLC).jqGrid('getRowData');
-                if (rows.length > 0)
-                    $(gridLC).setSelection(rows[0].ID);
+                $(gridLC).selectFirstRow();
             },
             onSelectRow: function (id) {
                 refreshDetailData(id);
@@ -69,10 +69,7 @@
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
-                //选中第一行
-                var rows = $(gridLed).jqGrid('getRowData');
-                if (rows.length > 0)
-                    $(gridLed).setSelection(rows[0].ID);
+                $(gridLed).selectFirstRow();
             }
         });
     }
@@ -151,29 +148,27 @@
     }
 
 </script>
-<div>
-    <div class="col-xs-5" style="padding: 0px; border-right: 10px solid #DCDCDC;">
-        <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="Add()">
-                <i class="icon-plus-sign bigger-110"></i>新增</button>
-            <button class="btn btn-sm btn-success" onclick="Edit()">
-                <i class="icon-pencil bigger-110"></i>编辑</button>
-            <button class="btn btn-sm btn-danger" onclick="Delete()">
-                <i class="icon-minus-sign bigger-110"></i>删除</button>
-            <button class="btn btn-sm btn-yellow" onclick="View()">
-                <i class="icon-zoom-in bigger-110"></i>查看</button>
-            <button class="btn btn-sm btn-info" onclick="Refresh()">
-                <i class="icon-refresh bigger-110"></i>刷新</button>
-        </div>
-        <table id="grid-table">
-        </table>
-        <div id="grid-pager">
-        </div>
+<div class="ui-layout-west">
+    <div class="btn-group">
+        <button class="btn btn-sm btn-primary" onclick="Add()">
+            <i class="icon-plus-sign bigger-110"></i>新增</button>
+        <button class="btn btn-sm btn-success" onclick="Edit()">
+            <i class="icon-pencil bigger-110"></i>编辑</button>
+        <button class="btn btn-sm btn-danger" onclick="Delete()">
+            <i class="icon-minus-sign bigger-110"></i>删除</button>
+        <button class="btn btn-sm btn-yellow" onclick="View()">
+            <i class="icon-zoom-in bigger-110"></i>查看</button>
+        <button class="btn btn-sm btn-info" onclick="Refresh()">
+            <i class="icon-refresh bigger-110"></i>刷新</button>
     </div>
-    <div class="col-xs-7" style="padding: 0px;">
-        <table id="grid-Led-table">
-        </table>
-        <div id="grid-Led-pager">
-        </div>
+    <table id="grid-table">
+    </table>
+    <div id="grid-pager">
+    </div>
+</div>
+<div class="ui-layout-center">
+    <table id="grid-Led-table">
+    </table>
+    <div id="grid-Led-pager">
     </div>
 </div>

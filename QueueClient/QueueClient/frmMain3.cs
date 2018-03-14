@@ -17,16 +17,10 @@ namespace QueueClient
 {
     public partial class frmMain3 : Form
     {
-        PageLocation pageLocation;
-        BusyType busyType;
-        Person person;
-
-        bool suppend = true;
-        int pageStopTime = 100;
-        int iRetUSB = 0;
-        string idCard = "";//身份证号码
-        string userCode = "";//
-        JavaScriptSerializer script = new JavaScriptSerializer();
+        #region
+        string TimeInterval = "";
+        string NumberRestriction = "";
+        string ClientName = "";
         string areaSeq = System.Configuration.ConfigurationManager.AppSettings["areaSeq"];
         string GetAppointmentByID = System.Configuration.ConfigurationManager.AppSettings["GetAppointmentByID"];
         string GetWorkByID = System.Configuration.ConfigurationManager.AppSettings["GetWorkByID"];//申办
@@ -44,9 +38,6 @@ namespace QueueClient
         string SaveEvaluate = System.Configuration.ConfigurationManager.AppSettings["SaveEvaluate"];
         string GetUserByUserCode = System.Configuration.ConfigurationManager.AppSettings["GetUserByUserCode"];
         string GetAppointmentByReserveSeq = System.Configuration.ConfigurationManager.AppSettings["GetAppointmentByReserveSeq"];
-        string TimeInterval = "";
-        string NumberRestriction = "";
-        string ClientName = "";
         string ExitTime = System.Configuration.ConfigurationManager.AppSettings["ExitTime"];
         string EvaluateTime = System.Configuration.ConfigurationManager.AppSettings["Evaluate"];
         string AppointTime = System.Configuration.ConfigurationManager.AppSettings["Appoint"];
@@ -54,6 +45,10 @@ namespace QueueClient
         string UnitTime = System.Configuration.ConfigurationManager.AppSettings["Unit"];
         string ReadcardTime = System.Configuration.ConfigurationManager.AppSettings["Readcard"];
         string CardTime = System.Configuration.ConfigurationManager.AppSettings["Card"];
+        #endregion
+
+        #region
+        JavaScriptSerializer script = new JavaScriptSerializer();
         HttpHelper http = new HttpHelper();
         PrintHelper print = new PrintHelper();
         TEvaluateBLL eBll = new TEvaluateBLL();
@@ -78,6 +73,14 @@ namespace QueueClient
         List<TBusinessModel> bList = new List<TBusinessModel>();//业务列表
         List<TBusinessAttributeModel> baList = new List<TBusinessAttributeModel>();
         AutoResetEvent are = new AutoResetEvent(false);
+        PageLocation pageLocation;
+        BusyType busyType;
+        Person person;
+        bool suppend = true;
+        int pageStopTime = 100;
+        int iRetUSB = 0;
+        string idCard = "";//身份证号码
+        string userCode = "";//
         Thread thread;
         Thread exit;
         Thread wait;
@@ -88,6 +91,8 @@ namespace QueueClient
         string appName = "X";
         Dictionary<string, Control> uc = new Dictionary<string, Control>();
         Dictionary<string, int> ucTimer = new Dictionary<string, int>();
+        #endregion
+
         #region 构造函数，初始化，读卡
 
         public static void SetConfigValue(string key, string value)
@@ -598,9 +603,9 @@ namespace QueueClient
                                     var paperCode = data["paperCode"] == null ? "" : data["paperCode"].ToString();
                                     var mobilePhone = data["mobilePhone"] == null ? "" : data["mobilePhone"].ToString();
                                     var comName = data["comName"] == null ? "" : data["comName"].ToString();
-                                    var reserveDate = data["reserveDate"] == null ? "" : data["reserveDate"].ToString();
-                                    var reserveStartTime = data["reserveStartTime"] == null ? "" : data["reserveStartTime"].ToString();
-                                    var reserveEndTime = data["reserveEndTime"] == null ? "" : data["reserveEndTime"].ToString();
+                                    var reserveDate = data["reserveDate"] == null ? "1990-01-01" : data["reserveDate"].ToString();
+                                    var reserveStartTime = data["reserveStartTime"] == null ? "00:00" : data["reserveStartTime"].ToString();
+                                    var reserveEndTime = data["reserveEndTime"] == null ? "00:00" : data["reserveEndTime"].ToString();
                                     var approveSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
                                     var approveName = data["approveName"] == null ? "" : data["approveName"].ToString();
                                     var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
@@ -977,7 +982,7 @@ namespace QueueClient
 
         #region 二级菜单
 
-        #region 页面跳转 刷身份证 读身份证
+        #region 页面跳转 刷身份证 读身份证 ******** 入口
 
         /// <summary>
         /// 刷身份证type0：办事读卡 1：评价读卡 2：领卡读卡
@@ -1076,10 +1081,11 @@ namespace QueueClient
                     else
                     {
                         #region 有预约
-                        #region
+
                         appList = new List<TAppointmentModel>();
                         foreach (Dictionary<string, object> data in dataArr)
                         {
+                            #region
                             var busiCode = data["busiCode"] == null ? "" : data["busiCode"].ToString();
                             var reserveSeq = data["reserveSeq"] == null ? "" : data["reserveSeq"].ToString();
                             var busiName = data["busiName"] == null ? "" : data["busiName"].ToString();
@@ -1088,9 +1094,9 @@ namespace QueueClient
                             var paperCode = data["paperCode"] == null ? "" : data["paperCode"].ToString();
                             var mobilePhone = data["mobilePhone"] == null ? "" : data["mobilePhone"].ToString();
                             var comName = data["comName"] == null ? "" : data["comName"].ToString();
-                            var reserveDate = data["reserveDate"] == null ? "" : data["reserveDate"].ToString();
-                            var reserveStartTime = data["reserveStartTime"] == null ? "" : data["reserveStartTime"].ToString();
-                            var reserveEndTime = data["reserveEndTime"] == null ? "" : data["reserveEndTime"].ToString();
+                            var reserveDate = data["reserveDate"] == null ? "1990-01-01" : data["reserveDate"].ToString();
+                            var reserveStartTime = data["reserveStartTime"] == null ? "00:00" : data["reserveStartTime"].ToString();
+                            var reserveEndTime = data["reserveEndTime"] == null ? "00:00" : data["reserveEndTime"].ToString();
                             var approveSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
                             var approveName = data["approveName"] == null ? "" : data["approveName"].ToString();
                             var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
@@ -1117,35 +1123,20 @@ namespace QueueClient
                             app.isCheck = false;
                             app.sysFlag = 0;
                             appList.Add(app);
+                            #endregion
                         }
-                        #endregion
+                        var ali = appList.Where(a => a.reserveEndTime >= DateTime.Now).ToList();
+                        if (ali == null)
+                        {
+                            SelectUnit();//如果预约失效 则不显示预约界面
+                        }
+                        else
+                        {
+                            appList = ali;
+                            ShowAppointment();
+                        }
 
-                        ShowAppointment();
 
-                        #region
-                        //if (appList.Count == 1)
-                        //{
-                        //    #region
-                        //    selectAppoomt = appList[0]; //目前默认取第一条直接出号，暂时不做让选择预约号功能
-                        //    selectUnit = uList.Where(u => u.unitName == selectAppoomt.unitName).FirstOrDefault();
-                        //    selectBusy = bList.Where(b => b.busiName == selectAppoomt.busiName).FirstOrDefault();
-                        //    if (selectUnit == null || selectBusy == null)
-                        //    {
-                        //        frmMsg frm = new frmMsg();//提示
-                        //        frm.msgInfo = "预约的部门/业务不存在！";
-                        //        frm.ShowDialog();
-                        //        return;
-                        //    }
-                        //    //出号
-                        //    OutQueueNo(selectAppoomt);
-                        //    #endregion
-                        //}
-                        //else
-                        //{
-                        //    #region
-                        //    #endregion
-                        //}
-                        #endregion
                         #endregion
                     }
                 }

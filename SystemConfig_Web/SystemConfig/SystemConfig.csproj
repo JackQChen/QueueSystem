@@ -167,6 +167,7 @@
     <Content Include="Content\css\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="Content\css\jquery-ui-1.10.3.full.min.css" />
     <Content Include="Content\css\jquery.gritter.css" />
+    <Content Include="Content\css\layout.css" />
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\css\ui.jqgrid.css" />
     <Content Include="Content\font\font.css" />
@@ -281,8 +282,6 @@
     <Content Include="Areas\SystemConfig\Views\TWindow\FormBusi.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TWindow\FormUser.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\Form.cshtml" />
-    <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\FormBusi.cshtml" />
-    <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\FormAttr.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TBusinessAttribute\Index.cshtml">
       <SubType>Code</SubType>
     </Content>

@@ -20,6 +20,7 @@
 		  <link rel="stylesheet" href="@Url.Content("~/Content/css/ace-ie.min.css")" />
 		<![endif]-->
     <!-- inline styles related to this page -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/layout.css")" />
     <style>
         body
         {
@@ -27,19 +28,9 @@
             background: white;
             overflow-y: hidden;
         }
-        .ui-layout-resizer
-        {
-            background: #DDD;
-            border: 1px solid #BBB;
-            border-width: 0;
-        }
-        .ui-layout-toggler
-        {
-            border: 1px solid #BBB;
-            background-color: #BBB;
-        }
     </style>
     <script src="@Url.Content("~/Content/js/jquery-2.0.3.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jquery-ui-1.10.3.custom.min.js")"></script>
     <script src="@Url.Content("~/Content/js/jquery.layout.min.js")"></script>
     <script src="@Url.Content("~/Content/js/jqGrid/jquery.jqGrid.min.js")"></script>
     <script src="@Url.Content("~/Content/js/jqGrid/i18n/grid.locale-cn.js")"></script>
@@ -62,6 +53,15 @@
                     icon.attr('class', 'ui-icon ' + replacement[$class]);
             })
         }
+
+        $.fn.extend({
+            selectFirstRow: function (dataGrid) {
+                var ids = this.jqGrid('getDataIDs');
+                if (ids.length > 0)
+                    this.setSelection(ids[0]);
+            }
+        });
+
         $.modalOpen = function (opt) {
             window.parent.modalOpen(opt);
         };

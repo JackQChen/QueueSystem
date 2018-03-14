@@ -9,12 +9,19 @@
     var grid3 = "#grid-table_3";
 
     $(function () {
+        $('body').layout({
+            west__size: 0.4,
+            west__childOptions: {
+                north__size: 0.5,
+                north__closable: false
+            }
+        });
         initBusiData();
         initAttrData();
         $(grid1).jqGrid({
             url: "/TBusinessAttribute/GetGridData",
             datatype: "json",
-            height: $(document).height() / 2 - 88,
+            height: $(document).height() / 2 - 45,
             colModel: [
                 { label: '单位编码', name: 'unitSeq', key: true },
                 { label: '单位名称', name: 'unitName' }
@@ -26,10 +33,7 @@
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
-                //选中第一行
-                var rows = $(grid1).jqGrid('getRowData');
-                if (rows.length > 0)
-                    $(grid1).setSelection(rows[0].unitSeq);
+                $(grid1).selectFirstRow();
             },
             onSelectRow: function (id) {
                 $.ajax({
@@ -47,25 +51,22 @@
         $(grid2).jqGrid({
             datatype: 'local',
             data: [],
-            height: $(document).height() / 2 - 88,
+            height: $(document).height() / 2 - 62,
             colModel: [
-                { label: '预约业务流水号', name: 'busiSeq', key: true },
-                { label: '预约业务编号', name: 'busiCode' },
+                { label: '预约业务流水号', name: 'busiSeq', key: true, width: 120 },
+                { label: '预约业务编号', name: 'busiCode', width: 100 },
                 { label: '预约业务名称', name: 'busiName' },
-                { label: '预约类型', name: 'busiType' },
-                { label: '是否可预约办件', name: 'acceptBusi' },
-                { label: '是否可预约领件', name: 'getBusi' },
-                { label: '是否可预约咨询', name: 'askBusi' }
+                { label: '预约类型', name: 'busiType', width: 70 },
+                { label: '预约办件', name: 'acceptBusi', width: 70 },
+                { label: '预约领件', name: 'getBusi', width: 70 },
+                { label: '预约咨询', name: 'askBusi', width: 70 }
         ],
             loadComplete: function () {
                 var table = this;
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
-                //选中第一行
-                var rows = $(grid2).jqGrid('getRowData');
-                if (rows.length > 0)
-                    $(grid2).setSelection(rows[0].busiSeq);
+                $(grid2).selectFirstRow();
             },
             onSelectRow: function (id) {
                 var unitSeq = $(grid1).jqGrid('getGridParam', 'selrow');
@@ -84,18 +85,19 @@
         $(grid3).jqGrid({
             datatype: 'local',
             data: [],
-            height: $(document).height() - 94,
+            height: $(document).height() - 89,
             colModel: [
-                { label: 'ID', name: 'id', key: true },
-                { label: '单位编码', name: 'unitSeq' },
+                { label: 'ID', name: 'id', key: true, width: 80 },
+                { label: '单位编码', name: 'unitSeq', width: 80 },
                 { label: '单位名称', name: 'unitName' },
-                { label: '业务流水号', name: 'busiSeq' },
-                { label: '业务编号', name: 'busiCode' },
+                { label: '业务流水号', name: 'busiSeq', width: 80 },
+                { label: '业务编号', name: 'busiCode', width: 80 },
                 { label: '业务名称', name: 'busiName' },
                 { label: '出票时间段', name: 'timeInterval' },
                 { label: '限制取号数量', name: 'ticketRestriction' },
                 { label: '等候人数预警值', name: 'lineUpWarningMax' },
                 { label: '该业务票号前缀', name: 'ticketPrefix' },
+                { label: '绿色通道', name: 'isGreenChannel' },
                 { label: '备注', name: 'remark' }
         ],
             loadComplete: function () {
@@ -103,10 +105,7 @@
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
-                //选中第一行
-                var rows = $(grid3).jqGrid('getRowData');
-                if (rows.length > 0)
-                    $(grid3).setSelection(rows[0].id);
+                $(grid3).selectFirstRow();
             }
         });
     }
@@ -127,27 +126,24 @@
         }).trigger("reloadGrid");
     }
 
-    function Add() {
-        $.modalOpen({
-            title: "窗口管理 - 新增",
-            url: "SystemConfig/TWindow/Form?id=-1",
-            callback: function () {
-                $.modalContent().submitForm(function () {
-                    Refresh();
-                });
-            }
-        });
-    }
-
-    function Edit() {
-        var sid = $(grid1).jqGrid('getGridParam', 'selrow');
-        if (sid == null) {
-            alert("没有任何选中行！");
+    function Save() {
+        var unitSeq = $(grid1).jqGrid('getGridParam', 'selrow');
+        if (unitSeq == null) {
+            alert("没有选中单位！");
             return;
         }
+        var busiSeq = $(grid2).jqGrid('getGridParam', 'selrow');
+        if (busiSeq == null) {
+            alert("没有选中业务！");
+            return;
+        }
+        var baId = -1;
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
+        if (sid != null)
+            baId = sid;
         $.modalOpen({
-            title: "窗口管理 - 编辑",
-            url: "SystemConfig/TWindow/Form?id=" + sid,
+            title: "业务属性 - 维护",
+            url: "SystemConfig/TBusinessAttribute/Form?id=" + baId + "&unitSeq=" + unitSeq + "&busiSeq=" + busiSeq,
             callback: function () {
                 $.modalContent().submitForm(function () {
                     Refresh();
@@ -157,7 +153,7 @@
     }
 
     function Delete() {
-        var sid = $(grid1).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
@@ -166,7 +162,7 @@
             text: "确定删除该记录吗？",
             callback: function () {
                 $.deleteForm({
-                    url: "TWindow/DeleteForm?id=" + sid,
+                    url: "TBusinessAttribute/DeleteForm?id=" + sid,
                     callback: function () {
                         Refresh();
                     }
@@ -176,197 +172,45 @@
     }
 
     function View() {
-        var sid = $(grid1).jqGrid('getGridParam', 'selrow');
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
         if (sid == null) {
             alert("没有任何选中行！");
             return;
         }
         $.modalOpen({
-            title: "窗口管理 - 查看",
-            url: "SystemConfig/TWindow/Form?id=" + sid,
+            title: "业务属性 - 查看",
+            url: "SystemConfig/TBusinessAttribute/Form?id=" + sid,
             view: true
         });
     }
 
     function Refresh() {
-        $(grid1).jqGrid('setGridParam').trigger('reloadGrid');
-    }
-
-    //对应业务
-    function BusiAdd() {
-        $.modalOpen({
-            title: "窗口业务对应 - 新增",
-            url: "SystemConfig/TWindow/BusiForm?id=-1",
-            callback: function () {
-                $.modalContent().submitForm(function () {
-                    Refresh();
-                });
-            }
-        });
-    }
-
-    function BusiEdit() {
-        var sid = $(grid2).jqGrid('getGridParam', 'selrow');
-        if (sid == null) {
-            alert("没有任何选中行！");
-            return;
-        }
-        $.modalOpen({
-            title: "窗口业务对应 - 编辑",
-            url: "SystemConfig/TWindow/BusiForm?id=" + sid,
-            callback: function () {
-                $.modalContent().submitForm(function () {
-                    Refresh();
-                });
-            }
-        });
-    }
-
-    function BusiDelete() {
-        var sid = $(grid2).jqGrid('getGridParam', 'selrow');
-        if (sid == null) {
-            alert("没有任何选中行！");
-            return;
-        }
-        $.modalConfirm({
-            text: "确定删除该记录吗？",
-            callback: function () {
-                $.deleteForm({
-                    url: "TWindow/DeleteBusiForm?id=" + sid,
-                    callback: function () {
-                        Refresh();
-                    }
-                });
-            }
-        });
-    }
-
-    function BusiView() {
-        var sid = $(grid2).jqGrid('getGridParam', 'selrow');
-        if (sid == null) {
-            alert("没有任何选中行！");
-            return;
-        }
-        $.modalOpen({
-            title: "窗口业务对应 - 查看",
-            url: "SystemConfig/TWindow/BusiForm?id=" + sid,
-            view: true
-        });
-    }
-
-
-    //对应用户
-    function UserAdd() {
-        $.modalOpen({
-            title: "窗口用户对应 - 新增",
-            url: "SystemConfig/TWindow/UserForm?id=-1",
-            callback: function () {
-                $.modalContent().submitForm(function () {
-                    Refresh();
-                });
-            }
-        });
-    }
-
-    function UserEdit() {
-        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
-        if (sid == null) {
-            alert("没有任何选中行！");
-            return;
-        }
-        $.modalOpen({
-            title: "窗口用户对应 - 编辑",
-            url: "SystemConfig/TWindow/UserForm?id=" + sid,
-            callback: function () {
-                $.modalContent().submitForm(function () {
-                    Refresh();
-                });
-            }
-        });
-    }
-
-    function UserDelete() {
-        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
-        if (sid == null) {
-            alert("没有任何选中行！");
-            return;
-        }
-        $.modalConfirm({
-            text: "确定删除该记录吗？",
-            callback: function () {
-                $.deleteForm({
-                    url: "TWindow/DeleteUserForm?id=" + sid,
-                    callback: function () {
-                        Refresh();
-                    }
-                });
-            }
-        });
-    }
-
-    function UserView() {
-        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
-        if (sid == null) {
-            alert("没有任何选中行！");
-            return;
-        }
-        $.modalOpen({
-            title: "窗口用户对应 - 查看",
-            url: "SystemConfig/TWindow/UserForm?id=" + sid,
-            view: true
-        });
+        var id = $(grid2).jqGrid('getGridParam', 'selrow');
+        $(grid2).setSelection(id);
     }
 
 </script>
-<div>
-    <div class="col-xs-6" style="padding: 0px; border-right: 10px solid #DCDCDC;">
-        <div>
-            <div class="btn-group">
-                <button class="btn btn-sm btn-primary" onclick="Add()">
-                    <i class="icon-plus-sign bigger-110"></i>新增</button>
-                <button class="btn btn-sm btn-success" onclick="Edit()">
-                    <i class="icon-pencil bigger-110"></i>编辑</button>
-                <button class="btn btn-sm btn-danger" onclick="Delete()">
-                    <i class="icon-minus-sign bigger-110"></i>删除</button>
-                <button class="btn btn-sm btn-yellow" onclick="View()">
-                    <i class="icon-zoom-in bigger-110"></i>查看</button>
-                <button class="btn btn-sm btn-info" onclick="Refresh()">
-                    <i class="icon-refresh bigger-110"></i>刷新</button>
-            </div>
-            <table id="grid-table_1">
-            </table>
-        </div>
-        <div style="border-top: 10px solid #DCDCDC;">
-            <div class="btn-group">
-                <button class="btn btn-sm btn-primary" onclick="BusiAdd()">
-                    <i class="icon-plus-sign bigger-110"></i>新增</button>
-                <button class="btn btn-sm btn-success" onclick="BusiEdit()">
-                    <i class="icon-pencil bigger-110"></i>编辑</button>
-                <button class="btn btn-sm btn-danger" onclick="BusiDelete()">
-                    <i class="icon-minus-sign bigger-110"></i>删除</button>
-                <button class="btn btn-sm btn-yellow" onclick="BusiView()">
-                    <i class="icon-zoom-in bigger-110"></i>查看</button>
-            </div>
-            <div style="overflow-x: auto">
-                <table id="grid-table_2">
-                </table>
-            </div>
-        </div>
+<div class="ui-layout-west">
+    <div class="ui-layout-north">
+        <table id="grid-table_1">
+        </table>
     </div>
-    <div class="col-xs-6" style="padding: 0px;">
-        <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="UserAdd()">
-                <i class="icon-plus-sign bigger-110"></i>新增</button>
-            <button class="btn btn-sm btn-success" onclick="UserEdit()">
-                <i class="icon-pencil bigger-110"></i>编辑</button>
-            <button class="btn btn-sm btn-danger" onclick="UserDelete()">
-                <i class="icon-minus-sign bigger-110"></i>删除</button>
-            <button class="btn btn-sm btn-yellow" onclick="UserView()">
-                <i class="icon-zoom-in bigger-110"></i>查看</button>
-        </div>
-        <div style="overflow-x: auto">
-            <table id="grid-table_3">
-            </table>
-        </div>
+    <div class="ui-layout-center">
+        <table id="grid-table_2">
+        </table>
+    </div>
+</div>
+<div class="ui-layout-center">
+    <div class="btn-group">
+        <button class="btn btn-sm btn-success" onclick="Save()">
+            <i class="icon-pencil bigger-110"></i>维护</button>
+        <button class="btn btn-sm btn-danger" onclick="Delete()">
+            <i class="icon-minus-sign bigger-110"></i>删除</button>
+        <button class="btn btn-sm btn-yellow" onclick="View()">
+            <i class="icon-zoom-in bigger-110"></i>查看</button>
+    </div>
+    <div style="overflow: scroll">
+        <table id="grid-table_3">
+        </table>
     </div>
 </div>

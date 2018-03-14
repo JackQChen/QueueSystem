@@ -117,6 +117,7 @@ namespace DAL
               m.lineUpMax,
               m.lineUpWarningMax,
               m.ticketPrefix,
+              isGreenChannel = m.isGreenChannel == 1 ? "是" : "否",
               m.remark,
               Model = m
           })

@@ -10,13 +10,19 @@
     var gridUser = "#grid-User-table";
 
     $(function () {
-        $('body').layout();
+        $('body').layout({
+            west__size: 0.5,
+            center__childOptions: {
+                north__size: 0.5,
+                north__closable: false
+            }
+        });
         initBusiData();
         initUserData();
         $(gridWin).jqGrid({
             url: "/TWindow/GetGridData",
             datatype: "json",
-            height: $(document).height() - 127,
+            height: $(document).height() - 128,
             colModel: [
                 { label: 'ID', name: 'ID', width: 60, sorttype: "int", key: true },
                 { label: '窗口名称', name: 'Name' },
@@ -33,10 +39,7 @@
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
-                //选中第一行
-                var rows = $(gridWin).jqGrid('getRowData');
-                if (rows.length > 0)
-                    $(gridWin).setSelection(rows[0].ID);
+                $(gridWin).selectFirstRow();
             },
             onSelectRow: function (id) {
                 refreshDetailData(id);
@@ -73,10 +76,7 @@
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
-                //选中第一行
-                var rows = $(gridBusi).jqGrid('getRowData');
-                if (rows.length > 0)
-                    $(gridBusi).setSelection(rows[0].ID);
+                $(gridBusi).selectFirstRow();
             }
         });
     }
@@ -97,10 +97,7 @@
                 setTimeout(function () {
                     updatePagerIcons(table);
                 }, 0);
-                //选中第一行
-                var rows = $(gridUser).jqGrid('getRowData');
-                if (rows.length > 0)
-                    $(gridUser).setSelection(rows[0].ID);
+                $(gridUser).selectFirstRow();
             }
         });
     }
