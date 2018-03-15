@@ -199,7 +199,8 @@ namespace QueueService
                                 rateId = msg.RateId,
                                 transactor = msg.Transactor,
                                 date = msg.WorkDate,
-                                item = msg.ItemName
+                                item = msg.ItemName,
+                                reserveSeq = msg.reserveSeq
                             }
                         }), null);
                     }

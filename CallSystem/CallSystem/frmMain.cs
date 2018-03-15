@@ -473,9 +473,10 @@ namespace CallSystem
                             {
                                 WindowNo = wNum[adress],
                                 RateId = wModel[adress].handleId,
-                                ItemName = "暂时测试",
+                                ItemName = "项目名称",
                                 WorkDate = DateTime.Now.ToShortDateString(),
-                                Transactor = "办理人测试"
+                                Transactor = "办理人",
+                                reserveSeq = wModel[adress].reserveSeq
                             }
                             );
                             SendWait(adress);

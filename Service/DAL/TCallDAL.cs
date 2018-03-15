@@ -110,7 +110,7 @@ namespace DAL
         }
 
         /// <summary>
-        /// 叫号
+        /// 叫号 * 已弃用
         /// </summary>
         /// <param name="wlBusy"></param>
         /// <param name="windowNumber"></param>
@@ -216,6 +216,7 @@ namespace DAL
                      call.idCard = line.idCard;
                      call.qId = line.id;
                      call.qNmae = line.qNmae;
+                     call.reserveSeq = line.reserveSeq;
                      call.state = 0;
                      call.ticketNumber = line.ticketNumber;
                      call.ticketTime = line.ticketTime;

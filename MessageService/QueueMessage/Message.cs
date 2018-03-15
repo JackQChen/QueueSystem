@@ -95,6 +95,10 @@ namespace QueueMessage
         /// 办理事项
         /// </summary>
         public string ItemName { get; set; }
+        /// <summary>
+        /// 预约号
+        /// </summary>
+        public string reserveSeq { get; set; }
 
         public override string ToString()
         {

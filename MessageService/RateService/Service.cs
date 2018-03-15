@@ -73,7 +73,8 @@ namespace RateService
                                         rateId = param["rateId"].ToString(),
                                         transactor = param["transactor"].ToString(),
                                         item = param["item"].ToString(),
-                                        date = param["date"].ToString()
+                                        date = param["date"].ToString(),
+                                        reserveSeq = param["reserveSeq"].ToString()
                                     }
                                 };
                                 this.SendWSMessage(target.ID, rateData.ToResultData());

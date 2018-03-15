@@ -4,6 +4,51 @@
         <name>Model</name>
     </assembly>
     <members>
+        <member name="P:Model.TOprateLogModel.id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Model.TOprateLogModel.oprateFlag">
+            <summary>
+            客户端标识
+            </summary>
+        </member>
+        <member name="P:Model.TOprateLogModel.oprateType">
+            <summary>
+            客户端类型
+            </summary>
+        </member>
+        <member name="P:Model.TOprateLogModel.oprateTime">
+            <summary>
+            日志日期
+            </summary>
+        </member>
+        <member name="P:Model.TOprateLogModel.oprateClassifyType">
+            <summary>
+            客户端分级类别
+            </summary>
+        </member>
+        <member name="P:Model.TOprateLogModel.oprateLog">
+            <summary>
+            日志内容
+            </summary>
+        </member>
+        <member name="P:Model.TOprateLogModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TOprateLogModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TOprateLogModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
         <member name="P:Model.TLineUpMaxNoModel.id">
             <summary>
             
@@ -32,6 +77,21 @@
         <member name="P:Model.TLineUpMaxNoModel.maxNo">
             <summary>
             当天最大号
+            </summary>
+        </member>
+        <member name="P:Model.TLineUpMaxNoModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TLineUpMaxNoModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TLineUpMaxNoModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="T:Model.TGetCardModel">
@@ -77,6 +137,21 @@
         <member name="P:Model.TGetCardModel.busTypeName">
             <summary>
             业务类型名称
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TGetCardModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="P:Model.TEvaluateModel.id">
@@ -174,6 +249,21 @@
             廉洁自律1-5分
             </summary>
         </member>
+        <member name="P:Model.TEvaluateModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TEvaluateModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
         <member name="T:Model.TWindowUserModel">
             <summary>
             窗口用户对应
@@ -199,6 +289,21 @@
             创建时间
             </summary>
         </member>
+        <member name="P:Model.TWindowUserModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TWindowUserModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TWindowUserModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
         <member name="T:Model.TUnitModel">
             <summary>
             
@@ -222,6 +327,21 @@
         <member name="P:Model.TUnitModel.orderNum">
             <summary>
             排序号
+            </summary>
+        </member>
+        <member name="P:Model.TUnitModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TUnitModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TUnitModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="T:Model.TRegisterModel">
@@ -264,6 +384,21 @@
             
             </summary>
         </member>
+        <member name="P:Model.TRegisterModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TRegisterModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
         <member name="T:Model.TWindowAreaModel">
             <summary>
             
@@ -282,6 +417,21 @@
         <member name="P:Model.TWindowAreaModel.remark">
             <summary>
             备注
+            </summary>
+        </member>
+        <member name="P:Model.TWindowAreaModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TWindowAreaModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TWindowAreaModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="T:Model.TBusinessModel">
@@ -339,6 +489,21 @@
             是否可预约咨询
             </summary>
         </member>
+        <member name="P:Model.TBusinessModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
         <member name="P:Model.TWindowBusinessModel.ID">
             <summary>
             
@@ -362,6 +527,21 @@
         <member name="P:Model.TWindowBusinessModel.priorityLevel">
             <summary>
             优先级
+            </summary>
+        </member>
+        <member name="P:Model.TWindowBusinessModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TWindowBusinessModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TWindowBusinessModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="T:Model.TQueueModel">
@@ -436,7 +616,42 @@
         </member>
         <member name="P:Model.TQueueModel.state">
             <summary>
-            处理状态(排队0、其他1)
+            处理状态(排队中0、已处理1)
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.reserveSeq">
+            <summary>
+            预约号
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.appType">
+            <summary>
+            预约类型（0：后预约 1：先预约）
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.reserveStartTime">
+            <summary>
+            预约开始时间
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.reserveEndTime">
+            <summary>
+            预约结束时间
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="T:Model.TDictionaryModel">
@@ -467,6 +682,21 @@
         <member name="P:Model.TDictionaryModel.Remark">
             <summary>
             备注
+            </summary>
+        </member>
+        <member name="P:Model.TDictionaryModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TDictionaryModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TDictionaryModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="T:Model.TAppointmentModel">
@@ -584,6 +814,26 @@
             申办企业名称
             </summary>
         </member>
+        <member name="P:Model.TAppointmentModel.appType">
+            <summary>
+            预约类型（0：后预约 1：先预约）
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TAppointmentModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
         <member name="P:Model.TLedControllerModel.ID">
             <summary>
             
@@ -607,6 +857,21 @@
         <member name="P:Model.TLedControllerModel.Name">
             <summary>
             
+            </summary>
+        </member>
+        <member name="P:Model.TLedControllerModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TLedControllerModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TLedControllerModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="T:Model.DictionaryString">
@@ -669,6 +934,21 @@
             区域名称
             </summary>
         </member>
+        <member name="P:Model.TWindowModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TWindowModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
         <member name="P:Model.TLedWindowModel.ID">
             <summary>
             
@@ -692,6 +972,21 @@
         <member name="P:Model.TLedWindowModel.Position">
             <summary>
             
+            </summary>
+        </member>
+        <member name="P:Model.TLedWindowModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TLedWindowModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TLedWindowModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="T:Model.TUserModel">
@@ -737,6 +1032,21 @@
         <member name="P:Model.TUserModel.Remark">
             <summary>
             备注
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.areaId">
+            <summary>
+            编号
             </summary>
         </member>
         <member name="P:Model.TCallModel.id">
@@ -791,7 +1101,7 @@
         </member>
         <member name="P:Model.TCallModel.state">
             <summary>
-            状态（已弃号-1,、已叫号0、已完成1）
+            状态（已弃号-1,、已叫号0、已完成1、已转移2、已挂起3）
             </summary>
         </member>
         <member name="P:Model.TCallModel.windowUser">
@@ -802,6 +1112,26 @@
         <member name="P:Model.TCallModel.handleTime">
             <summary>
             处理时间
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
+        <member name="P:Model.TCallModel.reserveSeq">
+            <summary>
+            预约号
             </summary>
         </member>
         <member name="P:Model.TBusinessAttributeModel.id">
@@ -862,6 +1192,26 @@
         <member name="P:Model.TBusinessAttributeModel.ticketRestriction">
             <summary>
             按业务类型限制出票（需要和timeInterval分段对应，中间用逗号分隔）
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.sysFlag">
+            <summary>
+            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.areaCode">
+            <summary>
+            区域编号
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.areaId">
+            <summary>
+            编号
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessAttributeModel.isGreenChannel">
+            <summary>
+            是否绿色通道
             </summary>
         </member>
     </members>

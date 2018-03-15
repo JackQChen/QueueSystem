@@ -86,6 +86,11 @@ namespace Model
         /// 编号
         /// </summary>
         public int areaId { get; set; }
+
+        /// <summary>
+        /// 预约号
+        /// </summary>
+        public string reserveSeq { get; set; }
     }
 }
 
