@@ -56,7 +56,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbWNumber.Font = new System.Drawing.Font("微软雅黑", 45F, System.Drawing.FontStyle.Bold);
             this.lbWNumber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(240)))), ((int)(((byte)(146)))));
-            this.lbWNumber.Location = new System.Drawing.Point(577, 0);
+            this.lbWNumber.Location = new System.Drawing.Point(616, 0);
             this.lbWNumber.Name = "lbWNumber";
             this.lbWNumber.Size = new System.Drawing.Size(152, 122);
             this.lbWNumber.TabIndex = 8;
@@ -71,7 +71,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.Font = new System.Drawing.Font("微软雅黑", 45F, System.Drawing.FontStyle.Bold);
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(429, 0);
+            this.label3.Location = new System.Drawing.Point(468, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(158, 122);
             this.label3.TabIndex = 7;
@@ -86,7 +86,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbQNumber.Font = new System.Drawing.Font("微软雅黑", 45F, System.Drawing.FontStyle.Bold);
             this.lbQNumber.ForeColor = System.Drawing.Color.Yellow;
-            this.lbQNumber.Location = new System.Drawing.Point(214, 0);
+            this.lbQNumber.Location = new System.Drawing.Point(245, 0);
             this.lbQNumber.Name = "lbQNumber";
             this.lbQNumber.Size = new System.Drawing.Size(236, 122);
             this.lbQNumber.TabIndex = 6;
@@ -114,7 +114,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.lblVip.Font = new System.Drawing.Font("微软雅黑", 45F, System.Drawing.FontStyle.Bold);
             this.lblVip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(240)))), ((int)(((byte)(146)))));
-            this.lblVip.Location = new System.Drawing.Point(82, -1);
+            this.lblVip.Location = new System.Drawing.Point(114, -1);
             this.lblVip.Name = "lblVip";
             this.lblVip.Size = new System.Drawing.Size(154, 122);
             this.lblVip.TabIndex = 10;

@@ -1126,13 +1126,12 @@ namespace QueueClient
                             #endregion
                         }
                         var ali = appList.Where(a => a.reserveEndTime >= DateTime.Now).ToList();
-                        if (ali == null)
+                        if (ali == null || ali.Count == 0)
                         {
                             SelectUnit();//如果预约失效 则不显示预约界面
                         }
                         else
                         {
-                            appList = ali;
                             ShowAppointment();
                         }
 

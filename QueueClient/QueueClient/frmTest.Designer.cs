@@ -30,6 +30,7 @@
         {
             this.pbOther = new System.Windows.Forms.PictureBox();
             this.pbOk = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbOther)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOk)).BeginInit();
             this.SuspendLayout();
@@ -44,6 +45,7 @@
             this.pbOther.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pbOther.TabIndex = 5;
             this.pbOther.TabStop = false;
+            this.pbOther.Visible = false;
             this.pbOther.Paint += new System.Windows.Forms.PaintEventHandler(this.pbOk_Paint);
             // 
             // pbOk
@@ -56,13 +58,25 @@
             this.pbOk.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pbOk.TabIndex = 4;
             this.pbOk.TabStop = false;
+            this.pbOk.Visible = false;
             this.pbOk.Paint += new System.Windows.Forms.PaintEventHandler(this.pbOk_Paint);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(446, 170);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(735, 443);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.pbOther);
             this.Controls.Add(this.pbOk);
             this.Name = "frmTest";
@@ -78,5 +92,6 @@
 
         private System.Windows.Forms.PictureBox pbOther;
         private System.Windows.Forms.PictureBox pbOk;
+        private System.Windows.Forms.Button button1;
     }
 }
