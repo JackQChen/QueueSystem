@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.Configuration;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Office.Interop.Word;
 using MySql.Data.MySqlClient;
 
 namespace CodeGenerator
@@ -17,33 +15,50 @@ namespace CodeGenerator
             InitializeComponent();
         }
 
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            this.txtTableName.Items.Clear();
+            using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString))
+            {
+                conn.Open();
+                MySqlDataAdapter adapter = new MySqlDataAdapter(@"select table_name from information_schema.tables where table_schema='" + conn.Database + "'", conn);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    this.txtTableName.Items.Add(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(row["table_name"].ToString()));
+                }
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             var tableName = this.txtTableName.Text;
-            MySqlConnection conn = new MySqlConnection(@"Database='QueueDB';Data Source='cysoft.uicp.net';User Id='root';Password='admin88';charset='utf8';pooling=true");
-            conn.Open();
-            MySqlDataAdapter adapter = new MySqlDataAdapter(@"
+            using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString))
+            {
+                conn.Open();
+                MySqlDataAdapter adapter = new MySqlDataAdapter(@"
 select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT 
 from information_schema.COLUMNS 
-where  TABLE_SCHEMA = 'QueueDB' and table_name = '" + tableName + @"'", conn);
-            DataSet ds = new DataSet();
-            adapter.Fill(ds);
-            string strProps = "";
-            foreach (DataRow row in ds.Tables[0].Rows)
-            {
-                string strProp = string.Format(@"
+where  TABLE_SCHEMA = '" + conn.Database + "' and table_name = '" + tableName + @"'", conn);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
+                string strProps = "";
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    string strProp = string.Format(@"
 
         /// <summary>
         /// {2}
         /// </summary>
         public {0} {1} {{ get; set; }}",
-              getCSharpType(row["DATA_TYPE"].ToString()),
-              row["COLUMN_NAME"],
-              row["COLUMN_COMMENT"]
-            );
-                strProps += strProp;
-            }
-            string strCode = string.Format(@"using Chloe.Entity;
+                  getCSharpType(row["DATA_TYPE"].ToString()),
+                  row["COLUMN_NAME"],
+                  row["COLUMN_COMMENT"]
+                );
+                    strProps += strProp;
+                }
+                string strCode = string.Format(@"using Chloe.Entity;
 
 namespace Model
 {{
@@ -55,7 +70,8 @@ namespace Model
 }}
 
 ", tableName, tableName.Replace("_", ""), strProps);
-            this.txtCode.Text = strCode;
+                this.txtCode.Text = strCode;
+            }
         }
 
         string getCSharpType(string dbType)
@@ -215,6 +231,44 @@ namespace BLL
 }}
 ", tableName.Replace("_", "") + "BLL", tableName.Replace("_", "") + "DAL", tableName.Replace("_", "") + "Model");
             this.txtCode.Text = strCode;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var tableName = this.txtTableName.Text;
+            using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString))
+            {
+                conn.Open();
+                MySqlDataAdapter adapter = new MySqlDataAdapter(@"
+select COLUMN_NAME,DATA_TYPE,IS_NULLABLE,COLUMN_COMMENT 
+from information_schema.COLUMNS 
+where  TABLE_SCHEMA = '" + conn.Database + "' and table_name = '" + tableName + @"'", conn);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
+                //Word操作
+                var app = new Microsoft.Office.Interop.Word.Application();
+                Document doc = app.Documents.Add();
+                app = doc.Application;
+                Bookmark bk = doc.Bookmarks.Add("Database");
+                var rowCount = ds.Tables[0].Rows.Count;
+                Table tb = doc.Tables.Add(bk.Range, rowCount + 1, 4);
+                tb.set_Style("浅色网格 - 强调文字颜色 1");
+                tb.Cell(1, 1).Range.Text = "列名";
+                tb.Cell(1, 2).Range.Text = "数据类型";
+                tb.Cell(1, 3).Range.Text = "可空";
+                tb.Cell(1, 4).Range.Text = "描述";
+                for (int i = 0; i < rowCount; i++)
+                {
+                    DataRow row = ds.Tables[0].Rows[i];
+                    tb.Cell(i + 2, 1).Range.Text = row["COLUMN_NAME"].ToString();
+                    tb.Cell(i + 2, 2).Range.Text = row["DATA_TYPE"].ToString();
+                    tb.Cell(i + 2, 3).Range.Text = row["IS_NULLABLE"].ToString();
+                    tb.Cell(i + 2, 4).Range.Text = row["COLUMN_COMMENT"].ToString();
+                }
+                doc.SaveAs(AppDomain.CurrentDomain.BaseDirectory + "Database.doc");
+                doc.Close();
+                app.Quit();
+            }
         }
     }
 }

@@ -108,10 +108,7 @@ namespace LEDDisplay
                                         this.SendLEDMessage(sendInfo.ip, ushort.Parse(sendInfo.port), sendInfo.deviceAddr, sendInfo.position, sendInfo.text, true);
                                         Thread.Sleep(3000);
                                         this.SendLEDMessage(sendInfo.ip, ushort.Parse(sendInfo.port), sendInfo.deviceAddr, sendInfo.position, sendInfo.text);
-                                        //确认LED不进行闪烁
-                                        Thread.Sleep(1000);
-                                        this.SendLEDMessage(sendInfo.ip, ushort.Parse(sendInfo.port), sendInfo.deviceAddr, sendInfo.position, sendInfo.text);
-                                    }) { IsBackground = true }.Start(
+                                    }).Start(
                                     new ledSendInfo()
                                     {
                                         ip = ctl.IP,

@@ -150,7 +150,6 @@ namespace ScreenDisplay
                 label3.Font = value;
                 lbWNumber.Font = value;
                 label5.Font = value;
-                lblVip.Font = value;
             }
         }
 

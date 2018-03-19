@@ -30,10 +30,11 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.txtCode = new System.Windows.Forms.TextBox();
-            this.txtTableName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.txtTableName = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // button1
@@ -53,17 +54,9 @@
             this.txtCode.Multiline = true;
             this.txtCode.Name = "txtCode";
             this.txtCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtCode.Size = new System.Drawing.Size(409, 346);
+            this.txtCode.Size = new System.Drawing.Size(396, 346);
             this.txtCode.TabIndex = 1;
             this.txtCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCode_KeyDown);
-            // 
-            // txtTableName
-            // 
-            this.txtTableName.Location = new System.Drawing.Point(102, 11);
-            this.txtTableName.Name = "txtTableName";
-            this.txtTableName.Size = new System.Drawing.Size(100, 21);
-            this.txtTableName.TabIndex = 2;
-            this.txtTableName.Text = "T_User";
             // 
             // label1
             // 
@@ -96,20 +89,42 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.Location = new System.Drawing.Point(427, 101);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 6;
+            this.button4.Text = "Doc";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // txtTableName
+            // 
+            this.txtTableName.FormattingEnabled = true;
+            this.txtTableName.Location = new System.Drawing.Point(102, 11);
+            this.txtTableName.Name = "txtTableName";
+            this.txtTableName.Size = new System.Drawing.Size(121, 20);
+            this.txtTableName.TabIndex = 7;
+            this.txtTableName.Text = "T_User";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(514, 396);
+            this.Controls.Add(this.txtTableName);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtTableName);
             this.Controls.Add(this.txtCode);
             this.Controls.Add(this.button1);
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "代码生成器";
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -119,10 +134,11 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox txtCode;
-        private System.Windows.Forms.TextBox txtTableName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ComboBox txtTableName;
     }
 }
 

@@ -112,13 +112,13 @@
             // 
             this.lblVip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblVip.Font = new System.Drawing.Font("微软雅黑", 45F, System.Drawing.FontStyle.Bold);
+            this.lblVip.Font = new System.Drawing.Font("微软雅黑", 25F, System.Drawing.FontStyle.Bold);
             this.lblVip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(240)))), ((int)(((byte)(146)))));
             this.lblVip.Location = new System.Drawing.Point(114, -1);
             this.lblVip.Name = "lblVip";
             this.lblVip.Size = new System.Drawing.Size(154, 122);
             this.lblVip.TabIndex = 10;
-            this.lblVip.Text = "绿色";
+            this.lblVip.Text = "绿色\r\n通道";
             this.lblVip.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // msInfo

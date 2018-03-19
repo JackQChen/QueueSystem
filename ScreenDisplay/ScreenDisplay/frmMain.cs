@@ -54,6 +54,7 @@ namespace ScreenDisplay
         private Color other;
         private Color vipColor;
         private bool ShowError = false;
+        private int VIPFontSize;
         TBusinessAttributeBLL baBll = new TBusinessAttributeBLL();
         TWindowBLL wBll = new TWindowBLL();
         List<TWindowModel> wList = new List<TWindowModel>();
@@ -116,6 +117,7 @@ namespace ScreenDisplay
                 ShowError = (isShowError == 0 ? false : true);
             }
             int i = 0;
+            Font vipFont = new Font(fontName, VIPFontSize, FontStyle.Bold);
             Font msgFont = new Font(fontName, fontSize, FontStyle.Bold);
             if (vList == null || vList.Count == 0)
             {
@@ -132,13 +134,13 @@ namespace ScreenDisplay
                 string strVip = "";
                 if (bam != null && bam.isGreenChannel == 1)
                 {
-                    strVip = "绿色";
+                    strVip = "绿色\r\n通道";
                 }
                 else
                 {
                     if ((queue != null && queue.appType == 1 && queue.reserveStartTime <= v.handleTime && queue.reserveEndTime >= v.handleTime))
                     {
-                        strVip = "网约";
+                        strVip = "网上\r\n预约";
                     }
                 }
                 msInfo ms = new msInfo();
@@ -148,6 +150,7 @@ namespace ScreenDisplay
                 ms.WindowColor = window;
                 ms.TicketColor = ticket;
                 ms.VIPColor = vipColor;
+                ms.VIPFont = vipFont;
                 ms.VIPText = strVip;
                 ms.OtherColor = other;
                 ms.WindowNumber = v.windowNumber;
@@ -244,6 +247,8 @@ namespace ScreenDisplay
         private void frmMain_Load(object sender, EventArgs e)
         {
             SetConfigValue("ColorVIPRGB", "136,240,146");
+            SetConfigValue("VIPFontSize", "25");
+            VIPFontSize = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["VIPFontSize"]);
             strVipColorRGB = System.Configuration.ConfigurationManager.AppSettings["ColorVIPRGB"];
             string[] sVip = strVipColorRGB.Split(',');
             vipColor = System.Drawing.Color.FromArgb(Convert.ToInt32(sVip[0]), Convert.ToInt32(sVip[1]), Convert.ToInt32(sVip[2]));
