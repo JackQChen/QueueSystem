@@ -252,7 +252,7 @@ where  TABLE_SCHEMA = '" + conn.Database + "' and table_name = '" + tableName + 
                 Bookmark bk = doc.Bookmarks.Add("Database");
                 var rowCount = ds.Tables[0].Rows.Count;
                 Table tb = doc.Tables.Add(bk.Range, rowCount + 1, 4);
-                tb.set_Style("浅色网格 - 强调文字颜色 1");
+                tb.set_Style("网格型");
                 tb.Cell(1, 1).Range.Text = "列名";
                 tb.Cell(1, 2).Range.Text = "数据类型";
                 tb.Cell(1, 3).Range.Text = "可空";

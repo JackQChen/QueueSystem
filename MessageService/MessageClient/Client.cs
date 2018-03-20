@@ -62,6 +62,11 @@ namespace MessageClient
         {
             switch (message.Type)
             {
+                case MessageType.Restart:
+                    {
+                        System.Windows.Forms.Application.Restart();
+                    }
+                    break;
                 case MessageType.Result:
                     {
                         var msg = message as ResultMessage;

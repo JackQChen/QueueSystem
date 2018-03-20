@@ -100,7 +100,7 @@ namespace QueueService
             return HandleResult.Ok;
         }
 
-        void SendMessage(IntPtr connId, Message message)
+        public void SendMessage(IntPtr connId, Message message)
         {
             var bytes = this.process.FormatterMessageBytes(message);
             this.Send(connId, bytes, bytes.Length);

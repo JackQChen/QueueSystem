@@ -247,7 +247,7 @@ namespace ScreenDisplay
         private void frmMain_Load(object sender, EventArgs e)
         {
             SetConfigValue("ColorVIPRGB", "136,240,146");
-            SetConfigValue("VIPFontSize", "25");
+            SetConfigValue("VIPFontSize", "33");
             VIPFontSize = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["VIPFontSize"]);
             strVipColorRGB = System.Configuration.ConfigurationManager.AppSettings["ColorVIPRGB"];
             string[] sVip = strVipColorRGB.Split(',');

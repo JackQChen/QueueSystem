@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace QueueService
 {
@@ -30,8 +31,19 @@ namespace QueueService
                 item.SubItems.Add(client.Name);
                 item.SubItems.Add(client.Type);
                 item.SubItems.Add(client.ConnTime);
+                item.Tag = client.ID;
             }
             this.service.clientListChanged = false;
+        }
+
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.listView1.SelectedItems)
+            {
+                var restartMsg = new QueueMessage.Message();
+                restartMsg.Type = QueueMessage.MessageType.Restart;
+                this.service.SendMessage((IntPtr)item.Tag, restartMsg);
+            }
         }
     }
 }
