@@ -42,6 +42,8 @@ namespace LEDDisplay
                 //}
                 //RemotingConfiguration.Configure(remotingConfigPath, false);
             }
+            //if (!Validate.Check())
+            //    return;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmMain());
