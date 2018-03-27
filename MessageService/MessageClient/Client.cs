@@ -64,7 +64,11 @@ namespace MessageClient
             {
                 case MessageType.Restart:
                     {
-                        System.Windows.Forms.Application.Restart();
+                        //以无参方式重启
+                        var startInfo = System.Diagnostics.Process.GetCurrentProcess().StartInfo;
+                        startInfo.FileName = System.Windows.Forms.Application.ExecutablePath;
+                        System.Windows.Forms.Application.Exit();
+                        System.Diagnostics.Process.Start(startInfo);
                     }
                     break;
                 case MessageType.Result:
