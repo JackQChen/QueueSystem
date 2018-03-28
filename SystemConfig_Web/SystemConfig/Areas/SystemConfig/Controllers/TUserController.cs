@@ -10,11 +10,13 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
     {
         TUserBLL bll;
         TDictionaryBLL dicBll;
+        TUnitBLL unitBll;
 
         public TUserController()
         {
             this.bll = new TUserBLL(this.AreaNo);
             this.dicBll = new TDictionaryBLL(this.AreaNo);
+            this.unitBll = new TUnitBLL(this.AreaNo);
         }
 
         //
@@ -38,6 +40,9 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             var model = this.bll.GetModel(id);
             if (model == null)
                 model = new TUserModel() { ID = -1 };
+            var unitModel = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq);
+            this.ViewBag.unitName = unitModel == null ? "" : unitModel.unitName;
+            this.ViewBag.unitList = JsonConvert.SerializeObject(unitBll.GetModelList());
             this.ViewBag.Sex = dicBll.GetModelList(DictionaryString.UserSex);
             this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
             return View(model);

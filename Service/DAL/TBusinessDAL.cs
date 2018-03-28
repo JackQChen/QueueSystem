@@ -22,6 +22,11 @@ namespace DAL
             this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
+        public TBusinessDAL(DbContext db)
+        {
+            this.db = db;
+        }
+
         #region CommonMethods
 
         public List<TBusinessModel> GetModelList()

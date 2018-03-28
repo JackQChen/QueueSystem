@@ -3,6 +3,29 @@
     Layout = "~/Views/Shared/_LayoutForm.cshtml";
 }
 <script>
+    $(function () {
+        initSearchControl({
+            id: 'unitSearch',
+            name: 'unitSeq',
+            value :'@Model.unitSeq',
+            displayText : '@this.ViewBag.unitName',
+            height:280,
+            dataSource: @Html.Raw(this.ViewBag.unitList),
+            colModel: [{
+                        label: 'ID',
+                        name: 'id',
+                        width: 30,
+                        key: true
+                    }, {
+                        label: '单位编码',
+                        width: 50,
+                        name: 'unitSeq'
+                    }, {
+                        label: '单位名称',
+                        name: 'unitName'
+                    }]
+        });
+    });
     function submitForm(callback) {
         $.submitForm({
             url: "SubmitForm",
@@ -29,6 +52,15 @@
                         else
                             $("#txtId").val(id);
                     </script>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    所属部门
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" id="unitSearch" displaymember='unitName' valuemember='unitSeq'
+                        autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             <div class="form-group">

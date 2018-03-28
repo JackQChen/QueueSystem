@@ -91,6 +91,11 @@ namespace Model
         public int appType { get; set; }
 
         /// <summary>
+        /// 类型 0：预约 1： 申办
+        /// </summary>
+        public int type { get; set; }
+
+        /// <summary>
         /// 预约开始时间
         /// </summary>
         public DateTime reserveStartTime { get; set; }

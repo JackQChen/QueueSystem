@@ -1,0 +1,1 @@
+ALTER table t_user add column unitSeq varchar(255) after NAME;

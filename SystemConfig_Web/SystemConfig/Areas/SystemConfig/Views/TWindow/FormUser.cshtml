@@ -5,11 +5,43 @@
 <script>
 $(function () {
         initSearchControl({
+            id: 'unitSearch',
+            name: 'unitSeq',
+            value :'@this.ViewBag.unitSeq',
+            displayText : '@this.ViewBag.unitName',
+            height:280,
+            dataSource: @Html.Raw(this.ViewBag.unitList),
+            colModel: [{
+                        label: 'ID',
+                        name: 'id',
+                        width: 30,
+                        key: true
+                    }, {
+                        label: '单位编码',
+                        width: 50,
+                        name: 'unitSeq'
+                    }, {
+                        label: '单位名称',
+                        name: 'unitName'
+                    }]
+        });
+
+        initSearchControl({
             id: 'userSearch',
             name: 'UserID',
             value :'@Model.UserID',
             displayText : '@ViewBag.UserName',
             height:280,
+            filter : function(ds,txt){
+                var newData = new Array();
+                ds.forEach(function(obj)
+                {
+                    if(obj["unitSeq"]==$('form [name=unitSeq]').val()&&
+                    (obj["ID"].toString().indexOf(txt)>=0||obj["Name"].indexOf(txt)>=0))
+                    newData.push(obj);
+                });
+                return newData;
+            },
             dataSource: @Html.Raw(this.ViewBag.UserList),
             colModel: [{
                         label: '用户ID',
@@ -21,8 +53,8 @@ $(function () {
                         width: 50,
                         name: 'Name'
                     }, {
-                        label: '用户性别',
-                        name: 'Sex'
+                        label: '所属部门',
+                        name: 'unitSeq'
                     }]
         });
 });
@@ -61,6 +93,15 @@ $(function () {
                 </label>
                 <div class="col-sm-9 col-xs-9">
                     <input type="text" readonly value="@ViewBag.WindowName" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    业务部门
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" id="unitSearch" displaymember='unitName' valuemember='unitSeq'
+                        autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             <div class="form-group">

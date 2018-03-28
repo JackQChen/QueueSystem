@@ -31,7 +31,9 @@
                 { label: '呼叫器编号', name: 'CallNumber' },
                 { label: '区域名称', name: 'AreaName' }
         ],
-            rowNum: -1,
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            loadonce: true, 
             pager: pagerWin,
             autowidth: true,
             loadComplete: function () {
@@ -180,7 +182,7 @@
     }
 
     function Refresh() {
-        $(gridWin).jqGrid('setGridParam').trigger('reloadGrid');
+        $(gridWin).setGridParam({ datatype: 'json' }).trigger('reloadGrid');
     }
 
     function RefreshDetail() {

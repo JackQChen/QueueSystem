@@ -72,11 +72,13 @@ namespace DAL
             return db.Query<TUserModel>()
                 .LeftJoin(dicState, (u, d) => u.State == d.Value)
                 .LeftJoin(dicSex, (u, d, s) => u.Sex == s.Value)
-                .Select((u, d, s) => new
+                .LeftJoin<TUnitModel>((u, d, s, u2) => u.unitSeq == u2.unitSeq)
+                .Select((u, d, s, u2) => new
                 {
                     u.ID,
                     u.Code,
                     u.Name,
+                    u2.unitName,
                     Sex = s.Name,
                     State = d.Name,
                     u.Photo,

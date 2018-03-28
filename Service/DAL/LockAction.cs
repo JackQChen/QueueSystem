@@ -8,6 +8,7 @@ namespace DAL
 {
     public enum LockKey
     {
+        Upload,
         Call,
         Queue
     }

@@ -13,7 +13,7 @@ namespace Model
         public int id { get; set; }
 
         /// <summary>
-        /// 类型（0：取票机评价 1：评价器评价）
+        /// 类型（0：取票机评价 1：评价器评价(安卓) 2：评价器评价(四键)）
         /// </summary>
         public int type { get; set; }
 

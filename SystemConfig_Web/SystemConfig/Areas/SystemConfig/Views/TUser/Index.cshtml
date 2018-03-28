@@ -13,13 +13,16 @@ $(function() {
         height: $(document).height() - 127,
         colModel: [
                 { label: 'ID', name: 'ID', width: 60, sorttype: "int", key:true },
+                { label: '所属部门', name: 'unitName', width: 90 },
                 { label: '姓名', name: 'Name', width: 90 },
                 { label: '工号', name: 'Code', width: 90 },
                 { label: '性别', name: 'Sex', width: 90 },
                 { label: '状态', name: 'State', width: 90 },
                 { label: '备注', name: 'Remark', width: 90 }
         ],
-        rowNum: -1,
+        rowNum:10,
+        rowList : [10,30,50],
+        loadonce: true, 
         pager: pager_selector,
         autowidth: true,
         loadComplete: function() {
@@ -101,7 +104,7 @@ function View()
 
 function Refresh() 
 {
-    $(grid_selector).jqGrid('setGridParam').trigger('reloadGrid');
+    $(grid_selector).setGridParam({datatype:'json'}).trigger('reloadGrid');
 }
 
 </script>

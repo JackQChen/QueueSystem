@@ -20,6 +20,11 @@ namespace Model
         public string Name { get; set; }
 
         /// <summary>
+        /// 所属单位
+        /// </summary>
+        public string unitSeq { get; set; }
+
+        /// <summary>
         /// 性别
         /// </summary>
         public string Sex { get; set; }

@@ -159,6 +159,11 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             this.ViewBag.UserName = userModel == null ? "" : userModel.Name;
             this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
             this.ViewBag.UserList = JsonConvert.SerializeObject(this.userBll.GetModelList());
+            var unitSeq = userModel == null ? "" : userModel.unitSeq;
+            this.ViewBag.unitSeq = unitSeq;
+            var unitModel = this.unitBll.GetModel(p => p.unitSeq == unitSeq);
+            this.ViewBag.unitName = unitModel == null ? "" : unitModel.unitName;
+            this.ViewBag.unitList = JsonConvert.SerializeObject(unitBll.GetModelList());
             return View("FormUser", model);
         }
 

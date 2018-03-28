@@ -23,12 +23,14 @@ $(function() {
                     { name: 'getBusi',  label:'是否可预约领件',width: 110 },
                     { name: 'askBusi', label:'是否可预约咨询', width: 110 },
                 ],
-        rowNum: -1,
-        pager: pager_selector,
-        autowidth: true,
-        loadComplete: function() {
-            var table = this;
-            setTimeout(function() {
+                rowNum:10,
+                rowList : [10,30,50],
+                loadonce: true, 
+                pager: pager_selector,
+                autowidth: true,
+                loadComplete: function() {
+                var table = this;
+                setTimeout(function() {
                 updatePagerIcons(table);
             }
             , 0);
@@ -105,7 +107,7 @@ function View()
 
 function Refresh() 
 {
-    $(grid_selector).jqGrid('setGridParam').trigger('reloadGrid');
+    $(grid_selector).setGridParam({datatype:'json'}).trigger('reloadGrid');
 }
 
 </script>

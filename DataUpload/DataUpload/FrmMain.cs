@@ -19,6 +19,7 @@ namespace DataUpload
         {
             InitializeComponent();
         }
+        object obj = new object();
         Thread threadBasic;
         Thread threadBusy;
         bool isBasic = true;
@@ -60,35 +61,43 @@ namespace DataUpload
         {
             while (isBasic)
             {
-                DateTime start = DateTime.Now;
-                StringBuilder logText = new StringBuilder();
-                StringBuilder showLog = new StringBuilder();
-                foreach (var key in dicClient)
+                try
                 {
-                    foreach (var instance in basicListBll)
+                    DateTime start = DateTime.Now;
+                    StringBuilder logText = new StringBuilder();
+                    StringBuilder showLog = new StringBuilder();
+                    foreach (var key in dicClient)
                     {
-                        var type = instance.GetType().Name;
-                        type = "T_" + type.Substring(1, type.Length - 4);
-                        var insert = instance.ProcessInsertData(key.Key, "Server");
-                        var update = instance.ProcessUpdateData(key.Key, "Server");
-                        string area = "";
-                        if (!(insert == 0 && update == 0))
+                        foreach (var instance in basicListBll)
                         {
-                            area += "                      区域编码【" + key.Key + "】表【" + type + "】同步：";
-                            area += (insert < 0 ? "新增出错；" : insert == 0 ? "本次无新增；" : "新增【" + insert.ToString() + "】条；");
-                            area += (update < 0 ? "更新出错；" : update == 0 ? "本次无更新；" : "更新【" + update.ToString() + "】条；");
-                            showLog.Append(area + "\r\n");
+                            var type = instance.GetType().Name;
+                            type = "T_" + type.Substring(1, type.Length - 4);
+                            var insert = instance.ProcessInsertData(key.Key, "Server");
+                            var update = instance.ProcessUpdateData(key.Key, "Server");
+                            string area = "";
+                            if (!(insert == 0 && update == 0))
+                            {
+                                area += "                      区域编码【" + key.Key + "】表【" + type + "】同步：";
+                                area += (insert < 0 ? "新增出错；" : insert == 0 ? "本次无新增；" : "新增【" + insert.ToString() + "】条；");
+                                area += (update < 0 ? "更新出错；" : update == 0 ? "本次无更新；" : "更新【" + update.ToString() + "】条；");
+                                showLog.Append(area + "\r\n");
+                            }
+                            if (area != "")
+                                logText.Append(area + "\r\n");
                         }
-                        if (area != "")
-                            logText.Append(area + "\r\n");
                     }
+                    TimeSpan ts = DateTime.Now - start;
+                    string show = showLog.ToString() == "" ? "" : "基础数据同步\r\n" + showLog.ToString();
+                    WriterLog("基础数据同步\r\n" + logText.ToString(), show);
+                    string log = "本次基础数据同步完成：共同步【" + dicClient.Count + "】个客户端，用时【" + ts.Minutes + "】分【" + ts.Seconds + "】秒。\r\n******************************************************************************************";
+                    WriterLog(log, log);
+                    Thread.Sleep(BasicInterval * 1000);
                 }
-                TimeSpan ts = DateTime.Now - start;
-                string show = showLog.ToString() == "" ? "" : "基础数据同步\r\n" + showLog.ToString();
-                WriterLog("基础数据同步\r\n" + logText.ToString(), show);
-                string log = "本次基础数据同步完成：共同步【" + dicClient.Count + "】个客户端，用时【" + ts.Minutes + "】分【" + ts.Seconds + "】秒。\r\n******************************************************************************************";
-                WriterLog(log, log);
-                Thread.Sleep(BasicInterval * 1000);
+                catch(Exception ex)
+                {
+                    WriterLog("同步基础数据出错 ", ex.Message);
+                    Thread.Sleep(BasicInterval * 1000);
+                }
             }
         }
 
@@ -96,36 +105,43 @@ namespace DataUpload
         {
             while (isBusy)
             {
-                StringBuilder logText = new StringBuilder();
-                StringBuilder showLog = new StringBuilder();
-                DateTime start = DateTime.Now;
-                foreach (var key in dicClient)
+                try
                 {
-                    foreach (var instance in busyListBll)
+                    StringBuilder logText = new StringBuilder();
+                    StringBuilder showLog = new StringBuilder();
+                    DateTime start = DateTime.Now;
+                    foreach (var key in dicClient)
                     {
-                        var type = instance.GetType().Name;
-                        type = "T_" + type.Substring(1, type.Length - 4);
-                        var insert = instance.ProcessInsertData(key.Key, "Server");
-                        var update = instance.ProcessUpdateData(key.Key, "Server");
-                        string area = "";
-                        if (!(insert == 0 && update == 0))
+                        foreach (var instance in busyListBll)
                         {
-                            area += "                      区域编码【" + key.Key + "】表【" + type + "】同步：";
-                            area += (insert < 0 ? "新增出错；" : insert == 0 ? "本次无新增；" : "新增【" + insert.ToString() + "】条；");
-                            area += (update < 0 ? "更新出错；" : update == 0 ? "本次无更新；" : "更新【" + update.ToString() + "】条；");
-                            showLog.Append(area + "\r\n");
+                            var type = instance.GetType().Name;
+                            type = "T_" + type.Substring(1, type.Length - 4);
+                            var insert = instance.ProcessInsertData(key.Key, "Server");
+                            var update = instance.ProcessUpdateData(key.Key, "Server");
+                            string area = "";
+                            if (!(insert == 0 && update == 0))
+                            {
+                                area += "                      区域编码【" + key.Key + "】表【" + type + "】同步：";
+                                area += (insert < 0 ? "新增出错；" : insert == 0 ? "本次无新增；" : "新增【" + insert.ToString() + "】条；");
+                                area += (update < 0 ? "更新出错；" : update == 0 ? "本次无更新；" : "更新【" + update.ToString() + "】条；");
+                                showLog.Append(area + "\r\n");
+                            }
+                            if (area != "")
+                                logText.Append(area + "\r\n");
                         }
-                        if (area != "")
-                            logText.Append(area + "\r\n");
                     }
+                    TimeSpan ts = DateTime.Now - start;
+                    string show = showLog.ToString() == "" ? "" : "业务数据同步明细\r\n" + showLog.ToString();
+                    WriterLog("业务数据同步明细\r\n" + logText.ToString(), show);
+                    string log = "本次业务数据同步完成：共同步【" + dicClient.Count + "】个客户端，用时【" + ts.Minutes + "】分【" + ts.Seconds + "】秒。\r\n******************************************************************************************";
+                    WriterLog(log, log);
+                    Thread.Sleep(BusyInterval * 1000);
                 }
-                TimeSpan ts = DateTime.Now - start;
-                string show = showLog.ToString() == "" ? "" : "业务数据同步明细\r\n" + showLog.ToString();
-                WriterLog("业务数据同步明细\r\n" + logText.ToString(), show);
-                string log = "本次业务数据同步完成：共同步【" + dicClient.Count + "】个客户端，用时【" + ts.Minutes + "】分【" + ts.Seconds + "】秒。\r\n******************************************************************************************";
-                WriterLog(log, log);
-                Thread.Sleep(BusyInterval * 1000);
-
+                catch (Exception ex)
+                {
+                    WriterLog("同步业务数据出错 ", ex.Message);
+                    Thread.Sleep(BusyInterval * 1000);
+                }
             }
         }
 
@@ -158,14 +174,24 @@ namespace DataUpload
 
         private void WriterLog(string writerLog, string showLog)
         {
-            if (showLog != "")
-                this.Invoke(new Action(() => { this.txtSoundMesInfo.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " : " + showLog + "\r\n"); }));
-            if (writerLog == "")
-                return;
-            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Upload_Log.txt", DateTime.Now + " : " + writerLog + "\r\n");
+            lock (obj)
+            {
+                try
+                {
+                    if (showLog != "")
+                        this.Invoke(new Action(() => { this.txtSoundMesInfo.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " : " + showLog + "\r\n"); }));
+                    if (writerLog == "")
+                        return;
+                    string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+                    if (!Directory.Exists(dir))
+                        Directory.CreateDirectory(dir);
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Upload_Log.txt", DateTime.Now + " : " + writerLog + "\r\n");
+                }
+                catch
+                {
+
+                }
+            }
         }
     }
 }

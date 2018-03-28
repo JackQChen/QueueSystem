@@ -19,7 +19,7 @@ namespace BLL
 
         public TBusinessBLL(string dbKey)
         {
-            this.dal = new TBusinessDAL(dbKey);
+            this.dal = new TBusinessDAL(dbKey: dbKey);
         }
 
         #region CommonMethods
@@ -81,14 +81,14 @@ namespace BLL
         {
             try
             {
-                var sList = new TBusinessDAL(areaCode.ToString()).GetModelList(c => c.sysFlag == 0).ToList();
+                var sList = new TBusinessDAL(dbKey: areaCode.ToString()).GetModelList(c => c.sysFlag == 0).ToList();
                 sList.ForEach(s =>
                 {
                     s.areaCode = areaCode;
                     s.areaId = s.id;
                 });
-                var dal = new TBusinessDAL(targetDbName);
-                var odal = new TBusinessDAL(areaCode.ToString());
+                var dal = new TBusinessDAL(dbKey:targetDbName);
+                var odal = new TBusinessDAL(dbKey:areaCode.ToString());
                 foreach (var s in sList)
                 {
                     dal.Insert(s);
@@ -108,8 +108,8 @@ namespace BLL
         {
             try
             {
-                var sdal = new TBusinessDAL(areaCode.ToString());
-                var tdal = new TBusinessDAL(targetDbName);
+                var sdal = new TBusinessDAL(dbKey:areaCode.ToString());
+                var tdal = new TBusinessDAL(dbKey:targetDbName);
                 var sList = sdal.GetModelList(p => p.sysFlag == 1);
                 foreach (var s in sList)
                 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL;
 using Model;
+using System.Collections;
 
 namespace BLL
 {
@@ -77,6 +78,11 @@ namespace BLL
             {
                 return true;
             }
+        }
+
+        public ArrayList UploadUnitAndBusy(List<TUnitModel> uList, List<TBusinessModel> bList)
+        {
+            return this.dal.UploadUnitAndBusy(uList, bList);
         }
 
         public int ProcessInsertData(int areaCode, string targetDbName)

@@ -86,9 +86,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbQNumber.Font = new System.Drawing.Font("微软雅黑", 45F, System.Drawing.FontStyle.Bold);
             this.lbQNumber.ForeColor = System.Drawing.Color.Yellow;
-            this.lbQNumber.Location = new System.Drawing.Point(245, 0);
+            this.lbQNumber.Location = new System.Drawing.Point(231, 0);
             this.lbQNumber.Name = "lbQNumber";
-            this.lbQNumber.Size = new System.Drawing.Size(236, 122);
+            this.lbQNumber.Size = new System.Drawing.Size(240, 122);
             this.lbQNumber.TabIndex = 6;
             this.lbQNumber.Text = "CA086";
             this.lbQNumber.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -112,9 +112,9 @@
             // 
             this.lblVip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblVip.Font = new System.Drawing.Font("微软雅黑", 30F, System.Drawing.FontStyle.Bold);
+            this.lblVip.Font = new System.Drawing.Font("微软雅黑", 33F, System.Drawing.FontStyle.Bold);
             this.lblVip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(240)))), ((int)(((byte)(146)))));
-            this.lblVip.Location = new System.Drawing.Point(114, 0);
+            this.lblVip.Location = new System.Drawing.Point(94, 0);
             this.lblVip.Name = "lblVip";
             this.lblVip.Size = new System.Drawing.Size(154, 122);
             this.lblVip.TabIndex = 10;
