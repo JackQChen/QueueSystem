@@ -43,7 +43,8 @@ namespace MessageClient
                         Thread.Sleep(10000);
                     }
                 }
-            }) { IsBackground = true }.Start();
+            })
+            { IsBackground = true }.Start();
         }
 
         HandleResult Client_OnClose(TcpClient sender, SocketOperation enOperation, int errorCode)
@@ -65,10 +66,8 @@ namespace MessageClient
                 case MessageType.Restart:
                     {
                         //以无参方式重启
-                        var startInfo = System.Diagnostics.Process.GetCurrentProcess().StartInfo;
-                        startInfo.FileName = System.Windows.Forms.Application.ExecutablePath;
                         System.Windows.Forms.Application.Exit();
-                        System.Diagnostics.Process.Start(startInfo);
+                        System.Diagnostics.Process.Start(System.Windows.Forms.Application.ExecutablePath);
                     }
                     break;
                 case MessageType.Result:
