@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Configuration;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
 using BLL;
 using MessageClient;
-using MessageLib;
 using Model;
 using QueueMessage;
-using System.Threading;
-using System.Configuration;
 
-namespace CallSystem
+namespace CallClient
 {
     public partial class frmMain : Form
     {
@@ -52,6 +49,8 @@ namespace CallSystem
         Dictionary<int, TCallModel> wHang;//挂起
         Dictionary<string, int> wCall;
         Client client = new Client();
+        Hotkey hotkey;
+        int hkCall, hkRecall;
         object objLock = new object();
         //Thread thread;
         public frmMain()
@@ -148,7 +147,7 @@ namespace CallSystem
             }
             client.ServerIP = ip;
             client.ServerPort = ushort.Parse(port);
-            client.ClientType = ClientType.Window;
+            client.ClientType = ClientType.CallClient;
             client.ClientName = clientName;
             if (!this.client.Login())
                 this.messageIndicator1.SetState(StateType.Error, "未连接");
@@ -160,22 +159,38 @@ namespace CallSystem
             {
                 this.messageIndicator1.SetState(StateType.Error, "未连接");
             };
-            this.Hide();
             this.ShowInTaskbar = false;
+            this.Hide();
+            this.ShowInTaskbar = true;
+            //设置ShowInTaskbar以后Handle会变化，所以热键绑定要放在最后面
+            hotkey = new Hotkey(this.Handle);
+            hkCall = hotkey.RegisterHotkey(Keys.F7, Hotkey.KeyFlags.MOD_NONE);
+            hkRecall = hotkey.RegisterHotkey(Keys.R, Hotkey.KeyFlags.MOD_ALT | Hotkey.KeyFlags.MOD_CONTROL);
+            hotkey.OnHotkey += new HotkeyEventHandler(OnHotkey);
+
+        }
+
+        private void OnHotkey(int hotkeyID)
+        {
+            if (hotkeyID == this.hkCall)
+            {
+                MessageBox.Show("呼叫");
+            }
+            else if (hotkeyID == this.hkRecall)
+            {
+                MessageBox.Show("重呼");
+            }
         }
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            this.ShowInTaskbar = true;
-            notifyIcon1.Visible = true;
             this.Show();
+            this.Activate();
         }
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
             this.Hide();
-            this.ShowInTaskbar = false;
-            this.notifyIcon1.Visible = true;
         }
         void sp_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {

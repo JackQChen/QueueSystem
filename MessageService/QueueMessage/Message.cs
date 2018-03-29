@@ -3,7 +3,7 @@
 namespace QueueMessage
 {
     public enum MessageType { Result, Restart, Login, Call, Rate, Operate, Logout }
-    public enum ClientType { Window, SoundPlayer, LEDDisplay, ScreenDisplay }
+    public enum ClientType { Window, CallClient, SoundPlayer, LEDDisplay, ScreenDisplay }
 
     [Serializable]
     public class Message
