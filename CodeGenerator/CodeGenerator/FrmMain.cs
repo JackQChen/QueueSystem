@@ -118,6 +118,11 @@ namespace DAL
             this.db = Factory.Instance.CreateDbContext();
         }}
 
+        public {0}(string dbKey)
+        {{
+            this.db = Factory.Instance.CreateDbContext(dbKey);
+        }}
+
         #region CommonMethods
 
         public List<{1}> GetModelList()
