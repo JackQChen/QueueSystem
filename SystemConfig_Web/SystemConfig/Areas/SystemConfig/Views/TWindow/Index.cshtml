@@ -182,7 +182,7 @@
     }
 
     function Refresh() {
-        $(gridWin).setGridParam({ datatype: 'json' }).trigger('reloadGrid');
+        $(gridWin).setGridParam({ datatype: 'json', page: 1 }).trigger('reloadGrid');
     }
 
     function RefreshDetail() {

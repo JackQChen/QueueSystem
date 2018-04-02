@@ -25,6 +25,16 @@
                         name: 'unitName'
                     }]
         });
+        
+                $("#avatarSelect").change(function() {
+                    var obj = $("#avatarSelect")[0].files[0];
+                    var fr = new FileReader();
+                    fr.onload = function() {
+                        $("#avatarPreview").attr('src', this.result);
+                        $("form [name=avatar]").val(this.result);
+                    };
+                    fr.readAsDataURL(obj);
+                });
     });
     function submitForm(callback) {
         $.submitForm({
@@ -39,36 +49,53 @@
         <div class="col-xs-12">
             <form class="form-horizontal" style="margin-top: 30px">
             <input  type="hidden" name= "ID" value="@Model.ID" />
-            <div class="form-group">
-                <label class="col-sm-3 col-xs-3">
-                    ID
-                </label>
+            <div class="form-group" style="margin-bottom: 0px">
                 <div class="col-sm-9 col-xs-9">
-                    <input id="txtId" readonly type="text" class="col-xs-10 col-sm-10" />
-                    <script>
-                        var id = $("form input[name='ID']").val();
-                        if (id == -1)
-                            $("#txtId").val("新增");
-                        else
-                            $("#txtId").val(id);
-                    </script>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-xs-4">
+                            ID
+                        </label>
+                        <div class="col-sm-8 col-xs-8">
+                            <input id="txtId" readonly type="text" class="col-xs-10 col-sm-10" />
+                            <script>
+                                var id = $("form input[name='ID']").val();
+                                if (id == -1)
+                                    $("#txtId").val("新增");
+                                else
+                                    $("#txtId").val(id);
+                            </script>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-xs-4">
+                            所属部门
+                        </label>
+                        <div class="col-sm-8 col-xs-8">
+                            <input type="text" id="unitSearch" displaymember='unitName' valuemember='unitSeq'
+                                autocomplete="off" class="col-xs-10 col-sm-10" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-xs-4">
+                            用户姓名
+                        </label>
+                        <div class="col-sm-8 col-xs-8">
+                            <input type="text" name="Name" value="@Model.Name"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 col-xs-3">
-                    所属部门
-                </label>
-                <div class="col-sm-9 col-xs-9">
-                    <input type="text" id="unitSearch" displaymember='unitName' valuemember='unitSeq'
-                        autocomplete="off" class="col-xs-10 col-sm-10" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 col-xs-3">
-                    用户姓名
-                </label>
-                <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="Name" value="@Model.Name"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                <div class="col-sm-3 col-xs-3" style="margin-left: -50px; margin-top: -8px">
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-primary" onclick="$('#avatarSelect').click();return false;">
+                            <i class="icon-plus-sign bigger-110"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="$('#avatarPreview').attr('src','data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==');$('form [name=avatar]').val('');return false;">
+                            <i class="icon-minus-sign bigger-110"></i>
+                        </button>
+                    </div>
+                    <input id="avatarSelect" type="file" style="display: none">
+                    <input name="avatar" type="hidden" />
+                    <img id="avatarPreview" @(string.IsNullOrEmpty(@ViewBag.avatar) ? "" : Html.Raw("src=" + @ViewBag.avatar))  style="width: 90px; height: 90px; border: 1px solid #d5d5d5;" />
                 </div>
             </div>
             <div class="form-group">

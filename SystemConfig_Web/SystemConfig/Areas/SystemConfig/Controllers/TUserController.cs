@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using BLL;
 using Model;
 using Newtonsoft.Json;
@@ -40,6 +41,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             var model = this.bll.GetModel(id);
             if (model == null)
                 model = new TUserModel() { ID = -1 };
+            if (model.Photo != null)
+                this.ViewBag.avatar = "data:image/png;base64," + Convert.ToBase64String(model.Photo);
             var unitModel = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq);
             this.ViewBag.unitName = unitModel == null ? "" : unitModel.unitName;
             this.ViewBag.unitList = JsonConvert.SerializeObject(unitBll.GetModelList());
@@ -50,8 +53,10 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(TUserModel model)
+        public ActionResult SubmitForm(TUserModel model, string avatar)
         {
+            if (!string.IsNullOrEmpty(avatar))
+                model.Photo = Convert.FromBase64String(avatar.Split(',')[1]);
             if (model.ID == -1)
                 this.bll.Insert(model);
             else

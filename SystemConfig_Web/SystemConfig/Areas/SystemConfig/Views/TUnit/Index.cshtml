@@ -101,7 +101,7 @@ function View()
 
 function Refresh() 
 {
-    $(grid_selector).setGridParam({datatype:'json'}).trigger('reloadGrid');
+    $(grid_selector).setGridParam({datatype:'json',page:1}).trigger('reloadGrid');
 }
 
 </script>
