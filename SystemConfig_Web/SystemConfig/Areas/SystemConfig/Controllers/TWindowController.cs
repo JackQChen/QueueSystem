@@ -169,19 +169,34 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitUserForm(TWindowUserModel model)
+        public ActionResult SubmitUserForm(TWindowUserModel model, string unitSeq, string allUser)
         {
-            if (model.ID == -1)
+            if (bool.Parse(allUser))
             {
-                if (this.winUserBll.GetModel(
-                    p => p.WindowID == model.WindowID
-                    && p.UserID == model.UserID) == null)
+                var uList = this.userBll.GetModelList(p => p.unitSeq == unitSeq);
+                var mList = this.winUserBll.GetModelList(p => p.WindowID == model.WindowID);
+                uList.RemoveAll(m => mList.FindAll(p => p.UserID == m.ID).Count > 0);
+                foreach (var user in uList)
+                {
+                    model.ID = -1;
+                    model.UserID = user.ID;
                     this.winUserBll.Insert(model);
-                else
-                    return Content("记录重复！");
+                }
             }
             else
-                this.winUserBll.Update(model);
+            {
+                if (model.ID == -1)
+                {
+                    if (this.winUserBll.GetModel(
+                        p => p.WindowID == model.WindowID
+                        && p.UserID == model.UserID) == null)
+                        this.winUserBll.Insert(model);
+                    else
+                        return Content("记录重复！");
+                }
+                else
+                    this.winUserBll.Update(model);
+            }
             return Content("操作成功！");
         }
 

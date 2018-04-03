@@ -110,7 +110,13 @@ $(function () {
                 </label>
                 <div class="col-sm-9 col-xs-9">
                     <input type="text" id="userSearch" displaymember='Name' valuemember='ID' autocomplete="off"
-                        class="col-xs-10 col-sm-10" />
+                        class="col-xs-8 col-sm-8" />
+                    <div class="checkbox col-xs-4 col-sm-4">
+                        <label>
+                            <input name="allUser" class="ace" type="checkbox" />
+                            <span class="lbl">&nbsp;该单位全部用户</span>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -118,7 +124,7 @@ $(function () {
                     创建时间
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input type="text" name="CreateDateTime" value="@Model.CreateDateTime"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="CreateDateTime" value="@Model.CreateDateTime" autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>
