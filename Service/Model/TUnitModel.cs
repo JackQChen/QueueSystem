@@ -43,6 +43,12 @@ namespace Model
         /// 编号
         /// </summary>
         public int areaId { get; set; }
+
+        /// <summary>
+        /// 是否投资的部门
+        /// </summary>
+        [NotMapped]
+        public bool isInvestment { get; set; }
     }
 }
 

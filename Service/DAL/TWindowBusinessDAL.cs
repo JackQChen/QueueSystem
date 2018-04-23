@@ -65,12 +65,12 @@ namespace DAL
             this.db.Session.ExecuteNonQuery("alter table t_windowbusiness AUTO_INCREMENT=1", new DbParam[] { });
         }
 
-        public object GetGridDetailData(int winId)
+        public object GetGridBusiData(int winId)
         {
             return this.db.Query<TWindowBusinessModel>()
-                .LeftJoin<TUnitModel>((m, u) => m.unitSeq == u.unitSeq)
-                .LeftJoin<TBusinessModel>((m, u, b) => m.busiSeq == b.busiSeq && m.unitSeq == b.unitSeq)
-                .Where((m, u, b) => m.WindowID == winId)
+                .Where(m => m.WindowID == winId)
+                .InnerJoin<TUnitModel>((m, u) => m.unitSeq == u.unitSeq)
+                .InnerJoin<TBusinessModel>((m, u, b) => m.busiSeq == b.busiSeq && m.unitSeq == b.unitSeq)
                 .Select((m, u, b) => new
                 {
                     m.ID,
@@ -78,10 +78,26 @@ namespace DAL
                     m.unitSeq,
                     u.unitName,
                     m.busiSeq,
-                    b.busiName,
-                    Model = m
+                    b.busiName
                 })
                 .OrderBy(k => k.unitSeq)
+                .ToList();
+        }
+
+        public object GetGridUserData(int winId)
+        {
+            return this.db.Query<TWindowBusinessModel>()
+                .Where(m => m.WindowID == winId)
+                .GroupBy(k => k.unitSeq)
+                .Select(s => new { s.ID, s.unitSeq })
+                .InnerJoin<TUserModel>((m, u) => m.unitSeq == u.unitSeq)
+                .Select((m, u) => new
+                {
+                    ID = m.ID,
+                    UserID = u.ID,
+                    UserName = u.Name
+                })
+                .OrderBy(k => k.UserID)
                 .ToList();
         }
     }

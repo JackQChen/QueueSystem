@@ -17,6 +17,7 @@ namespace CallSystem
 {
     public partial class frmMain : Form
     {
+        Queue<Oprate> QueueList = new Queue<Oprate>();
         public byte[] Head = new byte[] { 0xFF, 0x68 }; //帧头
         public byte Adress;      //通讯地址
         public byte Order;          //命令
@@ -30,7 +31,9 @@ namespace CallSystem
         string port = "";// System.Configuration.ConfigurationManager.AppSettings["Port"];
         string clientName;
         string areaNo = "";
+        int EvaluatorType = 0;
         //string test = "";
+        TEvaluateBLL eBll = new TEvaluateBLL();
         TOprateLogBLL oBll = new TOprateLogBLL();
         TQueueBLL qBll = new TQueueBLL();
         TWindowBLL wBll = new TWindowBLL();
@@ -42,6 +45,7 @@ namespace CallSystem
         List<TWindowBusinessModel> wbList;
         Dictionary<string, string> wArea;
         Dictionary<int, WorkState> wState;
+        Dictionary<int, TCallStateModel> csState;
         Dictionary<int, WorkState> wpState;
         Dictionary<int, TCallModel> wModel;//呼叫器-呼叫状态
         Dictionary<int, string> wNum;//呼叫器-窗口号
@@ -49,11 +53,11 @@ namespace CallSystem
         Dictionary<int, Dictionary<string, int>> wReCall;//重呼限制
         Dictionary<int, List<TWindowBusinessModel>> wlBusy;
         Dictionary<int, List<TWindowBusinessModel>> wbBusy;//属于绿色通道的窗口业务
-        Dictionary<int, TCallModel> wHang;//挂起
         Dictionary<string, int> wCall;
         Client client = new Client();
         object objLock = new object();
-        //Thread thread;
+        TCallStateBLL csBll = new TCallStateBLL();
+        Thread thread;
         public frmMain()
         {
             InitializeComponent();
@@ -77,11 +81,13 @@ namespace CallSystem
         private void frmMain_Load(object sender, EventArgs e)
         {
             SetConfigValue("AreaNo", "1,2");
+            SetConfigValue("EvaluatorType", "0");
             areaNo = System.Configuration.ConfigurationManager.AppSettings["AreaNo"];
             clientName = System.Configuration.ConfigurationManager.AppSettings["ClientName"];
             clearTime = System.Configuration.ConfigurationManager.AppSettings["ClearTime"];
             ip = System.Configuration.ConfigurationManager.AppSettings["IP"];
             port = System.Configuration.ConfigurationManager.AppSettings["Port"];
+            EvaluatorType = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["EvaluatorType"]);
             cmbAdress.Text = "1";
             ini = new OperateIni(System.Windows.Forms.Application.StartupPath + @"\WindowConfig.ini");
             portName = ini.ReadString("CallSet", "SerialPort");
@@ -90,6 +96,7 @@ namespace CallSystem
             baList = baBll.GetModelList();
             wArea = new Dictionary<string, string>();
             wState = new Dictionary<int, WorkState>();
+            csState = new Dictionary<int, TCallStateModel>();
             wpState = new Dictionary<int, WorkState>();
             wModel = new Dictionary<int, TCallModel>();
             wNum = new Dictionary<int, string>();
@@ -98,7 +105,6 @@ namespace CallSystem
             wlBusy = new Dictionary<int, List<TWindowBusinessModel>>();
             wbBusy = new Dictionary<int, List<TWindowBusinessModel>>();
             wReCall = new Dictionary<int, Dictionary<string, int>>();
-            wHang = new Dictionary<int, TCallModel>();
             //根据配置分区窗口
             var areaList = areaNo.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             wList = wList.Where(w => areaList.Contains(w.AreaName.ToString())).ToList();
@@ -108,6 +114,7 @@ namespace CallSystem
                 wCall.Add(w.Number, w.CallNumber);
                 wNum.Add(w.CallNumber, w.Number);
                 wState.Add(w.CallNumber, WorkState.Defalt);
+                csState.Add(w.CallNumber, new TCallStateModel());
                 var busyList = wbList.Where(b => b.WindowID == w.ID).ToList().OrderBy(o => o.priorityLevel).ToList();
                 var busy = busyList.FirstOrDefault();
                 if (busy != null)
@@ -138,9 +145,14 @@ namespace CallSystem
             try
             {
                 serialPort.Open();
-                //thread = new Thread(new ThreadStart(sp_DataReceived));
-                //thread.IsBackground = true;
-                //thread.Start();
+                //if (EvaluatorType == 1)
+                //{
+                //    foreach (var wKey in wCall)
+                //    {
+                //        SendServiceLever(wKey.Value);
+                //    }
+                //}
+
             }
             catch (Exception ex)
             {
@@ -160,8 +172,79 @@ namespace CallSystem
             {
                 this.messageIndicator1.SetState(StateType.Error, "未连接");
             };
+            thread = new Thread(new ThreadStart(Process));
+            thread.IsBackground = true;
+            thread.Start();
             this.Hide();
             this.ShowInTaskbar = false;
+        }
+
+        void Process()
+        {
+            while (true)
+            {
+                while (QueueList.Count > 0)
+                {
+                    var opr = QueueList.Dequeue();
+                    DateTime start = DateTime.Now;
+                    switch (opr.Type)
+                    {
+                        case OType.Call:
+                            {
+                                CallNo(opr.Adress);
+                                break;
+                            }
+                        case OType.CallBack:
+                            {
+                                CallBack(opr.Adress);
+                                break;
+                            }
+                        case OType.Evaluate:
+                            {
+                                EvaluateService(opr.Adress);
+                                break;
+                            }
+                        case OType.SaveEvaluate:
+                            {
+                                SaveEvaluate(opr.Adress, opr.Value);
+                                break;
+                            }
+                        case OType.GiveUp:
+                            {
+                                GiveUpNo(opr.Adress);
+                                break;
+                            }
+                        case OType.Hang:
+                            {
+                                Hang(opr.Adress);
+                                break;
+                            }
+                        case OType.Pause:
+                            {
+                                Pause(opr.Adress);
+                                break;
+                            }
+                        case OType.ReCall:
+                            {
+                                ReCallNo(opr.Adress);
+                                break;
+                            }
+                        case OType.Transfer:
+                            {
+                                Transfer(opr.Adress);
+                                break;
+                            }
+                        default: break;
+                    }
+                    TimeSpan ts = DateTime.Now - start;
+                    WriterTimeLog(string.Format("地址【{3}】执行操作【{0}】共耗时{1}分{2}秒。", opr.Type.ToString(), ts.Minutes, ts.Seconds,opr.Adress));
+                    if (QueueList.Count > 10)
+                    {
+                        WriterTimeLog("并发操作已超过10条，当前并发列表还有【" + QueueList.Count + "】条。");
+                    }
+                }
+                Thread.Sleep(1000);
+            }
         }
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -191,6 +274,7 @@ namespace CallSystem
                     var fixedvalue = (byte)serialPort.ReadByte();//固定值 0x68
                     var adress = (byte)serialPort.ReadByte();//通讯地址
                     var funccode = (byte)serialPort.ReadByte();//功能码
+                    var xvalue = 0;//评价器值
                     int index = 0;
                     if (length <= 2)
                     {
@@ -216,78 +300,143 @@ namespace CallSystem
                     send[3] = length2;
                     send[4] = fixedvalue;
                     send[5] = adress;
-                    send[6] = funccode;
-                    int startIndex = 7;
-                    foreach (byte b in data)
+                    if (funccode != 0x11)
                     {
-                        send[startIndex] = b;
-                        startIndex++;
+                        send[6] = funccode;// funccode;
+                        int startIndex = 7;
+                        foreach (byte b in data)
+                        {
+                            send[startIndex] = b;
+                            startIndex++;
+                        }
+                        send[7 + data.Length] = check;
+                        send[8 + data.Length] = end;
                     }
-                    send[7 + data.Length] = check;
-                    send[8 + data.Length] = end;
+                    else
+                    {
+                        send[6] = 0x01;
+                        send[7] = data[0];
+                        xvalue = data[0];
+                        send[8] = (byte)(check - 0x10);
+                        send[9] = end;
+                    }
                     SendOrder(send);
 
                     #endregion
 
-                    #region  功能操作
-                    //判断操作类型，进行对应的操作
-                    if (data[data.Length - 1] == 0x0C)
+                    if (funccode != 0x11)
                     {
-                        CallNo(adress);//呼叫
-                    }
-                    else if (data[data.Length - 1] == 0x0D)
-                    {
-                        ReCallNo(adress); //重呼
-                    }
-                    else if (data[data.Length - 1] == 0x0B)
-                    {
-                        EvaluateService(adress); //评价
-                    }
-                    else if (data[data.Length - 1] == 0x0E)
-                    {
-                        //取消 * 暂定为弃号键 ***该功能已不用。
-                    }
-                    else if (data[data.Length - 1] == 0x0F)
-                    {
-                        if (data.Length == 2)
+                        #region  功能操作
+                        //判断操作类型，进行对应的操作
+                        if (data[data.Length - 1] == 0x0C)
                         {
-                            if (data[data.Length - 2] == 0x06)
+                            lock (objLock)
                             {
-                                GiveUpNo(adress);//6+确认为弃号
+                                Oprate opr = new Oprate() { Adress = adress, Type = OType.Call };
+                                QueueList.Enqueue(opr);
                             }
-                            else if (data[data.Length - 2] == 0x00)
+                            //CallNo(adress);//呼叫
+                        }
+                        else if (data[data.Length - 1] == 0x0D)
+                        {
+                            lock (objLock)
                             {
-                                //0+确认为挂起
-                                Hang(adress);
+                                Oprate opr = new Oprate() { Adress = adress, Type = OType.ReCall };
+                                QueueList.Enqueue(opr);
                             }
-                            else if (data[data.Length - 2] == 0x03)
+                            //ReCallNo(adress); //重呼
+                        }
+                        else if (data[data.Length - 1] == 0x0B)
+                        {
+                            lock (objLock)
                             {
-                                //3+确认为回呼
-                                CallBack(adress);
+                                Oprate opr = new Oprate() { Adress = adress, Type = OType.Evaluate };
+                                QueueList.Enqueue(opr);
+                            }
+                            //EvaluateService(adress); //评价
+                        }
+                        else if (data[data.Length - 1] == 0x0E)
+                        {
+                            //取消 * 暂定为弃号键 ***该功能已不用。
+                        }
+                        else if (data[data.Length - 1] == 0x0F)
+                        {
+                            if (data.Length == 2)
+                            {
+                                if (data[data.Length - 2] == 0x06)
+                                {
+                                    lock (objLock)
+                                    {
+                                        Oprate opr = new Oprate() { Adress = adress, Type = OType.GiveUp };
+                                        QueueList.Enqueue(opr);
+                                    }
+                                    //GiveUpNo(adress);//6+确认为弃号
+                                }
+                                else if (data[data.Length - 2] == 0x00)
+                                {
+                                    //0+确认为挂起
+                                    lock (objLock)
+                                    {
+                                        Oprate opr = new Oprate() { Adress = adress, Type = OType.Hang };
+                                        QueueList.Enqueue(opr);
+                                    }
+                                    //Hang(adress);
+                                }
+                                else if (data[data.Length - 2] == 0x03)
+                                {
+                                    //3+确认为回呼
+                                    lock (objLock)
+                                    {
+                                        Oprate opr = new Oprate() { Adress = adress, Type = OType.CallBack };
+                                        QueueList.Enqueue(opr);
+                                    }
+                                    //CallBack(adress);
+                                }
+                            }
+                            else
+                            {
+                                WriterLog("发送确定键，但是指令未用，本次操作自动忽略！");
+                                return;
                             }
                         }
-                        else
+                        else if (data[data.Length - 1] == 0x11)
                         {
-                            WriterLog("发送确定键，但是指令未用，本次操作自动忽略！");
-                            return;
+                            //一米 ******** 暂无处理
                         }
-                    }
-                    else if (data[data.Length - 1] == 0x11)
-                    {
-                        //一米 ******** 暂无处理
-                    }
-                    else if (data[data.Length - 1] == 0x12)
-                    {
-                        //等候  暂停功能
-                        Pause(adress);
-                    }
-                    else if (data[data.Length - 1] == 0x13)
-                    {
-                        //转移
-                        Transfer(adress);
-                    }
+                        else if (data[data.Length - 1] == 0x12)
+                        {
+                            //等候  暂停功能
+                            lock (objLock)
+                            {
+                                Oprate opr = new Oprate() { Adress = adress, Type = OType.Pause };
+                                QueueList.Enqueue(opr);
+                            }
+                            //Pause(adress);
+                        }
+                        else if (data[data.Length - 1] == 0x13)
+                        {
+                            //转移
+                            lock (objLock)
+                            {
+                                Oprate opr = new Oprate() { Adress = adress, Type = OType.Transfer };
+                                QueueList.Enqueue(opr);
+                            }
+                            //Transfer(adress);
+                        }
 
-                    #endregion
+                        #endregion
+                    }
+                    else
+                    {
+                        #region  评价器接收数据
+                        lock (objLock)
+                        {
+                            Oprate opr = new Oprate() { Adress = adress, Type = OType.SaveEvaluate, Value = xvalue };
+                            QueueList.Enqueue(opr);
+                        }
+                        //SaveEvaluate(adress, xvalue);
+                        #endregion
+                    }
                 }
             }
         }
@@ -319,6 +468,13 @@ namespace CallSystem
             {
                 WriterLog("串口关闭错误：" + ex.Message);
             }
+            try
+            {
+                if (thread != null)
+                    thread.Abort();
+            }
+            catch
+            { }
             try
             {
                 client.Logout();
@@ -358,28 +514,35 @@ namespace CallSystem
 
         #region 功能方法
 
-        #region
+        #region 8 大方法
         //呼叫*顺呼
         private void CallNo(int adress)
         {
-            lock (objLock)
+            DateTime start = DateTime.Now;
+            if (GetWindowByAdress(adress, 0))
             {
-                if (GetWindowByAdress(adress, 0))
+                LockAction.RunWindowLock(wNum[adress], () =>
                 {
-                    if (wState[adress] == WorkState.PauseService)
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
+                    {
+                        csState[adress] = new TCallStateModel();
+                        csState[adress].windowNo = wNum[adress];
+                        csState[adress].workState = (int)WorkState.Defalt;
+                        csBll.Insert(csState[adress]);
+                    }
+                    if (csState[adress].workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
-                        wState[adress] = wpState[adress];
+                        csState[adress].workState = csState[adress].pauseState;
+                        csBll.Update(csState[adress]);
                     }
-                    if (wState[adress] == WorkState.Defalt || wState[adress] == WorkState.Evaluate)
+                    if (csState[adress].workState == (int)WorkState.Defalt || csState[adress].workState == (int)WorkState.Evaluate)
                     {
 
                         try
                         {
-
                             var model = cBll.CallNo(wlBusy[adress], wbBusy[adress], wNum[adress], "");//用户暂时为空
-                            //var model = cBll.CallNo(wlBusy[adress], wNum[adress], "");//用户暂时为空
-                            //var model = cBll.CallNo(wBusy[adress].unitSeq, wBusy[adress].busiSeq, wNum[adress], "");//用户暂时为空
                             if (model != null)
                             {
                                 if (wModel.ContainsKey(adress))
@@ -392,10 +555,13 @@ namespace CallSystem
                                     wReCall[adress] = rd;
                                 else
                                     wReCall.Add(adress, rd);
-
                                 var callString = "请" + model.ticketNumber + "号到 " + wNum[adress] + "号窗口办理 ";
                                 client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = wNum[adress], AreaNo = wArea[wNum[adress]], IsLEDMessage = true, IsSoundMessage = true });
-                                wState[adress] = WorkState.Call;
+                                csState[adress].workState = (int)WorkState.Call;
+                                csState[adress].ticketNo = model.ticketNumber;
+                                csState[adress].callId = model.id;
+                                csState[adress].reCallTimes = 0;
+                                csBll.Update(csState[adress]);
                                 this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
                                 SendTicket(adress, model.ticketNumber.Substring(model.ticketNumber.Length - 3, 3));
                                 WriterCallLog(0, callString);
@@ -407,75 +573,109 @@ namespace CallSystem
                             WriterLog("叫号异常：" + ex.Message);
                         }
                     }
-                }
+                });
             }
         }
         //重呼
         private void ReCallNo(int adress)
         {
-            lock (objLock)
+            if (GetWindowByAdress(adress, 1))
             {
-                if (GetWindowByAdress(adress, 1))
+                LockAction.RunWindowLock(wNum[adress], () =>
                 {
-                    if (wState[adress] == WorkState.PauseService)
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
+                    {
+                        return;
+                    }
+                    if (csState[adress].workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
-                        wState[adress] = wpState[adress];
+                        csState[adress].workState = csState[adress].pauseState;
+                        csBll.Update(csState[adress]);
                     }
-                    if (wState[adress] == WorkState.Call)
+                    if (csState[adress].workState == (int)WorkState.Call)
                     {
-                        //判断重呼限制
-                        Dictionary<string, int> dic = wReCall[adress];
-                        if (dic.ContainsKey(wModel[adress].ticketNumber))
+                        var model = cBll.GetModel(csState[adress].callId);
+                        if (model == null)
                         {
-                            int count = dic[wModel[adress].ticketNumber];
-                            if (count > 5)
-                                return;
-                            else
-                                dic[wModel[adress].ticketNumber] = count + 1;
+                            return;
                         }
-                        var callString = "请" + wModel[adress].ticketNumber + "号到 " + wNum[adress] + "号窗口办理 ";
-                        client.SendMessage(new CallMessage() { TicketNo = wModel[adress].ticketNumber, WindowNo = wNum[adress], AreaNo = wArea[wNum[adress]], IsLEDMessage = true, IsSoundMessage = true });
+                        if (csState[adress].reCallTimes >= 5)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            csState[adress].reCallTimes = csState[adress].reCallTimes + 1;
+                            csBll.Update(csState[adress]);
+                        }
+                        var callString = "请" + model.ticketNumber + "号到 " + wNum[adress] + "号窗口办理(重呼) ";
+                        client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = wNum[adress], AreaNo = wArea[wNum[adress]], IsLEDMessage = true, IsSoundMessage = true });
                         this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
-                        SendTicket(adress, wModel[adress].ticketNumber.Substring(wModel[adress].ticketNumber.Length - 3, 3));
+                        SendTicket(adress, model.ticketNumber.Substring(model.ticketNumber.Length - 3, 3));
                         WriterCallLog(1, callString);
                     }
-                }
+                });
             }
         }
         //评价
         private void EvaluateService(int adress)
         {
-            lock (objLock)
+            if (GetWindowByAdress(adress, 2))
             {
-                if (GetWindowByAdress(adress, 2))
+                LockAction.RunWindowLock(wNum[adress], () =>
                 {
-                    if (wState[adress] == WorkState.PauseService)
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
+                    {
+                        csState[adress] = new TCallStateModel();
+                        csState[adress].windowNo = wNum[adress];
+                        csState[adress].workState = (int)WorkState.Defalt;
+                        csBll.Insert(csState[adress]);
+                    }
+                    if (csState[adress].workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
-                        wState[adress] = wpState[adress];
+                        csState[adress].workState = csState[adress].pauseState;
+                        csBll.Update(csState[adress]);
                     }
-                    if (wState[adress] == WorkState.Call)
+                    if (csState[adress].workState == (int)WorkState.Call)
                     {
                         try
                         {
-                            wModel[adress].state = 1;
-                            wModel[adress].sysFlag = 1;
-                            cBll.Update(wModel[adress]);
-                            wState[adress] = WorkState.Evaluate;
-                            client.SendMessage(new RateMessage() //发送评价请求
+                            var model = cBll.GetModel(csState[adress].callId);
+                            if (model == null)
                             {
-                                WindowNo = wNum[adress],
-                                RateId = wModel[adress].handleId,
-                                ItemName = "项目名称",
-                                WorkDate = DateTime.Now.ToShortDateString(),
-                                Transactor = "办理人",
-                                reserveSeq = wModel[adress].reserveSeq
+                                return;
                             }
-                            );
+                            model.state = 1;
+                            model.sysFlag = 1;
+                            cBll.Update(model);
+                            csState[adress].workState = (int)WorkState.Evaluate;
+                            csState[adress].callId = 0;
+                            csState[adress].ticketNo = "";
+                            csBll.Update(csState[adress]);
+                            if (EvaluatorType == 0)
+                            {
+                                client.SendMessage(new RateMessage() //发送评价请求
+                                {
+                                    WindowNo = wNum[adress],
+                                    RateId = model.handleId,
+                                    ItemName = "项目名称",
+                                    WorkDate = DateTime.Now.ToShortDateString(),
+                                    Transactor = model.qNmae,
+                                    reserveSeq = model.reserveSeq
+                                }
+                                );
+                            }
+                            else
+                            {
+                                //SendStartE(adress);
+                            }
                             SendWait(adress);
-                            string mess = " [" + wModel[adress].ticketNumber + "]号已评价。";
-                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : [" + wModel[adress].ticketNumber + "]号已评价。"); }));
+                            string mess = " [" + model.ticketNumber + "]号已评价。";
+                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : [" + model.ticketNumber + "]号已评价。"); }));
                             WriterCallLog(2, mess);
                         }
                         catch (Exception ex)
@@ -485,35 +685,49 @@ namespace CallSystem
                     }
                     else
                     {
-                        if (wState[adress] == WorkState.Defalt || wState[adress] == WorkState.Evaluate)
+                        if (csState[adress].workState == (int)WorkState.Defalt || csState[adress].workState == (int)WorkState.Evaluate)
                         {
                             SendWait(adress);
                         }
                     }
-                }
+                });
             }
         }
         //弃号
         private void GiveUpNo(int adress)
         {
-            lock (objLock)
+            if (GetWindowByAdress(adress, 4))
             {
-                if (GetWindowByAdress(adress, 4))
+                LockAction.RunWindowLock(wNum[adress], () =>
                 {
-                    if (wState[adress] == WorkState.PauseService)
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
+                    {
+                        return;
+                    }
+                    if (csState[adress].workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
-                        wState[adress] = wpState[adress];
+                        csState[adress].workState = csState[adress].pauseState;
+                        csBll.Update(csState[adress]);
                     }
-                    if (wState[adress] == WorkState.Call)
+                    if (csState[adress].workState == (int)WorkState.Call)
                     {
                         try
                         {
-                            string mess = wModel[adress].ticketNumber + "号已弃号。";
-                            wModel[adress].state = -1;
-                            wModel[adress].sysFlag = 1;
-                            cBll.Update(wModel[adress]);
-                            wState[adress] = WorkState.Evaluate;
+                            var model = cBll.GetModel(csState[adress].callId);
+                            if (model == null)
+                            {
+                                return;
+                            }
+                            string mess = model.ticketNumber + "号已弃号。";
+                            model.state = -1;
+                            model.sysFlag = 1;
+                            cBll.Update(model);
+                            csState[adress].workState = (int)WorkState.Evaluate;
+                            csState[adress].callId = 0;
+                            csState[adress].ticketNo = "";
+                            csBll.Update(csState[adress]);
                             this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
                             this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
                             SendWait(adress);
@@ -524,131 +738,179 @@ namespace CallSystem
                             WriterLog("弃号异常：" + ex.Message);
                         }
                     }
-                }
+                });
             }
         }
         //暂停
         private void Pause(int adress)
         {
-            lock (objLock)
+            if (GetWindowByAdress(adress, 3))
             {
-                if (GetWindowByAdress(adress, 3))
+                LockAction.RunWindowLock(wNum[adress], () =>
                 {
-                    if (wState[adress] != WorkState.PauseService)
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
+                    {
+                        csState[adress] = new TCallStateModel();
+                        csState[adress].windowNo = wNum[adress];
+                        csState[adress].workState = (int)WorkState.Defalt;
+                        csBll.Insert(csState[adress]);
+                    }
+                    if (csState[adress].workState != (int)WorkState.PauseService)
                     {
                         string mess = wNum[adress] + "号窗口暂停服务";
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Pause });
                         this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
-                        if (wpState.ContainsKey(adress))
-                            wpState[adress] = wState[adress];
-                        else
-                            wpState.Add(adress, wState[adress]);
-                        wState[adress] = WorkState.PauseService;
+                        csState[adress].pauseState = csState[adress].workState;
+                        csState[adress].workState = (int)WorkState.PauseService;
+                        csBll.Update(csState[adress]);
                         WriterCallLog(0, mess);
                     }
-                }
+                });
             }
-
         }
-
         //转移-丢回去
         private void Transfer(int adress)
         {
-            lock (objLock)
+            if (GetWindowByAdress(adress, 5))
             {
-                if (GetWindowByAdress(adress, 5))
+                LockAction.RunWindowLock(wNum[adress], () =>
                 {
-                    if (wState[adress] == WorkState.PauseService)
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
                     {
-                        this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
-                        wState[adress] = wpState[adress];
+                        csState[adress] = new TCallStateModel();
+                        csState[adress].windowNo = wNum[adress];
+                        csState[adress].workState = (int)WorkState.Defalt;
+                        csBll.Insert(csState[adress]);
                     }
-                    if (wState[adress] == WorkState.Call)
+                    if (csState[adress].workState == (int)WorkState.PauseService)
                     {
-                        //转移号码
-                        cBll.Transfer(wModel[adress]);
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
-                        var callString = wModel[adress].ticketNumber + "号已转移(重置) ";
+                        csState[adress].workState = csState[adress].pauseState;
+                        csBll.Update(csState[adress]);
+                    }
+                    if (csState[adress].workState == (int)WorkState.Call)
+                    {
+                        var model = cBll.GetModel(csState[adress].callId);
+                        if (model == null)
+                        {
+                            return;
+                        }
+                        //转移号码
+                        cBll.Transfer(model);
+                        this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
+                        var callString = model.ticketNumber + "号已转移(重置) ";
                         this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
                         SendWait(adress);
-                        wState[adress] = WorkState.Defalt;
+                        csState[adress].workState = (int)WorkState.Defalt;
+                        csState[adress].callId = 0;
+                        csState[adress].ticketNo = "";
+                        csState[adress].reCallTimes = 0;
+                        csBll.Update(csState[adress]);
                         WriterCallLog(5, callString);
                     }
-                }
+                });
             }
         }
-
         //挂起
         private void Hang(int adress)
         {
-            lock (objLock)
+            if (GetWindowByAdress(adress, 6))
             {
-                if (GetWindowByAdress(adress, 6))
+                LockAction.RunWindowLock(wNum[adress], () =>
                 {
-                    if (wState[adress] == WorkState.PauseService)
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
+                    {
+                        csState[adress] = new TCallStateModel();
+                        csState[adress].windowNo = wNum[adress];
+                        csState[adress].workState = (int)WorkState.Defalt;
+                        csBll.Insert(csState[adress]);
+                    }
+                    if (csState[adress].workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
-                        wState[adress] = wpState[adress];
+                        csState[adress].workState = csState[adress].pauseState;
+                        csBll.Update(csState[adress]);
                     }
-                    if (wState[adress] == WorkState.Call)
+                    if (csState[adress].workState == (int)WorkState.Call)
                     {
-                        if (wHang.ContainsKey(adress))
+                        var model = cBll.GetModel(csState[adress].callId);
+                        if (model == null)
                         {
-                            wHang[adress] = wModel[adress];
+                            return;
                         }
-                        else
-                        {
-                            wHang.Add(adress, wModel[adress]);
-                        }
-                        wHang[adress].state = 3;
-                        wHang[adress].sysFlag = 1;
-                        cBll.Update(wHang[adress]);
-                        var callString = wModel[adress].ticketNumber + "号已挂起";
+                        model.state = 3;
+                        model.sysFlag = 1;
+                        cBll.Update(model);
+                        var callString = model.ticketNumber + "号已挂起";
                         this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
                         SendWait(adress);
-                        wState[adress] = WorkState.Defalt;
+                        csState[adress].workState = (int)WorkState.Defalt;
+                        csState[adress].hangId = model.id;
+                        csState[adress].callId = 0;
+                        csState[adress].ticketNo = "";
+                        csState[adress].reCallTimes = 0;
+                        csBll.Update(csState[adress]);
                         WriterCallLog(6, callString);
                     }
-                }
+                });
             }
         }
-
         //回呼
         private void CallBack(int adress)
         {
-            lock (objLock)
+            if (GetWindowByAdress(adress, 7))
             {
-                if (GetWindowByAdress(adress, 7))
+                LockAction.RunWindowLock(wNum[adress], () =>
                 {
-                    if (wState[adress] == WorkState.PauseService)
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
+                    {
+                        return;
+                    }
+                    if (csState[adress].workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
-                        wState[adress] = wpState[adress];
+                        csState[adress].workState = csState[adress].pauseState;
+                        csBll.Update(csState[adress]);
                     }
-                    if (wState[adress] == WorkState.Defalt || wState[adress] == WorkState.Evaluate)
+                    if (csState[adress].workState == (int)WorkState.Defalt || csState[adress].workState == (int)WorkState.Evaluate)
                     {
-                        if (wHang.ContainsKey(adress))
-                        {
-                            var model = wHang[adress];
-                            if (wModel.ContainsKey(adress))
-                                wModel[adress] = model;
-                            else
-                                wModel.Add(adress, model);
-                            model.state = 0;
-                            model.sysFlag = 1;
-                            cBll.Update(model);
-                            var callString = wModel[adress].ticketNumber + "号回呼";
-                            client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = wNum[adress], AreaNo = wArea[wNum[adress]], IsLEDMessage = true, IsSoundMessage = true });
-                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
-                            SendTicket(adress, wHang[adress].ticketNumber.Substring(wHang[adress].ticketNumber.Length - 3, 3));
-                            wState[adress] = WorkState.Call;
-                            WriterCallLog(7, callString);
-                            wHang.Clear();
-                        }
-                    }
-                }
-            }
 
+                        var model = cBll.GetModel(csState[adress].hangId);
+                        if (model == null)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            if (model.ticketTime.Date != DateTime.Now.Date)
+                            {
+                                csState[adress].hangId = 0;
+                                csBll.Update(csState[adress]);
+                                return;
+                            }
+                        }
+                        model.state = 0;
+                        model.sysFlag = 1;
+                        cBll.Update(model);
+                        var callString = model.ticketNumber + "号回呼";
+                        client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = wNum[adress], AreaNo = wArea[wNum[adress]], IsLEDMessage = true, IsSoundMessage = true });
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
+                        SendTicket(adress, model.ticketNumber.Substring(model.ticketNumber.Length - 3, 3));
+                        csState[adress].workState = (int)WorkState.Call;
+                        csState[adress].ticketNo = model.ticketNumber;
+                        csState[adress].callId = model.id;
+                        csState[adress].reCallTimes = 0;
+                        csState[adress].hangId = 0;
+                        csBll.Update(csState[adress]);
+                        WriterCallLog(7, callString);
+                    }
+                });
+
+            }
         }
 
         #endregion
@@ -723,6 +985,99 @@ namespace CallSystem
         }
         #endregion
 
+        #region 评价器相关
+
+        //发送服务星级、默认都是满星 （经过测试开机后默认就是满星 不需要发送）
+        private void SendServiceLever(int adress)
+        {
+            var send = new byte[10];
+            send[0] = 0xFF;
+            send[1] = 0x68;
+            send[2] = 0x03;
+            send[3] = 0x03;
+            send[4] = 0x68;
+            send[5] = (byte)adress;
+            send[6] = 0x02;
+            send[7] = 0x05;
+            send[8] = (byte)((adress + 2 + 5) % 256);// 0x03;//计算校验和
+            send[9] = 0x16;
+            SendOrder(send);
+        }
+
+        //开启评价 ** 暂时没有用，经过测试点击评价后自动开启评价，无需再次发送命令
+        private void SendStartE(int adress)
+        {
+            var send = new byte[10];
+            send[0] = 0xFF;
+            send[1] = 0x68;
+            send[2] = 0x03;
+            send[3] = 0x03;
+            send[4] = 0x68;
+            send[5] = (byte)adress;
+            send[6] = 0x01;
+            send[7] = 0x0B;
+            send[8] = (byte)((adress + 1 + 0x0B) % 256);// 0x03;//计算校验和
+            send[9] = 0x16;
+            SendOrder(send);
+        }
+
+        //保存评价数据
+        private void SaveEvaluate(int adress, int xvalue)
+        {
+            if (GetWindowByAdress(adress, 2))
+            {
+                LockAction.RunWindowLock(wNum[adress], () =>
+                {
+                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    if (csState[adress] == null)
+                    {
+                        return;
+                    }
+                    if (csState[adress].workState == (int)WorkState.Evaluate)
+                    {
+                        try
+                        {
+                            var model = cBll.GetModel(csState[adress].callId);
+                            if (model == null)
+                            {
+                                return;
+                            }
+
+                            SaveEvaluate(model, wNum[adress], xvalue);
+                            csState[adress].workState = (int)WorkState.Defalt;
+                            csBll.Update(csState[adress]);
+                            //SendWait(adress);
+                            string mess = " [" + model.ticketNumber + "]号已评价。";
+                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : [" + model.ticketNumber + "]号已评价。"); }));
+                            WriterCallLog(2, mess);
+                        }
+                        catch (Exception ex)
+                        {
+                            WriterLog("评价保存异常：" + ex.Message);
+                        }
+                    }
+                });
+            }
+        }
+
+        //保存评价数据(4键评价器)
+        private void SaveEvaluate(TCallModel call, string WindowNo, int xvalue)
+        {
+            TEvaluateModel ev = new TEvaluateModel();
+            ev.type = 2;
+            ev.handId = call.id;
+            ev.unitSeq = call.unitSeq;
+            ev.windowNumber = WindowNo;
+            ev.handleTime = DateTime.Now;
+            ev.custCardId = call.idCard;
+            ev.name = call.qNmae;
+            ev.windowUser = "";//4键评价器 没有登录人员
+            ev.approveSeq = call.busiSeq;
+            ev.evaluateResult = xvalue == 0 ? 1 : xvalue == 1 ? 0 : xvalue == 2 ? 3 : 4;
+            eBll.Insert(ev);
+        }
+        #endregion
+
         #endregion
 
         #region 测试
@@ -773,6 +1128,19 @@ namespace CallSystem
                 if (DateTime.Now.ToString("HH:mm:ss") == c)
                 {
                     var tList = cBll.GiveUpAll();
+                    foreach (var t in tList.Select(s => s.windowNumber).Distinct())
+                    {
+                        var stateModel = csBll.GetModel(t);
+                        if (stateModel != null)
+                        {
+                            stateModel.callId = 0;
+                            stateModel.workState = 0;
+                            stateModel.hangId = 0;
+                            stateModel.pauseState = 0;
+                            stateModel.ticketNo = "";
+                            csBll.Update(stateModel);
+                        }
+                    }
                     foreach (var t in tList)
                     {
                         string mess = "自动批量弃号：窗口[" + t.windowNumber + "]票号[" + t.ticketNumber + "]已完成弃号";
@@ -788,11 +1156,17 @@ namespace CallSystem
 
         private void WriterLog(string text)
         {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Exception.txt", DateTime.Now + " : " + text + "\r\n");
         }
 
         private void WriterCallLog(int type, string text)
         {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
             string otype = type == 0 ? "叫号" : type == 1 ? "重呼" : type == 2 ? "评价" : type == 3 ? "暂停" : type == 4 ? "弃号" : type == 5 ? "转移" : type == 6 ? "挂起" : "回呼";
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Record.txt", DateTime.Now + " : 【" + otype + "】" + text + "\r\n");
             oBll.Insert(new TOprateLogModel()
@@ -806,6 +1180,13 @@ namespace CallSystem
             });
         }
 
+        private void WriterTimeLog(string info)
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Time.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + info + "\r\n");
+        }
 
     }
 
@@ -814,11 +1195,11 @@ namespace CallSystem
         /// <summary>
         /// 默认初始
         /// </summary>
-        Defalt,
+        Defalt = 0,
         /// <summary>
         /// 呼叫
         /// </summary>
-        Call,
+        Call = 1,
         /// <summary>
         /// 转移
         /// </summary>
@@ -826,11 +1207,30 @@ namespace CallSystem
         /// <summary>
         /// 已评价
         /// </summary>
-        Evaluate,
+        Evaluate = 2,
         /// <summary>
         /// 暂停服务
         /// </summary>
-        PauseService
+        PauseService = 3
 
+    }
+
+    public enum OType
+    {
+        Call,
+        ReCall,
+        Evaluate,
+        GiveUp,
+        Pause,
+        Transfer,
+        Hang,
+        CallBack,
+        SaveEvaluate
+    }
+    public class Oprate
+    {
+        public OType Type { get; set; }
+        public int Adress { get; set; }
+        public int Value { get; set; }
     }
 }

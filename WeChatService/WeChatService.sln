@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeChatService", "WeChatService\WeChatService.csproj", "{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{41B0254D-36F7-4399-AA9C-07F36E09531B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{40E0090E-E9F8-48FC-BA17-F9AFDD4C0E65}.Release|x86.ActiveCfg = Release|Any CPU
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Debug|x86.ActiveCfg = Debug|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Debug|x86.Build.0 = Debug|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Release|Any CPU.ActiveCfg = Release|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Release|x86.ActiveCfg = Release|x86
+		{41B0254D-36F7-4399-AA9C-07F36E09531B}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

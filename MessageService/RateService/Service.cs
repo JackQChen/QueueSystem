@@ -114,9 +114,23 @@ namespace RateService
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;
+                    case "getunitlist":
+                        {
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = process.RS_GetUnitList() };
+                            this.SendWSMessage(connId, rData.ToResultData());
+                        }
+                        break;
                     case "getwindowlist":
                         {
-                            var rData = new ResponseData { code = "0", request = requestData.method, result = process.GetWindowList() };
+                            var param = requestData.param as Dictionary<string, object>;
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.process.RS_GetWindowListByUnitSeq(param["unitSeq"].ToString()) };
+                            this.SendWSMessage(connId, rData.ToResultData());
+                        }
+                        break;
+                    case "getuserlist":
+                        {
+                            var param = requestData.param as Dictionary<string, object>;
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.process.RS_GetUserListByUnitSeq(param["unitSeq"].ToString()) };
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;

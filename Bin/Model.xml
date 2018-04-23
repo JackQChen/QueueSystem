@@ -161,7 +161,7 @@
         </member>
         <member name="P:Model.TEvaluateModel.type">
             <summary>
-            类型（0：取票机评价 1：评价器评价）
+            类型（0：取票机评价 1：评价器评价(安卓) 2：评价器评价(四键)）
             </summary>
         </member>
         <member name="P:Model.TEvaluateModel.custCardId">
@@ -264,46 +264,6 @@
             编号
             </summary>
         </member>
-        <member name="T:Model.TWindowUserModel">
-            <summary>
-            窗口用户对应
-            </summary>
-        </member>
-        <member name="P:Model.TWindowUserModel.ID">
-            <summary>
-            ID
-            </summary> 
-        </member>
-        <member name="P:Model.TWindowUserModel.WindowID">
-            <summary>
-            窗口ID
-            </summary>
-        </member>
-        <member name="P:Model.TWindowUserModel.UserID">
-            <summary>
-            用户ID
-            </summary>
-        </member>
-        <member name="P:Model.TWindowUserModel.CreateDateTime">
-            <summary>
-            创建时间
-            </summary>
-        </member>
-        <member name="P:Model.TWindowUserModel.sysFlag">
-            <summary>
-            同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
-            </summary>
-        </member>
-        <member name="P:Model.TWindowUserModel.areaCode">
-            <summary>
-            区域编号
-            </summary>
-        </member>
-        <member name="P:Model.TWindowUserModel.areaId">
-            <summary>
-            编号
-            </summary>
-        </member>
         <member name="T:Model.TUnitModel">
             <summary>
             
@@ -342,6 +302,11 @@
         <member name="P:Model.TUnitModel.areaId">
             <summary>
             编号
+            </summary>
+        </member>
+        <member name="P:Model.TUnitModel.isInvestment">
+            <summary>
+            是否投资的部门
             </summary>
         </member>
         <member name="T:Model.TRegisterModel">
@@ -434,6 +399,41 @@
             编号
             </summary>
         </member>
+        <member name="P:Model.TCallStateModel.windowNo">
+            <summary>
+            窗口号
+            </summary>
+        </member>
+        <member name="P:Model.TCallStateModel.workState">
+            <summary>
+            窗口状态(0：默认 1：呼叫  2：已评价 3：暂停服务)
+            </summary>
+        </member>
+        <member name="P:Model.TCallStateModel.callId">
+            <summary>
+            当前已叫号ID
+            </summary>
+        </member>
+        <member name="P:Model.TCallStateModel.hangId">
+            <summary>
+            当前挂起ID
+            </summary>
+        </member>
+        <member name="P:Model.TCallStateModel.pauseState">
+            <summary>
+            暂停前的状态
+            </summary>
+        </member>
+        <member name="P:Model.TCallStateModel.ticketNo">
+            <summary>
+            当前票号
+            </summary>
+        </member>
+        <member name="P:Model.TCallStateModel.reCallTimes">
+            <summary>
+            '重呼次数'
+            </summary>
+        </member>
         <member name="T:Model.TBusinessModel">
             <summary>
             业务操作
@@ -502,6 +502,11 @@
         <member name="P:Model.TBusinessModel.areaId">
             <summary>
             编号
+            </summary>
+        </member>
+        <member name="P:Model.TBusinessModel.isInvestment">
+            <summary>
+            是否投资的业务
             </summary>
         </member>
         <member name="P:Model.TWindowBusinessModel.ID">
@@ -627,6 +632,11 @@
         <member name="P:Model.TQueueModel.appType">
             <summary>
             预约类型（0：后预约 1：先预约）
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.type">
+            <summary>
+            类型 0：预约 1： 申办
             </summary>
         </member>
         <member name="P:Model.TQueueModel.reserveStartTime">
@@ -1002,6 +1012,11 @@
         <member name="P:Model.TUserModel.Name">
             <summary>
             姓名
+            </summary>
+        </member>
+        <member name="P:Model.TUserModel.unitSeq">
+            <summary>
+            所属单位
             </summary>
         </member>
         <member name="P:Model.TUserModel.Sex">

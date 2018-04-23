@@ -85,5 +85,71 @@ namespace DAL
                 .OrderBy(k => k.ID)
                 .ToList();
         }
+
+        //RateService相关
+
+        public object RS_GetUnitList()
+        {
+            return this.db.Query<TUnitModel>()
+                .OrderBy(k => k.unitSeq)
+                .Select(s => new
+                {
+                    s.unitSeq,
+                    s.unitName
+                })
+                .ToList();
+        }
+
+        public object RS_GetWindowListByUnitSeq(string unitSeq)
+        {
+            return this.db.Query<TWindowBusinessModel>()
+                .Where(p => p.unitSeq == unitSeq)
+                .GroupBy(k => k.WindowID)
+                .Select(s => s.WindowID)
+                .InnerJoin<TWindowModel>((m, w) => m == w.ID)
+                .Select((m, w) => new
+                {
+                    WindowNumber = w.Number,
+                    WindowName = w.Name
+                })
+                .OrderBy(k => k.WindowNumber)
+                .ToList();
+        }
+
+        public object RS_GetUserListByUnitSeq(string unitSeq)
+        {
+            return this.db.Query<TWindowBusinessModel>()
+                .Where(p => p.unitSeq == unitSeq)
+                .GroupBy(k => k.unitSeq)
+                .Select(s => s)
+                .InnerJoin<TUserModel>((m, u) => m.unitSeq == u.unitSeq)
+                .Select((m, u) => new
+                {
+                    UserCode = u.Code,
+                    UserName = u.Name
+                })
+                .OrderBy(k => k.UserCode)
+                .ToList();
+        }
+
+        public string RS_GetUserPhoto(string userCode)
+        {
+            var user = this.db.Query<TUserModel>()
+                .Where(p => p.Code == userCode)
+                .FirstOrDefault();
+            if (user != null)
+                if (user.Photo != null)
+                    return Convert.ToBase64String(user.Photo);
+            return "";
+        }
+
+        public object RS_GetModel(string winNum, string userCode)
+        {
+            return this.db.Query<TWindowBusinessModel>()
+                  .InnerJoin<TWindowModel>((m, w) => m.WindowID == w.ID)
+                  .InnerJoin<TUserModel>((m, w, u) => m.unitSeq == u.unitSeq)
+                  .Where((m, w, u) => w.Number == winNum && u.Code == userCode)
+                  .Select((m, w, u) => u).FirstOrDefault();
+        }
     }
 }

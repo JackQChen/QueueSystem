@@ -71,11 +71,15 @@ namespace BLL
             return new TWindowDAL().GetGridData();
         }
 
-        public object GetGridDetailData(int winId)
+        public object GetGridBusiData(int winId)
         {
-            return this.dal.GetGridDetailData(winId);
+            return this.dal.GetGridBusiData(winId);
         }
 
+        public object GetGridUserData(int winId)
+        {
+            return this.dal.GetGridUserData(winId);
+        }
 
 
         public bool IsBasic

@@ -12,7 +12,6 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
     {
 
         TWindowBLL bll;
-        TWindowUserBLL winUserBll;
         TWindowBusinessBLL winBusiBll;
         TDictionaryBLL dicBll;
         TWindowAreaBLL areaBll;
@@ -23,7 +22,6 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public TWindowController()
         {
             this.bll = new TWindowBLL(this.AreaNo);
-            this.winUserBll = new TWindowUserBLL(this.AreaNo);
             this.winBusiBll = new TWindowBusinessBLL(this.AreaNo);
             this.dicBll = new TDictionaryBLL(this.AreaNo);
             this.areaBll = new TWindowAreaBLL(this.AreaNo);
@@ -53,8 +51,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         {
             var data = new
             {
-                busiData = this.winBusiBll.GetGridDetailData(winId),
-                userData = this.winUserBll.GetGridDetailData(winId)
+                busiData = this.winBusiBll.GetGridBusiData(winId),
+                userData = this.winBusiBll.GetGridUserData(winId)
             };
             return Content(JsonConvert.SerializeObject(data));
         }
@@ -142,74 +140,5 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             return Content("操作成功！");
         }
         #endregion
-
-        #region user
-        public ActionResult UserForm(int id)
-        {
-            var model = this.winUserBll.GetModel(id);
-            if (model == null)
-                model = new TWindowUserModel()
-                {
-                    ID = -1,
-                    WindowID = Convert.ToInt32(this.Request["winId"])
-                };
-            var winModel = this.bll.GetModel(model.WindowID);
-            this.ViewBag.WindowName = winModel == null ? "" : winModel.Name;
-            var userModel = this.userBll.GetModel(p => p.ID == model.UserID);
-            this.ViewBag.UserName = userModel == null ? "" : userModel.Name;
-            this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
-            this.ViewBag.UserList = JsonConvert.SerializeObject(this.userBll.GetModelList());
-            var unitSeq = userModel == null ? "" : userModel.unitSeq;
-            this.ViewBag.unitSeq = unitSeq;
-            var unitModel = this.unitBll.GetModel(p => p.unitSeq == unitSeq);
-            this.ViewBag.unitName = unitModel == null ? "" : unitModel.unitName;
-            this.ViewBag.unitList = JsonConvert.SerializeObject(unitBll.GetModelList());
-            return View("FormUser", model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SubmitUserForm(TWindowUserModel model, string unitSeq, string allUser)
-        {
-            if (bool.Parse(allUser))
-            {
-                var uList = this.userBll.GetModelList(p => p.unitSeq == unitSeq);
-                var mList = this.winUserBll.GetModelList(p => p.WindowID == model.WindowID);
-                uList.RemoveAll(m => mList.FindAll(p => p.UserID == m.ID).Count > 0);
-                foreach (var user in uList)
-                {
-                    model.ID = -1;
-                    model.UserID = user.ID;
-                    this.winUserBll.Insert(model);
-                }
-            }
-            else
-            {
-                if (model.ID == -1)
-                {
-                    if (this.winUserBll.GetModel(
-                        p => p.WindowID == model.WindowID
-                        && p.UserID == model.UserID) == null)
-                        this.winUserBll.Insert(model);
-                    else
-                        return Content("记录重复！");
-                }
-                else
-                    this.winUserBll.Update(model);
-            }
-            return Content("操作成功！");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteUserForm(int id)
-        {
-            this.winUserBll.Delete(this.winUserBll.GetModel(id));
-            this.winUserBll.ResetIndex();
-            return Content("操作成功！");
-        }
-        #endregion
-
-
     }
 }

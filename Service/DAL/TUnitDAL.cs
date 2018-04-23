@@ -137,7 +137,7 @@ namespace DAL
                         this.Delete(d);
                     this.db.Session.CommitTransaction();
                     arr = new ArrayList();
-                    arr.Add(uList);
+                    arr.Add(uList.OrderBy(o=>o.orderNum).ToList());
                     arr.Add(serchBlist);
                 });
                 return arr;

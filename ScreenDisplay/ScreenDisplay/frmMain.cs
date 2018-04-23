@@ -11,6 +11,7 @@ using Model;
 using BLL;
 using System.Runtime.InteropServices;
 using System.Configuration;
+using System.IO;
 namespace ScreenDisplay
 {
     public partial class frmMain : Form
@@ -112,8 +113,9 @@ namespace ScreenDisplay
                 vList = cBll.ScreenShowByArea(areaList).Take(rowCount).ToList();
                 ShowError = false;
             }
-            catch
+            catch (Exception ex)
             {
+                WriterLog("获取大屏显示数据异常，方法[ScreenShowByArea]，错误原因：" + ex.Message);
                 ShowError = (isShowError == 0 ? false : true);
             }
             int i = 0;
@@ -130,7 +132,15 @@ namespace ScreenDisplay
             foreach (var v in vList)
             {
                 var bam = baList.Where(b => b.busiSeq == v.busiSeq && b.unitSeq == v.unitSeq).FirstOrDefault();
-                var queue = qBll.GetModel(q => q.id == v.qId);
+                TQueueModel queue = null;
+                try
+                {
+                    queue = qBll.GetModel(q => q.id == v.qId);
+                }
+                catch (Exception ex)
+                {
+                    WriterLog("获取排队数据异常，方法[GetModel]，错误原因：" + ex.Message);
+                }
                 string strVip = "";
                 if (bam != null && bam.isGreenChannel == 1)
                 {
@@ -138,9 +148,13 @@ namespace ScreenDisplay
                 }
                 else
                 {
-                    if ((queue != null && queue.appType == 1 && queue.reserveStartTime <= v.handleTime && queue.reserveEndTime >= v.handleTime))
+                    if ((queue != null && queue.type == 0 && queue.appType == 1 && queue.reserveStartTime <= v.handleTime && queue.reserveEndTime >= v.handleTime))
                     {
                         strVip = "网上\r\n预约";
+                    }
+                    else if (queue != null && queue.type == 1)
+                    {
+                        strVip = "网上\r\n申办";
                     }
                 }
                 msInfo ms = new msInfo();
@@ -257,13 +271,20 @@ namespace ScreenDisplay
             bmp = new Bitmap(this.pictureBox1.Width, this.pictureBox1.Height);
             timer1.Interval = interval;
             timer2.Interval = refreshInterval * 1000;
-            areaStrList = areaList.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            wList = wBll.GetModelList(w => areaStrList.Contains(w.AreaName.ToString())).ToList();
-            var windowList = wList.Select(s => s.ID).ToList();
-            wbList = wbBll.GetModelList(w => windowList.Contains(w.WindowID)).ToList();
-            var busyList = wbList.Select(w => w.busiSeq).ToList();
-            var unitList = wbList.Select(w => w.unitSeq).ToList();
-            baList = baBll.GetModelList(b => busyList.Contains(b.busiSeq) && unitList.Contains(b.unitSeq)).ToList();
+            try
+            {
+                areaStrList = areaList.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                wList = wBll.GetModelList(w => areaStrList.Contains(w.AreaName.ToString())).ToList();
+                var windowList = wList.Select(s => s.ID).ToList();
+                wbList = wbBll.GetModelList(w => windowList.Contains(w.WindowID)).ToList();
+                var busyList = wbList.Select(w => w.busiSeq).ToList();
+                var unitList = wbList.Select(w => w.unitSeq).ToList();
+                baList = baBll.GetModelList(b => busyList.Contains(b.busiSeq) && unitList.Contains(b.unitSeq)).ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("获取基础数据错误，请检查网络，请重启重新获取基础数据！", "温馨提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         Bitmap bmp;
@@ -304,6 +325,18 @@ namespace ScreenDisplay
         private void pnMain_Click(object sender, EventArgs e)
         {
             ms_Click();
+        }
+
+        public void WriterLog(string logString)
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            string path = dir + "\\ScreenLog.txt";
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            using (StreamWriter sw = new StreamWriter(path, true))
+            {
+                sw.WriteLine(DateTime.Now.ToString() + " : " + logString);
+            }
         }
     }
 }

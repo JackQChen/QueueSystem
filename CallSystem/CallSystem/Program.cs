@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace CallSystem
 {
@@ -45,5 +46,40 @@ namespace CallSystem
             Exception ex = e.ExceptionObject as Exception;
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Exception.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " : " + ex.StackTrace.ToString());
         }
+    }
+
+    class test
+    {
+        class ParamInfo
+        {
+            string Type { get; set; }
+            string Info { get; set; }
+        }
+
+        Queue<ParamInfo> Queue = new Queue<ParamInfo>();
+
+        void Init()
+        {
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    while (Queue.Count > 0)
+                    {
+                        var x = Queue.Dequeue();
+                        //Process(Queue.Dequeue());
+                    }
+
+                }
+            }) { IsBackground = true }.Start();
+        }
+
+        void Invoke()
+        {
+            //construct
+            var p = new ParamInfo();
+            Queue.Enqueue(p);
+        }
+
     }
 }

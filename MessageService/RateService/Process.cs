@@ -8,7 +8,7 @@ namespace RateService
     public class Process
     {
         TCallBLL cBll = new TCallBLL();
-        TWindowUserBLL winUserBll = new TWindowUserBLL();
+        TWindowBLL winUserBll = new TWindowBLL();
         TEvaluateBLL eBll = new TEvaluateBLL();
         const string serviceKey = "D840F2A3-C421-4B3A-B385-12B25727F70F";
 
@@ -16,9 +16,19 @@ namespace RateService
         {
         }
 
-        public object GetWindowList()
+        public object RS_GetUnitList()
         {
-            return this.winUserBll.RS_GetDataList();
+            return this.winUserBll.RS_GetUnitList();
+        }
+
+        public object RS_GetWindowListByUnitSeq(string unitSeq)
+        {
+            return this.winUserBll.RS_GetWindowListByUnitSeq(unitSeq);
+        }
+
+        public object RS_GetUserListByUnitSeq(string unitSeq)
+        {
+            return this.winUserBll.RS_GetUserListByUnitSeq(unitSeq);
         }
 
         public object GetUserPhoto(string userCode)
@@ -33,6 +43,7 @@ namespace RateService
             else
                 return this.winUserBll.RS_GetModel(winNum, userCode) != null;
         }
+
         public bool RateSubmit(string WindowUser, string WindowNo, string RateId, string attitude, string quality, string efficiency, string honest)
         {
             try

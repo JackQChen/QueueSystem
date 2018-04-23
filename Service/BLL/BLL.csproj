@@ -41,11 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLLInterface.cs" />
+    <Compile Include="LockAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TAppointmentBLL.cs" />
     <Compile Include="TBusinessAttributeBLL.cs" />
     <Compile Include="TBusinessBLL.cs" />
     <Compile Include="TCallBLL.cs" />
+    <Compile Include="TCallstateBLL.cs" />
     <Compile Include="TDictionaryBLL.cs" />
     <Compile Include="TEvaluateBLL.cs" />
     <Compile Include="TGetCardBLL.cs" />
@@ -60,7 +62,6 @@
     <Compile Include="TWindowAreaBLL.cs" />
     <Compile Include="TWindowBLL.cs" />
     <Compile Include="TWindowBusinessBLL.cs" />
-    <Compile Include="TWindowUserBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">

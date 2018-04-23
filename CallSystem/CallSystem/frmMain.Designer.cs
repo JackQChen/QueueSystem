@@ -45,9 +45,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnEv = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnPause = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnPause = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -75,6 +75,7 @@
             this.btnSet.Name = "btnSet";
             this.btnSet.Size = new System.Drawing.Size(152, 22);
             this.btnSet.Text = "高级选项";
+            this.btnSet.Visible = false;
             this.btnSet.Click += new System.EventHandler(this.btnSet_Click);
             // 
             // btnConfig
@@ -207,6 +208,16 @@
             this.panel1.Size = new System.Drawing.Size(503, 72);
             this.panel1.TabIndex = 11;
             // 
+            // btnPause
+            // 
+            this.btnPause.Location = new System.Drawing.Point(394, 30);
+            this.btnPause.Name = "btnPause";
+            this.btnPause.Size = new System.Drawing.Size(88, 36);
+            this.btnPause.TabIndex = 11;
+            this.btnPause.Text = "暂停";
+            this.btnPause.UseVisualStyleBackColor = true;
+            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.listView1);
@@ -221,16 +232,6 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // btnPause
-            // 
-            this.btnPause.Location = new System.Drawing.Point(394, 30);
-            this.btnPause.Name = "btnPause";
-            this.btnPause.Size = new System.Drawing.Size(88, 36);
-            this.btnPause.TabIndex = 11;
-            this.btnPause.Text = "暂停";
-            this.btnPause.UseVisualStyleBackColor = true;
-            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
             // frmMain
             // 

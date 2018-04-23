@@ -36,6 +36,12 @@ namespace QueueClient
         /// </summary>
         WorkSelectBusy,
 
+        InvestmentReadCard,
+        InvestmentInputIdCard,
+        InvestmentAppointment,
+        InvestmentSelectUnit,
+        InvestmentSelectBusy,
+
         /// <summary>
         /// 领卡刷身份证
         /// </summary>

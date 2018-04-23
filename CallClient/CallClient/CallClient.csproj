@@ -42,6 +42,9 @@
     <Reference Include="BLL">
       <HintPath>..\..\Service\BLL\bin\Debug\BLL.dll</HintPath>
     </Reference>
+    <Reference Include="CustomSkin">
+      <HintPath>..\..\Lib\CustomSkin.dll</HintPath>
+    </Reference>
     <Reference Include="MessageClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\MessageClient.dll</HintPath>
@@ -91,6 +94,7 @@
     <Compile Include="OperateIni.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkState.cs" />
     <EmbeddedResource Include="frmConfig.resx">
       <DependentUpon>frmConfig.cs</DependentUpon>
     </EmbeddedResource>

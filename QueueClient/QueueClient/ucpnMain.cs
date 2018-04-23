@@ -21,6 +21,7 @@ namespace QueueClient
         public event Action Consult;
         public event Action Evaluate;
         public event Action UserGuide;
+        public event Action Investment;
         private void pbWork_MouseDown(object sender, MouseEventArgs e)
         {
 
@@ -29,6 +30,12 @@ namespace QueueClient
         private void pbWork_MouseUp(object sender, MouseEventArgs e)
         {
 
+        }
+
+        private void pbInvestment_Click(object sender, EventArgs e)
+        {
+            if (Investment != null)
+                Investment();
         }
 
         private void pbWork_Click(object sender, EventArgs e)
@@ -86,8 +93,11 @@ namespace QueueClient
             {
                 e.Graphics.DrawString("办事指南", fontS, new SolidBrush(Color.White), 2, 67);
             }
+            else if (pic.Name == "pbInvestment")
+            {
+                fontS = new Font("黑体", 22, FontStyle.Bold);
+                e.Graphics.DrawString("投资项目服务专窗", fontS, new SolidBrush(Color.White), 70, 25);
+            }
         }
-
-       
     }
 }

@@ -73,6 +73,32 @@ namespace BLL
         }
 
 
+        //RateService相关
+        public object RS_GetUnitList()
+        {
+            return dal.RS_GetUnitList();
+        }
+
+        public object RS_GetWindowListByUnitSeq(string unitSeq)
+        {
+            return dal.RS_GetWindowListByUnitSeq(unitSeq);
+        }
+
+        public object RS_GetUserListByUnitSeq(string unitSeq)
+        {
+            return dal.RS_GetUserListByUnitSeq(unitSeq);
+        }
+
+        public string RS_GetUserPhoto(string userCode)
+        {
+            return dal.RS_GetUserPhoto(userCode);
+        }
+
+        public object RS_GetModel(string winNum, string userCode)
+        {
+            return dal.RS_GetModel(winNum, userCode);
+        }
+
         public bool IsBasic
         {
             get { return true; }

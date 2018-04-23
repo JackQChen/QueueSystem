@@ -237,6 +237,7 @@ namespace DAL
                           line.reserveSeq = app.reserveSeq;
                           line.reserveStartTime = app.reserveStartTime;
                           line.reserveEndTime = app.reserveEndTime;
+                          line.type = app.type;
                       }
                       line = this.Insert(line);
                       if (maxNo == null)

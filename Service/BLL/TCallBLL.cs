@@ -110,6 +110,15 @@ namespace BLL
             return new TCallDAL().GiveUpAll();
         }
 
+        /// <summary>
+        /// 按窗口全部弃号
+        /// </summary>
+        /// <returns></returns>
+        public List<TCallModel> GiveUpAll(List<TWindowBusinessModel> windowBusys)
+        {
+            return new TCallDAL().GiveUpAll(windowBusys);
+        }
+
         public bool Transfer(TCallModel call)
         {
             return new TCallDAL().Transfer(call);

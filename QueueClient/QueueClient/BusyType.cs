@@ -26,6 +26,10 @@ namespace QueueClient
         /// <summary>
         /// 咨询
         /// </summary>
-        Consult
+        Consult,
+        /// <summary>
+        /// 投资
+        /// </summary>
+        Investment,
     }
 }

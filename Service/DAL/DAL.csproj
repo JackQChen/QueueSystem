@@ -58,6 +58,7 @@
     <Compile Include="TBusinessAttributeDAL.cs" />
     <Compile Include="TBusinessDAL.cs" />
     <Compile Include="TCallDAL.cs" />
+    <Compile Include="TCallstateDAL.cs" />
     <Compile Include="TDictionaryDAL.cs" />
     <Compile Include="TEvaluateDAL.cs" />
     <Compile Include="TGetCardDAL.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="TWindowAreaDAL.cs" />
     <Compile Include="TWindowBusinessDAL.cs" />
     <Compile Include="TWindowDAL.cs" />
-    <Compile Include="TWindowUserDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

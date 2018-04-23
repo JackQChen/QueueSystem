@@ -340,6 +340,13 @@ namespace QueueClient.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap 招商引资 {
+            get {
+                object obj = ResourceManager.GetObject("招商引资", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap 按钮 {
             get {
                 object obj = ResourceManager.GetObject("按钮", resourceCulture);

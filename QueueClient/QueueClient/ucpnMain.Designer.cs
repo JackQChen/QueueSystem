@@ -34,12 +34,14 @@
             this.pbGetCard = new System.Windows.Forms.PictureBox();
             this.pbEvaluate = new System.Windows.Forms.PictureBox();
             this.pbConsult = new System.Windows.Forms.PictureBox();
+            this.pbInvestment = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbSelect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbWorkGuide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbWork)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGetCard)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbEvaluate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbConsult)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInvestment)).BeginInit();
             this.SuspendLayout();
             // 
             // pbSelect
@@ -125,11 +127,26 @@
             this.pbConsult.Click += new System.EventHandler(this.pbConsult_Click);
             this.pbConsult.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWork_Paint);
             // 
+            // pbInvestment
+            // 
+            this.pbInvestment.BackColor = System.Drawing.Color.Transparent;
+            this.pbInvestment.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbInvestment.Image = global::QueueClient.Properties.Resources.招商引资;
+            this.pbInvestment.Location = new System.Drawing.Point(143, 680);
+            this.pbInvestment.Name = "pbInvestment";
+            this.pbInvestment.Size = new System.Drawing.Size(339, 79);
+            this.pbInvestment.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbInvestment.TabIndex = 19;
+            this.pbInvestment.TabStop = false;
+            this.pbInvestment.Click += new System.EventHandler(this.pbInvestment_Click);
+            this.pbInvestment.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWork_Paint);
+            // 
             // ucpnMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.pbInvestment);
             this.Controls.Add(this.pbSelect);
             this.Controls.Add(this.pbWorkGuide);
             this.Controls.Add(this.pbWork);
@@ -144,6 +161,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbGetCard)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbEvaluate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbConsult)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInvestment)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -156,5 +174,6 @@
         private System.Windows.Forms.PictureBox pbConsult;
         private System.Windows.Forms.PictureBox pbWorkGuide;
         private System.Windows.Forms.PictureBox pbSelect;
+        private System.Windows.Forms.PictureBox pbInvestment;
     }
 }
