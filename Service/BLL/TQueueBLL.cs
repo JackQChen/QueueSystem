@@ -70,6 +70,10 @@ namespace BLL
         {
             return new TQueueDAL().QueueLine(selectBusy, selectUnit, ticketStart, idCard, name, app);
         }
+        public TQueueModel QueueLine(string unitSeq, string unitName, string busiSeq, string busiName, string ticketStart, string idCard, string name, TAppointmentModel app)
+        {
+            return new TQueueDAL().QueueLine(unitSeq, unitName, busiSeq, busiName, ticketStart, idCard, name, app);
+        }
         public List<TQueueModel> GetModelList(List<TWindowBusinessModel> wlBusy, int state)
         {
             return new TQueueDAL().GetModelList(wlBusy, state);

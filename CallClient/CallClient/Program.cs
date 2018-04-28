@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace CallClient
 {
@@ -14,31 +15,40 @@ namespace CallClient
         [STAThread]
         static void Main(string[] args)
         {
-            var updatePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUpdate.exe";
-            if (args.Length == 0)
+            bool createdNew;
+            Mutex instance = new Mutex(true, "CallClient", out createdNew);
+            if (createdNew)
             {
-                if (File.Exists(updatePath))
+                var updatePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUpdate.exe";
+                if (args.Length == 0)
                 {
-                    System.Diagnostics.Process.Start(updatePath, "CallClient.exe");
-                    return;
+                    if (File.Exists(updatePath))
+                    {
+                        System.Diagnostics.Process.Start(updatePath, "CallClient.exe");
+                        return;
+                    }
                 }
+                else
+                {
+                    var newUpdatePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUpdate.exe.tmp";
+                    if (File.Exists(newUpdatePath))
+                    {
+                        File.Delete(updatePath);
+                        File.Move(newUpdatePath, updatePath);
+                    }
+                }
+                string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+                Application.Run(new frmMain());
             }
             else
             {
-                var newUpdatePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUpdate.exe.tmp";
-                if (File.Exists(newUpdatePath))
-                {
-                    File.Delete(updatePath);
-                    File.Move(newUpdatePath, updatePath);
-                }
+                MessageBox.Show("程序已运行，不能重复启动！");
             }
-            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            Application.Run(new frmMain());
         }
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {

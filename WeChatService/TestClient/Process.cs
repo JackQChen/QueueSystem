@@ -60,12 +60,14 @@ namespace WeChatService
 
         int GetHead(byte[] bytes)
         {
+            Array.Reverse(bytes);
             return BitConverter.ToInt32(bytes, 0);
         }
 
         byte[] SetHead(byte[] bytes)
         {
             byte[] bHead = BitConverter.GetBytes(bytes.Length);
+            Array.Reverse(bHead);
             byte[] bRst = new byte[bytes.Length + 4];
             Array.Copy(bHead, 0, bRst, 0, bHead.Length);
             Array.Copy(bytes, 0, bRst, bHead.Length, bytes.Length);

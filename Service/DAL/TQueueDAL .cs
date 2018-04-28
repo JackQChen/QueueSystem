@@ -271,6 +271,79 @@ namespace DAL
             return qModel;
         }
 
+        /// <summary>
+        /// 排队 微信接口使用
+        /// </summary>
+        /// <param name="selectBusy"></param>
+        /// <param name="selectUnit"></param>
+        /// <param name="ticketStart"></param>
+        /// <param name="idCard"></param>
+        /// <param name="name"></param>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public TQueueModel QueueLine(string unitSeq, string unitName, string busiSeq, string busiName, string ticketStart, string idCard, string name, TAppointmentModel app)
+        {
+            TQueueModel qModel = null;
+            try
+            {
+                LockAction.Run(LockKey.Queue, () =>
+                {
+                    var maxNo = new TLineUpMaxNoDAL(this.db).GetModelList().Where(l => l.unitSeq == unitSeq && l.busiSeq == busiSeq).FirstOrDefault();
+                    int ticketNo = maxNo == null ? 1 : maxNo.lineDate.Date != DateTime.Now.Date ? 1 : maxNo.maxNo + 1;
+                    TQueueModel line = new TQueueModel();
+                    line.busTypeName = busiName;
+                    line.busTypeSeq = busiSeq;
+                    line.qNumber = ticketNo.ToString();
+                    line.state = 0;
+                    line.ticketNumber = ticketStart + ticketNo.ToString("000");
+                    line.ticketTime = DateTime.Now;
+                    line.unitName = unitName;
+                    line.unitSeq = unitSeq;
+                    line.vipLever = "";
+                    line.windowName = "";
+                    line.windowNumber = "";
+                    line.idCard = idCard;
+                    line.qNmae = name;
+                    line.sysFlag = 0;
+                    if (app != null)
+                    {
+                        line.appType = app.appType;
+                        line.reserveSeq = app.reserveSeq;
+                        line.reserveStartTime = app.reserveStartTime;
+                        line.reserveEndTime = app.reserveEndTime;
+                        line.type = app.type;
+                    }
+                    line = this.Insert(line);
+                    if (maxNo == null)
+                    {
+                        maxNo = new TLineUpMaxNoModel();
+                        maxNo.areaSeq = "";
+                        maxNo.busiSeq = busiSeq;
+                        maxNo.lineDate = DateTime.Now;
+                        maxNo.maxNo = 1;
+                        maxNo.unitSeq = unitSeq;
+                        maxNo.sysFlag = 0;
+                        new TLineUpMaxNoDAL(this.db).Insert(maxNo);
+                    }
+                    else
+                    {
+                        if (maxNo.lineDate.Date != DateTime.Now.Date)
+                            maxNo.maxNo = 1;
+                        else
+                            maxNo.maxNo = maxNo.maxNo + 1;
+                        maxNo.lineDate = DateTime.Now;
+                        maxNo.sysFlag = 1;
+                        new TLineUpMaxNoDAL(this.db).Update(maxNo);
+                    }
+                    qModel = line;
+                });
+            }
+            catch
+            {
+                return null;
+            }
+            return qModel;
+        }
 
         public bool IsCanQueue(string idCard, string busiSeq, string unitSeq)
         {

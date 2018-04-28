@@ -106,7 +106,6 @@ namespace CallClient
             ini.WriteString("Shortcutkey", "Fuction6", f6.Text.ToString());
             ini.WriteString("Shortcutkey", "Fuction7", f7.Text.ToString());
             ini.WriteString("Shortcutkey", "Fuction8", f8.Text.ToString());
-            //ini.WriteString("CallSet", "SerialPort", cmbPort.Text);
             MessageBox.Show("保存成功，重启系统生效！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -123,7 +122,6 @@ namespace CallClient
             f6.Text = ini.ReadString("Shortcutkey", "Fuction6");
             f7.Text = ini.ReadString("Shortcutkey", "Fuction7");
             f8.Text = ini.ReadString("Shortcutkey", "Fuction8");
-            //portName = ini.ReadString("CallSet", "SerialPort");
             //cmbPort.Text = portName;
             txtWindowName.Text = windowName;
             wList = wBll.GetModelList().Where(w => w.State == "1").ToList();

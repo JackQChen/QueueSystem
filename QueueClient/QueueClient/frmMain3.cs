@@ -45,7 +45,8 @@ namespace QueueClient
         string UnitTime = System.Configuration.ConfigurationManager.AppSettings["Unit"];
         string ReadcardTime = System.Configuration.ConfigurationManager.AppSettings["Readcard"];
         string CardTime = System.Configuration.ConfigurationManager.AppSettings["Card"];
-        string BidUrl = "";//申办
+        string BidUrl1 = "";//申办
+        string BidUrl2 = "";//申办
         string InvestmentUnit = "";//投资部门
         string InvestmentBusy = "";//投资业务
         #endregion
@@ -240,10 +241,12 @@ namespace QueueClient
         {
             SetConfigValue("NumberRestriction", "200,200");
             SetConfigValue("ClientName", "1号取票机");
-            //SetConfigValue("BidUrl", "http://120.78.202.223:8080/api/controlInfoList/query.v?custCardId=@paperCode&approveStatus=-2");
+            SetConfigValue("BidUrl1", "http://19.136.14.62/CommonService/api/control/controlInfoList/query.v?custCardId=@paperCode&approveStatus=-2");
+            SetConfigValue("BidUrl2", "http://19.136.14.62/CommonService/api/reserve/reserveTreeList/query.v?approveItem=@approveItem");
             SetConfigValue("InvestmentUnit", "http://19.136.14.62/CommonService/api/reserve/unitTreeList/query.v?pageRowNum=1000&areaCode=23");
             SetConfigValue("InvestmentBusy", "http://19.136.14.62/CommonService/api/reserve/reserveTypeList/query.v?pageRowNum=1000&unitSeq=@unitSeq");
-            //BidUrl = System.Configuration.ConfigurationManager.AppSettings["BidUrl"];
+            BidUrl1 = System.Configuration.ConfigurationManager.AppSettings["BidUrl1"];
+            BidUrl2 = System.Configuration.ConfigurationManager.AppSettings["BidUrl2"];
             ClientName = System.Configuration.ConfigurationManager.AppSettings["ClientName"];
             NumberRestriction = System.Configuration.ConfigurationManager.AppSettings["NumberRestriction"];
             TimeInterval = System.Configuration.ConfigurationManager.AppSettings["TimeInterval"];
@@ -895,7 +898,7 @@ namespace QueueClient
                 isGreen = "网上申办";
             Print(queue, area, windowStr, waitNo, "补打", isGreen);
         }
-       
+
         void gotoFirst()
         {
             pbReturn_Click(null, null);
@@ -1092,70 +1095,95 @@ namespace QueueClient
 
                 #region 申办
 
-                //var bidStr = BidUrl.Replace("@paperCode", idNo);
-                //var jlist = http.HttpGet(bidStr, "");
-                //var bids = script.DeserializeObject(jlist) as Dictionary<string, object>;
-                //if (bids != null)
-                //{
-                //    var status = bids["status"].ToString();
-                //    var dataQuery = bids["data"] as Dictionary<string, object>;
-                //    var dataArr = dataQuery["dataList"] as object[];
-                //    if (dataArr == null || dataArr.Count() == 0)
-                //    {
-                //    }
-                //    else
-                //    {
-                //        foreach (Dictionary<string, object> data in dataArr)
-                //        {
-                //            #region
-                //            var busiCode = data["busiCode"] == null ? "" : data["busiCode"].ToString();
-                //            var reserveSeq = data["controlSeq"] == null ? "" : data["controlSeq"].ToString();
-                //            var busiName = data["busiName"] == null ? "" : data["busiName"].ToString();
-                //            var userName = data["userName"] == null ? "" : data["userName"].ToString();
-                //            var paperType = "";// data["paperType"] == null ? "" : data["paperType"].ToString();// 10 为身份证
-                //            var paperCode = idNo; //data["paperCode"] == null ? "" : data["paperCode"].ToString();
-                //            var mobilePhone = "";// data["mobilePhone"] == null ? "" : data["mobilePhone"].ToString();
-                //            var comName = data["custName"] == null ? "" : data["custName"].ToString();
-                //            var reserveDate = "1990-01-01";// data["reserveDate"] == null ? "1990-01-01" : data["reserveDate"].ToString();
-                //            var reserveStartTime = "00:00";// data["reserveStartTime"] == null ? "00:00" : data["reserveStartTime"].ToString();
-                //            var reserveEndTime = "00:00";// data["reserveEndTime"] == null ? "00:00" : data["reserveEndTime"].ToString();
-                //            var approveSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
-                //            var approveName = data["approveName"] == null ? "" : data["approveName"].ToString();
-                //            var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
-                //            var unitCode = data["unitSeq"] == null ? "" : data["unitSeq"].ToString();
-                //            TAppointmentModel app = new TAppointmentModel();
-                //            app.appType = 0;
-                //            app.busiCode = busiCode;
-                //            app.type = 1;
-                //            app.reserveSeq = reserveSeq;
-                //            app.approveName = approveName;
-                //            app.approveSeq = approveSeq;
-                //            app.busiName = busiName;
-                //            app.comName = comName;
-                //            app.custCardId = paperCode;
-                //            app.mobilePhone = mobilePhone;
-                //            app.paperCode = paperCode;
-                //            app.paperType = paperType;
-                //            app.reserveDate = Convert.ToDateTime(reserveDate);
-                //            app.reserveEndTime = Convert.ToDateTime(reserveDate + " " + reserveEndTime + ":00");
-                //            app.reserveStartTime = Convert.ToDateTime(reserveDate + " " + reserveStartTime + ":00");
-                //            app.unitCode = unitCode;
-                //            app.unitName = unitName;
-                //            app.userName = userName;
-                //            app.isCheck = false;
-                //            app.sysFlag = 0;
-                //            appList.Add(app);
-                //            #endregion
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    //frmMsg frm = new frmMsg();//提示
-                //    //frm.msgInfo = "获取用户申办接口错误！";
-                //    //frm.ShowDialog();
-                //    //return;
-                //}
+                var bidStr = BidUrl1.Replace("@paperCode", idNo);
+                var jlist = http.HttpGet(bidStr, "");
+                var bids = script.DeserializeObject(jlist) as Dictionary<string, object>;
+                if (bids != null)
+                {
+                    var status = bids["status"].ToString();
+                    var dataQuery = bids["data"] as Dictionary<string, object>;
+                    var dataArr = dataQuery["dataList"] as object[];
+                    if (dataArr == null || dataArr.Count() == 0)
+                    {
+                    }
+                    else
+                    {
+                        foreach (Dictionary<string, object> data in dataArr)
+                        {
+                            #region
+
+                            var approveSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
+                            var approveName = data["approveName"] == null ? "" : data["approveName"].ToString();
+                            var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
+                            var unitCode = data["unitSeq"] == null ? "" : data["unitSeq"].ToString();
+                            var reserveSeq = data["controlSeq"] == null ? "" : data["controlSeq"].ToString();
+                            var comName = data["custName"] == null ? "" : data["custName"].ToString();
+                            var paperCode = idNo;
+                            var paperType = "";
+                            var mobilePhone = "";
+                            var reserveDate = "1990-01-01";
+                            var reserveStartTime = "00:00";
+                            var reserveEndTime = "00:00";
+                            var userName = "";
+                            var busiCode = "";
+                            var busiName = "";
+                            if (approveSeq != "")
+                            {
+                                #region  根据事项名称获取业务类型 默认取第一条
+                                var bid2 = BidUrl2.Replace("@approveItem", approveSeq);
+                                var blist = http.HttpGet(bid2, "");
+                                var bds = script.DeserializeObject(blist) as Dictionary<string, object>;
+                                if (bds != null)
+                                {
+                                    var dQuery = bds["data"] as Dictionary<string, object>;
+                                    var dArr = dQuery["dataList"] as object[];
+                                    if (dArr == null || dArr.Count() == 0)
+                                    {
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        foreach (Dictionary<string, object> dt in dArr)
+                                        {
+                                            busiCode = dt["businessCode"] == null ? "" : dt["businessCode"].ToString();
+                                            busiName = dt["businessName"] == null ? "" : dt["businessName"].ToString();
+                                            if (busiCode != "" && busiName != "")
+                                                break;
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            if (busiCode != "" && busiName != "")
+                            {
+                                TAppointmentModel app = new TAppointmentModel();
+                                app.type = 1;
+                                app.appType = 0;
+                                app.busiCode = busiCode;
+                                app.reserveSeq = reserveSeq;
+                                app.approveName = approveName;
+                                app.approveSeq = approveSeq;
+                                app.busiName = busiName;
+                                app.comName = comName;
+                                app.custCardId = paperCode;
+                                app.mobilePhone = mobilePhone;
+                                app.paperCode = paperCode;
+                                app.paperType = paperType;
+                                app.reserveDate = Convert.ToDateTime(reserveDate);
+                                app.reserveEndTime = Convert.ToDateTime(reserveDate + " " + reserveEndTime + ":00");
+                                app.reserveStartTime = Convert.ToDateTime(reserveDate + " " + reserveStartTime + ":00");
+                                app.unitCode = unitCode;
+                                app.unitName = unitName;
+                                app.userName = userName;
+                                app.isCheck = false;
+                                app.sysFlag = 0;
+                                appList.Add(app);
+                            }
+
+                            #endregion
+                        }
+                    }
+                }
 
                 #endregion
 
@@ -1288,7 +1316,7 @@ namespace QueueClient
                     else
                     {
                         Dictionary<string, object> data = dataArr.FirstOrDefault() as Dictionary<string, object>;
-                        var busiCode = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
+                        var busiSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
                         var busiName = data["approveName"] == null ? "" : data["approveName"].ToString();
                         var unitSeq = data["unitSeq"] == null ? "" : data["unitSeq"].ToString();
                         var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
@@ -1297,14 +1325,14 @@ namespace QueueClient
                         selectUnit = uList.Where(u => u.unitSeq == unitSeq).FirstOrDefault();
                         if (selectUnit != null)
                         {
-                            selectBusy = bList.Where(b => b.busiSeq == busiCode).FirstOrDefault();
+                            selectBusy = bList.Where(b => b.busiSeq == busiSeq).FirstOrDefault();
                             if (selectBusy != null)
                             {
                                 TGetCardModel model = new TGetCardModel();
                                 model.controlSeq = controlSeq;
                                 model.unitName = unitName;
                                 model.unitSeq = unitSeq;
-                                model.busTypeSeq = busiCode;
+                                model.busTypeSeq = busiSeq;
                                 model.busTypeName = busiName;
                                 model.custCardId = idNo;
                                 model.outCardTime = DateTime.Now;
@@ -2115,6 +2143,7 @@ namespace QueueClient
             }
         }
 
+        #region 暂时不用
         SolidBrush mBrush = new SolidBrush(Color.White);
         private void pbReturnMain_Paint(object sender, PaintEventArgs e)
         {
@@ -2157,6 +2186,7 @@ namespace QueueClient
                 pb.Image = Properties.Resources.返回按钮;
             }
         }
+        #endregion
 
         #endregion
     }

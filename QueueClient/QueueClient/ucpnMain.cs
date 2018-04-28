@@ -70,34 +70,34 @@ namespace QueueClient
 
         private void pbWork_Paint(object sender, PaintEventArgs e)
         {
-            PictureBox pic = sender as PictureBox;
-            Font fontMain = new Font("黑体", 60, FontStyle.Bold);
-            Font fontS = new Font("黑体", 16, FontStyle.Bold);
-            if (pic.Name == "pbWork")
-            {
-                e.Graphics.DrawString("办事", fontMain, new SolidBrush(Color.White), 210, 60);
-            }
-            else if (pic.Name == "pbGetCard")
-            {
-                e.Graphics.DrawString("领证", fontMain, new SolidBrush(Color.White), 210, 60);
-            }
-            else if (pic.Name == "pbConsult")
-            {
-                e.Graphics.DrawString("咨询", fontMain, new SolidBrush(Color.White), 210, 60);
-            }
-            else if (pic.Name == "pbEvaluate")
-            {
-                e.Graphics.DrawString("评价", fontS, new SolidBrush(Color.White), 20, 67);
-            }
-            else if (pic.Name == "pbWorkGuide")
-            {
-                e.Graphics.DrawString("办事指南", fontS, new SolidBrush(Color.White), 2, 67);
-            }
-            else if (pic.Name == "pbInvestment")
-            {
-                fontS = new Font("黑体", 22, FontStyle.Bold);
-                e.Graphics.DrawString("投资项目服务专窗", fontS, new SolidBrush(Color.White), 70, 25);
-            }
+            //PictureBox pic = sender as PictureBox;
+            //Font fontMain = new Font("黑体", 60, FontStyle.Bold);
+            //Font fontS = new Font("黑体", 16, FontStyle.Bold);
+            //if (pic.Name == "pbWork")
+            //{
+            //    e.Graphics.DrawString("办事", fontMain, new SolidBrush(Color.White), 210, 60);
+            //}
+            //else if (pic.Name == "pbGetCard")
+            //{
+            //    e.Graphics.DrawString("领证", fontMain, new SolidBrush(Color.White), 210, 60);
+            //}
+            //else if (pic.Name == "pbConsult")
+            //{
+            //    e.Graphics.DrawString("咨询", fontMain, new SolidBrush(Color.White), 210, 60);
+            //}
+            //else if (pic.Name == "pbEvaluate")
+            //{
+            //    e.Graphics.DrawString("评价", fontS, new SolidBrush(Color.White), 20, 67);
+            //}
+            //else if (pic.Name == "pbWorkGuide")
+            //{
+            //    e.Graphics.DrawString("办事指南", fontS, new SolidBrush(Color.White), 2, 67);
+            //}
+            //else if (pic.Name == "pbInvestment")
+            //{
+            //    fontS = new Font("黑体", 22, FontStyle.Bold);
+            //    e.Graphics.DrawString("投资项目服务专窗", fontS, new SolidBrush(Color.White), 70, 25);
+            //}
         }
     }
 }

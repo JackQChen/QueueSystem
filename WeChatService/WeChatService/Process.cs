@@ -52,7 +52,9 @@ namespace WeChatService
                     if (msg.Position == msg.Data.Length)
                     {
                         var obj = FormatterBytesObject(msg.Data);
-                        if (!msg.Access)
+                        if (msg.Access)
+                            this.OnReceiveMessage(connId, obj);
+                        else
                         {
                             var dic = obj as Dictionary<string, object>;
                             if (dic != null)
@@ -61,13 +63,11 @@ namespace WeChatService
                                     msg.Access = true;
                                     this.service.SendMessage(connId, StateList.State[StateInfo.Authorized]);
                                 }
-                        }
-                        if (msg.Access)
-                            this.OnReceiveMessage(connId, obj);
-                        else
-                        {
-                            this.service.SendMessage(connId, StateList.State[StateInfo.Unauthorized]);
-                            this.service.Disconnect(connId);
+                            if (!msg.Access)
+                            {
+                                this.service.SendMessage(connId, StateList.State[StateInfo.Unauthorized]);
+                                this.service.Disconnect(connId);
+                            }
                         }
                         msg.Data = null;
                         msg.Position = 0;
@@ -79,12 +79,14 @@ namespace WeChatService
 
         int GetHead(byte[] bytes)
         {
+            Array.Reverse(bytes);
             return BitConverter.ToInt32(bytes, 0);
         }
 
         byte[] SetHead(byte[] bytes)
         {
             byte[] bHead = BitConverter.GetBytes(bytes.Length);
+            Array.Reverse(bHead);
             byte[] bRst = new byte[bytes.Length + 4];
             Array.Copy(bHead, 0, bRst, 0, bHead.Length);
             Array.Copy(bytes, 0, bRst, bHead.Length, bytes.Length);

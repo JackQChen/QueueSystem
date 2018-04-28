@@ -58,6 +58,8 @@ namespace CallSystem
         object objLock = new object();
         TCallStateBLL csBll = new TCallStateBLL();
         Thread thread;
+        bool isBool = true;
+        object Obj = new object();
         public frmMain()
         {
             InitializeComponent();
@@ -137,11 +139,12 @@ namespace CallSystem
             serialPort.Parity = Parity.None;
             serialPort.DataBits = 8;
             serialPort.StopBits = StopBits.One;
+            serialPort.ReadBufferSize = 40960;
+            serialPort.ReceivedBytesThreshold = 1;
             serialPort.ErrorReceived += new SerialErrorReceivedEventHandler(serialPort_ErrorReceived);
             //serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
-            serialPort.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
-            serialPort.ReadBufferSize = 9600;
-            serialPort.ReceivedBytesThreshold = 1;
+            //serialPort.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
+
             try
             {
                 serialPort.Open();
@@ -172,6 +175,210 @@ namespace CallSystem
             {
                 this.messageIndicator1.SetState(StateType.Error, "未连接");
             };
+            new Thread(() =>
+            {
+                while (isBool)
+                {
+                    try
+                    {
+                        WriterSerialPortLog("1.Start Read...");
+                        byte temp = (byte)serialPort.ReadByte();
+                        if (temp == Head[0])
+                        {
+                            byte temp2 = (byte)serialPort.ReadByte();
+                            if (temp2 == Head[1])
+                            {
+                                #region 数据接收
+                                WriterSerialPortLog("2.Enter Package...");
+                                var length = (byte)serialPort.ReadByte();//数据长度
+                                var length2 = (byte)serialPort.ReadByte();//数据长度
+                                var fixedvalue = (byte)serialPort.ReadByte();//固定值 0x68
+                                var adress = (byte)serialPort.ReadByte();//通讯地址
+                                var funccode = (byte)serialPort.ReadByte();//功能码
+                                WriterSerialPortLog(string.Format("3.Received package code [adress:{0}][funccode:{1}].", adress, funccode));
+                                var xvalue = 0;//评价器值
+                                int index = 0;
+                                if (length <= 2)
+                                {
+                                    WriterLog("有呼叫器【" + adress + "】协议出错，发送过来的数据长度小于等于2【" + length + "】！本次操作取消！");
+                                    return;
+                                }
+                                var data = new byte[length - 2];//发送的 数据内容
+                                while (index < length - 2)
+                                {
+                                    data[index] = (byte)serialPort.ReadByte();
+                                    index++;
+                                }
+                                var check = (byte)serialPort.ReadByte();//校验和
+                                var end = (byte)serialPort.ReadByte();//结束码 0x16
+
+                                #endregion
+
+                                #region 发送响应指令
+                                var send = new byte[9 + data.Length];
+                                send[0] = temp;
+                                send[1] = temp2;
+                                send[2] = length;
+                                send[3] = length2;
+                                send[4] = fixedvalue;
+                                send[5] = adress;
+                                if (funccode != 0x11)
+                                {
+                                    send[6] = funccode;// funccode;
+                                    int startIndex = 7;
+                                    foreach (byte b in data)
+                                    {
+                                        send[startIndex] = b;
+                                        startIndex++;
+                                    }
+                                    send[7 + data.Length] = check;
+                                    send[8 + data.Length] = end;
+                                }
+                                else
+                                {
+                                    send[6] = 0x01;
+                                    send[7] = data[0];
+                                    xvalue = data[0];
+                                    send[8] = (byte)(check - 0x10);
+                                    send[9] = end;
+                                }
+                                SendOrder(send);
+
+                                string sendOrder = "";
+                                foreach (var f in send.ToList())
+                                {
+                                    sendOrder += (" " + f.ToString("X"));
+                                }
+                                WriterSerialPortLog(string.Format("4.Send Response Order[{0}]", sendOrder.Length > 0 ? sendOrder.Substring(1) : ""));
+                                #endregion
+
+                                #region 功能
+
+                                if (funccode != 0x11)
+                                {
+                                    #region  功能操作
+                                    //判断操作类型，进行对应的操作
+                                    if (data[data.Length - 1] == 0x0C)
+                                    {
+                                        lock (objLock)
+                                        {
+                                            Oprate opr = new Oprate() { Adress = adress, Type = OType.Call };
+                                            QueueList.Enqueue(opr);
+                                        }
+                                        //CallNo(adress);//呼叫
+                                    }
+                                    else if (data[data.Length - 1] == 0x0D)
+                                    {
+                                        lock (objLock)
+                                        {
+                                            Oprate opr = new Oprate() { Adress = adress, Type = OType.ReCall };
+                                            QueueList.Enqueue(opr);
+                                        }
+                                        //ReCallNo(adress); //重呼
+                                    }
+                                    else if (data[data.Length - 1] == 0x0B)
+                                    {
+                                        lock (objLock)
+                                        {
+                                            Oprate opr = new Oprate() { Adress = adress, Type = OType.Evaluate };
+                                            QueueList.Enqueue(opr);
+                                        }
+                                        //EvaluateService(adress); //评价
+                                    }
+                                    else if (data[data.Length - 1] == 0x0E)
+                                    {
+                                        //取消 * 暂定为弃号键 ***该功能已不用。
+                                    }
+                                    else if (data[data.Length - 1] == 0x0F)
+                                    {
+                                        if (data.Length == 2)
+                                        {
+                                            if (data[data.Length - 2] == 0x06)
+                                            {
+                                                lock (objLock)
+                                                {
+                                                    Oprate opr = new Oprate() { Adress = adress, Type = OType.GiveUp };
+                                                    QueueList.Enqueue(opr);
+                                                }
+                                                //GiveUpNo(adress);//6+确认为弃号
+                                            }
+                                            else if (data[data.Length - 2] == 0x00)
+                                            {
+                                                //0+确认为挂起
+                                                lock (objLock)
+                                                {
+                                                    Oprate opr = new Oprate() { Adress = adress, Type = OType.Hang };
+                                                    QueueList.Enqueue(opr);
+                                                }
+                                                //Hang(adress);
+                                            }
+                                            else if (data[data.Length - 2] == 0x03)
+                                            {
+                                                //3+确认为回呼
+                                                lock (objLock)
+                                                {
+                                                    Oprate opr = new Oprate() { Adress = adress, Type = OType.CallBack };
+                                                    QueueList.Enqueue(opr);
+                                                }
+                                                //CallBack(adress);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            WriterLog("发送确定键，但是指令未用，本次操作自动忽略！");
+                                            return;
+                                        }
+                                    }
+                                    else if (data[data.Length - 1] == 0x11)
+                                    {
+                                        //一米 ******** 暂无处理
+                                    }
+                                    else if (data[data.Length - 1] == 0x12)
+                                    {
+                                        //等候  暂停功能
+                                        lock (objLock)
+                                        {
+                                            Oprate opr = new Oprate() { Adress = adress, Type = OType.Pause };
+                                            QueueList.Enqueue(opr);
+                                        }
+                                        //Pause(adress);
+                                    }
+                                    else if (data[data.Length - 1] == 0x13)
+                                    {
+                                        //转移
+                                        lock (objLock)
+                                        {
+                                            Oprate opr = new Oprate() { Adress = adress, Type = OType.Transfer };
+                                            QueueList.Enqueue(opr);
+                                        }
+                                        //Transfer(adress);
+                                    }
+
+                                    #endregion
+                                }
+                                else
+                                {
+                                    #region  评价器接收数据
+                                    lock (objLock)
+                                    {
+                                        Oprate opr = new Oprate() { Adress = adress, Type = OType.SaveEvaluate, Value = xvalue };
+                                        QueueList.Enqueue(opr);
+                                    }
+                                    //SaveEvaluate(adress, xvalue);
+                                    #endregion
+                                }
+                                #endregion
+
+                                WriterSerialPortLog("5.End Received...");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        WriterLog("串口接受数据异常：" + ex.Message);
+                    }
+                }
+            }) { IsBackground = true }.Start();
             thread = new Thread(new ThreadStart(Process));
             thread.IsBackground = true;
             thread.Start();
@@ -237,10 +444,10 @@ namespace CallSystem
                         default: break;
                     }
                     TimeSpan ts = DateTime.Now - start;
-                    WriterTimeLog(string.Format("地址【{3}】执行操作【{0}】共耗时{1}分{2}秒。", opr.Type.ToString(), ts.Minutes, ts.Seconds,opr.Adress));
-                    if (QueueList.Count > 10)
+                    WriterTimeLog(string.Format("地址【{3}】执行操作【{0}】共耗时{1}分{2}秒{4}毫。", opr.Type.ToString(), ts.Minutes, ts.Seconds, opr.Adress, ts.Milliseconds), opr.Adress);
+                    if (QueueList.Count > 5)
                     {
-                        WriterTimeLog("并发操作已超过10条，当前并发列表还有【" + QueueList.Count + "】条。");
+                        WriterTimeLog("并发操作已超过5条，当前并发列表还有【" + QueueList.Count + "】条。", opr.Adress);
                     }
                 }
                 Thread.Sleep(1000);
@@ -262,6 +469,7 @@ namespace CallSystem
         }
         void sp_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            WriterSerialPortLog("1.Start Read...");
             byte temp = (byte)serialPort.ReadByte();
             if (temp == Head[0])
             {
@@ -269,11 +477,13 @@ namespace CallSystem
                 if (temp2 == Head[1])
                 {
                     #region 数据接收
+                    WriterSerialPortLog("2.Enter Package...");
                     var length = (byte)serialPort.ReadByte();//数据长度
                     var length2 = (byte)serialPort.ReadByte();//数据长度
                     var fixedvalue = (byte)serialPort.ReadByte();//固定值 0x68
                     var adress = (byte)serialPort.ReadByte();//通讯地址
                     var funccode = (byte)serialPort.ReadByte();//功能码
+                    WriterSerialPortLog(string.Format("3.Received package code [adress:{0}][funccode:{1}].", adress, funccode));
                     var xvalue = 0;//评价器值
                     int index = 0;
                     if (length <= 2)
@@ -281,7 +491,7 @@ namespace CallSystem
                         WriterLog("有呼叫器【" + adress + "】协议出错，发送过来的数据长度小于等于2【" + length + "】！本次操作取消！");
                         return;
                     }
-                    var data = new byte[length - 2];//发送的数据内容
+                    var data = new byte[length - 2];//发送的 数据内容
                     while (index < length - 2)
                     {
                         data[index] = (byte)serialPort.ReadByte();
@@ -322,6 +532,12 @@ namespace CallSystem
                     }
                     SendOrder(send);
 
+                    string sendOrder = "";
+                    foreach (var f in send.ToList())
+                    {
+                        sendOrder += (" " + f.ToString("X"));
+                    }
+                    WriterSerialPortLog(string.Format("4.Send Response Order[{0}]", sendOrder.Length > 0 ? sendOrder.Substring(1) : ""));
                     #endregion
 
                     if (funccode != 0x11)
@@ -437,6 +653,7 @@ namespace CallSystem
                         //SaveEvaluate(adress, xvalue);
                         #endregion
                     }
+                    WriterSerialPortLog("5.End Received...");
                 }
             }
         }
@@ -459,6 +676,7 @@ namespace CallSystem
         }
         private void btnExit_Click(object sender, EventArgs e)
         {
+            isBool = false;
             try
             {
                 if (serialPort.IsOpen)
@@ -564,7 +782,7 @@ namespace CallSystem
                                 csBll.Update(csState[adress]);
                                 this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
                                 SendTicket(adress, model.ticketNumber.Substring(model.ticketNumber.Length - 3, 3));
-                                WriterCallLog(0, callString);
+                                WriterCallLog(0, callString, adress);
 
                             }
                         }
@@ -614,7 +832,7 @@ namespace CallSystem
                         client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = wNum[adress], AreaNo = wArea[wNum[adress]], IsLEDMessage = true, IsSoundMessage = true });
                         this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
                         SendTicket(adress, model.ticketNumber.Substring(model.ticketNumber.Length - 3, 3));
-                        WriterCallLog(1, callString);
+                        WriterCallLog(1, callString, adress);
                     }
                 });
             }
@@ -653,30 +871,24 @@ namespace CallSystem
                             model.sysFlag = 1;
                             cBll.Update(model);
                             csState[adress].workState = (int)WorkState.Evaluate;
-                            csState[adress].callId = 0;
+                            //csState[adress].callId = 0;
                             csState[adress].ticketNo = "";
                             csBll.Update(csState[adress]);
-                            if (EvaluatorType == 0)
+                            client.SendMessage(new RateMessage() //发送评价请求
                             {
-                                client.SendMessage(new RateMessage() //发送评价请求
-                                {
-                                    WindowNo = wNum[adress],
-                                    RateId = model.handleId,
-                                    ItemName = "项目名称",
-                                    WorkDate = DateTime.Now.ToShortDateString(),
-                                    Transactor = model.qNmae,
-                                    reserveSeq = model.reserveSeq
-                                }
-                                );
+                                WindowNo = wNum[adress],
+                                RateId = model.handleId,
+                                ItemName = "项目名称",
+                                WorkDate = DateTime.Now.ToShortDateString(),
+                                Transactor = model.qNmae,
+                                reserveSeq = model.reserveSeq
                             }
-                            else
-                            {
-                                //SendStartE(adress);
-                            }
+                            );
+                            //SendStartE(adress);
                             SendWait(adress);
                             string mess = " [" + model.ticketNumber + "]号已评价。";
                             this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : [" + model.ticketNumber + "]号已评价。"); }));
-                            WriterCallLog(2, mess);
+                            WriterCallLog(2, mess, adress);
                         }
                         catch (Exception ex)
                         {
@@ -731,7 +943,7 @@ namespace CallSystem
                             this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
                             this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
                             SendWait(adress);
-                            WriterCallLog(4, mess);
+                            WriterCallLog(4, mess, adress);
                         }
                         catch (Exception ex)
                         {
@@ -764,7 +976,7 @@ namespace CallSystem
                         csState[adress].pauseState = csState[adress].workState;
                         csState[adress].workState = (int)WorkState.PauseService;
                         csBll.Update(csState[adress]);
-                        WriterCallLog(0, mess);
+                        WriterCallLog(3, mess, adress);
                     }
                 });
             }
@@ -808,7 +1020,7 @@ namespace CallSystem
                         csState[adress].ticketNo = "";
                         csState[adress].reCallTimes = 0;
                         csBll.Update(csState[adress]);
-                        WriterCallLog(5, callString);
+                        WriterCallLog(5, callString, adress);
                     }
                 });
             }
@@ -853,7 +1065,7 @@ namespace CallSystem
                         csState[adress].ticketNo = "";
                         csState[adress].reCallTimes = 0;
                         csBll.Update(csState[adress]);
-                        WriterCallLog(6, callString);
+                        WriterCallLog(6, callString, adress);
                     }
                 });
             }
@@ -906,7 +1118,7 @@ namespace CallSystem
                         csState[adress].reCallTimes = 0;
                         csState[adress].hangId = 0;
                         csBll.Update(csState[adress]);
-                        WriterCallLog(7, callString);
+                        WriterCallLog(7, callString, adress);
                     }
                 });
 
@@ -939,6 +1151,7 @@ namespace CallSystem
             send[13] = (byte)((adress + 2 + tfir + tsec + tthr + 0x0A + 0x0A + 0x0A) % 256);
             send[14] = 0x16;
             SendOrder(send);
+            WriterSendLog(string.Format("地址【{0}】发送发票【{1}】已完成。", adress, ticket), adress);
         }
 
         private void SendWait(int adress)
@@ -966,6 +1179,7 @@ namespace CallSystem
             send[13] = (byte)((adress + 2 + wfir + wsec + wthr + 0x0A + 0x0A + 0x0A) % 256);
             send[14] = 0x16;
             SendOrder(send);
+            WriterSendLog(string.Format("地址【{0}】发送等候人数【{1}】已完成。", adress, count.ToString()), adress);
         }
 
         //叫号器蜂鸣
@@ -1047,9 +1261,9 @@ namespace CallSystem
                             csState[adress].workState = (int)WorkState.Defalt;
                             csBll.Update(csState[adress]);
                             //SendWait(adress);
-                            string mess = " [" + model.ticketNumber + "]号已评价。";
-                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : [" + model.ticketNumber + "]号已评价。"); }));
-                            WriterCallLog(2, mess);
+                            string mess = " [" + model.ticketNumber + "]号已评价(4键评价器)。";
+                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
+                            WriterCallLog(2, mess, adress);
                         }
                         catch (Exception ex)
                         {
@@ -1148,7 +1362,7 @@ namespace CallSystem
                         this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
                         if (wCall.Keys.Contains(t.windowNumber))
                             wState[wCall[t.windowNumber]] = WorkState.Defalt;
-                        WriterCallLog(4, mess);
+                        WriterCallLog(4, mess, 0);
                     }
                 }
             }
@@ -1162,13 +1376,14 @@ namespace CallSystem
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Exception.txt", DateTime.Now + " : " + text + "\r\n");
         }
 
-        private void WriterCallLog(int type, string text)
+        private void WriterCallLog(int type, string text, int adress)
         {
             string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
             string otype = type == 0 ? "叫号" : type == 1 ? "重呼" : type == 2 ? "评价" : type == 3 ? "暂停" : type == 4 ? "弃号" : type == 5 ? "转移" : type == 6 ? "挂起" : "回呼";
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Record.txt", DateTime.Now + " : 【" + otype + "】" + text + "\r\n");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Record_" + adress + ".txt", DateTime.Now + " : 【" + otype + "】" + text + "\r\n");
             oBll.Insert(new TOprateLogModel()
             {
                 oprateFlag = clientName,
@@ -1180,14 +1395,35 @@ namespace CallSystem
             });
         }
 
-        private void WriterTimeLog(string info)
+        private void WriterTimeLog(string info, int adress)
         {
             string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Time.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + info + "\r\n");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Time_" + adress.ToString() + ".txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + info + "\r\n");
         }
 
+        private void WriterSendLog(string info, int adress)
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_SendInfo.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + info + "\r\n");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_SendInfo_" + adress.ToString() + ".txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + info + "\r\n");
+        }
+
+        object sObj = new object();
+        private void WriterSerialPortLog(string text)
+        {
+            lock (sObj)
+            {
+                string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_SerialPort.txt", DateTime.Now + " : " + text + "\r\n");
+            }
+        }
     }
 
     public enum WorkState

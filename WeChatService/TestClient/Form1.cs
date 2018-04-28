@@ -65,8 +65,11 @@ namespace TestClient
             var data = process.FormatterMessageBytes(
                 new
                 {
-                    Name = "张三",
-                    Age = 25
+                    method = "GetQueueInfo",
+                    param = new
+                    {
+                        id = "1"
+                    }
                 });
             this.client.Send(data, data.Length);
         }

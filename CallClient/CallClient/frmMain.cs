@@ -38,6 +38,7 @@ namespace CallClient
         TWindowModel windowModel;
         TCallStateBLL csBll = new TCallStateBLL();
         TCallStateModel stateModel;
+        List<TQueueModel> qList;
         public frmMain()
         {
             InitializeComponent();
@@ -73,6 +74,14 @@ namespace CallClient
             f6 = ini.ReadString("Shortcutkey", "Fuction6");
             f7 = ini.ReadString("Shortcutkey", "Fuction7");
             f8 = ini.ReadString("Shortcutkey", "Fuction8");
+            if (windowNo == "")
+            {
+                frmConfig frm = new frmConfig();
+                frm.ShowDialog();
+                Application.ExitThread();
+                return;
+            }
+            qList = new List<TQueueModel>();
             windowModel = wBll.GetModelList().Where(w => w.State == "1" && w.Number == windowNo).FirstOrDefault();
             wbList = wbBll.GetModelList();
             baList = baBll.GetModelList();
@@ -191,6 +200,8 @@ namespace CallClient
                 hkCallBack = hotkey.RegisterHotkey(act(f8), Hotkey.KeyFlags.MOD_NONE);
             }
             hotkey.OnHotkey += new HotkeyEventHandler(OnHotkey);
+            timer1.Enabled = true;
+            timer1.Start();
         }
 
         private void OnHotkey(int hotkeyID)
@@ -367,7 +378,7 @@ namespace CallClient
                     if (stateModel == null)
                     {
                         stateModel = new TCallStateModel();
-                        stateModel.windowNo =windowNo;
+                        stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
                         csBll.Insert(stateModel);
                     }
@@ -390,7 +401,7 @@ namespace CallClient
                             model.sysFlag = 1;
                             cBll.Update(model);
                             stateModel.workState = (int)WorkState.Evaluate;
-                            stateModel.callId = 0;
+                            //stateModel.callId = 0;
                             stateModel.ticketNo = "";
                             csBll.Update(stateModel);
                             client.SendMessage(new RateMessage() //发送评价请求
@@ -572,7 +583,7 @@ namespace CallClient
                         {
                             return;
                         }
-                        
+
                         model.state = 3;
                         model.sysFlag = 1;
                         cBll.Update(model);
@@ -726,9 +737,12 @@ namespace CallClient
             RefreshInfo();
         }
 
+        int x = 0;
         void RefreshInfo()
         {
             this.txtWindow.Text = windowName;
+            this.lblWindow.Text = windowName;
+            stateModel = csBll.GetModel(windowNo);
             if (stateModel != null)
             {
                 this.txtTicket.Text = stateModel.workState == (int)WorkState.Call ? stateModel.ticketNo : "";
@@ -739,24 +753,47 @@ namespace CallClient
                 this.txtHangCount.Text = "0";
                 this.txtTicket.Text = "";
             }
+
             //查询当前窗口排队等候人数
             var list = qBll.GetModelList(windowBusys, 0).OrderBy(o => o.ticketTime).ToList();//排队中
             var list2 = qBll.GetModelList(windowBusys, 1);//已完成
             this.txtQueueCount.Text = (list.Count + list2.Count).ToString();
             this.txtWait.Text = list.Count.ToString();
-            foreach (var item in list)
+            this.txtAlready.Text = list2.Count.ToString();
+            foreach (var l in list.OrderByDescending(o => o.ticketTime).ToList())
             {
-                ListViewItem lvItem = new ListViewItem();
-                lvItem.Tag = item;
-                lvItem.SubItems[0].Text = item.ticketNumber;
-                lvItem.SubItems.Add(item.ticketTime.ToString("yyyy-MM-dd HH:mm:ss"));
-                lvItem.SubItems.Add(item.qNmae);
-                listView2.Items.Add(lvItem);
+                if (qList.FirstOrDefault(q => q.id == l.id) == null)
+                {
+                    frmMsg frm = new frmMsg();
+                    frm.Ticket = l.qNumber;
+                    frm.Show();
+                    break;
+                }
             }
-            listView2.Refresh();
+            qList = list;
+
+            //if (x > 3)
+            //{
+            //    frmMsg frm = new frmMsg();
+            //    frm.Ticket = "AB016";
+            //    frm.Show();
+            //    x = 0;
+            //}
+            //x++;
+            //listView2.Items.Clear();
+            //foreach (var item in list)
+            //{
+            //    ListViewItem lvItem = new ListViewItem();
+            //    lvItem.Tag = item;
+            //    lvItem.SubItems[0].Text = item.ticketNumber;
+            //    lvItem.SubItems.Add(item.ticketTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            //    lvItem.SubItems.Add(item.qNmae);
+            //    listView2.Items.Add(lvItem);
+            //}
+            //listView2.Refresh();
         }
 
-        private void btnGiveUpAll_Click_1(object sender, EventArgs e)
+        private void btnGiveUpAll_Click(object sender, EventArgs e)
         {
             if (DialogResult.OK == MessageBox.Show("确定对当前窗口所有业务的排队票进行批量弃号？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question))
             {
@@ -780,7 +817,5 @@ namespace CallClient
                 }
             }
         }
-
     }
-
 }

@@ -28,21 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.pbInvestment = new System.Windows.Forms.PictureBox();
             this.pbSelect = new System.Windows.Forms.PictureBox();
             this.pbWorkGuide = new System.Windows.Forms.PictureBox();
             this.pbWork = new System.Windows.Forms.PictureBox();
             this.pbGetCard = new System.Windows.Forms.PictureBox();
             this.pbEvaluate = new System.Windows.Forms.PictureBox();
             this.pbConsult = new System.Windows.Forms.PictureBox();
-            this.pbInvestment = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInvestment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSelect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbWorkGuide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbWork)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGetCard)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbEvaluate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbConsult)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbInvestment)).BeginInit();
             this.SuspendLayout();
+            // 
+            // pbInvestment
+            // 
+            this.pbInvestment.BackColor = System.Drawing.Color.Transparent;
+            this.pbInvestment.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbInvestment.Image = global::QueueClient.Properties.Resources.L招商引资_拷贝;
+            this.pbInvestment.Location = new System.Drawing.Point(143, 680);
+            this.pbInvestment.Name = "pbInvestment";
+            this.pbInvestment.Size = new System.Drawing.Size(339, 79);
+            this.pbInvestment.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbInvestment.TabIndex = 19;
+            this.pbInvestment.TabStop = false;
+            this.pbInvestment.Click += new System.EventHandler(this.pbInvestment_Click);
+            this.pbInvestment.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWork_Paint);
             // 
             // pbSelect
             // 
@@ -75,8 +89,8 @@
             // 
             this.pbWork.BackColor = System.Drawing.Color.Transparent;
             this.pbWork.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbWork.Image = global::QueueClient.Properties.Resources.办事;
-            this.pbWork.Location = new System.Drawing.Point(63, 302);
+            this.pbWork.Image = global::QueueClient.Properties.Resources.L办事;
+            this.pbWork.Location = new System.Drawing.Point(242, 302);
             this.pbWork.Name = "pbWork";
             this.pbWork.Size = new System.Drawing.Size(490, 190);
             this.pbWork.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -89,8 +103,8 @@
             // 
             this.pbGetCard.BackColor = System.Drawing.Color.Transparent;
             this.pbGetCard.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbGetCard.Image = global::QueueClient.Properties.Resources.领证;
-            this.pbGetCard.Location = new System.Drawing.Point(697, 302);
+            this.pbGetCard.Image = global::QueueClient.Properties.Resources.L领证;
+            this.pbGetCard.Location = new System.Drawing.Point(1229, 302);
             this.pbGetCard.Name = "pbGetCard";
             this.pbGetCard.Size = new System.Drawing.Size(490, 190);
             this.pbGetCard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -103,10 +117,10 @@
             // 
             this.pbEvaluate.BackColor = System.Drawing.Color.Transparent;
             this.pbEvaluate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbEvaluate.Image = global::QueueClient.Properties.Resources.评价;
-            this.pbEvaluate.Location = new System.Drawing.Point(1661, 702);
+            this.pbEvaluate.Image = global::QueueClient.Properties.Resources.L评价_拷贝_3;
+            this.pbEvaluate.Location = new System.Drawing.Point(1651, 702);
             this.pbEvaluate.Name = "pbEvaluate";
-            this.pbEvaluate.Size = new System.Drawing.Size(98, 98);
+            this.pbEvaluate.Size = new System.Drawing.Size(154, 76);
             this.pbEvaluate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbEvaluate.TabIndex = 16;
             this.pbEvaluate.TabStop = false;
@@ -118,28 +132,15 @@
             this.pbConsult.BackColor = System.Drawing.Color.Transparent;
             this.pbConsult.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbConsult.Image = global::QueueClient.Properties.Resources.咨询;
-            this.pbConsult.Location = new System.Drawing.Point(1355, 302);
+            this.pbConsult.Location = new System.Drawing.Point(773, 610);
             this.pbConsult.Name = "pbConsult";
             this.pbConsult.Size = new System.Drawing.Size(490, 190);
             this.pbConsult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbConsult.TabIndex = 15;
             this.pbConsult.TabStop = false;
+            this.pbConsult.Visible = false;
             this.pbConsult.Click += new System.EventHandler(this.pbConsult_Click);
             this.pbConsult.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWork_Paint);
-            // 
-            // pbInvestment
-            // 
-            this.pbInvestment.BackColor = System.Drawing.Color.Transparent;
-            this.pbInvestment.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbInvestment.Image = global::QueueClient.Properties.Resources.招商引资;
-            this.pbInvestment.Location = new System.Drawing.Point(143, 680);
-            this.pbInvestment.Name = "pbInvestment";
-            this.pbInvestment.Size = new System.Drawing.Size(339, 79);
-            this.pbInvestment.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbInvestment.TabIndex = 19;
-            this.pbInvestment.TabStop = false;
-            this.pbInvestment.Click += new System.EventHandler(this.pbInvestment_Click);
-            this.pbInvestment.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWork_Paint);
             // 
             // ucpnMain
             // 
@@ -155,13 +156,13 @@
             this.Controls.Add(this.pbConsult);
             this.Name = "ucpnMain";
             this.Size = new System.Drawing.Size(1920, 910);
+            ((System.ComponentModel.ISupportInitialize)(this.pbInvestment)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSelect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbWorkGuide)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbWork)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGetCard)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbEvaluate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbConsult)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbInvestment)).EndInit();
             this.ResumeLayout(false);
 
         }

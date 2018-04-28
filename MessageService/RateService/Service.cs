@@ -70,11 +70,11 @@ namespace RateService
                                     method = "RateQuest",
                                     param = new
                                     {
-                                        rateId = param["rateId"].ToString(),
-                                        transactor = param["transactor"].ToString(),
-                                        item = param["item"].ToString(),
-                                        date = param["date"].ToString(),
-                                        reserveSeq = param["reserveSeq"].ToString()
+                                        rateId = param["rateId"] == null ? "" : param["rateId"].ToString(),
+                                        transactor = param["transactor"] == null ? "" : param["transactor"].ToString(),
+                                        item = param["item"] == null ? "" : param["item"].ToString(),
+                                        date = param["date"] == null ? "" : param["date"].ToString(),
+                                        reserveSeq = param["reserveSeq"] == null ? "" : param["reserveSeq"].ToString()
                                     }
                                 };
                                 this.SendWSMessage(target.ID, rateData.ToResultData());
@@ -159,31 +159,26 @@ namespace RateService
                     case "login":
                         {
                             ResponseData rData = null;
-                            if (device == null)
+                            var param = requestData.param as Dictionary<string, object>;
+                            string winNum = param["winNum"].ToString(), userCode = param["userCode"].ToString();
+                            if (process.Login(winNum, userCode))
                             {
-                                var param = requestData.param as Dictionary<string, object>;
-                                string winNum = param["winNum"].ToString(), userCode = param["userCode"].ToString();
-                                if (process.Login(winNum, userCode))
+                                string ip = "";
+                                ushort port = 0;
+                                this.GetRemoteAddress(connId, ref ip, ref port);
+                                this.deviceList.Set(connId, new DeviceInfo()
                                 {
-                                    string ip = "";
-                                    ushort port = 0;
-                                    this.GetRemoteAddress(connId, ref ip, ref port);
-                                    this.deviceList.Set(connId, new DeviceInfo()
-                                    {
-                                        ID = connId,
-                                        IP = ip + ":" + port,
-                                        WindowNumber = winNum,
-                                        UserCode = userCode,
-                                        ConnTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                                    });
-                                    rData = new ResponseData { code = "0", request = requestData.method, result = "登录成功!" };
-                                    deviceListChanged = true;
-                                }
-                                else
-                                    rData = new ResponseData { code = "1002", request = requestData.method, result = "窗口或用户信息不正确!" };
+                                    ID = connId,
+                                    IP = ip + ":" + port,
+                                    WindowNumber = winNum,
+                                    UserCode = userCode,
+                                    ConnTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                                });
+                                rData = new ResponseData { code = "0", request = requestData.method, result = "登录成功!" };
+                                deviceListChanged = true;
                             }
                             else
-                                rData = new ResponseData { code = "0", request = requestData.method, result = "当前用户已登录!" };
+                                rData = new ResponseData { code = "1002", request = requestData.method, result = "窗口或用户信息不正确!" };
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;

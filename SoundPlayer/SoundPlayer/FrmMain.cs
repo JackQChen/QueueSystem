@@ -88,9 +88,10 @@ namespace SoundPlayer
                     while (queuePlay.Count > 0)
                     {
                         var voiceText = queuePlay.Dequeue();
-                        var paly = type == 1 ? ConvertTo(voiceText) : voiceText;
-                        vc.PlayText(paly);
+                        var play = type == 1 ? ConvertTo(voiceText) : voiceText;
+                        vc.PlayText(play);
                         arePlay.WaitOne(-1);
+                        LogService.Debug("播报完成:" + play);
                     }
                     Thread.Sleep(1000);
                 }
@@ -113,9 +114,14 @@ namespace SoundPlayer
                 PlaySound(obj.ToString());
         }
 
+        object asyncObj = new object();
+
         private void PlaySound(string voiceText)
         {
-            queuePlay.Enqueue(voiceText);
+            lock (asyncObj)
+            {
+                queuePlay.Enqueue(voiceText);
+            }
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)

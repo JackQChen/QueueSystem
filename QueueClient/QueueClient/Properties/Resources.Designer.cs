@@ -193,6 +193,48 @@ namespace QueueClient.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap L办事 {
+            get {
+                object obj = ResourceManager.GetObject("L办事", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap L招商引资_拷贝 {
+            get {
+                object obj = ResourceManager.GetObject("L招商引资_拷贝", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap L评价_拷贝_3 {
+            get {
+                object obj = ResourceManager.GetObject("L评价_拷贝_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap L返回按钮 {
+            get {
+                object obj = ResourceManager.GetObject("L返回按钮", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap L领证 {
+            get {
+                object obj = ResourceManager.GetObject("L领证", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap L首页按钮 {
+            get {
+                object obj = ResourceManager.GetObject("L首页按钮", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap nubmer_button_1 {
             get {
                 object obj = ResourceManager.GetObject("nubmer_button_1", resourceCulture);

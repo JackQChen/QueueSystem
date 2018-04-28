@@ -208,7 +208,7 @@ namespace LEDDisplay
                 this.messageIndicator1.SetState(StateType.Success, "打开通讯设备失败");
             else if (result == LEDSender.R_DEVICE_BUSY)
                 this.messageIndicator1.SetState(StateType.Success, "设备忙，正在通讯中...");
-            LogService.Debug("SendLEDMessage->End");
+            LogService.Debug("SendLEDMessage->End:Result=" + result);
         }
 
         protected override void DefWndProc(ref System.Windows.Forms.Message m)

@@ -117,7 +117,7 @@
             this.pbLastPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbLastPage.BackColor = System.Drawing.Color.Transparent;
             this.pbLastPage.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbLastPage.Image = global::QueueClient.Properties.Resources.返回按钮;
+            this.pbLastPage.Image = global::QueueClient.Properties.Resources.L返回按钮;
             this.pbLastPage.Location = new System.Drawing.Point(951, 22);
             this.pbLastPage.Name = "pbLastPage";
             this.pbLastPage.Size = new System.Drawing.Size(170, 60);
@@ -125,15 +125,12 @@
             this.pbLastPage.TabIndex = 37;
             this.pbLastPage.TabStop = false;
             this.pbLastPage.Click += new System.EventHandler(this.pbLastPage_Click);
-            this.pbLastPage.Paint += new System.Windows.Forms.PaintEventHandler(this.pbReturnMain_Paint);
-            this.pbLastPage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbReturnMain_MouseDown);
-            this.pbLastPage.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbReturnMain_MouseUp);
             // 
             // pbReturnMain
             // 
             this.pbReturnMain.BackColor = System.Drawing.Color.Transparent;
             this.pbReturnMain.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbReturnMain.Image = global::QueueClient.Properties.Resources.首页按钮;
+            this.pbReturnMain.Image = global::QueueClient.Properties.Resources.L首页按钮;
             this.pbReturnMain.Location = new System.Drawing.Point(131, 22);
             this.pbReturnMain.Name = "pbReturnMain";
             this.pbReturnMain.Size = new System.Drawing.Size(170, 60);
@@ -141,9 +138,6 @@
             this.pbReturnMain.TabIndex = 36;
             this.pbReturnMain.TabStop = false;
             this.pbReturnMain.Click += new System.EventHandler(this.pbReturn_Click);
-            this.pbReturnMain.Paint += new System.Windows.Forms.PaintEventHandler(this.pbReturnMain_Paint);
-            this.pbReturnMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbReturnMain_MouseDown);
-            this.pbReturnMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbReturnMain_MouseUp);
             // 
             // pnMain
             // 
