@@ -201,7 +201,15 @@ namespace CallSystem
                                 if (length <= 2)
                                 {
                                     WriterLog("有呼叫器【" + adress + "】协议出错，发送过来的数据长度小于等于2【" + length + "】！本次操作取消！");
-                                    return;
+                                    continue ;
+                                }
+                                else
+                                {
+                                    if (length != length2 || length > 5)
+                                    {
+                                        WriterLog("有呼叫器【" + adress + "】发送过来的数据长度【{"+length +"}{"+length2+"}】超过设定值【5】,疑似协议出错，该条过滤！");
+                                        continue;
+                                    }
                                 }
                                 var data = new byte[length - 2];//发送的 数据内容
                                 while (index < length - 2)

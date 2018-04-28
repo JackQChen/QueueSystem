@@ -97,6 +97,9 @@ namespace WeChatService
                         case "GetQueueInfo":
                             this.SendMessage(connId, GetQueueInfo(dic["param"] as Dictionary<string, object>));
                             break;
+                        case "ProcessQueue":
+                            this.SendMessage(connId, ProcessQueue(dic["param"] as Dictionary<string, object>));
+                            break;
                         default:
                             this.SendMessage(connId, StateList.State[StateInfo.Invalid]);
                             break;
@@ -119,9 +122,35 @@ namespace WeChatService
             wList = wBll.GetModelList();
         }
 
-        object ProcessQueue(object json)
+        object ProcessQueue(Dictionary<string, object> json)
         {
-            return new Object();
+            try
+            {
+                WriterReciveLog("ProcessQueue", script.Serialize(json));
+                var QueueInfo = json["QueueInfo"] as Dictionary<string, object>;
+                var unitSeq = QueueInfo["unitSeq"].ToString();
+                var unitName = QueueInfo["unitName"].ToString();
+                var busiSeq = QueueInfo["busiSeq"].ToString();
+                var busiName = QueueInfo["busiName"].ToString();
+                var personName = QueueInfo["personName"].ToString();
+                var idCard = QueueInfo["idCard"].ToString();
+                var wxId = QueueInfo["wxId"] == null ? "" : QueueInfo["wxId"].ToString();
+                var Appointment = script.Deserialize<TAppointmentModel>(script.Serialize(json["Appointment"]));
+                var obj = OutQueueNo(Appointment, unitSeq, unitName, busiSeq, busiName, personName, idCard, wxId);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                WriterErrorLog("处理排队数据出错：" + ex.Message);
+                return new
+                {
+                    code = 0,
+                    desc = "处理排队数据出错：" + ex.Message,
+                    result = new
+                    {
+                    }
+                };
+            }
         }
 
         object GetQueueInfo(Dictionary<string, object> json)
@@ -243,7 +272,7 @@ namespace WeChatService
                     busySeq = queue.busTypeSeq,
                     busyName = queue.busTypeName,
                     ticketNumber = queue.ticketNumber,
-                    ticketTime = queue.ticketTime,
+                    ticketTime = queue.ticketTime.ToString("yyyy-MM-dd HH:mm:ss"),
                     cardId = queue.idCard,
                     reserveSeq = queue.reserveSeq,
                     vip = isGreen,
@@ -294,6 +323,32 @@ namespace WeChatService
         {
             string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
             string path = dir + "\\QueueLog.txt";
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            using (StreamWriter sw = new StreamWriter(path, true))
+            {
+                sw.WriteLine(DateTime.Now.ToString() + " : " + logString);
+            }
+        }
+
+        //写收数据日志
+        public static void WriterReciveLog(string method, string logString)
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            string path = dir + "\\ReciveLog.txt";
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            using (StreamWriter sw = new StreamWriter(path, true))
+            {
+                sw.WriteLine(string.Format("{0} : 方法【{1}】值【{2}】", DateTime.Now.ToString(), method, logString));
+            }
+        }
+
+        //写错误日志
+        public static void WriterErrorLog(string logString)
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            string path = dir + "\\ErrorLog.txt";
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
             using (StreamWriter sw = new StreamWriter(path, true))

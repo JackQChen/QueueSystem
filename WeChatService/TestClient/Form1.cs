@@ -74,5 +74,56 @@ namespace TestClient
             this.client.Send(data, data.Length);
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var data = process.FormatterMessageBytes(
+              new
+              {
+                  method = "ProcessQueue",
+                  param = new
+                  {
+                      QueueInfo = new
+                      {
+                          unitSeq = "2788",
+                          unitName = "阳江市公安局",
+                          busiSeq = "2953",
+                          busiName = "安全技术防范系统竣工验收",
+                          personName = "张三",
+                          idCard = "612025365654215698",
+                          wxId = "wx233"
+                      },
+                      Appointment = new
+                      {
+                          approveName = "",
+                          approveSeq = "",
+                          appType = 0,
+                          areaCode = "0",
+                          areaId = 0,
+                          busiCode = "2812",
+                          busiName = "",
+                          unitCode = "",
+                          unitName = "",
+                          userName = "",
+                          comName = "",
+                          controlSeq = "",
+                          custCardId = "",
+                          custName = "",
+                          isTake = "1",
+                          mobilePhone = "",
+                          paperCode = "",
+                          paperType = "",
+                          queueCode = "",
+                          reserveDate = "2018-04-28 00:00:00",
+                          reserveEndTime = "2018-04-28 00:00:00",
+                          reserveSeq = "",
+                          reserveStartTime = "2018-04-28 00:00:00",
+                          sysFlag = 0,
+                          type = 0
+                      }
+                  }
+              });
+            this.client.Send(data, data.Length);
+        }
+
     }
 }
