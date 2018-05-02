@@ -201,13 +201,13 @@ namespace CallSystem
                                 if (length <= 2)
                                 {
                                     WriterLog("有呼叫器【" + adress + "】协议出错，发送过来的数据长度小于等于2【" + length + "】！本次操作取消！");
-                                    continue ;
+                                    continue;
                                 }
                                 else
                                 {
                                     if (length != length2 || length > 5)
                                     {
-                                        WriterLog("有呼叫器【" + adress + "】发送过来的数据长度【{"+length +"}{"+length2+"}】超过设定值【5】,疑似协议出错，该条过滤！");
+                                        WriterLog("有呼叫器【" + adress + "】发送过来的数据长度【{" + length + "}{" + length2 + "}】超过设定值【5】,疑似协议出错，该条过滤！");
                                         continue;
                                     }
                                 }
@@ -334,7 +334,7 @@ namespace CallSystem
                                         else
                                         {
                                             WriterLog("发送确定键，但是指令未用，本次操作自动忽略！");
-                                            return;
+                                            continue;
                                         }
                                     }
                                     else if (data[data.Length - 1] == 0x11)
