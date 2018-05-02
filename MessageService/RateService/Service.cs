@@ -1,28 +1,109 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 using MessageLib;
+using QueueMessage;
 
 namespace RateService
 {
     public class Service : WebSocketServer, IServiceUI
     {
         JavaScriptSerializer convert = new JavaScriptSerializer();
-        Process process = new Process();
+        RateProcess rateProcess = new RateProcess();
+        Process dataProcess = new Process();
         List<string> loginOperation = new List<string>();
         byte[] btDisConn = new byte[] { 0x3, 0xe9 };
         internal Extra<DeviceInfo> deviceList = new Extra<DeviceInfo>();
         internal bool deviceListChanged = false;
+        TcpClient client = new TcpClient();
+        ExtraData extraData = new ExtraData();
         OperateIni ini;
 
         public Service()
         {
             ini = new OperateIni(AppDomain.CurrentDomain.BaseDirectory + "RateUpdate.ini");
+            this.client.OnConnect += new TcpClientEvent.OnConnectEventHandler(client_OnConnect);
+            this.client.OnReceive += new TcpClientEvent.OnReceiveEventHandler(client_OnReceive);
+            this.dataProcess.ReceiveMessage += new Action<IntPtr, Message>(dataProcess_ReceiveMessage);
+            this.OnPrepareListen += new TcpServerEvent.OnPrepareListenEventHandler(Service_OnPrepareListen);
             this.OnClose += new TcpServerEvent.OnCloseEventHandler(Service_OnClose);
             this.OnWSMessageBody += new WebSocketEvent.OnWSMessageBodyEventHandler(Service_OnWSMessageBody);
             loginOperation.AddRange("raterequest,rateoperate,ratesubmit".Split(','));
+        }
+
+        HandleResult client_OnConnect(TcpClient sender)
+        {
+            var bytes = this.dataProcess.FormatterMessageBytes(new LoginMessage()
+            {
+                ClientType = QueueMessage.ClientType.Service,
+                ClientName = "RateService"
+            });
+            this.client.Send(bytes, bytes.Length);
+            return HandleResult.Ignore;
+        }
+
+        HandleResult Service_OnPrepareListen(TcpServer sender, IntPtr soListen)
+        {
+            dynamic section = ConfigurationManager.GetSection("ServiceConfig");
+            var port = section.Configs["排队消息服务"].Port;
+            this.client.Connect("127.0.0.1", ushort.Parse(port));
+            return HandleResult.Ignore;
+        }
+
+        HandleResult client_OnReceive(TcpClient sender, byte[] bytes)
+        {
+            this.dataProcess.RecvData(this.client.ConnectionId, extraData, bytes);
+            return HandleResult.Ignore;
+        }
+
+        void dataProcess_ReceiveMessage(IntPtr connId, Message message)
+        {
+            switch (message.Type)
+            {
+                case MessageType.Rate:
+                    {
+                        var msg = message as RateMessage;
+                        var targetList = this.deviceList.Dictionary.Values.Where(p => p.WindowNumber == msg.WindowNo).ToList();
+                        foreach (var target in targetList)
+                        {
+                            var rateData = new RequestData
+                            {
+                                method = "RateQuest",
+                                param = new
+                                {
+                                    rateId = msg.RateId,
+                                    transactor = msg.Transactor,
+                                    item = msg.ItemName,
+                                    date = msg.WorkDate,
+                                    reserveSeq = msg.reserveSeq
+                                }
+                            };
+                            this.SendWSMessage(target.ID, rateData.ToResultData());
+                        }
+                    }
+                    break;
+                case MessageType.Operate:
+                    {
+                        var msg = message as OperateMessage;
+                        var targetList = this.deviceList.Dictionary.Values.Where(p => p.WindowNumber == msg.WindowNo).ToList();
+                        foreach (var target in targetList)
+                        {
+                            var rateData = new RequestData
+                            {
+                                method = "RateOperate",
+                                param = new
+                                {
+                                    operate = msg.Operate.ToString()
+                                }
+                            };
+                            this.SendWSMessage(target.ID, rateData.ToResultData());
+                        }
+                    }
+                    break;
+            }
         }
 
         HandleResult Service_OnClose(TcpServer sender, IntPtr connId, SocketOperation enOperation, int errorCode)
@@ -58,6 +139,7 @@ namespace RateService
                 }
                 switch (method)
                 {
+                    #region debug
                     case "raterequest":
                         if (device.UserCode == "QueueService")
                         {
@@ -114,23 +196,24 @@ namespace RateService
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;
+                    #endregion
                     case "getunitlist":
                         {
-                            var rData = new ResponseData { code = "0", request = requestData.method, result = process.RS_GetUnitList() };
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = rateProcess.RS_GetUnitList() };
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;
                     case "getwindowlist":
                         {
                             var param = requestData.param as Dictionary<string, object>;
-                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.process.RS_GetWindowListByUnitSeq(param["unitSeq"].ToString()) };
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.rateProcess.RS_GetWindowListByUnitSeq(param["unitSeq"].ToString()) };
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;
                     case "getuserlist":
                         {
                             var param = requestData.param as Dictionary<string, object>;
-                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.process.RS_GetUserListByUnitSeq(param["unitSeq"].ToString()) };
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.rateProcess.RS_GetUserListByUnitSeq(param["unitSeq"].ToString()) };
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;
@@ -152,7 +235,7 @@ namespace RateService
                     case "getuserphoto":
                         {
                             var param = requestData.param as Dictionary<string, object>;
-                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.process.GetUserPhoto(param["userCode"].ToString()) };
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.rateProcess.GetUserPhoto(param["userCode"].ToString()) };
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;
@@ -161,7 +244,7 @@ namespace RateService
                             ResponseData rData = null;
                             var param = requestData.param as Dictionary<string, object>;
                             string winNum = param["winNum"].ToString(), userCode = param["userCode"].ToString();
-                            if (process.Login(winNum, userCode))
+                            if (rateProcess.Login(winNum, userCode))
                             {
                                 string ip = "";
                                 ushort port = 0;
@@ -186,7 +269,7 @@ namespace RateService
                         {
                             var param = requestData.param as Dictionary<string, object>;
                             ResponseData rData = null;
-                            if (process.RateSubmit(device.UserCode, device.WindowNumber, param["rateId"].ToString(), param["attitude"].ToString(), param["quality"].ToString(), param["efficiency"].ToString(), param["honest"].ToString()))
+                            if (rateProcess.RateSubmit(device.UserCode, device.WindowNumber, param["rateId"].ToString(), param["attitude"].ToString(), param["quality"].ToString(), param["efficiency"].ToString(), param["honest"].ToString()))
                                 rData = new ResponseData { code = "0", request = requestData.method, result = "评价成功!" };
                             else
                                 rData = new ResponseData { code = "1003", request = requestData.method, result = "评价失败!" };

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Web.Script.Serialization;
 using MessageLib;
@@ -12,61 +10,17 @@ namespace QueueService
     {
         Process process;
         internal Extra<ClientInfo> clientList = new Extra<ClientInfo>();
-        internal bool clientListChanged = false, needConn = false;
-        WebSocketSharp.WebSocket rateClient;
+        internal bool clientListChanged = false;
+        const string rateService = "RateService", wechatService = "WeChatService";
         JavaScriptSerializer convert = new JavaScriptSerializer();
 
         public Service()
         {
             process = new Process();
             process.ReceiveMessage += new Action<IntPtr, Message>(process_ReceiveMessage);
-            dynamic section = ConfigurationManager.GetSection("ServiceConfig");
-            var port = section.Configs["评价系统服务"].Port;
-            rateClient = new WebSocketSharp.WebSocket("ws://127.0.0.1:" + port);
-            rateClient.OnOpen += new EventHandler(rateClient_OnOpen);
-            rateClient.OnClose += new EventHandler<WebSocketSharp.CloseEventArgs>(rateClient_OnClose);
-            this.OnPrepareListen += new TcpServerEvent.OnPrepareListenEventHandler(Service_OnPrepareListen);
-            this.OnShutdown += new TcpServerEvent.OnShutdownEventHandler(Service_OnShutdown);
             this.OnAccept += new TcpServerEvent.OnAcceptEventHandler(Service_OnAccept);
             this.OnClose += new TcpServerEvent.OnCloseEventHandler(Service_OnClose);
             this.OnReceive += new TcpServerEvent.OnReceiveEventHandler(Service_OnReceive);
-        }
-
-        void rateClient_OnOpen(object sender, EventArgs e)
-        {
-            rateClient.SendAsync(convert.Serialize(new
-            {
-                method = "Login",
-                param = new
-                {
-                    winNum = "D840F2A3-C421-4B3A-B385-12B25727F70F",
-                    userCode = "QueueService"
-                }
-            }), null);
-        }
-
-        void rateClient_OnClose(object sender, WebSocketSharp.CloseEventArgs e)
-        {
-            if (needConn)
-            {
-                rateClient.ConnectAsync();
-                needConn = false;
-            }
-        }
-
-        HandleResult Service_OnPrepareListen(TcpServer sender, IntPtr soListen)
-        {
-            if (rateClient.ReadyState == WebSocketSharp.WebSocketState.Closing)
-                needConn = true;
-            else
-                rateClient.ConnectAsync();
-            return HandleResult.Ok;
-        }
-
-        HandleResult Service_OnShutdown(TcpServer sender)
-        {
-            rateClient.CloseAsync();
-            return HandleResult.Ok;
         }
 
         HandleResult Service_OnAccept(TcpServer server, IntPtr connId, IntPtr pClient)
@@ -187,22 +141,10 @@ namespace QueueService
                         var list = allClient.Where(p => p.Type == ClientType.LEDDisplay.ToString()).ToList();
                         foreach (var client in list)
                             this.Send(client.ID, bytes, bytes.Length);
-                        //LED屏发送完成
-                        if (!rateClient.IsConnected)
-                            rateClient.Connect();
-                        rateClient.SendAsync(convert.Serialize(new
-                        {
-                            method = "RateRequest",
-                            param = new
-                            {
-                                winNum = msg.WindowNo,
-                                rateId = msg.RateId,
-                                transactor = msg.Transactor,
-                                date = msg.WorkDate,
-                                item = msg.ItemName,
-                                reserveSeq = msg.reserveSeq
-                            }
-                        }), null);
+                        //LED屏发送完成 
+                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == rateService).ToList();
+                        foreach (var service in listRate)
+                            this.SendMessage(service.ID, message);
                     }
                     #endregion
                     break;
@@ -218,17 +160,9 @@ namespace QueueService
                         foreach (var client in list)
                             this.Send(client.ID, bytes, bytes.Length);
                         //LED屏发送完成
-                        if (!rateClient.IsConnected)
-                            rateClient.Connect();
-                        rateClient.SendAsync(convert.Serialize(new
-                        {
-                            method = "RateOperate",
-                            param = new
-                            {
-                                winNum = msg.WindowNo,
-                                operate = msg.Operate.ToString()
-                            }
-                        }), null);
+                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == rateService).ToList();
+                        foreach (var service in listRate)
+                            this.SendMessage(service.ID, message);
                     }
                     #endregion
                     break;

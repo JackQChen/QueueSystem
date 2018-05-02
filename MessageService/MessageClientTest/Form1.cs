@@ -95,7 +95,7 @@ namespace MessageClientTest
 
         private void button8_Click(object sender, EventArgs e)
         {
-            this.client.SendMessage(new RateMessage() { RateId = "123", WindowNo = "1" });
+            this.client.SendMessage(new RateMessage() { RateId = "123", WindowNo = "2" });
             this.client.SendMessage(new OperateMessage() { WindowNo = "1", Operate = Operate.Resume });
         }
     }

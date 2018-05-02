@@ -1280,7 +1280,7 @@ namespace QueueClient
 
                 #region  校验
 
-                var ali = appList.Where(a => a.reserveEndTime >= DateTime.Now).ToList();
+                var ali = appList.Where(a => a.type == 1 || (a.type == 0 && a.reserveEndTime >= DateTime.Now)).ToList();
                 if (ali == null || ali.Count == 0)
                 {
                     SelectUnit();//如果预约失效 则不显示预约界面
