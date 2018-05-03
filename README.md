@@ -15,3 +15,4 @@
 #### SoundPlayer - 语音端<br>
 #### SystemConfig - 系统配置<br>
 #### SystemConfig_Web - 系统配置网页版<br>
+#### WeChatService - 微信消息服务
