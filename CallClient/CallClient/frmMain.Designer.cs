@@ -44,7 +44,7 @@
             this.panel4 = new CustomSkin.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.lblWindow = new System.Windows.Forms.Label();
-            this.txtAlready = new System.Windows.Forms.TextBox();
+            this.txtAlready = new CustomSkin.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.btnRefresh = new CustomSkin.Windows.Forms.Button();
             this.btnGiveUpAll = new CustomSkin.Windows.Forms.Button();
@@ -151,14 +151,17 @@
             // 
             // listView1
             // 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listView1.Location = new System.Drawing.Point(265, 0);
+            this.listView1.Location = new System.Drawing.Point(265, 15);
             this.listView1.Margin = new System.Windows.Forms.Padding(4);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(349, 360);
+            this.listView1.Size = new System.Drawing.Size(340, 326);
             this.listView1.TabIndex = 8;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -170,7 +173,6 @@
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.Transparent;
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel4.Controls.Add(this.label1);
             this.panel4.Controls.Add(this.lblWindow);
             this.panel4.Controls.Add(this.txtAlready);
@@ -196,7 +198,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(38, 43);
+            this.label1.Location = new System.Drawing.Point(44, 43);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 16);
@@ -211,26 +213,29 @@
             this.lblWindow.Font = new System.Drawing.Font("黑体", 50F, System.Drawing.FontStyle.Bold);
             this.lblWindow.Location = new System.Drawing.Point(117, 15);
             this.lblWindow.Name = "lblWindow";
-            this.lblWindow.Size = new System.Drawing.Size(140, 68);
+            this.lblWindow.Size = new System.Drawing.Size(142, 70);
             this.lblWindow.TabIndex = 32;
             this.lblWindow.Text = "101";
             this.lblWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txtAlready
             // 
+            this.txtAlready.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAlready.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtAlready.Location = new System.Drawing.Point(118, 206);
+            this.txtAlready.Location = new System.Drawing.Point(118, 207);
             this.txtAlready.Margin = new System.Windows.Forms.Padding(4);
             this.txtAlready.Name = "txtAlready";
             this.txtAlready.ReadOnly = true;
             this.txtAlready.Size = new System.Drawing.Size(131, 30);
             this.txtAlready.TabIndex = 31;
+            this.txtAlready.WatermarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.txtAlready.WatermarkText = null;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(1, 211);
+            this.label6.Location = new System.Drawing.Point(10, 213);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(110, 16);
@@ -269,7 +274,7 @@
             // 
             this.txtTicket.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTicket.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtTicket.Location = new System.Drawing.Point(118, 315);
+            this.txtTicket.Location = new System.Drawing.Point(118, 311);
             this.txtTicket.Margin = new System.Windows.Forms.Padding(4);
             this.txtTicket.Name = "txtTicket";
             this.txtTicket.ReadOnly = true;
@@ -282,7 +287,7 @@
             // 
             this.txtHangCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtHangCount.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtHangCount.Location = new System.Drawing.Point(118, 263);
+            this.txtHangCount.Location = new System.Drawing.Point(118, 259);
             this.txtHangCount.Margin = new System.Windows.Forms.Padding(4);
             this.txtHangCount.Name = "txtHangCount";
             this.txtHangCount.ReadOnly = true;
@@ -295,7 +300,7 @@
             // 
             this.txtWait.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtWait.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtWait.Location = new System.Drawing.Point(118, 151);
+            this.txtWait.Location = new System.Drawing.Point(118, 155);
             this.txtWait.Margin = new System.Windows.Forms.Padding(4);
             this.txtWait.Name = "txtWait";
             this.txtWait.ReadOnly = true;
@@ -321,7 +326,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(21, 318);
+            this.label5.Location = new System.Drawing.Point(27, 317);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(93, 16);
@@ -332,7 +337,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(21, 266);
+            this.label4.Location = new System.Drawing.Point(27, 265);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(93, 16);
@@ -343,7 +348,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(21, 156);
+            this.label3.Location = new System.Drawing.Point(27, 161);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(93, 16);
@@ -354,7 +359,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(21, 108);
+            this.label2.Location = new System.Drawing.Point(27, 109);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 16);
@@ -378,7 +383,6 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.btnBackCall);
             this.panel1.Controls.Add(this.btnHang);
             this.panel1.Controls.Add(this.btnMove);
@@ -399,7 +403,7 @@
             this.btnBackCall.BackColor = System.Drawing.Color.Transparent;
             this.btnBackCall.FocusBorder = true;
             this.btnBackCall.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnBackCall.Location = new System.Drawing.Point(540, 1);
+            this.btnBackCall.Location = new System.Drawing.Point(540, -1);
             this.btnBackCall.Margin = new System.Windows.Forms.Padding(4);
             this.btnBackCall.Name = "btnBackCall";
             this.btnBackCall.Size = new System.Drawing.Size(70, 58);
@@ -413,7 +417,7 @@
             this.btnHang.BackColor = System.Drawing.Color.Transparent;
             this.btnHang.FocusBorder = true;
             this.btnHang.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnHang.Location = new System.Drawing.Point(463, 1);
+            this.btnHang.Location = new System.Drawing.Point(463, -1);
             this.btnHang.Margin = new System.Windows.Forms.Padding(4);
             this.btnHang.Name = "btnHang";
             this.btnHang.Size = new System.Drawing.Size(70, 58);
@@ -427,7 +431,7 @@
             this.btnMove.BackColor = System.Drawing.Color.Transparent;
             this.btnMove.FocusBorder = true;
             this.btnMove.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnMove.Location = new System.Drawing.Point(386, 1);
+            this.btnMove.Location = new System.Drawing.Point(386, -1);
             this.btnMove.Margin = new System.Windows.Forms.Padding(4);
             this.btnMove.Name = "btnMove";
             this.btnMove.Size = new System.Drawing.Size(70, 58);
@@ -441,7 +445,7 @@
             this.btnPause.BackColor = System.Drawing.Color.Transparent;
             this.btnPause.FocusBorder = true;
             this.btnPause.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnPause.Location = new System.Drawing.Point(309, 1);
+            this.btnPause.Location = new System.Drawing.Point(309, -1);
             this.btnPause.Margin = new System.Windows.Forms.Padding(4);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(70, 58);
@@ -455,7 +459,7 @@
             this.btnCall.BackColor = System.Drawing.Color.Transparent;
             this.btnCall.FocusBorder = true;
             this.btnCall.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnCall.Location = new System.Drawing.Point(1, 1);
+            this.btnCall.Location = new System.Drawing.Point(1, -1);
             this.btnCall.Margin = new System.Windows.Forms.Padding(4);
             this.btnCall.Name = "btnCall";
             this.btnCall.Size = new System.Drawing.Size(70, 58);
@@ -469,7 +473,7 @@
             this.btnReCall.BackColor = System.Drawing.Color.Transparent;
             this.btnReCall.FocusBorder = true;
             this.btnReCall.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnReCall.Location = new System.Drawing.Point(78, 1);
+            this.btnReCall.Location = new System.Drawing.Point(78, -1);
             this.btnReCall.Margin = new System.Windows.Forms.Padding(4);
             this.btnReCall.Name = "btnReCall";
             this.btnReCall.Size = new System.Drawing.Size(70, 58);
@@ -483,7 +487,7 @@
             this.btnEv.BackColor = System.Drawing.Color.Transparent;
             this.btnEv.FocusBorder = true;
             this.btnEv.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnEv.Location = new System.Drawing.Point(155, 1);
+            this.btnEv.Location = new System.Drawing.Point(155, -1);
             this.btnEv.Margin = new System.Windows.Forms.Padding(4);
             this.btnEv.Name = "btnEv";
             this.btnEv.Size = new System.Drawing.Size(70, 58);
@@ -497,7 +501,7 @@
             this.btnCance.BackColor = System.Drawing.Color.Transparent;
             this.btnCance.FocusBorder = true;
             this.btnCance.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnCance.Location = new System.Drawing.Point(232, 1);
+            this.btnCance.Location = new System.Drawing.Point(232, -1);
             this.btnCance.Margin = new System.Windows.Forms.Padding(4);
             this.btnCance.Name = "btnCance";
             this.btnCance.Size = new System.Drawing.Size(70, 58);
@@ -510,7 +514,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(116)))), ((int)(((byte)(193)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(138)))), ((int)(((byte)(221)))));
             this.ClientSize = new System.Drawing.Size(622, 510);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.messageIndicator1);
@@ -561,7 +565,7 @@
         private CustomSkin.Windows.Forms.Button btnCance;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.TextBox txtAlready;
+        private CustomSkin.Windows.Forms.TextBox txtAlready;
         private System.Windows.Forms.Label label6;
         private CustomSkin.Windows.Forms.Button btnRefresh;
         private CustomSkin.Windows.Forms.Button btnGiveUpAll;

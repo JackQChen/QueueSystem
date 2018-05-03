@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using QueueMessage;
 
 namespace QueueService
 {
@@ -40,8 +41,7 @@ namespace QueueService
         {
             foreach (ListViewItem item in this.listView1.SelectedItems)
             {
-                var restartMsg = new QueueMessage.Message();
-                restartMsg.Type = QueueMessage.MessageType.Restart;
+                var restartMsg = new RestartMessage();
                 this.service.SendMessage((IntPtr)item.Tag, restartMsg);
             }
         }

@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\phone_call_128px_1202028_easyicon.net.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\phone_call_128px_1202012_easyicon.net.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BLL">

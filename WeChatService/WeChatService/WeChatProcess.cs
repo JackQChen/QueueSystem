@@ -5,19 +5,21 @@ using System.Collections.Generic;
 
 namespace WeChatService
 {
-    public class Process
+    public class WeChatProcess
     {
         JavaScriptSerializer convert = new JavaScriptSerializer();
-        public event Action<object> ReceiveMessage;
+        public event Action<IntPtr, object> ReceiveMessage;
+        Service service;
 
-        public Process()
+        public WeChatProcess(Service service)
         {
+            this.service = service;
         }
 
-        void OnReceiveMessage(object msg)
+        void OnReceiveMessage(IntPtr connId, object msg)
         {
             if (this.ReceiveMessage != null)
-                this.ReceiveMessage(msg);
+                this.ReceiveMessage(connId, msg);
         }
 
         int ArrayCopy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex)
@@ -28,7 +30,7 @@ namespace WeChatService
             return length;
         }
 
-        public void RecvData(ExtraData msg, byte[] bytes)
+        public void RecvData(IntPtr connId, ExtraData msg, byte[] bytes)
         {
             int position = 0, length = 0;
             while (position < bytes.Length)
@@ -49,7 +51,24 @@ namespace WeChatService
                     msg.Position += length;
                     if (msg.Position == msg.Data.Length)
                     {
-                        this.OnReceiveMessage(FormatterBytesObject(msg.Data));
+                        var obj = FormatterBytesObject(msg.Data);
+                        if (msg.Access)
+                            this.OnReceiveMessage(connId, obj);
+                        else
+                        {
+                            var dic = obj as Dictionary<string, object>;
+                            if (dic != null)
+                                if (msg.GUID == dic["key"].ToString())
+                                {
+                                    msg.Access = true;
+                                    this.service.SendMessage(connId, StateList.State[StateInfo.Authorized]);
+                                }
+                            if (!msg.Access)
+                            {
+                                this.service.SendMessage(connId, StateList.State[StateInfo.Unauthorized]);
+                                this.service.Disconnect(connId);
+                            }
+                        }
                         msg.Data = null;
                         msg.Position = 0;
                     }

@@ -15,7 +15,7 @@ namespace MessageClient
         public ClientType ClientType { get; set; }
         public string ClientName { get; set; }
 
-        public event Action<MessageType, string> OnResult;
+        public event Action<string, string> OnResult;
         public event Action<Message> OnMessage;
         public event Action OnDisconnect;
         private AutoResetEvent areConn = new AutoResetEvent(false);
@@ -43,8 +43,7 @@ namespace MessageClient
                         Thread.Sleep(10000);
                     }
                 }
-            })
-            { IsBackground = true }.Start();
+            }) { IsBackground = true }.Start();
         }
 
         HandleResult Client_OnClose(TcpClient sender, SocketOperation enOperation, int errorCode)
@@ -61,21 +60,21 @@ namespace MessageClient
 
         void process_ReceiveMessage(IntPtr connId, Message message)
         {
-            switch (message.Type)
+            switch (message.GetType().Name)
             {
-                case MessageType.Restart:
+                case "RestartMessage":
                     {
                         //以无参方式重启
                         System.Windows.Forms.Application.Exit();
                         System.Diagnostics.Process.Start(System.Windows.Forms.Application.ExecutablePath);
                     }
                     break;
-                case MessageType.Result:
+                case "ResultMessage":
                     {
                         var msg = message as ResultMessage;
                         if (this.OnResult != null)
                             this.OnResult(msg.Operate, msg.Result);
-                        if (msg.Operate == MessageType.Logout)
+                        if (msg.Operate == "Logout")
                             this.Stop();
                     }
                     break;

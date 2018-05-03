@@ -62,17 +62,17 @@ namespace QueueService
 
         void process_ReceiveMessage(IntPtr connId, Message message)
         {
-            if (message.Type != MessageType.Login && !this.clientList.Dictionary.ContainsKey(connId))
+            if (message.GetType() != typeof(LoginMessage) && !this.clientList.Dictionary.ContainsKey(connId))
             {
                 var resultMsg = new ResultMessage();
-                resultMsg.Operate = MessageType.Result;
+                resultMsg.Operate = message.GetType().Name;
                 resultMsg.Result = "当前用户尚未登录";
                 this.SendMessage(connId, resultMsg);
                 return;
             }
-            switch (message.Type)
+            switch (message.GetType().Name)
             {
-                case MessageType.Login:
+                case "LoginMessage":
                     #region login
                     {
                         var islogin = false;
@@ -95,13 +95,13 @@ namespace QueueService
                             clientListChanged = true;
                         }
                         var resultMsg = new ResultMessage();
-                        resultMsg.Operate = MessageType.Login;
+                        resultMsg.Operate = "Login";
                         resultMsg.Result = islogin ? "您已登录过系统" : "登录成功";
                         this.SendMessage(connId, resultMsg);
                     }
                     #endregion
                     break;
-                case MessageType.Call:
+                case "CallMessage":
                     #region call
                     {
                         var msg = message as CallMessage;
@@ -124,13 +124,13 @@ namespace QueueService
                             }
                         }
                         var resultMsg = new ResultMessage();
-                        resultMsg.Operate = MessageType.Call;
+                        resultMsg.Operate = "Call";
                         resultMsg.Result = "呼叫成功";
                         this.SendMessage(connId, resultMsg);
                     }
                     #endregion
                     break;
-                case MessageType.Rate:
+                case "RateMessage":
                     #region rate
                     {
                         var msg = message as RateMessage;
@@ -148,7 +148,7 @@ namespace QueueService
                     }
                     #endregion
                     break;
-                case MessageType.Operate:
+                case "OperateMessage":
                     #region operate
                     {
                         var msg = message as OperateMessage;
@@ -166,11 +166,24 @@ namespace QueueService
                     }
                     #endregion
                     break;
-                case MessageType.Logout:
+                case "WeChatMessage":
+                    #region wechat
+                    {
+                        var msg = message as WeChatMessage;
+                        var bytes = this.process.FormatterMessageBytes(message);
+                        var allClient = new ClientInfo[this.clientList.Dictionary.Count];
+                        this.clientList.Dictionary.Values.CopyTo(allClient, 0);
+                        var list = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == wechatService).ToList();
+                        foreach (var client in list)
+                            this.Send(client.ID, bytes, bytes.Length);
+                    }
+                    #endregion
+                    break;
+                case "LogoutMessage":
                     #region logout
                     {
                         var resultMsg = new ResultMessage();
-                        resultMsg.Operate = MessageType.Logout;
+                        resultMsg.Operate = "Logout";
                         resultMsg.Result = "注销成功";
                         this.SendMessage(connId, resultMsg);
                     }

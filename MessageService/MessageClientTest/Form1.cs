@@ -31,7 +31,7 @@ namespace MessageClientTest
             client.ServerPort = ushort.Parse("3347");
             client.ClientType = ClientType.Window;
             client.ClientName = "张三";
-            client.OnResult += new Action<MessageType, string>(client_OnResult);
+            client.OnResult += new Action<string, string>(client_OnResult);
             client.OnMessage += new Action<QueueMessage.Message>(client_OnMessage);
         }
 
@@ -42,7 +42,7 @@ namespace MessageClientTest
                 this.Log("Message:" + callMsg.TicketNo);
         }
 
-        void client_OnResult(MessageType operate, string result)
+        void client_OnResult(string operate, string result)
         {
             this.Log(operate + ":" + result);
         }

@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeChatService", "WeChatServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{41B0254D-36F7-4399-AA9C-07F36E09531B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{9EB52FDD-5D5C-4372-ACC4-D0201AEF12D5}"
+	ProjectSection(SolutionItems) = preProject
+		Doc\微信服务消息规范.doc = Doc\微信服务消息规范.doc
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

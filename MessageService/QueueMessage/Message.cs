@@ -2,28 +2,22 @@
 
 namespace QueueMessage
 {
-    public enum MessageType { Result, Restart, Login, Call, Rate, Operate, Logout }
     public enum ClientType { Service, Window, CallClient, SoundPlayer, LEDDisplay, ScreenDisplay }
 
     [Serializable]
     public class Message
     {
-        public MessageType Type { get; set; }
-
-        public override string ToString()
-        {
-            return "基础消息类型";
-        }
     }
+
+    #region 基础消息
 
     [Serializable]
     public class ResultMessage : Message
     {
         public ResultMessage()
         {
-            this.Type = MessageType.Result;
         }
-        public MessageType Operate { get; set; }
+        public string Operate { get; set; }
         public string Result { get; set; }
         public override string ToString()
         {
@@ -36,18 +30,36 @@ namespace QueueMessage
     {
         public LoginMessage()
         {
-            this.Type = MessageType.Login;
         }
         public ClientType ClientType { get; set; }
         public string ClientName { get; set; }
     }
 
     [Serializable]
+    public class RestartMessage : Message
+    {
+        public RestartMessage()
+        {
+        }
+    }
+
+    [Serializable]
+    public class LogoutMessage : Message
+    {
+        public LogoutMessage()
+        {
+        }
+    }
+
+    #endregion
+
+    #region 业务消息
+
+    [Serializable]
     public class CallMessage : Message
     {
         public CallMessage()
         {
-            this.Type = MessageType.Call;
         }
 
         public bool IsSoundMessage { get; set; }
@@ -73,7 +85,6 @@ namespace QueueMessage
     {
         public RateMessage()
         {
-            this.Type = MessageType.Rate;
         }
         /// <summary>
         /// 评价流水号
@@ -113,7 +124,6 @@ namespace QueueMessage
     {
         public OperateMessage()
         {
-            this.Type = MessageType.Operate;
         }
 
         /// <summary>
@@ -130,11 +140,14 @@ namespace QueueMessage
     }
 
     [Serializable]
-    public class LogoutMessage : Message
+    public class WeChatMessage : Message
     {
-        public LogoutMessage()
+        public WeChatMessage()
         {
-            this.Type = MessageType.Logout;
         }
+
+        public string ID { get; set; }
     }
+
+    #endregion
 }

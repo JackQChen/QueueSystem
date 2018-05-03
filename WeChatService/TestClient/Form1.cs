@@ -125,5 +125,10 @@ namespace TestClient
             this.client.Send(data, data.Length);
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.SendMessage(new { key = Guid.NewGuid().ToString() });
+        }
+
     }
 }

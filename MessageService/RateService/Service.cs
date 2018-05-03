@@ -34,22 +34,22 @@ namespace RateService
             loginOperation.AddRange("raterequest,rateoperate,ratesubmit".Split(','));
         }
 
-        HandleResult client_OnConnect(TcpClient sender)
-        {
-            var bytes = this.dataProcess.FormatterMessageBytes(new LoginMessage()
-            {
-                ClientType = QueueMessage.ClientType.Service,
-                ClientName = "RateService"
-            });
-            this.client.Send(bytes, bytes.Length);
-            return HandleResult.Ignore;
-        }
-
         HandleResult Service_OnPrepareListen(TcpServer sender, IntPtr soListen)
         {
             dynamic section = ConfigurationManager.GetSection("ServiceConfig");
             var port = section.Configs["排队消息服务"].Port;
             this.client.Connect("127.0.0.1", ushort.Parse(port));
+            return HandleResult.Ignore;
+        }
+
+        HandleResult client_OnConnect(TcpClient sender)
+        {
+            var bytes = this.dataProcess.FormatterMessageBytes(new LoginMessage()
+            {
+                ClientType = ClientType.Service,
+                ClientName = "RateService"
+            });
+            this.client.Send(bytes, bytes.Length);
             return HandleResult.Ignore;
         }
 
@@ -61,9 +61,9 @@ namespace RateService
 
         void dataProcess_ReceiveMessage(IntPtr connId, Message message)
         {
-            switch (message.Type)
+            switch (message.GetType().Name)
             {
-                case MessageType.Rate:
+                case "RateMessage":
                     {
                         var msg = message as RateMessage;
                         var targetList = this.deviceList.Dictionary.Values.Where(p => p.WindowNumber == msg.WindowNo).ToList();
@@ -85,7 +85,7 @@ namespace RateService
                         }
                     }
                     break;
-                case MessageType.Operate:
+                case "OperateMessage":
                     {
                         var msg = message as OperateMessage;
                         var targetList = this.deviceList.Dictionary.Values.Where(p => p.WindowNumber == msg.WindowNo).ToList();

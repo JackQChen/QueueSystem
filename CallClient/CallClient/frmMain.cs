@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
 using BLL;
 using MessageClient;
 using Model;
 using QueueMessage;
-using System.Collections;
 
 namespace CallClient
 {

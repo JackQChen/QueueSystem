@@ -40,6 +40,10 @@
     <Reference Include="Model">
       <HintPath>..\..\Service\Model\bin\Debug\Model.dll</HintPath>
     </Reference>
+    <Reference Include="QueueMessage, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\QueueMessage.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -51,9 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business.cs" />
     <Compile Include="Encrypt.cs" />
     <Compile Include="ExtraData.cs" />
-    <Compile Include="Process.cs" />
+    <Compile Include="WeChatProcess.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateList.cs" />
