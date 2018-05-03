@@ -23,7 +23,7 @@ namespace WeChatService
             wechatProcess = new WeChatProcess(this);
             busi = new Business();
             client = new TcpClient();
-            wechatProcess.ReceiveMessage += new Action<IntPtr, object>(process_ReceiveMessage);
+            wechatProcess.ReceiveMessage += new Action<IntPtr, object>(wechatProcess_ReceiveMessage);
             client.OnConnect += new TcpClientEvent.OnConnectEventHandler(client_OnConnect);
             client.OnReceive += new TcpClientEvent.OnReceiveEventHandler(client_OnReceive);
             dataProcess.ReceiveMessage += new Action<IntPtr, Message>(dataProcess_ReceiveMessage);
@@ -118,7 +118,7 @@ namespace WeChatService
         }
 
         //授权通过后才会触发
-        void process_ReceiveMessage(IntPtr connId, object message)
+        void wechatProcess_ReceiveMessage(IntPtr connId, object message)
         {
             var dic = message as Dictionary<string, object>;
             if (dic != null)
