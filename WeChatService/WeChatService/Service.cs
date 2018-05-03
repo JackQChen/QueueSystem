@@ -9,24 +9,19 @@ namespace WeChatService
 {
     public class Service : TcpServer<ExtraData>
     {
-        Process dataProcess;
+        ServiceClient client;
         WeChatProcess wechatProcess;
         Business busi;
-        TcpClient client;
-        QueueMessage.ExtraData extraData = new QueueMessage.ExtraData();
         string strKey;
 
         public Service()
         {
             strKey = ConfigurationManager.AppSettings["AccessKey"];
-            dataProcess = new Process();
+            client = new ServiceClient();
             wechatProcess = new WeChatProcess(this);
             busi = new Business();
-            client = new TcpClient();
+            client.ReceiveMessage += new Action<IntPtr, Message>(client_ReceiveMessage);
             wechatProcess.ReceiveMessage += new Action<IntPtr, object>(wechatProcess_ReceiveMessage);
-            client.OnConnect += new TcpClientEvent.OnConnectEventHandler(client_OnConnect);
-            client.OnReceive += new TcpClientEvent.OnReceiveEventHandler(client_OnReceive);
-            dataProcess.ReceiveMessage += new Action<IntPtr, Message>(dataProcess_ReceiveMessage);
             this.OnPrepareListen += new TcpServerEvent.OnPrepareListenEventHandler(Service_OnPrepareListen);
             this.OnAccept += new TcpServerEvent.OnAcceptEventHandler(Service_OnAccept);
             this.OnClose += new TcpServerEvent.OnCloseEventHandler(Service_OnClose);
@@ -39,24 +34,7 @@ namespace WeChatService
             return HandleResult.Ignore;
         }
 
-        HandleResult client_OnConnect(TcpClient sender)
-        {
-            var bytes = this.dataProcess.FormatterMessageBytes(new LoginMessage()
-            {
-                ClientType = ClientType.Service,
-                ClientName = "WeChatService"
-            });
-            this.client.Send(bytes, bytes.Length);
-            return HandleResult.Ignore;
-        }
-
-        HandleResult client_OnReceive(TcpClient sender, byte[] bytes)
-        {
-            this.dataProcess.RecvData(this.client.ConnectionId, extraData, bytes);
-            return HandleResult.Ignore;
-        }
-
-        void dataProcess_ReceiveMessage(IntPtr connId, Message message)
+        void client_ReceiveMessage(IntPtr connId, Message message)
         {
             switch (message.GetType().Name)
             {

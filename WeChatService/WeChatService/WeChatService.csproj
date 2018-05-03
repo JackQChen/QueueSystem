@@ -58,6 +58,7 @@
     <Compile Include="Business.cs" />
     <Compile Include="Encrypt.cs" />
     <Compile Include="ExtraData.cs" />
+    <Compile Include="ServiceClient.cs" />
     <Compile Include="WeChatProcess.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

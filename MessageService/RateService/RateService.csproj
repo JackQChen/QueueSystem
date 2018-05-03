@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateDevice.cs" />
     <Compile Include="Service.cs" />
+    <Compile Include="ServiceClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="RateDebug.html" />

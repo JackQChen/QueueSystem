@@ -13,21 +13,17 @@ namespace RateService
     {
         JavaScriptSerializer convert = new JavaScriptSerializer();
         RateProcess rateProcess = new RateProcess();
-        Process dataProcess = new Process();
         List<string> loginOperation = new List<string>();
         byte[] btDisConn = new byte[] { 0x3, 0xe9 };
         internal Extra<DeviceInfo> deviceList = new Extra<DeviceInfo>();
         internal bool deviceListChanged = false;
-        TcpClient client = new TcpClient();
-        ExtraData extraData = new ExtraData();
+        ServiceClient client = new ServiceClient();
         OperateIni ini;
 
         public Service()
         {
             ini = new OperateIni(AppDomain.CurrentDomain.BaseDirectory + "RateUpdate.ini");
-            this.client.OnConnect += new TcpClientEvent.OnConnectEventHandler(client_OnConnect);
-            this.client.OnReceive += new TcpClientEvent.OnReceiveEventHandler(client_OnReceive);
-            this.dataProcess.ReceiveMessage += new Action<IntPtr, Message>(dataProcess_ReceiveMessage);
+            this.client.ReceiveMessage += new Action<IntPtr, Message>(client_ReceiveMessage);
             this.OnPrepareListen += new TcpServerEvent.OnPrepareListenEventHandler(Service_OnPrepareListen);
             this.OnClose += new TcpServerEvent.OnCloseEventHandler(Service_OnClose);
             this.OnWSMessageBody += new WebSocketEvent.OnWSMessageBodyEventHandler(Service_OnWSMessageBody);
@@ -42,24 +38,7 @@ namespace RateService
             return HandleResult.Ignore;
         }
 
-        HandleResult client_OnConnect(TcpClient sender)
-        {
-            var bytes = this.dataProcess.FormatterMessageBytes(new LoginMessage()
-            {
-                ClientType = ClientType.Service,
-                ClientName = "RateService"
-            });
-            this.client.Send(bytes, bytes.Length);
-            return HandleResult.Ignore;
-        }
-
-        HandleResult client_OnReceive(TcpClient sender, byte[] bytes)
-        {
-            this.dataProcess.RecvData(this.client.ConnectionId, extraData, bytes);
-            return HandleResult.Ignore;
-        }
-
-        void dataProcess_ReceiveMessage(IntPtr connId, Message message)
+        void client_ReceiveMessage(IntPtr connId, Message message)
         {
             switch (message.GetType().Name)
             {
