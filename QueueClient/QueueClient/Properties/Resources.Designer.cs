@@ -214,6 +214,13 @@ namespace QueueClient.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap L评价_拷贝_4 {
+            get {
+                object obj = ResourceManager.GetObject("L评价_拷贝_4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap L返回按钮 {
             get {
                 object obj = ResourceManager.GetObject("L返回按钮", resourceCulture);

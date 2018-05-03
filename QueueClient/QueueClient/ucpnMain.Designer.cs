@@ -49,7 +49,7 @@
             this.pbInvestment.BackColor = System.Drawing.Color.Transparent;
             this.pbInvestment.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbInvestment.Image = global::QueueClient.Properties.Resources.L招商引资_拷贝;
-            this.pbInvestment.Location = new System.Drawing.Point(143, 680);
+            this.pbInvestment.Location = new System.Drawing.Point(137, 729);
             this.pbInvestment.Name = "pbInvestment";
             this.pbInvestment.Size = new System.Drawing.Size(339, 79);
             this.pbInvestment.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -90,7 +90,7 @@
             this.pbWork.BackColor = System.Drawing.Color.Transparent;
             this.pbWork.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbWork.Image = global::QueueClient.Properties.Resources.L办事;
-            this.pbWork.Location = new System.Drawing.Point(242, 302);
+            this.pbWork.Location = new System.Drawing.Point(199, 302);
             this.pbWork.Name = "pbWork";
             this.pbWork.Size = new System.Drawing.Size(490, 190);
             this.pbWork.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -104,7 +104,7 @@
             this.pbGetCard.BackColor = System.Drawing.Color.Transparent;
             this.pbGetCard.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbGetCard.Image = global::QueueClient.Properties.Resources.L领证;
-            this.pbGetCard.Location = new System.Drawing.Point(1229, 302);
+            this.pbGetCard.Location = new System.Drawing.Point(1232, 302);
             this.pbGetCard.Name = "pbGetCard";
             this.pbGetCard.Size = new System.Drawing.Size(490, 190);
             this.pbGetCard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -117,10 +117,10 @@
             // 
             this.pbEvaluate.BackColor = System.Drawing.Color.Transparent;
             this.pbEvaluate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbEvaluate.Image = global::QueueClient.Properties.Resources.L评价_拷贝_3;
-            this.pbEvaluate.Location = new System.Drawing.Point(1651, 702);
+            this.pbEvaluate.Image = global::QueueClient.Properties.Resources.L评价_拷贝_4;
+            this.pbEvaluate.Location = new System.Drawing.Point(1631, 732);
             this.pbEvaluate.Name = "pbEvaluate";
-            this.pbEvaluate.Size = new System.Drawing.Size(154, 76);
+            this.pbEvaluate.Size = new System.Drawing.Size(208, 76);
             this.pbEvaluate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbEvaluate.TabIndex = 16;
             this.pbEvaluate.TabStop = false;

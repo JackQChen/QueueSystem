@@ -1121,7 +1121,7 @@ namespace QueueClient
                             var paperCode = idNo;
                             var paperType = "";
                             var mobilePhone = "";
-                            var reserveDate = "1990-01-01";
+                            var reserveDate = DateTime.Now.ToString("yyyy-MM-dd");
                             var reserveStartTime = "00:00";
                             var reserveEndTime = "00:00";
                             var userName = "";
@@ -1147,6 +1147,7 @@ namespace QueueClient
                                         {
                                             busiCode = dt["businessCode"] == null ? "" : dt["businessCode"].ToString();
                                             busiName = dt["businessName"] == null ? "" : dt["businessName"].ToString();
+                                            unitCode = dt["unitSeq"] == null ? "" : dt["unitSeq"].ToString();
                                             if (busiCode != "" && busiName != "")
                                                 break;
                                         }
@@ -1174,7 +1175,7 @@ namespace QueueClient
                                 app.reserveStartTime = Convert.ToDateTime(reserveDate + " " + reserveStartTime + ":00");
                                 app.unitCode = unitCode;
                                 app.unitName = unitName;
-                                app.userName = userName;
+                                app.userName = person == null ? userName : person.name;
                                 app.isCheck = false;
                                 app.sysFlag = 0;
                                 appList.Add(app);
@@ -1287,6 +1288,7 @@ namespace QueueClient
                 }
                 else
                 {
+                    appList = ali;
                     ShowAppointment();
                 }
 

@@ -410,6 +410,7 @@
     <Content Include="bin\Debug\UnPack.dll" />
     <Content Include="bin\Debug\wrapper.dll" />
     <Content Include="queue.ico" />
+    <None Include="Resources\评价 拷贝 3.png" />
     <None Include="Resources\L首页按钮.png" />
     <None Include="Resources\L评价 拷贝 3.png" />
     <None Include="Resources\L领证.png" />
