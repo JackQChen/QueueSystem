@@ -95,15 +95,16 @@ namespace MessageClient
 
         public bool Login()
         {
-            var message = new LoginMessage();
-            message.ClientType = this.ClientType;
-            message.ClientName = this.ClientName;
             if (!this.IsStarted)
             {
                 if (!this.Connect(this.ServerIP, this.ServerPort, false))
                     return false;
             }
-            var bytes = this.process.FormatterMessageBytes(message);
+            var bytes = this.process.FormatterMessageBytes(new LoginMessage()
+            {
+                ClientType = this.ClientType,
+                ClientName = this.ClientName
+            });
             this.Send(bytes, bytes.Length);
             return true;
         }
