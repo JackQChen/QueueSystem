@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConstString.cs" />
+    <Compile Include="EnumType.cs" />
     <Compile Include="ExtraData.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Process.cs" />

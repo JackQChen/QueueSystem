@@ -83,9 +83,9 @@ namespace LEDDisplay
 
         void client_OnMessage(QueueMessage.Message message)
         {
-            switch (message.Type)
+            switch (message.GetType().Name)
             {
-                case MessageType.Call:
+                case MessageName.CallMessage:
                     {
                         var msg = message as CallMessage;
                         if (msg.IsLEDMessage)
@@ -126,7 +126,7 @@ namespace LEDDisplay
                         }
                     }
                     break;
-                case MessageType.Rate:
+                case MessageName.RateMessage:
                     {
                         var msg = message as RateMessage;
                         var win = this.listLedWin.Find(m => m.WindowNumber == msg.WindowNo);
@@ -138,7 +138,7 @@ namespace LEDDisplay
                         }
                     }
                     break;
-                case MessageType.Operate:
+                case MessageName.OperateMessage:
                     {
                         var msg = message as OperateMessage;
                         var win = this.listLedWin.Find(m => m.WindowNumber == msg.WindowNo);
@@ -208,6 +208,12 @@ namespace LEDDisplay
                 this.messageIndicator1.SetState(StateType.Success, "打开通讯设备失败");
             else if (result == LEDSender.R_DEVICE_BUSY)
                 this.messageIndicator1.SetState(StateType.Success, "设备忙，正在通讯中...");
+            //cq 20180504 发送失败尝试重新发送
+            if (result != LEDSender.R_DEVICE_READY)
+            {
+                Thread.Sleep(1000);
+                result = LEDSender.Do_LED_SendToScreen(ref param, K);
+            }
             LogService.Debug("SendLEDMessage->End:Result=" + result);
         }
 

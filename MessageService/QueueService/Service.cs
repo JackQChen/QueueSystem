@@ -11,7 +11,6 @@ namespace QueueService
         Process process;
         internal Extra<ClientInfo> clientList = new Extra<ClientInfo>();
         internal bool clientListChanged = false;
-        const string rateService = "RateService", wechatService = "WeChatService";
         JavaScriptSerializer convert = new JavaScriptSerializer();
 
         public Service()
@@ -62,17 +61,18 @@ namespace QueueService
 
         void process_ReceiveMessage(IntPtr connId, Message message)
         {
-            if (message.GetType() != typeof(LoginMessage) && !this.clientList.Dictionary.ContainsKey(connId))
+            var msgName = message.GetType().Name;
+            if (msgName != MessageName.LoginMessage && !this.clientList.Dictionary.ContainsKey(connId))
             {
                 var resultMsg = new ResultMessage();
-                resultMsg.Operate = message.GetType().Name;
+                resultMsg.Operate = msgName;
                 resultMsg.Result = "当前用户尚未登录";
                 this.SendMessage(connId, resultMsg);
                 return;
             }
-            switch (message.GetType().Name)
+            switch (msgName)
             {
-                case "LoginMessage":
+                case MessageName.LoginMessage:
                     #region login
                     {
                         var islogin = false;
@@ -95,13 +95,13 @@ namespace QueueService
                             clientListChanged = true;
                         }
                         var resultMsg = new ResultMessage();
-                        resultMsg.Operate = "Login";
+                        resultMsg.Operate = OperateName.Login;
                         resultMsg.Result = islogin ? "您已登录过系统" : "登录成功";
                         this.SendMessage(connId, resultMsg);
                     }
                     #endregion
                     break;
-                case "CallMessage":
+                case MessageName.CallMessage:
                     #region call
                     {
                         var msg = message as CallMessage;
@@ -124,13 +124,13 @@ namespace QueueService
                             }
                         }
                         var resultMsg = new ResultMessage();
-                        resultMsg.Operate = "Call";
+                        resultMsg.Operate = OperateName.Call;
                         resultMsg.Result = "呼叫成功";
                         this.SendMessage(connId, resultMsg);
                     }
                     #endregion
                     break;
-                case "RateMessage":
+                case MessageName.RateMessage:
                     #region rate
                     {
                         var msg = message as RateMessage;
@@ -142,13 +142,13 @@ namespace QueueService
                         foreach (var client in list)
                             this.Send(client.ID, bytes, bytes.Length);
                         //LED屏发送完成 
-                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == rateService).ToList();
+                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.RateService).ToList();
                         foreach (var service in listRate)
                             this.SendMessage(service.ID, message);
                     }
                     #endregion
                     break;
-                case "OperateMessage":
+                case MessageName.OperateMessage:
                     #region operate
                     {
                         var msg = message as OperateMessage;
@@ -160,30 +160,30 @@ namespace QueueService
                         foreach (var client in list)
                             this.Send(client.ID, bytes, bytes.Length);
                         //LED屏发送完成
-                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == rateService).ToList();
+                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.RateService).ToList();
                         foreach (var service in listRate)
                             this.SendMessage(service.ID, message);
                     }
                     #endregion
                     break;
-                case "WeChatMessage":
+                case MessageName.WeChatMessage:
                     #region wechat
                     {
                         var msg = message as WeChatMessage;
                         var bytes = this.process.FormatterMessageBytes(message);
                         var allClient = new ClientInfo[this.clientList.Dictionary.Count];
                         this.clientList.Dictionary.Values.CopyTo(allClient, 0);
-                        var list = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == wechatService).ToList();
+                        var list = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.WeChatService).ToList();
                         foreach (var client in list)
                             this.Send(client.ID, bytes, bytes.Length);
                     }
                     #endregion
                     break;
-                case "LogoutMessage":
+                case MessageName.LogoutMessage:
                     #region logout
                     {
                         var resultMsg = new ResultMessage();
-                        resultMsg.Operate = "Logout";
+                        resultMsg.Operate = OperateName.Logout;
                         resultMsg.Result = "注销成功";
                         this.SendMessage(connId, resultMsg);
                     }

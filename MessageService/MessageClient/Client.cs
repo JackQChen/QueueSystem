@@ -62,19 +62,19 @@ namespace MessageClient
         {
             switch (message.GetType().Name)
             {
-                case "RestartMessage":
+                case MessageName.RestartMessage:
                     {
                         //以无参方式重启
                         System.Windows.Forms.Application.Exit();
                         System.Diagnostics.Process.Start(System.Windows.Forms.Application.ExecutablePath);
                     }
                     break;
-                case "ResultMessage":
+                case MessageName.ResultMessage:
                     {
                         var msg = message as ResultMessage;
                         if (this.OnResult != null)
                             this.OnResult(msg.Operate, msg.Result);
-                        if (msg.Operate == "Logout")
+                        if (msg.Operate == OperateName.Logout)
                             this.Stop();
                     }
                     break;

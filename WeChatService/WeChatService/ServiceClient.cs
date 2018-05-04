@@ -22,7 +22,7 @@ namespace WeChatService
             var bytes = this.process.FormatterMessageBytes(new LoginMessage()
             {
                 ClientType = ClientType.Service,
-                ClientName = "WeChatService"
+                ClientName = ServiceName.WeChatService
             });
             this.Send(bytes, bytes.Length);
             return HandleResult.Ignore;

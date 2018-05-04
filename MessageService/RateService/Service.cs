@@ -42,7 +42,7 @@ namespace RateService
         {
             switch (message.GetType().Name)
             {
-                case "RateMessage":
+                case MessageName.RateMessage:
                     {
                         var msg = message as RateMessage;
                         var targetList = this.deviceList.Dictionary.Values.Where(p => p.WindowNumber == msg.WindowNo).ToList();
@@ -64,7 +64,7 @@ namespace RateService
                         }
                     }
                     break;
-                case "OperateMessage":
+                case MessageName.OperateMessage:
                     {
                         var msg = message as OperateMessage;
                         var targetList = this.deviceList.Dictionary.Values.Where(p => p.WindowNumber == msg.WindowNo).ToList();

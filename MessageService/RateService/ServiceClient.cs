@@ -22,7 +22,7 @@ namespace RateService
             var bytes = this.process.FormatterMessageBytes(new LoginMessage()
             {
                 ClientType = ClientType.Service,
-                ClientName = "RateService"
+                ClientName = ServiceName.RateService
             });
             this.Send(bytes, bytes.Length);
             return HandleResult.Ignore;

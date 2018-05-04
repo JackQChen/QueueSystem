@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using MessageLib;
 using QueueMessage;
 
@@ -38,7 +37,7 @@ namespace WeChatService
         {
             switch (message.GetType().Name)
             {
-                case "WeChatMessage":
+                case MessageName.WeChatMessage:
                     {
                         var msg = message as WeChatMessage;
                         //msg.ID

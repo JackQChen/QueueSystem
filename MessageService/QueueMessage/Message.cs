@@ -2,7 +2,6 @@
 
 namespace QueueMessage
 {
-    public enum ClientType { Service, Window, CallClient, SoundPlayer, LEDDisplay, ScreenDisplay }
 
     [Serializable]
     public class Message
@@ -116,8 +115,6 @@ namespace QueueMessage
             return string.Format("请求评价消息:RateId={0} WindowNo={1}", this.RateId, this.WindowNo);
         }
     }
-
-    public enum Operate { Pause, Resume, Reset }
 
     [Serializable]
     public class OperateMessage : Message
