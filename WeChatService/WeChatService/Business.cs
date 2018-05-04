@@ -39,6 +39,7 @@ namespace WeChatService
             wList = wBll.GetModelList();
         }
 
+        //处理排队信息
         public object ProcessQueue(Dictionary<string, object> json)
         {
             try
@@ -70,10 +71,108 @@ namespace WeChatService
             }
         }
 
+        //获取当前排队等候数据
         public object GetQueueInfo(Dictionary<string, object> json)
         {
+            WriterReciveLog("GetQueueInfo", script.Serialize(json));
             var id = Convert.ToInt32(json["id"]);
             return GetQueueById(id);
+        }
+
+        //推送提醒
+        public object PushNotify(string Id)
+        {
+            object obj = new object();
+            var model = qBll.GetModel(Convert.ToInt32(Id));
+            if (model == null)
+            {
+                return new
+                {
+                    method = "PushNotify",
+                    code = 0,
+                    desc = "无此编号的排队数据，排队已失效，请核查",
+                    result = new
+                    {
+                    }
+                };
+
+            }
+            else
+            {
+                if (model.state == 0)
+                {
+                    return new
+                    {
+                        method = "PushNotify",
+                        code = 0,
+                        desc = "该排队数据已失效，请核查",
+                        result = new
+                        {
+                        }
+                    };
+                }
+            }
+            var list = qBll.GetModelList(model.busTypeSeq, model.unitSeq, 0);
+            var cModel = cBll.GetModel(f => f.qId == Convert.ToInt32(Id) && f.state != 2);
+            var areaWindowStr = GetAreaWindowsStr(model.unitSeq, model.busTypeSeq);
+            var waitNo = 1;
+            //返回该条数据以及三条待叫号数据
+            var objresult = new
+            {
+                method = "PushNotify",
+                code = 1,
+                desc = "处理成功",
+                result = new
+                {
+                    currentQueue = new
+                    {
+                        state = "已叫号",
+                        id = model.id,
+                        ticketNumber = model.ticketNumber,
+                        windowName = cModel.windowNumber,
+                        wxId = model.wxId,
+                    },
+                    waitQueue = list.OrderBy(o => o.id).Take(3).Select(s => new
+                    {
+                        id = s.id,
+                        area = areaWindowStr[0],
+                        windowStr = areaWindowStr[2],
+                        currentState = "排队中",
+                        windowNo = "",
+                        waitCount = waitNo++,
+                        unitSeq = s.unitSeq,
+                        unitName = s.unitName,
+                        busySeq = s.busTypeSeq,
+                        busyName = s.busTypeName,
+                        ticketNumber = s.ticketNumber,
+                        ticketTime = s.ticketTime,
+                        reserveSeq = s.reserveSeq,
+                        cardId = s.idCard,
+                        vip = GetVipLever(s),
+                    }).ToList()
+                }
+            };
+            return objresult;
+        }
+
+        //获取排队等候人数
+        public object GetWaitInfo(Dictionary<string, object> json)
+        {
+            WriterReciveLog("GetWaitInfo", script.Serialize(json));
+            var unitSeq = json["unitSeq"].ToString();
+            var busiSeq = json["busiSeq"].ToString();
+            var list = qBll.GetModelList(busiSeq, unitSeq, 0);
+            return new
+            {
+                code = 1,
+                desc = "处理成功",
+                result = list.Select(s => new
+                {
+                    unitSeq = unitSeq,
+                    busiSeq = busiSeq,
+                    waitCount = list.Count,
+                })
+            };
         }
 
         //获取业务所属区域以及窗口
@@ -148,7 +247,7 @@ namespace WeChatService
             #endregion
 
             #region 排队
-            var queue = qBll.QueueLine(unitSeq, unitName, busiSeq, busiName, ticketStart, idCard, personName, app);
+            var queue = qBll.QueueLine(unitSeq, unitName, busiSeq, busiName, ticketStart, idCard, personName, wxId, app);
             if (app != null)
             {
                 app.sysFlag = 0;
@@ -293,8 +392,8 @@ namespace WeChatService
             }
             var areaWindowStr = GetAreaWindowsStr(model.unitSeq, model.busTypeSeq);
             var isGreen = GetVipLever(model);
-            var list = qBll.GetModelList(model.busTypeSeq, model.unitSeq, 0);
-            int waitNo = list.Count - 1;//计算等候人数
+            var list = qBll.GetModelList(model.busTypeSeq, model.unitSeq, 0).Where(q => q.id < model.id).ToList();
+            int waitNo = list.Count;//计算等候人数
             if (model.state == 1)
             {
                 //已叫号/已处理
@@ -334,7 +433,6 @@ namespace WeChatService
                             reserveSeq = model.reserveSeq,
                             cardId = model.idCard,
                             vip = isGreen,
-
                         }
                     };
                 }
@@ -363,7 +461,6 @@ namespace WeChatService
                         reserveSeq = model.reserveSeq,
                         cardId = model.idCard,
                         vip = isGreen,
-
                     }
                 };
             }

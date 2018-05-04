@@ -664,6 +664,16 @@
             编号
             </summary>
         </member>
+        <member name="P:Model.TQueueModel.qType">
+            <summary>
+            排队类型 0:现场排队 1:微信排队
+            </summary>
+        </member>
+        <member name="P:Model.TQueueModel.wxId">
+            <summary>
+            微信排队时微信号
+            </summary>
+        </member>
         <member name="T:Model.TDictionaryModel">
             <summary>
             

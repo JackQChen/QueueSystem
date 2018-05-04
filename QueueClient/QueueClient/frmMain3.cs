@@ -878,8 +878,8 @@ namespace QueueClient
             {
                 isGreen = att.isGreenChannel == 1 ? "绿色通道" : "";
             }
-            var list = qBll.GetModelList(selectBusy.busiSeq, selectUnit.unitSeq, 0);
-            int waitNo = list.Count - 1;//计算等候人数
+            var list = qBll.GetModelList(selectBusy.busiSeq, selectUnit.unitSeq, 0).Where(q => q.id < queue.id).ToList();
+            int waitNo = list.Count;//计算等候人数
             string strLog = string.Format("补打已出票：部门[{0}]，业务[{1}]，票号[{2}]，预约号[{3}]，身份证号[{4}]，姓名[{5}]，时间[{6}]。",
                 queue.unitName, queue.busTypeName, queue.ticketNumber, queue.reserveSeq, queue.idCard, queue.qNmae, DateTime.Now);
             LogHelper.WriterQueueLog(strLog);

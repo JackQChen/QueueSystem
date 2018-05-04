@@ -29,7 +29,9 @@ namespace WeChatService
 
         HandleResult Service_OnPrepareListen(TcpServer sender, IntPtr soListen)
         {
-            this.client.Connect("127.0.0.1", ushort.Parse(ConfigurationManager.AppSettings["QueueServicePort"]));
+            dynamic section = ConfigurationManager.GetSection("ServiceConfig");
+            var port = section.Configs["排队消息服务"].Port;
+            this.client.Connect("127.0.0.1", ushort.Parse(port));
             return HandleResult.Ignore;
         }
 
@@ -40,7 +42,8 @@ namespace WeChatService
                 case MessageName.WeChatMessage:
                     {
                         var msg = message as WeChatMessage;
-                        //msg.ID
+                        var obj = busi.PushNotify(msg.ID);
+                        this.SendMessage(connId, obj);
                     }
                     break;
             }
@@ -105,11 +108,25 @@ namespace WeChatService
                     var method = dic["method"].ToString();
                     switch (method)
                     {
+                        case "HeartBeat":
+                            this.SendMessage(connId, new
+                            {
+                                method = "HeartBeat",
+                                param = new
+                                {
+                                    Message = "心跳消息接收成功",
+                                    DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                                }
+                            });
+                            break;
                         case "GetQueueInfo":
                             this.SendMessage(connId, busi.GetQueueInfo(dic["param"] as Dictionary<string, object>));
                             break;
                         case "ProcessQueue":
                             this.SendMessage(connId, busi.ProcessQueue(dic["param"] as Dictionary<string, object>));
+                            break;
+                        case "GetWaitInfo":
+                            this.SendMessage(connId, busi.GetWaitInfo(dic["param"] as Dictionary<string, object>));
                             break;
                         default:
                             this.SendMessage(connId, StateList.State[StateInfo.Invalid]);

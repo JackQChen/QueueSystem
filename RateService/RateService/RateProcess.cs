@@ -16,19 +16,14 @@ namespace RateService
         {
         }
 
-        public object RS_GetUnitList()
+        public object RS_GetWindowList()
         {
-            return this.winUserBll.RS_GetUnitList();
+            return this.winUserBll.RS_GetWindowList();
         }
 
-        public object RS_GetWindowListByUnitSeq(string unitSeq)
+        public object RS_GetUserListByWindowNo(string winNum)
         {
-            return this.winUserBll.RS_GetWindowListByUnitSeq(unitSeq);
-        }
-
-        public object RS_GetUserListByUnitSeq(string unitSeq)
-        {
-            return this.winUserBll.RS_GetUserListByUnitSeq(unitSeq);
+            return this.winUserBll.RS_GetUserListByWindowNo(winNum);
         }
 
         public object GetUserPhoto(string userCode)

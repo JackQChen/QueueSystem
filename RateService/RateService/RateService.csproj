@@ -43,6 +43,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Service\Model\bin\Debug\Model.dll</HintPath>
     </Reference>
+    <Reference Include="QueueMessage, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\QueueMessage.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -72,22 +76,12 @@
     <Compile Include="ServiceClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="RateDebug.html" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="FrmService.resx">
       <DependentUpon>FrmService.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="RateUpdate.ini" />
-    <None Include="评价服务消息规范.doc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\QueueMessage\QueueMessage.csproj">
-      <Project>{8ED6057A-D7DF-41A4-83AA-6D239686307C}</Project>
-      <Name>QueueMessage</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

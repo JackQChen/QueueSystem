@@ -74,19 +74,15 @@ namespace BLL
 
 
         //RateService相关
-        public object RS_GetUnitList()
+
+        public object RS_GetWindowList()
         {
-            return dal.RS_GetUnitList();
+            return dal.RS_GetWindowList();
         }
 
-        public object RS_GetWindowListByUnitSeq(string unitSeq)
+        public object RS_GetUserListByWindowNo(string winNum)
         {
-            return dal.RS_GetWindowListByUnitSeq(unitSeq);
-        }
-
-        public object RS_GetUserListByUnitSeq(string unitSeq)
-        {
-            return dal.RS_GetUserListByUnitSeq(unitSeq);
+            return dal.RS_GetUserListByWindowNo(winNum);
         }
 
         public string RS_GetUserPhoto(string userCode)

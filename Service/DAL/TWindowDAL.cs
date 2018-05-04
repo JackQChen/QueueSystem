@@ -88,22 +88,9 @@ namespace DAL
 
         //RateService相关
 
-        public object RS_GetUnitList()
-        {
-            return this.db.Query<TUnitModel>()
-                .OrderBy(k => k.unitSeq)
-                .Select(s => new
-                {
-                    s.unitSeq,
-                    s.unitName
-                })
-                .ToList();
-        }
-
-        public object RS_GetWindowListByUnitSeq(string unitSeq)
+        public object RS_GetWindowList()
         {
             return this.db.Query<TWindowBusinessModel>()
-                .Where(p => p.unitSeq == unitSeq)
                 .GroupBy(k => k.WindowID)
                 .Select(s => s.WindowID)
                 .InnerJoin<TWindowModel>((m, w) => m == w.ID)
@@ -116,14 +103,16 @@ namespace DAL
                 .ToList();
         }
 
-        public object RS_GetUserListByUnitSeq(string unitSeq)
+        public object RS_GetUserListByWindowNo(string winNum)
         {
             return this.db.Query<TWindowBusinessModel>()
-                .Where(p => p.unitSeq == unitSeq)
+                .InnerJoin<TWindowModel>((m, w) => m.WindowID == w.ID)
+                .Where((m, w) => w.Number == winNum)
+                .Select((m, w) => m)
                 .GroupBy(k => k.unitSeq)
-                .Select(s => s)
-                .InnerJoin<TUserModel>((m, u) => m.unitSeq == u.unitSeq)
-                .Select((m, u) => new
+                .Select(s => s.unitSeq)
+                .InnerJoin<TUserModel>((s, u) => s == u.unitSeq)
+                .Select((s, u) => new
                 {
                     UserCode = u.Code,
                     UserName = u.Name

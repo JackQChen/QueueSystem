@@ -302,6 +302,7 @@ namespace CallClient
                                 stateModel.callId = model.id;
                                 var callString = "请" + model.ticketNumber + "号到 " + windowNo + "号窗口办理 ";
                                 client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = windowNo, AreaNo = windowModel.AreaName.ToString(), IsLEDMessage = true, IsSoundMessage = true });
+                                client.SendMessage(new WeChatMessage() { ID = model.qId.ToString() });
                                 stateModel.workState = (int)WorkState.Call;
                                 stateModel.ticketNo = model.ticketNumber;
                                 stateModel.callId = model.id;

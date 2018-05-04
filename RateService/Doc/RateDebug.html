@@ -1,0 +1,169 @@
+﻿<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebSocketDebug</title>
+    <script language="javascript" type="text/javascript">
+
+        var output;
+        var photoResult = false;
+        function init() {
+            testWebSocket();
+            output = document.getElementById('output');
+        }
+        function testWebSocket() {
+            websocket = new WebSocket("ws://127.0.0.1:3348");
+            websocket.onopen = function (evt) {
+                writeToScreen("CONNECTED");
+            };
+            websocket.onclose = function (evt) {
+                writeToScreen("DISCONNECTED");
+            };
+            websocket.onmessage = function (evt) {
+                if (photoResult) {
+                    var img = document.getElementById('userPhoto');
+                    img.src = 'data: image / png; base64,' + eval('(' + evt.data + ')').result;
+                    photoResult = false;
+                    return;
+                }
+                writeToScreen('RESPONSE:' + evt.data);
+            };
+            websocket.onerror = function (evt) {
+                writeToScreen('ERROR:' + evt.data);
+            };
+        }
+
+        function doSend(message) {
+            writeToScreen("SENT: " + message);
+            websocket.send(message);
+        }
+        function writeToScreen(message) {
+            output.value = output.value + '\r\n' + message;
+            output.scrollTop = output.scrollHeight;
+        }
+        function GetUpdateInfo() {
+            doSend(JSON.stringify({
+                method: 'GetUpdateInfo'
+            }));
+        }
+        function GetWindowList() {
+            doSend(JSON.stringify({
+                method: 'GetWindowList'
+            }));
+        }
+        function GetUserList() {
+            doSend(JSON.stringify({
+                method: 'GetUserList', param: {
+                    winNum: document.getElementById('txtWinNo').value
+                }
+            }));
+        }
+        function GetUserPhoto() {
+            doSend(JSON.stringify({
+                method: 'GetUserPhoto',
+                param: {
+                    userCode: document.getElementById('txtPhoto').value
+                }
+            }));
+            photoResult = true;
+        }
+        function Login() {
+            doSend(JSON.stringify({
+                method: 'Login',
+                param: {
+                    winNum: document.getElementById('txtWinNum').value,
+                    userCode: document.getElementById('txtUserCode').value
+                }
+            }));
+        }
+        function RateRequest() {
+            doSend(JSON.stringify({
+                method: 'RateRequest',
+                param:
+                {
+                    winNum: document.getElementById('txtTargetWindow').value,
+                    rateId: '20171229211602',
+                    transactor: '测试办理人',
+                    item: '测试办理事项',
+                    date: '2018-01-02'
+                }
+            }));
+        }
+        function RateOperate() {
+            doSend(JSON.stringify({
+                method: 'RateOperate',
+                param:
+                {
+                    winNum: document.getElementById('txtOperateWindow').value,
+                    operate: document.getElementById('sltOperate').value
+                }
+            }));
+        }
+        function RateSubmit() {
+            doSend(JSON.stringify({
+                method: 'RateSubmit',
+                param: {
+                    rateId: document.getElementById('txtRateId').value,
+                    attitude: document.getElementById('txtRate1').value,
+                    quality: document.getElementById('txtRate2').value,
+                    efficiency: document.getElementById('txtRate3').value,
+                    honest: document.getElementById('txtRate4').value
+                }
+            }));
+        }
+    
+    </script>
+</head>
+<body onload="init()">
+    <h2>
+        WebSocketDebug</h2>
+    <div>
+        <input type="button" value="获取更新信息" onclick="GetUpdateInfo()" />
+    </div>
+    <div>
+        <input type="button" value="获取窗口列表" onclick="GetWindowList()" />
+    </div>
+    <div>
+        <span>窗口编号<input id="txtWinNo" type="text" />
+        </span>
+        <input type="button" value="获取用户列表" onclick="GetUserList()" />
+    </div>
+    <img id="userPhoto" src="" style="width: 100px; height: 100px" />
+    <div>
+        <span>用户编号<input id="txtPhoto" type="text" />
+        </span>
+        <input id="Button5" type="button" value="获取头像" onclick="GetUserPhoto()" />
+    </div>
+    <div>
+        <span>窗口号<input id="txtWinNum" type="text" />
+        </span><span>用户编号<input id="txtUserCode" type="text" />
+        </span>
+        <input id="Button2" type="button" value="登录" onclick="Login()" />
+    </div>
+    <div>
+        <span>目标窗口号<input id="txtTargetWindow" type="text" />
+            <input style="background: red" type="button" value="请求评价(*服务端触发此处仅供测试)" onclick="RateRequest()" />
+        </span>
+    </div>
+    <div>
+        <span>目标窗口号<input id="txtOperateWindow" type="text" />
+            <select id="sltOperate">
+                <option value="Pause">暂停服务</option>
+                <option value="Resume">恢复业务</option>
+            </select>
+            <input style="background: red" type="button" value="评价器操作(*服务端触发此处仅供测试)" onclick="RateOperate()" />
+        </span>
+    </div>
+    <div>
+        <span>评价请求ID<input id="txtRateId" type="text" />
+        </span><span>服务态度<input id="txtRate1" type="text" />
+        </span><span>完成质量<input id="txtRate2" type="text" />
+        </span><span>处理效率<input id="txtRate3" type="text" />
+        </span><span>廉洁自律<input id="txtRate4" type="text" />
+        </span>
+        <input id="Button4" type="button" value="提交评价" onclick="RateSubmit()" />
+    </div>
+    <div>
+        <textarea id="output" style="width: 800px; height: 300px"></textarea>
+    </div>
+</body>
+</html>

@@ -783,6 +783,7 @@ namespace CallSystem
                                     wReCall.Add(adress, rd);
                                 var callString = "请" + model.ticketNumber + "号到 " + wNum[adress] + "号窗口办理 ";
                                 client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = wNum[adress], AreaNo = wArea[wNum[adress]], IsLEDMessage = true, IsSoundMessage = true });
+                                client.SendMessage(new WeChatMessage() { ID = model.qId.ToString() });
                                 csState[adress].workState = (int)WorkState.Call;
                                 csState[adress].ticketNo = model.ticketNumber;
                                 csState[adress].callId = model.id;

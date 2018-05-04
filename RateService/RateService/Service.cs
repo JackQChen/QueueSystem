@@ -176,23 +176,17 @@ namespace RateService
                         }
                         break;
                     #endregion
-                    case "getunitlist":
-                        {
-                            var rData = new ResponseData { code = "0", request = requestData.method, result = rateProcess.RS_GetUnitList() };
-                            this.SendWSMessage(connId, rData.ToResultData());
-                        }
-                        break;
                     case "getwindowlist":
                         {
                             var param = requestData.param as Dictionary<string, object>;
-                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.rateProcess.RS_GetWindowListByUnitSeq(param["unitSeq"].ToString()) };
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.rateProcess.RS_GetWindowList() };
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;
                     case "getuserlist":
                         {
                             var param = requestData.param as Dictionary<string, object>;
-                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.rateProcess.RS_GetUserListByUnitSeq(param["unitSeq"].ToString()) };
+                            var rData = new ResponseData { code = "0", request = requestData.method, result = this.rateProcess.RS_GetUserListByWindowNo(param["winNum"].ToString()) };
                             this.SendWSMessage(connId, rData.ToResultData());
                         }
                         break;

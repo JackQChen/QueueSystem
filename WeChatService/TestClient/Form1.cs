@@ -51,8 +51,9 @@ namespace TestClient
             }
             else
             {
-                if (dic["code"].ToString() == "1001")
-                    access = true;
+                if (!access)
+                    if (dic["code"].ToString() == "1001")
+                        access = true;
             }
             this.textBox1.Invoke(new Action(() =>
             {
@@ -128,6 +129,11 @@ namespace TestClient
         private void button3_Click(object sender, EventArgs e)
         {
             this.SendMessage(new { key = Guid.NewGuid().ToString() });
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.SendMessage(new { method = "HeartBeat" });
         }
 
     }

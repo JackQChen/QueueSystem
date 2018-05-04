@@ -230,6 +230,7 @@ namespace DAL
                       line.windowNumber = "";
                       line.idCard = idCard;
                       line.qNmae = name;
+                      line.qType = 0;
                       line.sysFlag = 0;
                       if (app != null)
                       {
@@ -306,6 +307,7 @@ namespace DAL
                     line.qNmae = name;
                     line.sysFlag = 0;
                     line.wxId = wxId;
+                    line.qType = 1;
                     if (app != null)
                     {
                         line.appType = app.appType;
