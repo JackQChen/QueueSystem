@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using MessageLib;
 using QueueMessage;
+using System.IO;
 
 namespace WeChatService
 {
@@ -37,15 +38,23 @@ namespace WeChatService
 
         void client_ReceiveMessage(IntPtr connId, Message message)
         {
-            switch (message.GetType().Name)
+            try
             {
-                case MessageName.WeChatMessage:
-                    {
-                        var msg = message as WeChatMessage;
-                        var obj = busi.PushNotify(msg.ID);
-                        this.SendMessage(connId, obj);
-                    }
-                    break;
+                switch (message.GetType().Name)
+                {
+                    case MessageName.WeChatMessage:
+                        {
+                            var msg = message as WeChatMessage;
+                            var obj = busi.PushNotify(msg.ID);
+                            foreach (var cId in this.GetAllConnectionIDs())
+                                this.SendMessage(cId, obj);
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log("ClientEx=" + ex.Message);
             }
         }
 
@@ -100,45 +109,53 @@ namespace WeChatService
         //授权通过后才会触发
         void wechatProcess_ReceiveMessage(IntPtr connId, object message)
         {
-            var dic = message as Dictionary<string, object>;
-            if (dic != null)
+            try
             {
-                if (dic.ContainsKey("method"))
+                var dic = message as Dictionary<string, object>;
+                if (dic != null)
                 {
-                    var method = dic["method"].ToString();
-                    switch (method)
+                    if (dic.ContainsKey("method"))
                     {
-                        case "HeartBeat":
-                            this.SendMessage(connId, new
-                            {
-                                method = "HeartBeat",
-                                param = new
+                        var method = dic["method"].ToString();
+                        switch (method)
+                        {
+                            case "HeartBeat":
+                                this.SendMessage(connId, new
                                 {
-                                    Message = "心跳消息接收成功",
-                                    DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                                }
-                            });
-                            break;
-                        case "GetQueueInfo":
-                            this.SendMessage(connId, busi.GetQueueInfo(dic["param"] as Dictionary<string, object>));
-                            break;
-                        case "ProcessQueue":
-                            this.SendMessage(connId, busi.ProcessQueue(dic["param"] as Dictionary<string, object>));
-                            break;
-                        case "GetWaitInfo":
-                            this.SendMessage(connId, busi.GetWaitInfo(dic["param"] as Dictionary<string, object>));
-                            break;
-                        default:
-                            this.SendMessage(connId, StateList.State[StateInfo.Invalid]);
-                            break;
+                                    method = "HeartBeat",
+                                    param = new
+                                    {
+                                        Message = "心跳消息接收成功",
+                                        DateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                                    }
+                                });
+                                break;
+                            case "GetQueueInfo":
+                                this.SendMessage(connId, busi.GetQueueInfo(dic["param"] as Dictionary<string, object>));
+                                break;
+                            case "ProcessQueue":
+                                this.SendMessage(connId, busi.ProcessQueue(dic["param"] as Dictionary<string, object>));
+                                break;
+                            case "GetWaitInfo":
+                                this.SendMessage(connId, busi.GetWaitInfo(dic["param"] as Dictionary<string, object>));
+                                break;
+                            default:
+                                this.SendMessage(connId, StateList.State[StateInfo.Invalid]);
+                                break;
+                        }
                     }
+                    else
+                        this.SendMessage(connId, StateList.State[StateInfo.Invalid]);
                 }
                 else
+                {
                     this.SendMessage(connId, StateList.State[StateInfo.Invalid]);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                this.SendMessage(connId, StateList.State[StateInfo.Invalid]);
+                Log("ServiceEx=" + ex.Message);
+                this.SendMessage(connId, StateList.State[StateInfo.Error]);
             }
         }
 
@@ -154,14 +171,14 @@ namespace WeChatService
 
         void Log(string strLog)
         {
-            //lock (asyncObj)
-            //{
-            //    var dir = AppDomain.CurrentDomain.BaseDirectory + "Log\\";
-            //    if (!Directory.Exists(dir))
-            //        Directory.CreateDirectory(dir);
-            //    File.AppendAllText(dir + DateTime.Now.ToString("yyyyMMdd") + ".log",
-            //             string.Format("{0}\r\n{1}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), strLog));
-            //}
+            lock (asyncObj)
+            {
+                var dir = AppDomain.CurrentDomain.BaseDirectory + "Log\\";
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                File.AppendAllText(dir + DateTime.Now.ToString("yyyyMMdd") + ".log",
+                         string.Format("{0}\r\n{1}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), strLog));
+            }
         }
 
     }

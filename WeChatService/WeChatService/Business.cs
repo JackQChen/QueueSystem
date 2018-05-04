@@ -44,7 +44,7 @@ namespace WeChatService
         {
             try
             {
-                WriterReciveLog("ProcessQueue", script.Serialize(json));
+                WriterReceiveLog("ProcessQueue", script.Serialize(json));
                 var QueueInfo = json["QueueInfo"] as Dictionary<string, object>;
                 var unitSeq = QueueInfo["unitSeq"].ToString();
                 var unitName = QueueInfo["unitName"].ToString();
@@ -74,7 +74,7 @@ namespace WeChatService
         //获取当前排队等候数据
         public object GetQueueInfo(Dictionary<string, object> json)
         {
-            WriterReciveLog("GetQueueInfo", script.Serialize(json));
+            WriterReceiveLog("GetQueueInfo", script.Serialize(json));
             var id = Convert.ToInt32(json["id"]);
             return GetQueueById(id);
         }
@@ -82,8 +82,9 @@ namespace WeChatService
         //推送提醒
         public object PushNotify(string Id)
         {
+            var oId = Convert.ToInt32(Id);
             object obj = new object();
-            var model = qBll.GetModel(Convert.ToInt32(Id));
+            var model = qBll.GetModel(oId);
             if (model == null)
             {
                 return new
@@ -113,7 +114,7 @@ namespace WeChatService
                 }
             }
             var list = qBll.GetModelList(model.busTypeSeq, model.unitSeq, 0);
-            var cModel = cBll.GetModel(f => f.qId == Convert.ToInt32(Id) && f.state != 2);
+            var cModel = cBll.GetModel(f => f.qId == oId && f.state != 2);
             var areaWindowStr = GetAreaWindowsStr(model.unitSeq, model.busTypeSeq);
             var waitNo = 1;
             //返回该条数据以及三条待叫号数据
@@ -136,7 +137,7 @@ namespace WeChatService
                     {
                         id = s.id,
                         area = areaWindowStr[0],
-                        windowStr = areaWindowStr[2],
+                        windowStr = areaWindowStr[1],
                         currentState = "排队中",
                         windowNo = "",
                         waitCount = waitNo++,
@@ -145,7 +146,7 @@ namespace WeChatService
                         busySeq = s.busTypeSeq,
                         busyName = s.busTypeName,
                         ticketNumber = s.ticketNumber,
-                        ticketTime = s.ticketTime,
+                        ticketTime = s.ticketTime.ToString("yyyy-MM-dd HH:mm:ss"),
                         reserveSeq = s.reserveSeq,
                         cardId = s.idCard,
                         vip = GetVipLever(s),
@@ -158,7 +159,7 @@ namespace WeChatService
         //获取排队等候人数
         public object GetWaitInfo(Dictionary<string, object> json)
         {
-            WriterReciveLog("GetWaitInfo", script.Serialize(json));
+            WriterReceiveLog("GetWaitInfo", script.Serialize(json));
             var unitSeq = json["unitSeq"].ToString();
             var busiSeq = json["busiSeq"].ToString();
             var list = qBll.GetModelList(busiSeq, unitSeq, 0);
@@ -348,7 +349,7 @@ namespace WeChatService
         }
 
         //写收数据日志
-        public static void WriterReciveLog(string method, string logString)
+        public static void WriterReceiveLog(string method, string logString)
         {
             string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
             string path = dir + "\\ReciveLog.txt";
@@ -420,7 +421,7 @@ namespace WeChatService
                         {
                             id = model.id,
                             area = areaWindowStr[0],
-                            windowStr = areaWindowStr[2],
+                            windowStr = areaWindowStr[1],
                             currentState = currentState,
                             windowNo = "",
                             waitCount = waitNo,
@@ -429,7 +430,7 @@ namespace WeChatService
                             busySeq = model.busTypeSeq,
                             busyName = model.busTypeName,
                             ticketNumber = model.ticketNumber,
-                            ticketTime = model.ticketTime,
+                            ticketTime = model.ticketTime.ToString("yyyy-MM-dd HH:mm:ss"),
                             reserveSeq = model.reserveSeq,
                             cardId = model.idCard,
                             vip = isGreen,
@@ -448,7 +449,7 @@ namespace WeChatService
                     {
                         id = model.id,
                         area = areaWindowStr[0],
-                        windowStr = areaWindowStr[2],
+                        windowStr = areaWindowStr[1],
                         currentState = "排队中",
                         windowNo = "",
                         waitCount = waitNo,
@@ -457,7 +458,7 @@ namespace WeChatService
                         busySeq = model.busTypeSeq,
                         busyName = model.busTypeName,
                         ticketNumber = model.ticketNumber,
-                        ticketTime = model.ticketTime,
+                        ticketTime = model.ticketTime.ToString("yyyy-MM-dd HH:mm:ss"),
                         reserveSeq = model.reserveSeq,
                         cardId = model.idCard,
                         vip = isGreen,
