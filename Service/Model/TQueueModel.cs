@@ -119,6 +119,16 @@ namespace Model
         /// 编号
         /// </summary>
         public int areaId { get; set; }
+
+        /// <summary>
+        /// 排队类型 0:现场排队 1:微信排队
+        /// </summary>
+        public int qType { get; set; }
+
+        /// <summary>
+        /// 微信排队时微信号
+        /// </summary>
+        public string wxId { get; set; }
     }
 }
 

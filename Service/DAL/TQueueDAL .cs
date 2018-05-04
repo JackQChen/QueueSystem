@@ -281,7 +281,7 @@ namespace DAL
         /// <param name="name"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        public TQueueModel QueueLine(string unitSeq, string unitName, string busiSeq, string busiName, string ticketStart, string idCard, string name, TAppointmentModel app)
+        public TQueueModel QueueLine(string unitSeq, string unitName, string busiSeq, string busiName, string ticketStart, string idCard, string name, string wxId,TAppointmentModel app)
         {
             TQueueModel qModel = null;
             try
@@ -305,6 +305,7 @@ namespace DAL
                     line.idCard = idCard;
                     line.qNmae = name;
                     line.sysFlag = 0;
+                    line.wxId = wxId;
                     if (app != null)
                     {
                         line.appType = app.appType;
