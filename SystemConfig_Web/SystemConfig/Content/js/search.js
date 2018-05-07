@@ -107,6 +107,7 @@ function init_Grid(opt) {
     dataGrid.jqGrid({
         datatype: 'local',
         data: opt.dataSource,
+	rowNum: -1,
         colModel: opt.colModel,
         width: opt.width,
         height: opt.height - 45,
