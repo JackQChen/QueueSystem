@@ -208,12 +208,12 @@ namespace LEDDisplay
                 this.messageIndicator1.SetState(StateType.Success, "打开通讯设备失败");
             else if (result == LEDSender.R_DEVICE_BUSY)
                 this.messageIndicator1.SetState(StateType.Success, "设备忙，正在通讯中...");
-            //cq 20180504 发送失败尝试重新发送
-            if (result != LEDSender.R_DEVICE_READY)
-            {
-                Thread.Sleep(1000);
-                result = LEDSender.Do_LED_SendToScreen(ref param, K);
-            }
+            ////cq 20180504 发送失败尝试重新发送
+            //if (result != LEDSender.R_DEVICE_READY)
+            //{
+            //    Thread.Sleep(1000);
+            //    result = LEDSender.Do_LED_SendToScreen(ref param, K);
+            //}
             LogService.Debug("SendLEDMessage->End:Result=" + result);
         }
 
