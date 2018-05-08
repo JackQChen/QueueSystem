@@ -984,11 +984,11 @@ namespace QueueClient
                         }
                         #endregion
                     }
-                    else
-                        LogHelper.WriterReadIdCardLog("身份证读卡miss:读卡失败");
+                    //else
+                    //    LogHelper.WriterReadIdCardLog("身份证读卡miss:读卡失败");
                 }
-                else
-                    LogHelper.WriterReadIdCardLog("身份证读卡miss:无卡");
+                //else
+                //    LogHelper.WriterReadIdCardLog("身份证读卡miss:无卡");
                 Thread.Sleep(100);
             }
         }
@@ -1754,7 +1754,8 @@ namespace QueueClient
                             var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
                             var sortNum = data["sortNum"] == null ? "999" : data["sortNum"].ToString();
                             TUnitModel unit = new TUnitModel { unitSeq = unitSeq, unitName = unitName, orderNum = Convert.ToInt32(sortNum), sysFlag = 0, isInvestment = true };
-                            depts.Add(unit);
+                            if (depts.Where(d => d.unitSeq == unitSeq && d.unitName == unitName).Count() == 0)
+                                depts.Add(unit);
                         }
                     }
                 }
@@ -1842,7 +1843,8 @@ namespace QueueClient
                                 sysFlag = 0,
                                 isInvestment = true
                             };
-                            busies.Add(buss);
+                            if (busies.Where(b => b.unitName == unitName && b.unitSeq == unitSeq && b.busiSeq == busiSeq && b.busiName == b.busiName).Count() == 0)
+                                busies.Add(buss);
                         }
                     }
                 }

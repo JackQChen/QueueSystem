@@ -96,6 +96,7 @@ namespace DAL
                     var serchBlist = new List<TBusinessModel>();//循环接口返回的部门，按照部门获取到业务类型
                     var insertBlist = new List<TBusinessModel>();//筛选获取到的业务类型。把需要添加的列表整理出来
                     var inserUlist = new List<TUnitModel>();
+                    var busyBll = new TBusinessDAL(this.db);
                     foreach (var uSeq in uList)
                     {
                         var unitBusy = bList.Where(b => b.unitSeq == uSeq.unitSeq && b.unitName == uSeq.unitName).ToList();
@@ -109,7 +110,7 @@ namespace DAL
                     }
                     foreach (var i in serchBlist)
                     {
-                        if (businessList.Where(b => b.unitSeq == i.unitSeq && b.unitName == i.unitName && b.busiCode == i.busiCode && b.busiName == i.busiName).Count() == 0)
+                        if (businessList.Where(b => b.unitSeq == i.unitSeq && b.unitName == i.unitName && b.busiSeq == i.busiSeq && b.busiName == i.busiName).Count() == 0)
                             insertBlist.Add(i);
                     }
 
@@ -117,7 +118,7 @@ namespace DAL
                     var deleteUnit = new List<TUnitModel>();
                     foreach (var busy in businessList)
                     {
-                        if (bList.Where(b => b.unitSeq == busy.unitSeq && b.unitName == busy.unitName && b.busiCode == busy.busiCode && b.busiName == busy.busiName).Count() == 0)
+                        if (bList.Where(b => b.unitSeq == busy.unitSeq && b.unitName == busy.unitName && b.busiSeq == busy.busiSeq && b.busiName == busy.busiName).Count() == 0)
                             deleteBusy.Add(busy);
                     }
                     foreach (var unit in unitList)
@@ -125,17 +126,15 @@ namespace DAL
                         if (uList.Where(u => u.unitSeq == unit.unitSeq && u.unitName == unit.unitName).Count() == 0)
                             deleteUnit.Add(unit);
                     }
-                    this.db.Session.BeginTransaction();
-                    var busyBll = new TBusinessDAL(this.db);
-                    foreach (var i in insertBlist)
-                        busyBll.Insert(i);
-                    foreach (var d in deleteBusy)
-                        busyBll.Delete(d);
+                    
                     foreach (var u in inserUlist)
                         this.Insert(u);
                     foreach (var d in deleteUnit)
                         this.Delete(d);
-                    this.db.Session.CommitTransaction();
+                    foreach (var i in insertBlist)
+                        busyBll.Insert(i);
+                    foreach (var d in deleteBusy)
+                        busyBll.Delete(d);
                     arr = new ArrayList();
                     arr.Add(uList.OrderBy(o=>o.orderNum).ToList());
                     arr.Add(serchBlist);

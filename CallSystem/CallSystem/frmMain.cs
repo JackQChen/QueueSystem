@@ -181,7 +181,7 @@ namespace CallSystem
                 {
                     try
                     {
-                        WriterSerialPortLog("1.Start Read...");
+                        //WriterSerialPortLog("1.Start Read...");
                         byte temp = (byte)serialPort.ReadByte();
                         if (temp == Head[0])
                         {
@@ -189,13 +189,13 @@ namespace CallSystem
                             if (temp2 == Head[1])
                             {
                                 #region 数据接收
-                                WriterSerialPortLog("2.Enter Package...");
+                                //WriterSerialPortLog("2.Enter Package...");
                                 var length = (byte)serialPort.ReadByte();//数据长度
                                 var length2 = (byte)serialPort.ReadByte();//数据长度
                                 var fixedvalue = (byte)serialPort.ReadByte();//固定值 0x68
                                 var adress = (byte)serialPort.ReadByte();//通讯地址
                                 var funccode = (byte)serialPort.ReadByte();//功能码
-                                WriterSerialPortLog(string.Format("3.Received package code [adress:{0}][funccode:{1}].", adress, funccode));
+                                //WriterSerialPortLog(string.Format("3.Received package code [adress:{0}][funccode:{1}].", adress, funccode));
                                 var xvalue = 0;//评价器值
                                 int index = 0;
                                 if (length <= 2)
@@ -257,7 +257,7 @@ namespace CallSystem
                                 {
                                     sendOrder += (" " + f.ToString("X"));
                                 }
-                                WriterSerialPortLog(string.Format("4.Send Response Order[{0}]", sendOrder.Length > 0 ? sendOrder.Substring(1) : ""));
+                                //WriterSerialPortLog(string.Format("4.Send Response Order[{0}]", sendOrder.Length > 0 ? sendOrder.Substring(1) : ""));
                                 #endregion
 
                                 #region 功能
@@ -377,7 +377,7 @@ namespace CallSystem
                                 }
                                 #endregion
 
-                                WriterSerialPortLog("5.End Received...");
+                                //WriterSerialPortLog("5.End Received...");
                             }
                         }
                     }
@@ -451,12 +451,12 @@ namespace CallSystem
                             }
                         default: break;
                     }
-                    TimeSpan ts = DateTime.Now - start;
-                    WriterTimeLog(string.Format("地址【{3}】执行操作【{0}】共耗时{1}分{2}秒{4}毫。", opr.Type.ToString(), ts.Minutes, ts.Seconds, opr.Adress, ts.Milliseconds), opr.Adress);
-                    if (QueueList.Count > 5)
-                    {
-                        WriterTimeLog("并发操作已超过5条，当前并发列表还有【" + QueueList.Count + "】条。", opr.Adress);
-                    }
+                    //TimeSpan ts = DateTime.Now - start;
+                    //WriterTimeLog(string.Format("地址【{3}】执行操作【{0}】共耗时{1}分{2}秒{4}毫。", opr.Type.ToString(), ts.Minutes, ts.Seconds, opr.Adress, ts.Milliseconds), opr.Adress);
+                    //if (QueueList.Count > 5)
+                    //{
+                    //    WriterTimeLog("并发操作已超过5条，当前并发列表还有【" + QueueList.Count + "】条。", opr.Adress);
+                    //}
                 }
                 Thread.Sleep(1000);
             }
@@ -1160,7 +1160,7 @@ namespace CallSystem
             send[13] = (byte)((adress + 2 + tfir + tsec + tthr + 0x0A + 0x0A + 0x0A) % 256);
             send[14] = 0x16;
             SendOrder(send);
-            WriterSendLog(string.Format("地址【{0}】发送发票【{1}】已完成。", adress, ticket), adress);
+            //WriterSendLog(string.Format("地址【{0}】发送发票【{1}】已完成。", adress, ticket), adress);
         }
 
         private void SendWait(int adress)
@@ -1188,7 +1188,7 @@ namespace CallSystem
             send[13] = (byte)((adress + 2 + wfir + wsec + wthr + 0x0A + 0x0A + 0x0A) % 256);
             send[14] = 0x16;
             SendOrder(send);
-            WriterSendLog(string.Format("地址【{0}】发送等候人数【{1}】已完成。", adress, count.ToString()), adress);
+            //WriterSendLog(string.Format("地址【{0}】发送等候人数【{1}】已完成。", adress, count.ToString()), adress);
         }
 
         //叫号器蜂鸣

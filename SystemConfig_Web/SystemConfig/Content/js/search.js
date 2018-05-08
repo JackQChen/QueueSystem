@@ -81,6 +81,7 @@ function init_Control(opt) {
         dataGrid.setGridParam({
             datatype: 'local',
             data: newData,
+            rowNum: newData.length,
         }).trigger("reloadGrid");
     };
     tBox.onblur = function(e) {
@@ -107,7 +108,6 @@ function init_Grid(opt) {
     dataGrid.jqGrid({
         datatype: 'local',
         data: opt.dataSource,
-	rowNum: -1,
         colModel: opt.colModel,
         width: opt.width,
         height: opt.height - 45,
