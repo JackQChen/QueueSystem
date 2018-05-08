@@ -62,6 +62,7 @@ namespace WeChatService
                 WriterErrorLog("处理排队数据出错：" + ex.Message);
                 return new
                 {
+                    method = "ProcessQueue",
                     code = 0,
                     desc = "处理排队数据出错：" + ex.Message,
                     result = new
@@ -165,6 +166,7 @@ namespace WeChatService
             var list = qBll.GetModelList(busiSeq, unitSeq, 0);
             return new
             {
+                method = "GetWaitInfo",
                 code = 1,
                 desc = "处理成功",
                 result = list.Select(s => new
@@ -238,6 +240,7 @@ namespace WeChatService
             {
                 return new
                 {
+                    method = "ProcessQueue",
                     code = 0,
                     desc = "当前部门以及业务类型未获取到扩展属性，无法排队",
                     result = new
@@ -276,6 +279,7 @@ namespace WeChatService
             var isGreen = GetVipLever(queue);
             object obj = new
             {
+                method = "ProcessQueue",
                 code = 1,
                 desc = "处理成功",
                 result = new
@@ -383,6 +387,7 @@ namespace WeChatService
             {
                 return new
                 {
+                    method = "GetQueueInfo",
                     code = 0,
                     desc = "无此编号的排队数据",
                     result = new
@@ -403,6 +408,7 @@ namespace WeChatService
                 {
                     return new
                     {
+                        method = "GetQueueInfo",
                         code = 0,
                         desc = "无此编号的叫号数据",
                         result = new
@@ -415,6 +421,7 @@ namespace WeChatService
                     var currentState = call.ticketTime.Date != DateTime.Now.Date ? "已过期" : (call.state == -1 || call.state == 1) ? "已完成" : "已叫号";
                     obj = new
                     {
+                        method = "GetQueueInfo",
                         code = 1,
                         desc = "处理成功",
                         result = new
@@ -443,6 +450,7 @@ namespace WeChatService
                 //排队中
                 obj = new
                 {
+                    method = "GetQueueInfo",
                     code = 1,
                     desc = "处理成功",
                     result = new
