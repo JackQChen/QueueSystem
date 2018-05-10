@@ -159,6 +159,7 @@ namespace WeChatService
                         reserveSeq = s.reserveSeq,
                         cardId = s.idCard,
                         vip = GetVipLever(s),
+                        wxId = s.wxId
                     }).ToList()
                 }
             };
@@ -559,6 +560,7 @@ namespace WeChatService
                             reserveSeq = model.reserveSeq,
                             cardId = model.idCard,
                             vip = isGreen,
+                            wxId = model.wxId
                         }
                     };
                 }
@@ -588,6 +590,7 @@ namespace WeChatService
                         reserveSeq = model.reserveSeq,
                         cardId = model.idCard,
                         vip = isGreen,
+                        wxId = model.wxId
                     }
                 };
             }

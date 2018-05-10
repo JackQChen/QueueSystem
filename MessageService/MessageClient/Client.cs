@@ -9,6 +9,7 @@ namespace MessageClient
     {
         Process process = new Process();
         ExtraData data = new ExtraData();
+        bool isRun;
 
         public string ServerIP { get; set; }
         public ushort ServerPort { get; set; }
@@ -32,7 +33,7 @@ namespace MessageClient
                 while (true)
                 {
                     areConn.WaitOne();
-                    while (true)
+                    while (isRun)
                     {
                         if (this.Login())
                             break;
@@ -75,10 +76,14 @@ namespace MessageClient
                 case MessageName.ResultMessage:
                     {
                         var msg = message as ResultMessage;
+                        if (msg.Operate == OperateName.Logout)
+                        {
+                            isRun = false;
+                            base.Stop();
+                            break;
+                        }
                         if (this.OnResult != null)
                             this.OnResult(msg.Operate, msg.Result);
-                        if (msg.Operate == OperateName.Logout)
-                            base.Stop();
                     }
                     break;
                 default:
@@ -114,6 +119,7 @@ namespace MessageClient
 
         public void Start()
         {
+            isRun = true;
             this.areConn.Set();
         }
 
