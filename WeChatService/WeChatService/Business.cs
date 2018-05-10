@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web.Script.Serialization;
 using BLL;
 using Model;
+using System.Collections;
 
 namespace WeChatService
 {
@@ -42,6 +43,7 @@ namespace WeChatService
         //处理排队信息
         public object ProcessQueue(Dictionary<string, object> json)
         {
+            var idCard = "";
             try
             {
                 WriterReceiveLog("ProcessQueue", script.Serialize(json));
@@ -51,8 +53,13 @@ namespace WeChatService
                 var busiSeq = QueueInfo["busiSeq"].ToString();
                 var busiName = QueueInfo["busiName"].ToString();
                 var personName = QueueInfo["personName"].ToString();
-                var idCard = QueueInfo["idCard"].ToString();
+                idCard = QueueInfo["idCard"].ToString();
                 var wxId = QueueInfo["wxId"] == null ? "" : QueueInfo["wxId"].ToString();
+                var arr = CheckLimit(idCard, unitSeq, busiSeq);
+                if (Convert.ToBoolean(arr[0]) == false)
+                {
+                    return arr[1];
+                }
                 var Appointment = script.Deserialize<TAppointmentModel>(script.Serialize(json["Appointment"]));
                 var obj = OutQueueNo(Appointment, unitSeq, unitName, busiSeq, busiName, personName, idCard, wxId);
                 return obj;
@@ -65,6 +72,7 @@ namespace WeChatService
                     method = "ProcessQueue",
                     code = 0,
                     desc = "处理排队数据出错：" + ex.Message,
+                    idcard = idCard,
                     result = new
                     {
                     }
@@ -178,6 +186,114 @@ namespace WeChatService
             };
         }
 
+        //取票时间段检测
+        ArrayList GetLimitBySeq(string unitSeq, string busiSeq)
+        {
+            try
+            {
+                var busiAtt = baList.Where(b => b.unitSeq == unitSeq && b.busiSeq == busiSeq).FirstOrDefault();
+                if (busiAtt == null)
+                {
+                    return null;
+                }
+                ArrayList arr = new ArrayList();
+                string[] section = busiAtt.timeInterval.Split('|');
+                string[] limits = busiAtt.ticketRestriction.Split(',');
+                int index = 0;
+                foreach (var part in section)
+                {
+                    string[] ts = part.Split(',');
+                    if (ts.Length > 1)
+                    {
+                        DateTime start = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd ") + ts[0]);
+                        DateTime end = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd ") + ts[1]);
+                        if (DateTime.Now > start && DateTime.Now < end)
+                        {
+                            arr.Add(Convert.ToInt32(limits[index]));
+                            arr.Add(start);
+                            arr.Add(end);
+                            return arr;
+                        }
+                    }
+                    index++;
+                }
+            }
+            catch (Exception ex)
+            {
+                WriterErrorLog("检测票数限制出错：" + ex.Message);
+            }
+            return null;
+        }
+
+        //1.身份证验证
+        //2.取号时间段验证
+        //3.取号数量验证
+        ArrayList CheckLimit(string idCard, string unitSeq, string busiSeq)
+        {
+            ArrayList arry = new ArrayList();
+            arry.Add(true);
+            //验证同一个身份证不能在一个部门一个业务排队2次（未处理的）
+            var isCan = qBll.IsCanQueueO(idCard, busiSeq, unitSeq);
+            if (Convert.ToBoolean(isCan[0]) == false)
+            {
+                var err = new
+                {
+                    method = "ProcessQueue",
+                    code = 0,
+                    desc = "此身份证同类业务未办理，请办理完成后再次取号",
+                    idcard = idCard,
+                    result = new
+                    {
+                    }
+                };
+                arry.Clear();
+                arry.Add(false);
+                arry.Add(err);
+                return arry;
+            }
+
+            ArrayList arr = GetLimitBySeq(unitSeq, busiSeq);
+            if (arr == null)
+            {
+                var err = new
+                {
+                    method = "ProcessQueue",
+                    code = 0,
+                    desc = "该业务类型当前时间段不能取号或未配置取号限制条件",
+                    idcard = idCard,
+                    result = new
+                    {
+                    }
+                };
+                arry.Clear();
+                arry.Add(false);
+                arry.Add(err);
+                return arry;
+            }
+            int max = Convert.ToInt32(arr[0]);
+            DateTime start = Convert.ToDateTime(arr[1]);
+            DateTime end = Convert.ToDateTime(arr[2]);
+            var mList = qBll.GetModelList(busiSeq, unitSeq, start, end);
+            if (max <= mList.Count)
+            {
+                var err = new
+                {
+                    method = "ProcessQueue",
+                    code = 0,
+                    desc = "该业务类型当前时间段排队数量已达上限",
+                    idcard = idCard,
+                    result = new
+                    {
+                    }
+                };
+                arry.Clear();
+                arry.Add(false);
+                arry.Add(err);
+                return arry;
+            }
+            return arry;
+        }
+
         //获取业务所属区域以及窗口
         string[] GetAreaWindowsStr(string unitSeq, string busTypeSeq)
         {
@@ -243,6 +359,7 @@ namespace WeChatService
                     method = "ProcessQueue",
                     code = 0,
                     desc = "当前部门以及业务类型未获取到扩展属性，无法排队",
+                    idcard = idCard,
                     result = new
                     {
                     }
@@ -282,6 +399,7 @@ namespace WeChatService
                 method = "ProcessQueue",
                 code = 1,
                 desc = "处理成功",
+                idcard = idCard,
                 result = new
                 {
                     id = queue.id,

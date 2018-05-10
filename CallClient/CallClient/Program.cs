@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace CallClient
 {
@@ -17,6 +15,12 @@ namespace CallClient
         {
             bool createdNew;
             Mutex instance = new Mutex(true, "CallClient", out createdNew);
+            var ini = new OperateIni(Application.StartupPath + @"\WindowConfig.ini");
+            if (bool.Parse(ini.ReadString("WindowSet", "Restart", "false")))
+            {
+                createdNew = true;
+                ini.DelKey("WindowSet", "Restart");
+            }
             if (createdNew)
             {
                 var updatePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUpdate.exe";

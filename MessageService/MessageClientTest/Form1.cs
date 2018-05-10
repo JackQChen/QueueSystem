@@ -50,13 +50,15 @@ namespace MessageClientTest
         private void button1_Click(object sender, EventArgs e)
         {
             this.Log("登录中...");
-            client.Login();
+            client.ClientType = ClientType.Window;
+            client.ClientName = "张三";
+            client.Start();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             this.Log("注销中...");
-            this.client.Logout();
+            this.client.Stop();
         }
 
         void Log(string text)
@@ -69,7 +71,7 @@ namespace MessageClientTest
             this.Log("登录中...");
             client.ClientType = ClientType.SoundPlayer;
             client.ClientName = "张三";
-            client.Login();
+            client.Start();
         }
 
         private void button4_Click(object sender, EventArgs e)

@@ -54,8 +54,7 @@ namespace LEDDisplay
             this.client.ServerPort = ushort.Parse(port);
             this.client.ClientType = ClientType.LEDDisplay;
             this.client.ClientName = clientName;
-            if (!this.client.Login())
-                this.messageIndicator1.SetState(StateType.Error, "未连接");
+            this.client.Start();
             this.client.OnResult += (msgType, msgText) =>
             {
                 this.messageIndicator1.SetState(StateType.Success, msgText);
@@ -248,7 +247,7 @@ namespace LEDDisplay
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            this.client.Logout();
+            this.client.Stop();
             Application.ExitThread();
         }
 

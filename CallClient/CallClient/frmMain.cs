@@ -106,8 +106,7 @@ namespace CallClient
             client.ServerPort = ushort.Parse(port);
             client.ClientType = ClientType.CallClient;
             client.ClientName = windowName;
-            if (!this.client.Login())
-                this.messageIndicator1.SetState(StateType.Error, "未连接");
+            client.Start();
             this.client.OnResult += (msgType, msgText) =>
             {
                 this.messageIndicator1.SetState(StateType.Success, msgText);
@@ -115,6 +114,10 @@ namespace CallClient
             this.client.OnDisconnect += () =>
             {
                 this.messageIndicator1.SetState(StateType.Error, "未连接");
+            };
+            this.client.OnRestart += () =>
+            {
+                ini.WriteString("WindowSet", "Restart", "true");
             };
             this.ShowInTaskbar = false;
             this.Hide();
@@ -253,7 +256,7 @@ namespace CallClient
         {
             try
             {
-                client.Logout();
+                client.Stop();
             }
             catch
             {

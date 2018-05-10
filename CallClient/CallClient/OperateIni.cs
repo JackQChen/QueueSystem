@@ -54,16 +54,20 @@ namespace CallClient
         {
             return GetPrivateProfileInt(section, key, def, fFileName);
         }
+        public string ReadString(string section, string key)
+        {
+            return this.ReadString(section, key, "");
+        }
         /// <summary>
         /// 读Ini文件（字符）
         /// </summary>
         /// <param name="section"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public string ReadString(string section, string key)
+        public string ReadString(string section, string key, string defaultVal)
         {
             StringBuilder temp = new StringBuilder(1024);
-            GetPrivateProfileString(section, key, "", temp, 1024, fFileName);
+            GetPrivateProfileString(section, key, defaultVal, temp, 1024, fFileName);
             return temp.ToString();
         }
         /// <summary>

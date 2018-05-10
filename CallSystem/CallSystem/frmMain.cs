@@ -165,8 +165,7 @@ namespace CallSystem
             client.ServerPort = ushort.Parse(port);
             client.ClientType = ClientType.Window;
             client.ClientName = clientName;
-            if (!this.client.Login())
-                this.messageIndicator1.SetState(StateType.Error, "未连接");
+            client.Start();
             this.client.OnResult += (msgType, msgText) =>
             {
                 this.messageIndicator1.SetState(StateType.Success, msgText);
@@ -703,7 +702,7 @@ namespace CallSystem
             { }
             try
             {
-                client.Logout();
+                client.Stop();
             }
             catch
             {

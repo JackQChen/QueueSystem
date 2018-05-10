@@ -51,8 +51,7 @@ namespace SoundPlayer
             this.client.ServerPort = ushort.Parse(port);
             this.client.ClientType = ClientType.SoundPlayer;
             this.client.ClientName = areaNo;
-            if (!this.client.Login())
-                this.messageIndicator1.SetState(StateType.Error, "未连接");
+            this.client.Start();
             this.client.OnResult += (msgType, msgText) =>
             {
                 this.messageIndicator1.SetState(StateType.Success, msgText);
@@ -134,7 +133,7 @@ namespace SoundPlayer
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            this.client.Logout();
+            this.client.Stop();
             Application.ExitThread();
         }
 

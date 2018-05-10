@@ -17,6 +17,7 @@ namespace MessageClient
 
         public event Action<string, string> OnResult;
         public event Action<Message> OnMessage;
+        public event Action OnRestart;
         public event Action OnDisconnect;
         private AutoResetEvent areConn = new AutoResetEvent(false);
 
@@ -64,6 +65,8 @@ namespace MessageClient
             {
                 case MessageName.RestartMessage:
                     {
+                        if (this.OnRestart != null)
+                            this.OnRestart();
                         //以无参方式重启
                         System.Windows.Forms.Application.Exit();
                         System.Diagnostics.Process.Start(System.Windows.Forms.Application.ExecutablePath);
@@ -75,7 +78,7 @@ namespace MessageClient
                         if (this.OnResult != null)
                             this.OnResult(msg.Operate, msg.Result);
                         if (msg.Operate == OperateName.Logout)
-                            this.Stop();
+                            base.Stop();
                     }
                     break;
                 default:
@@ -93,7 +96,7 @@ namespace MessageClient
             this.Send(bytes, bytes.Length);
         }
 
-        public bool Login()
+        bool Login()
         {
             if (!this.IsStarted)
             {
@@ -109,7 +112,12 @@ namespace MessageClient
             return true;
         }
 
-        public void Logout()
+        public void Start()
+        {
+            this.areConn.Set();
+        }
+
+        public new void Stop()
         {
             var message = new LogoutMessage();
             this.SendMessage(message);
