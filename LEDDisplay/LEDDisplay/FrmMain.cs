@@ -244,7 +244,7 @@ namespace LEDDisplay
             LEDSender.Do_AddText(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0, text, this.fontName, this.fontSize, this.fontColor, this.fontStyle, LEDSender.V_FALSE, 0, 1, 5, 1, 5, isFlash ? 1 : 0, 1000, 10000);
             var result = LEDSender.Do_LED_SendToScreen(ref param, K);
             if (result == LEDSender.R_DEVICE_READY)
-                this.messageIndicator1.SetState(StateType.Success, "执行成功");
+                this.messageIndicator1.SetState(StateType.Success, "发送成功");
             else if (result == LEDSender.R_DEVICE_INVALID)
                 this.messageIndicator1.SetState(StateType.Success, "打开通讯设备失败");
             else if (result == LEDSender.R_DEVICE_BUSY)
