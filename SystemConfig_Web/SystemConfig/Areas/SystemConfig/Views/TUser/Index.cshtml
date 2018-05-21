@@ -42,10 +42,35 @@ function Add()
     $.modalOpen({
         title :"用户管理 - 新增",
         url: "SystemConfig/TUser/Form?id=-1" ,
-        callback:function(){  
-            $.modalContent().submitForm(function(){
-                Refresh();
-            });
+        callback:function(){
+        var doc = $($.modalContent().document); 
+        $.ajax({
+                async: false, 
+                url: "TUser/QueryUserID?code="+ doc .find('form [name=Code]').val() + "&name="+ doc .find('form [name=Name]').val(), 
+                dataType: "json",
+                success: function (data) {
+                if(data.userID != -1)
+                {
+                    window.parent.modalConfirm({
+                        title : "提示",
+                        text:"该姓名或工号已经存在，确定继续添加？",
+                        callback:function(){
+                            $.modalContent().submitForm(function(){
+                            Refresh();
+                            });
+                            window.parent.modalConfirmClose();
+                            window.parent.modalClose();
+                            }
+                     }); 
+                }
+                else 
+                {
+                            $.modalContent().submitForm(function(){
+                            Refresh();
+                            });
+                }
+                }
+            }); 
         }
      });
 }

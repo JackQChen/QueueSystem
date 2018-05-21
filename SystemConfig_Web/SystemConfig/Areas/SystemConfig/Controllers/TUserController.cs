@@ -51,6 +51,14 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             return View(model);
         }
 
+        public ActionResult QueryUserID(string code, string name)
+        {
+            code = code.Trim();
+            name = name.Trim();
+            var model = this.bll.GetModel(p => p.Code == code || p.Name == name);
+            return Content(JsonConvert.SerializeObject(new { userID = model == null ? -1 : model.ID }));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(TUserModel model, string avatar)

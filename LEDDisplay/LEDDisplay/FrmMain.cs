@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLL;
 using MessageClient;
@@ -21,7 +22,6 @@ namespace LEDDisplay
         TLedWindowBLL ledWinBll = new TLedWindowBLL();
         List<TLedControllerModel> listLedControl;
         List<TLedWindowModel> listLedWin;
-        AutoResetEvent areConn = new AutoResetEvent(false);
 
         private const int WM_LED_NOTIFY = 1025;
         CLEDSender LEDSender;
@@ -75,10 +75,23 @@ namespace LEDDisplay
         class ledSendInfo
         {
             public string ip, port, deviceAddr, position, text;
+            public bool isFlash;
         }
 
         ConcurrentDictionary<string, DateTime> callDic = new ConcurrentDictionary<string, DateTime>();
         TimeSpan callSpan = new TimeSpan(0, 0, 5);
+
+        void trySend(ledSendInfo sendInfo)
+        {
+            var tryCount = 0;
+            while (tryCount < 3)
+            {
+                if (LEDSender.R_DEVICE_READY == this.SendLEDMessage(sendInfo))
+                    break;
+                Thread.Sleep(100);
+                tryCount++;
+            }
+        }
 
         void client_OnMessage(QueueMessage.Message message)
         {
@@ -100,15 +113,16 @@ namespace LEDDisplay
                                     //频繁呼叫直接取消
                                     else if (DateTime.Now - callDic[win.WindowNumber] < callSpan)
                                         return;
-                                    new Thread(arg =>
+                                    Task.Factory.StartNew(arg =>
                                     {
                                         var sendInfo = arg as ledSendInfo;
                                         //LED闪烁
-                                        this.SendLEDMessage(sendInfo.ip, ushort.Parse(sendInfo.port), sendInfo.deviceAddr, sendInfo.position, sendInfo.text, true);
+                                        sendInfo.isFlash = true;
+                                        this.trySend(sendInfo);
                                         Thread.Sleep(3000);
-                                        this.SendLEDMessage(sendInfo.ip, ushort.Parse(sendInfo.port), sendInfo.deviceAddr, sendInfo.position, sendInfo.text);
-                                    }) { IsBackground = true }.Start(
-                                    new ledSendInfo()
+                                        sendInfo.isFlash = false;
+                                        this.trySend(sendInfo);
+                                    }, new ledSendInfo()
                                     {
                                         ip = ctl.IP,
                                         port = ctl.Port,
@@ -133,7 +147,19 @@ namespace LEDDisplay
                         {
                             var ctl = this.listLedControl.Find(m => m.ID == win.ControllerID);
                             if (ctl != null)
-                                this.SendLEDMessage(ctl.IP, ushort.Parse(ctl.Port), ctl.DeviceAddress, win.Position, "热情为您服务");
+                            {
+                                Task.Factory.StartNew(arg =>
+                                {
+                                    this.trySend(arg as ledSendInfo);
+                                }, new ledSendInfo()
+                                {
+                                    ip = ctl.IP,
+                                    port = ctl.Port,
+                                    deviceAddr = ctl.DeviceAddress,
+                                    position = win.Position,
+                                    text = "热情为您服务"
+                                });
+                            }
                         }
                     }
                     break;
@@ -146,10 +172,21 @@ namespace LEDDisplay
                             var ctl = this.listLedControl.Find(m => m.ID == win.ControllerID);
                             if (ctl != null)
                             {
+                                var sendInfo = new ledSendInfo()
+                                    {
+                                        ip = ctl.IP,
+                                        port = ctl.Port,
+                                        deviceAddr = ctl.DeviceAddress,
+                                        position = win.Position
+                                    };
                                 if (msg.Operate == Operate.Pause)
-                                    this.SendLEDMessage(ctl.IP, ushort.Parse(ctl.Port), ctl.DeviceAddress, win.Position, "  暂 停 服 务");
+                                    sendInfo.text = "  暂 停 服 务";
                                 else if (msg.Operate == Operate.Reset)
-                                    this.SendLEDMessage(ctl.IP, ushort.Parse(ctl.Port), ctl.DeviceAddress, win.Position, "热情为您服务");
+                                    sendInfo.text = "热情为您服务";
+                                Task.Factory.StartNew(arg =>
+                                {
+                                    this.trySend(arg as ledSendInfo);
+                                }, sendInfo);
                             }
                         }
                     }
@@ -171,12 +208,17 @@ namespace LEDDisplay
             this.notifyIcon1.Visible = true;
         }
 
-        void SendLEDMessage(string ip, ushort port, string deviceAddr, string position, string text)
+        int SendLEDMessage(string ip, ushort port, string deviceAddr, string position, string text)
         {
-            this.SendLEDMessage(ip, port, deviceAddr, position, text, false);
+            return this.SendLEDMessage(ip, port, deviceAddr, position, text, false);
         }
 
-        void SendLEDMessage(string ip, ushort port, string deviceAddr, string position, string text, bool isFlash)
+        int SendLEDMessage(ledSendInfo sendInfo)
+        {
+            return this.SendLEDMessage(sendInfo.ip, ushort.Parse(sendInfo.port), sendInfo.deviceAddr, sendInfo.position, sendInfo.text, sendInfo.isFlash);
+        }
+
+        int SendLEDMessage(string ip, ushort port, string deviceAddr, string position, string text, bool isFlash)
         {
             LogService.Debug(string.Format("SendLEDMessage->Start:Text={0}", text));
             var strArr = position.Split(',');
@@ -207,13 +249,8 @@ namespace LEDDisplay
                 this.messageIndicator1.SetState(StateType.Success, "打开通讯设备失败");
             else if (result == LEDSender.R_DEVICE_BUSY)
                 this.messageIndicator1.SetState(StateType.Success, "设备忙，正在通讯中...");
-            ////cq 20180504 发送失败尝试重新发送
-            //if (result != LEDSender.R_DEVICE_READY)
-            //{
-            //    Thread.Sleep(1000);
-            //    result = LEDSender.Do_LED_SendToScreen(ref param, K);
-            //}
             LogService.Debug("SendLEDMessage->End:Result=" + result);
+            return result;
         }
 
         protected override void DefWndProc(ref System.Windows.Forms.Message m)

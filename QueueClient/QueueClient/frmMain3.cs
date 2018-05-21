@@ -49,6 +49,7 @@ namespace QueueClient
         string BidUrl2 = "";//申办
         string InvestmentUnit = "";//投资部门
         string InvestmentBusy = "";//投资业务
+        string GetAppointmentLimit = "";//获取预约数
         #endregion
 
         #region
@@ -245,6 +246,8 @@ namespace QueueClient
             SetConfigValue("BidUrl2", "http://19.136.14.62/CommonService/api/reserve/reserveTreeList/query.v?approveItem=@approveItem");
             SetConfigValue("InvestmentUnit", "http://19.136.14.62/CommonService/api/reserve/unitTreeList/query.v?pageRowNum=1000&areaCode=23");
             SetConfigValue("InvestmentBusy", "http://19.136.14.62/CommonService/api/reserve/reserveTypeList/query.v?pageRowNum=1000&unitSeq=@unitSeq");
+            SetConfigValue("GetAppLimit", "http://19.136.14.62/CommonService/api/reserve/reserveInfoList/query.v?pageRowNum=1000&reserveDate=@currentDate&unitSeq=@unitSeq&busiSeq=@busiSeq&areaSeq=@areaSeq");
+            GetAppointmentLimit = System.Configuration.ConfigurationManager.AppSettings["GetAppLimit"];
             BidUrl1 = System.Configuration.ConfigurationManager.AppSettings["BidUrl1"];
             BidUrl2 = System.Configuration.ConfigurationManager.AppSettings["BidUrl2"];
             ClientName = System.Configuration.ConfigurationManager.AppSettings["ClientName"];
@@ -836,7 +839,8 @@ namespace QueueClient
             DateTime start = Convert.ToDateTime(arr[1]);
             DateTime end = Convert.ToDateTime(arr[2]);
             var mList = qBll.GetModelList(busiSeq, unitSeq, start, end);
-            if (max <= mList.Count)
+            var amount = GetAppCount(unitSeq, busiSeq);
+            if (max <= mList.Count + amount)
             {
                 frmMsg frm = new frmMsg();
                 frm.msgInfo = "当前时间段排队数量已达上限！";
@@ -844,6 +848,60 @@ namespace QueueClient
                 return false;
             }
             return true;
+        }
+
+        int GetAppCount(string unitSeq, string busiSeq)
+        {
+            int Amount = 0;
+            try
+            {
+                var app = GetAppointmentLimit;
+                app = app.Replace("@currentDate", DateTime.Now.ToString("yyyy-MM-dd"));
+                app = app.Replace("@unitSeq", unitSeq);
+                app = app.Replace("@busiSeq", busiSeq);
+                string[] areaSeqList = areaSeq.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var aSeq in areaSeqList)
+                {
+                    var appLimit = app.Replace("@areaSeq", aSeq);
+                    var appStr = http.HttpGet(appLimit, "");
+                    var appInfos = script.DeserializeObject(appStr) as Dictionary<string, object>;
+                    if (appInfos != null)
+                    {
+                        var status = appInfos["status"].ToString();
+                        var dataQuery = appInfos["data"] as Dictionary<string, object>;
+                        var page = dataQuery["pageObj"] as Dictionary<string, object>;
+                        if (page != null)
+                        {
+                            var totalRow = page["totalRow"] == null ? 0 : Convert.ToInt32(page["totalRow"]);
+                            Amount += totalRow;
+                        }
+                        #region
+                        //var dataArr = dataQuery["dataList"] as object[];
+                        //if (dataArr == null || dataArr.Count() == 0)
+                        //{
+                        //}
+                        //else
+                        //{
+                        //    foreach (Dictionary<string, object> data in dataArr)
+                        //    {
+                        //        var uSeq = data["unitSeq"] == null ? "" : data["unitSeq"].ToString();
+                        //        if (uSeq != "")
+                        //        {
+                        //            Amount++;
+                        //        }
+                        //    }
+                        //}
+                        #endregion
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriterInterfaceLog("获取预约数量异常：" + ex.Message);
+            }
+            return Amount;
         }
 
         void rePrint(TQueueModel queue)
