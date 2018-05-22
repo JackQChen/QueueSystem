@@ -130,6 +130,9 @@ namespace WeChatService
                                     }
                                 });
                                 break;
+                            case "QueueCheck":
+                                this.SendMessage(connId, busi.QueueCheck(dic["param"] as Dictionary<string, object>));
+                                break;
                             case "GetQueueInfo":
                                 this.SendMessage(connId, busi.GetQueueInfo(dic["param"] as Dictionary<string, object>));
                                 break;

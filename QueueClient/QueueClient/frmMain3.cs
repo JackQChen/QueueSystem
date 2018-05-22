@@ -30,7 +30,7 @@ namespace QueueClient
         string GetUnitBusiness = System.Configuration.ConfigurationManager.AppSettings["GetUnitBusiness"];
         string GetBusiness = System.Configuration.ConfigurationManager.AppSettings["GetBusiness"];
         string RegisterUser = System.Configuration.ConfigurationManager.AppSettings["RegisterUser"]; //暂停使用
-        string UpdateAppoint = System.Configuration.ConfigurationManager.AppSettings["UpdateAppoint"];
+        string UpdateAppoint = "";// System.Configuration.ConfigurationManager.AppSettings["UpdateAppoint"];
         string GetCard = System.Configuration.ConfigurationManager.AppSettings["GetCard"];
         string AppointmentOnline = System.Configuration.ConfigurationManager.AppSettings["AppointmentOnline"];
         string ExitPwd = System.Configuration.ConfigurationManager.AppSettings["ExitPwd"];
@@ -247,6 +247,8 @@ namespace QueueClient
             SetConfigValue("InvestmentUnit", "http://19.136.14.62/CommonService/api/reserve/unitTreeList/query.v?pageRowNum=1000&areaCode=23");
             SetConfigValue("InvestmentBusy", "http://19.136.14.62/CommonService/api/reserve/reserveTypeList/query.v?pageRowNum=1000&unitSeq=@unitSeq");
             SetConfigValue("GetAppLimit", "http://19.136.14.62/CommonService/api/reserve/reserveInfoList/query.v?pageRowNum=1000&reserveDate=@currentDate&unitSeq=@unitSeq&busiSeq=@busiSeq&areaSeq=@areaSeq");
+            SetConfigValue("UpdateApp", "http://19.136.14.62/CommonService/api/reserve/syncReserveInfo/update.v?reserveSeq=@reserveSeq&syncStatus=1");
+            UpdateAppoint = System.Configuration.ConfigurationManager.AppSettings["UpdateApp"];
             GetAppointmentLimit = System.Configuration.ConfigurationManager.AppSettings["GetAppLimit"];
             BidUrl1 = System.Configuration.ConfigurationManager.AppSettings["BidUrl1"];
             BidUrl2 = System.Configuration.ConfigurationManager.AppSettings["BidUrl2"];
@@ -446,7 +448,7 @@ namespace QueueClient
                 }
                 foreach (var ap in apList)
                 {
-                    if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq))
+                    if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq, true))
                     {
                         pbReturn_Click(null, null);
                         return;
@@ -558,7 +560,7 @@ namespace QueueClient
             if (selectUnit == null)
                 return;
             selectBusy = ((ucpnSelectBusy)uc["busy"]).selectBusy;
-            if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq))
+            if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq, false))
             {
                 pbReturn_Click(null, null);
                 return;
@@ -811,7 +813,7 @@ namespace QueueClient
             return null;
         }
 
-        bool CheckLimit(string unitSeq, string busiSeq)
+        bool CheckLimit(string unitSeq, string busiSeq, bool isApp)
         {
             if (person != null && !string.IsNullOrEmpty(person.idcard))
             {
@@ -839,13 +841,16 @@ namespace QueueClient
             DateTime start = Convert.ToDateTime(arr[1]);
             DateTime end = Convert.ToDateTime(arr[2]);
             var mList = qBll.GetModelList(busiSeq, unitSeq, start, end);
-            var amount = GetAppCount(unitSeq, busiSeq);
-            if (max <= mList.Count + amount)
+            if (!isApp)
             {
-                frmMsg frm = new frmMsg();
-                frm.msgInfo = "当前时间段排队数量已达上限！";
-                frm.ShowDialog();
-                return false;
+                var amount = GetAppCount(unitSeq, busiSeq);
+                if (max <= mList.Count + amount)
+                {
+                    frmMsg frm = new frmMsg();
+                    frm.msgInfo = "当前时间段排队数量已达上限！";
+                    frm.ShowDialog();
+                    return false;
+                }
             }
             return true;
         }
@@ -1397,7 +1402,7 @@ namespace QueueClient
                                 model.custCardId = idNo;
                                 model.outCardTime = DateTime.Now;
                                 model.sysFlag = 0;
-                                if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq))
+                                if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq, false))
                                 {
                                     pbReturn_Click(null, null);
                                     return;

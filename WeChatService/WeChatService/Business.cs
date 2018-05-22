@@ -40,6 +40,33 @@ namespace WeChatService
             wList = wBll.GetModelList();
         }
 
+        //验证是否符合取票条件
+        public object QueueCheck(Dictionary<string, object> json)
+        {
+            WriterReceiveLog("QueueCheck", script.Serialize(json));
+            var idCard = json["idCard"].ToString();
+            var unitSeq = json["unitSeq"].ToString();
+            var busiSeq = json["busiSeq"].ToString();
+            var arr = CheckLimit("QueueCheck",idCard, unitSeq, busiSeq);
+            if (Convert.ToBoolean(arr[0]) == false)
+            {
+                return arr[1];
+            }
+            return new
+            {
+                method = "QueueCheck",
+                code = 1,
+                desc = "验证通过",
+                idcard = idCard,
+                result = new
+                {
+                    unitSeq = unitSeq,
+                    busiSeq = busiSeq,
+                    idcard = idCard,
+                }
+            };
+        }
+
         //处理排队信息
         public object ProcessQueue(Dictionary<string, object> json)
         {
@@ -55,7 +82,7 @@ namespace WeChatService
                 var personName = QueueInfo["personName"].ToString();
                 idCard = QueueInfo["idCard"].ToString();
                 var wxId = QueueInfo["wxId"] == null ? "" : QueueInfo["wxId"].ToString();
-                var arr = CheckLimit(idCard, unitSeq, busiSeq);
+                var arr = CheckLimit("ProcessQueue",idCard, unitSeq, busiSeq);
                 if (Convert.ToBoolean(arr[0]) == false)
                 {
                     return arr[1];
@@ -238,7 +265,7 @@ namespace WeChatService
         //1.身份证验证
         //2.取号时间段验证
         //3.取号数量验证
-        ArrayList CheckLimit(string idCard, string unitSeq, string busiSeq)
+        ArrayList CheckLimit(string methodName,string idCard, string unitSeq, string busiSeq)
         {
             ArrayList arry = new ArrayList();
             arry.Add(true);
@@ -248,7 +275,7 @@ namespace WeChatService
             {
                 var err = new
                 {
-                    method = "ProcessQueue",
+                    method = methodName,
                     code = 0,
                     desc = "此身份证同类业务未办理，请办理完成后再次取号",
                     idcard = idCard,
@@ -267,7 +294,7 @@ namespace WeChatService
             {
                 var err = new
                 {
-                    method = "ProcessQueue",
+                    method = methodName,
                     code = 0,
                     desc = "该业务类型当前时间段不能取号或未配置取号限制条件",
                     idcard = idCard,
@@ -288,7 +315,7 @@ namespace WeChatService
             {
                 var err = new
                 {
-                    method = "ProcessQueue",
+                    method = methodName,
                     code = 0,
                     desc = "该业务类型当前时间段排队数量已达上限",
                     idcard = idCard,
