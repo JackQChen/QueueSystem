@@ -13,6 +13,8 @@ namespace SoundPlayer
     public partial class FrmMain : Form
     {
         private AutoResetEvent arePlay = new AutoResetEvent(false);
+        private AutoResetEvent areTask = new AutoResetEvent(false);
+
         Queue<string> queuePlay = new Queue<string>();
 
         private Voice vc;
@@ -28,7 +30,7 @@ namespace SoundPlayer
         }
 
         Client client = new Client();
-        AutoResetEvent areConn = new AutoResetEvent(false);
+
         public static void SetConfigValue(string key, string value)
         {
             try
@@ -84,15 +86,21 @@ namespace SoundPlayer
                 }
                 while (true)
                 {
-                    while (queuePlay.Count > 0)
+                    var voiceText = "";
+                    lock (asyncObj)
                     {
-                        var voiceText = queuePlay.Dequeue();
+                        if (queuePlay.Count > 0)
+                            voiceText = queuePlay.Dequeue();
+                    }
+                    if (string.IsNullOrEmpty(voiceText))
+                        this.areTask.WaitOne();
+                    else
+                    {
                         var play = type == 1 ? ConvertTo(voiceText) : voiceText;
                         vc.PlayText(play);
                         arePlay.WaitOne(-1);
                         LogService.Debug("播报完成:" + play);
                     }
-                    Thread.Sleep(1000);
                 }
             }) { IsBackground = true }.Start();
             this.Close();
@@ -117,10 +125,13 @@ namespace SoundPlayer
 
         private void PlaySound(string voiceText)
         {
+            if (string.IsNullOrEmpty(voiceText))
+                return;
             lock (asyncObj)
             {
                 queuePlay.Enqueue(voiceText);
             }
+            areTask.Set();
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
