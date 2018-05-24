@@ -1,5 +1,5 @@
 # QueueSystem
-已投入使用的排队叫号系统<br><br>
+已投入使用的排队叫号系统<br>
 #### Bin - 生成的程序集<br>
 #### CallClient - 叫号客户端（独立叫号程序）<br>
 #### CallSystem - 叫号系统（集成叫号器和评价器）<br>
