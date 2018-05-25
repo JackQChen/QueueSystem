@@ -31,8 +31,10 @@
             this.pbOther = new System.Windows.Forms.PictureBox();
             this.pbOk = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.pbMain = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbOther)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOk)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbMain)).BeginInit();
             this.SuspendLayout();
             // 
             // pbOther
@@ -71,18 +73,32 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // pbMain
+            // 
+            this.pbMain.BackColor = System.Drawing.Color.Red;
+            this.pbMain.Image = global::QueueClient.Properties.Resources.预约未选中;
+            this.pbMain.Location = new System.Drawing.Point(8, 8);
+            this.pbMain.Name = "pbMain";
+            this.pbMain.Size = new System.Drawing.Size(1507, 94);
+            this.pbMain.TabIndex = 7;
+            this.pbMain.TabStop = false;
+            this.pbMain.Paint += new System.Windows.Forms.PaintEventHandler(this.pbMain_Paint);
+            // 
             // frmTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(735, 443);
+            this.ClientSize = new System.Drawing.Size(1524, 443);
+            this.Controls.Add(this.pbMain);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pbOther);
             this.Controls.Add(this.pbOk);
             this.Name = "frmTest";
             this.Text = "frmTest";
+            this.Load += new System.EventHandler(this.frmTest_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbOther)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOk)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbMain)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -93,5 +109,6 @@
         private System.Windows.Forms.PictureBox pbOther;
         private System.Windows.Forms.PictureBox pbOk;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox pbMain;
     }
 }

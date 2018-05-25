@@ -105,8 +105,8 @@ namespace DAL
                         var unit = unitList.Where(b => b.unitSeq == uSeq.unitSeq && b.unitName == uSeq.unitName);
                         if (unit.Count() == 0)
                             inserUlist.Add(uSeq);
-                        else
-                            uSeq.orderNum = unit.FirstOrDefault().orderNum;
+                        //else
+                        //    uSeq.orderNum = unit.FirstOrDefault().orderNum;
                     }
                     foreach (var i in serchBlist)
                     {

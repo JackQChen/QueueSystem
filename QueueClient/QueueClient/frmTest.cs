@@ -75,5 +75,18 @@ namespace QueueClient
             }
             return line;
         }
+
+        private void frmTest_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pbMain_Paint(object sender, PaintEventArgs e)
+        {
+            Font fName = new Font("黑体", 22, FontStyle.Bold);
+            string info = string.Format("{0} {1}      {2}:{3} {4}     办理人：{5}", "市公共资源交易中心", "通用业务类型", "网上申办业务", "2018-05-23",
+                DateTime.Now.ToString("HH:mm") + "-" + DateTime.Now.ToString("HH:mm"), "张鹏飞");
+            e.Graphics.DrawString(info, fName, new SolidBrush(Color.Black), 100, 30);//业务名称
+        }
     }
 }
