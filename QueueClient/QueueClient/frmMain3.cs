@@ -1174,7 +1174,7 @@ namespace QueueClient
                         foreach (Dictionary<string, object> data in dataArr)
                         {
                             #region
-
+                            var beginDate = data["beginDate"] == null ? "" : data["beginDate"].ToString();
                             var approveSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
                             var approveName = data["approveName"] == null ? "" : data["approveName"].ToString();
                             var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
@@ -1184,7 +1184,7 @@ namespace QueueClient
                             var paperCode = idNo;
                             var paperType = "";
                             var mobilePhone = "";
-                            var reserveDate = DateTime.Now.ToString("yyyy-MM-dd");
+                            var reserveDate = (beginDate == "" ? DateTime.Now : GetTime(beginDate)).ToString("yyyy-MM-dd");
                             var reserveStartTime = "00:00";
                             var reserveEndTime = "00:00";
                             var userName = "";
@@ -1208,11 +1208,15 @@ namespace QueueClient
                                     {
                                         foreach (Dictionary<string, object> dt in dArr)
                                         {
-                                            busiCode = dt["businessCode"] == null ? "" : dt["businessCode"].ToString();
+                                            busiCode = dt["businessSeq"] == null ? "" : dt["businessSeq"].ToString();
                                             busiName = dt["businessName"] == null ? "" : dt["businessName"].ToString();
                                             unitCode = dt["unitSeq"] == null ? "" : dt["unitSeq"].ToString();
+                                            var u = uList.FirstOrDefault(f => f.unitSeq == unitCode);
+                                            unitName = unitCode == "" ? "" : u != null ? u.unitName : "";
                                             if (busiCode != "" && busiName != "")
+                                            {
                                                 break;
+                                            }
                                         }
                                     }
                                 }
@@ -1243,7 +1247,6 @@ namespace QueueClient
                                 app.sysFlag = 0;
                                 appList.Add(app);
                             }
-
                             #endregion
                         }
                     }
@@ -1928,6 +1931,14 @@ namespace QueueClient
         #endregion
 
         #region  显示预约列表、显示评价列表、选择部门、选择业务
+
+        private DateTime GetTime(string timeStamp)
+        {
+            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            long lTime = long.Parse(timeStamp + "0000");
+            TimeSpan toNow = new TimeSpan(lTime);
+            return dtStart.Add(toNow);
+        }
         private void ShowAppointment()
         {
             var appointment = ((ucpnAppointment)uc["appoint"]);

@@ -37,6 +37,7 @@ namespace CallClient
         TCallStateBLL csBll = new TCallStateBLL();
         TCallStateModel stateModel;
         List<TQueueModel> qList;
+        string userCode = "";
         public frmMain()
         {
             InitializeComponent();
@@ -106,10 +107,13 @@ namespace CallClient
             client.ServerPort = ushort.Parse(port);
             client.ClientType = ClientType.CallClient;
             client.ClientName = windowName;
-            client.Start();
             this.client.OnResult += (msgType, msgText) =>
             {
                 this.messageIndicator1.SetState(StateType.Success, msgText);
+            };
+            this.client.OnConnect += () =>
+            {
+                this.client.SendMessage(new ClientQueryMessage());
             };
             this.client.OnDisconnect += () =>
             {
@@ -119,6 +123,8 @@ namespace CallClient
             {
                 ini.WriteString("WindowSet", "Restart", "true");
             };
+            this.client.OnMessage += new Action<QueueMessage.Message>(client_OnMessage);
+            client.Start();
             this.ShowInTaskbar = false;
             this.Hide();
             this.ShowInTaskbar = true;
@@ -203,6 +209,32 @@ namespace CallClient
             hotkey.OnHotkey += new HotkeyEventHandler(OnHotkey);
             timer1.Enabled = true;
             timer1.Start();
+        }
+        void client_OnMessage(QueueMessage.Message obj)
+        {
+            switch (obj.GetType().Name)
+            {
+                case MessageName.ClientQueryMessage:
+                    {
+                        var msg = obj as ClientQueryMessage;
+                        if (msg.ClientList.ContainsKey(windowNo))
+                            userCode = msg.ClientList[windowNo];
+                        else
+                            userCode = "";
+                    }
+                    break;
+                case MessageName.ClientChangedMessage:
+                    {
+                        var msg = obj as ClientChangedMessage;
+                        if (msg.ChangedType == ClientChangedType.Add)
+                        {
+                            userCode = msg.UserCode;
+                        }
+                        else
+                            userCode = "";
+                    }
+                    break;
+            }
         }
 
         private void OnHotkey(int hotkeyID)
@@ -299,7 +331,7 @@ namespace CallClient
                     {
                         try
                         {
-                            var model = cBll.CallNo(windowBusys, windowBusyGreens, windowNo, "");//用户暂时为空
+                            var model = cBll.CallNo(windowBusys, windowBusyGreens, windowNo, userCode);
                             if (model != null)
                             {
                                 stateModel.callId = model.id;
@@ -716,11 +748,17 @@ namespace CallClient
 
         private void WriterLog(string text)
         {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Exception.txt", DateTime.Now + " : " + text + "\r\n");
         }
 
         private void WriterCallLog(int type, string text)
         {
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
             string otype = type == 0 ? "叫号" : type == 1 ? "重呼" : type == 2 ? "评价" : type == 3 ? "暂停" : type == 4 ? "弃号" : type == 5 ? "转移" : type == 6 ? "挂起" : "回呼";
             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Call_Record.txt", DateTime.Now + " : 【" + otype + "】" + text + "\r\n");
             oBll.Insert(new TOprateLogModel()
@@ -744,6 +782,7 @@ namespace CallClient
         {
             this.txtWindow.Text = windowName;
             this.lblWindow.Text = windowName;
+            this.txtUserCode.Text = userCode;
             stateModel = csBll.GetModel(windowNo);
             if (stateModel != null)
             {

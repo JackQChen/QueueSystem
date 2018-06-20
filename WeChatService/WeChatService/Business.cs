@@ -47,7 +47,7 @@ namespace WeChatService
             var idCard = json["idCard"].ToString();
             var unitSeq = json["unitSeq"].ToString();
             var busiSeq = json["busiSeq"].ToString();
-            var arr = CheckLimit("QueueCheck",idCard, unitSeq, busiSeq);
+            var arr = CheckLimit("QueueCheck", idCard, unitSeq, busiSeq);
             if (Convert.ToBoolean(arr[0]) == false)
             {
                 return arr[1];
@@ -82,7 +82,7 @@ namespace WeChatService
                 var personName = QueueInfo["personName"].ToString();
                 idCard = QueueInfo["idCard"].ToString();
                 var wxId = QueueInfo["wxId"] == null ? "" : QueueInfo["wxId"].ToString();
-                var arr = CheckLimit("ProcessQueue",idCard, unitSeq, busiSeq);
+                var arr = CheckLimit("ProcessQueue", idCard, unitSeq, busiSeq);
                 if (Convert.ToBoolean(arr[0]) == false)
                 {
                     return arr[1];
@@ -223,6 +223,51 @@ namespace WeChatService
             };
         }
 
+        //获取排队等候人数ByUnit
+        public object GetWaitInfoByUnit(Dictionary<string, object> json)
+        {
+            WriterReceiveLog("GetWaitInfoByUnit", script.Serialize(json));
+            var unitSeq = json["unitSeq"].ToString();
+            var list = qBll.GetModelList(unitSeq, 0);
+            return new
+            {
+                method = "GetWaitInfoByUnit",
+                code = 1,
+                desc = "处理成功",
+                result = list.Select(s => new
+                {
+                    unitSeq = unitSeq,
+                    waitCount = list.Count,
+                })
+            };
+        }
+
+        //获取排队等候人数 按部门业务分组
+        public object GetWaitInfoAll()
+        {
+            var list = qBll.GetModelList(c => c.ticketTime.Date == DateTime.Now.Date && c.state == 0);
+            var glist = list.GroupBy(g => g.unitSeq).ToList();
+            var grlist = list.GroupBy(g => new { g.unitSeq, g.busTypeSeq }).ToList();
+            return new
+            {
+                method = "GetWaitInfoAll",
+                code = 1,
+                desc = "处理成功",
+                result = glist.Select(s => new
+                {
+                    unitSeq = s.Key,
+                    waitCount = s.Count(),
+                    unitBusi = grlist.Where(g => g.Key.unitSeq == s.Key).Select(k => new
+                    {
+                        unitSeq = k.Key.unitSeq,
+                        busiSeq = k.Key.busTypeSeq,
+                        waitCount = k.Count()
+                    }).ToList()
+
+                }).ToList()
+            };
+        }
+
         //取票时间段检测
         ArrayList GetLimitBySeq(string unitSeq, string busiSeq)
         {
@@ -265,7 +310,7 @@ namespace WeChatService
         //1.身份证验证
         //2.取号时间段验证
         //3.取号数量验证
-        ArrayList CheckLimit(string methodName,string idCard, string unitSeq, string busiSeq)
+        ArrayList CheckLimit(string methodName, string idCard, string unitSeq, string busiSeq)
         {
             ArrayList arry = new ArrayList();
             arry.Add(true);

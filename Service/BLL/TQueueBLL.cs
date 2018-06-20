@@ -82,6 +82,10 @@ namespace BLL
         {
             return new TQueueDAL().GetModelList(busiSeq, unitSeq);
         }
+        public List<TQueueModel> GetModelList(string unitSeq, int state)
+        {
+            return new TQueueDAL().GetModelList(unitSeq, state);
+        }
         public List<TQueueModel> GetModelList(string busiSeq, string unitSeq, int state)
         {
             return new TQueueDAL().GetModelList(busiSeq, unitSeq, state);

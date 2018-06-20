@@ -142,6 +142,12 @@ namespace WeChatService
                             case "GetWaitInfo":
                                 this.SendMessage(connId, busi.GetWaitInfo(dic["param"] as Dictionary<string, object>));
                                 break;
+                            case "GetWaitInfoByUnit":
+                                this.SendMessage(connId, busi.GetWaitInfoByUnit(dic["param"] as Dictionary<string, object>));
+                                break;
+                            case "GetWaitInfoAll":
+                                this.SendMessage(connId, busi.GetWaitInfoAll());
+                                break;
                             default:
                                 this.SendMessage(connId, StateList.State[StateInfo.Invalid]);
                                 break;

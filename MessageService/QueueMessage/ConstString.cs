@@ -5,6 +5,8 @@ namespace QueueMessage
     {
         public const string LoginMessage = "LoginMessage";
         public const string ResultMessage = "ResultMessage";
+        public const string ClientQueryMessage = "ClientQueryMessage";
+        public const string ClientChangedMessage = "ClientChangedMessage";
         public const string CallMessage = "CallMessage";
         public const string OperateMessage = "OperateMessage";
         public const string RateMessage = "RateMessage";

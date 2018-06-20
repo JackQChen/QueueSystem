@@ -66,6 +66,8 @@
             this.btnReCall = new CustomSkin.Windows.Forms.Button();
             this.btnEv = new CustomSkin.Windows.Forms.Button();
             this.btnCance = new CustomSkin.Windows.Forms.Button();
+            this.txtUserCode = new CustomSkin.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -173,6 +175,8 @@
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.Transparent;
+            this.panel4.Controls.Add(this.txtUserCode);
+            this.panel4.Controls.Add(this.label7);
             this.panel4.Controls.Add(this.label1);
             this.panel4.Controls.Add(this.lblWindow);
             this.panel4.Controls.Add(this.txtAlready);
@@ -198,7 +202,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(44, 43);
+            this.label1.Location = new System.Drawing.Point(52, 43);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 16);
@@ -215,14 +219,14 @@
             this.lblWindow.Name = "lblWindow";
             this.lblWindow.Size = new System.Drawing.Size(142, 70);
             this.lblWindow.TabIndex = 32;
-            this.lblWindow.Text = "101";
+            this.lblWindow.Text = "--";
             this.lblWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txtAlready
             // 
             this.txtAlready.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAlready.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtAlready.Location = new System.Drawing.Point(118, 207);
+            this.txtAlready.Location = new System.Drawing.Point(118, 189);
             this.txtAlready.Margin = new System.Windows.Forms.Padding(4);
             this.txtAlready.Name = "txtAlready";
             this.txtAlready.ReadOnly = true;
@@ -235,7 +239,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(10, 213);
+            this.label6.Location = new System.Drawing.Point(18, 195);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(110, 16);
@@ -274,7 +278,7 @@
             // 
             this.txtTicket.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTicket.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtTicket.Location = new System.Drawing.Point(118, 311);
+            this.txtTicket.Location = new System.Drawing.Point(118, 275);
             this.txtTicket.Margin = new System.Windows.Forms.Padding(4);
             this.txtTicket.Name = "txtTicket";
             this.txtTicket.ReadOnly = true;
@@ -287,7 +291,7 @@
             // 
             this.txtHangCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtHangCount.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtHangCount.Location = new System.Drawing.Point(118, 259);
+            this.txtHangCount.Location = new System.Drawing.Point(118, 232);
             this.txtHangCount.Margin = new System.Windows.Forms.Padding(4);
             this.txtHangCount.Name = "txtHangCount";
             this.txtHangCount.ReadOnly = true;
@@ -300,7 +304,7 @@
             // 
             this.txtWait.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtWait.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtWait.Location = new System.Drawing.Point(118, 155);
+            this.txtWait.Location = new System.Drawing.Point(118, 146);
             this.txtWait.Margin = new System.Windows.Forms.Padding(4);
             this.txtWait.Name = "txtWait";
             this.txtWait.ReadOnly = true;
@@ -326,7 +330,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(27, 317);
+            this.label5.Location = new System.Drawing.Point(35, 281);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(93, 16);
@@ -337,7 +341,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(27, 265);
+            this.label4.Location = new System.Drawing.Point(35, 238);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(93, 16);
@@ -348,7 +352,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(27, 161);
+            this.label3.Location = new System.Drawing.Point(35, 152);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(93, 16);
@@ -359,7 +363,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(27, 109);
+            this.label2.Location = new System.Drawing.Point(35, 109);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 16);
@@ -510,6 +514,30 @@
             this.btnCance.UseVisualStyleBackColor = true;
             this.btnCance.Click += new System.EventHandler(this.btnCance_Click);
             // 
+            // txtUserCode
+            // 
+            this.txtUserCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtUserCode.Font = new System.Drawing.Font("宋体", 15F);
+            this.txtUserCode.Location = new System.Drawing.Point(118, 318);
+            this.txtUserCode.Margin = new System.Windows.Forms.Padding(4);
+            this.txtUserCode.Name = "txtUserCode";
+            this.txtUserCode.ReadOnly = true;
+            this.txtUserCode.Size = new System.Drawing.Size(131, 30);
+            this.txtUserCode.TabIndex = 35;
+            this.txtUserCode.WatermarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.txtUserCode.WatermarkText = null;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Location = new System.Drawing.Point(1, 324);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(127, 16);
+            this.label7.TabIndex = 34;
+            this.label7.Text = "当前用户编号：";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -580,6 +608,8 @@
         private CustomSkin.Windows.Forms.TextBox txtWindow;
         private System.Windows.Forms.Label lblWindow;
         private System.Windows.Forms.Label label1;
+        private CustomSkin.Windows.Forms.TextBox txtUserCode;
+        private System.Windows.Forms.Label label7;
     }
 }
 

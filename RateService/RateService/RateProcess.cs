@@ -1,15 +1,13 @@
-﻿using BLL;
-using Model;
-using System;
+﻿using System;
 using System.IO;
+using BLL;
+using Model;
 
 namespace RateService
 {
     public class RateProcess
     {
-        TCallBLL cBll = new TCallBLL();
-        TWindowBLL winUserBll = new TWindowBLL();
-        TEvaluateBLL eBll = new TEvaluateBLL();
+
         const string serviceKey = "D840F2A3-C421-4B3A-B385-12B25727F70F";
 
         public RateProcess()
@@ -18,17 +16,17 @@ namespace RateService
 
         public object RS_GetWindowList()
         {
-            return this.winUserBll.RS_GetWindowList();
+            return new TWindowBLL().RS_GetWindowList();
         }
 
         public object RS_GetUserListByWindowNo(string winNum)
         {
-            return this.winUserBll.RS_GetUserListByWindowNo(winNum);
+            return new TWindowBLL().RS_GetUserListByWindowNo(winNum);
         }
 
         public object GetUserPhoto(string userCode)
         {
-            return this.winUserBll.RS_GetUserPhoto(userCode);
+            return new TWindowBLL().RS_GetUserPhoto(userCode);
         }
 
         public bool Login(string winNum, string userCode)
@@ -36,7 +34,7 @@ namespace RateService
             if (userCode == "QueueService" && winNum == serviceKey)
                 return true;
             else
-                return this.winUserBll.RS_GetModel(winNum, userCode) != null;
+                return new TWindowBLL().RS_GetModel(winNum, userCode) != null;
         }
 
         public bool RateSubmit(string WindowUser, string WindowNo, string RateId, string attitude, string quality, string efficiency, string honest)
@@ -44,7 +42,7 @@ namespace RateService
             try
             {
                 //先不判断重复
-                TCallModel cl = cBll.GetModelByHandleId(RateId);
+                TCallModel cl = new TCallBLL().GetModelByHandleId(RateId);
                 TEvaluateModel ev = new TEvaluateModel();
                 ev.type = 1;
                 ev.handId = cl.id;
@@ -59,7 +57,7 @@ namespace RateService
                 ev.evaluateEfficiency = int.Parse(efficiency);
                 ev.evaluateHonest = int.Parse(honest);
                 ev.evaluateQuality = int.Parse(quality);
-                eBll.Insert(ev);
+                new TEvaluateBLL().Insert(ev);
             }
             catch (Exception ex)
             {

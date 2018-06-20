@@ -76,7 +76,10 @@ namespace DAL
             var unitList = wlBusy.Select(w => w.unitSeq).ToList();
             return db.Query<TQueueModel>().Where(c => busyList.Contains(c.busTypeSeq) && unitList.Contains(c.unitSeq) && c.ticketTime.Date == DateTime.Now.Date && c.state == state).ToList();
         }
-
+        public List<TQueueModel> GetModelList( string unitSeq, int state)
+        {
+            return db.Query<TQueueModel>().Where(c => c.unitSeq == unitSeq && c.ticketTime.Date == DateTime.Now.Date && c.state == state).ToList();
+        }
         public List<TQueueModel> GetModelList(string busiSeq, string unitSeq, int state)
         {
             return db.Query<TQueueModel>().Where(c => c.busTypeSeq == busiSeq && c.unitSeq == unitSeq && c.ticketTime.Date == DateTime.Now.Date && c.state == state).ToList();

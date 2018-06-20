@@ -136,5 +136,18 @@ namespace TestClient
             this.SendMessage(new { method = "HeartBeat" });
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var data = process.FormatterMessageBytes(
+                new
+                {
+                    method = "GetWaitInfoAll",
+                    param = new
+                    {
+                    }
+                });
+            this.client.Send(data, data.Length);
+        }
+
     }
 }

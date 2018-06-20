@@ -42,11 +42,29 @@ namespace RateService
         {
             switch (message.GetType().Name)
             {
+                case MessageName.ClientQueryMessage:
+                    #region clientQuery
+                    {
+                        var msg = message as ClientQueryMessage;
+                        var allClient = this.deviceList.Dictionary.Values.ToArray();
+                        Dictionary<string, string> dic = new Dictionary<string, string>();
+                        foreach (var client in allClient)
+                        {
+                            dic[client.WindowNumber] = client.UserCode;
+                        }
+                        msg.QueryType = ClientQueryType.Response;
+                        msg.ClientList = dic;
+                        this.client.SendMessage(msg);
+                    }
+                    #endregion
+                    break;
                 case MessageName.RateMessage:
+                    #region rateRequest
                     {
                         var msg = message as RateMessage;
-                        var targetList = this.deviceList.Dictionary.Values.Where(p => p.WindowNumber == msg.WindowNo).ToList();
-                        foreach (var target in targetList)
+                        var allClient = this.deviceList.Dictionary.Values.ToArray();
+                        var listRate = allClient.Where(p => p.WindowNumber == msg.WindowNo);
+                        foreach (var client in listRate)
                         {
                             var rateData = new RequestData
                             {
@@ -60,15 +78,18 @@ namespace RateService
                                     reserveSeq = msg.reserveSeq
                                 }
                             };
-                            this.SendWSMessage(target.ID, rateData.ToResultData());
+                            this.SendWSMessage(client.ID, rateData.ToResultData());
                         }
                     }
+                    #endregion
                     break;
                 case MessageName.OperateMessage:
+                    #region operate
                     {
                         var msg = message as OperateMessage;
-                        var targetList = this.deviceList.Dictionary.Values.Where(p => p.WindowNumber == msg.WindowNo).ToList();
-                        foreach (var target in targetList)
+                        var allClient = this.deviceList.Dictionary.Values.ToArray();
+                        var listRate = allClient.Where(p => p.WindowNumber == msg.WindowNo);
+                        foreach (var client in listRate)
                         {
                             var rateData = new RequestData
                             {
@@ -78,18 +99,28 @@ namespace RateService
                                     operate = msg.Operate.ToString()
                                 }
                             };
-                            this.SendWSMessage(target.ID, rateData.ToResultData());
+                            this.SendWSMessage(client.ID, rateData.ToResultData());
                         }
                     }
+                    #endregion
                     break;
             }
         }
 
         HandleResult Service_OnClose(TcpServer sender, IntPtr connId, SocketOperation enOperation, int errorCode)
         {
+            if (!this.deviceList.Dictionary.ContainsKey(connId))
+                return HandleResult.Ignore;
+            var deviceInfo = this.deviceList.Dictionary[connId];
+            this.client.SendMessage(new ClientChangedMessage()
+            {
+                ChangedType = ClientChangedType.Remove,
+                UserCode = deviceInfo.UserCode,
+                WindowNumber = deviceInfo.WindowNumber
+            });
             this.deviceList.Remove(connId);
             deviceListChanged = true;
-            return HandleResult.Ok;
+            return HandleResult.Ignore;
         }
 
         HandleResult Service_OnWSMessageBody(IntPtr connId, byte[] data)
@@ -236,6 +267,12 @@ namespace RateService
                             else
                                 rData = new ResponseData { code = "1002", request = requestData.method, result = "窗口或用户信息不正确!" };
                             this.SendWSMessage(connId, rData.ToResultData());
+                            this.client.SendMessage(new ClientChangedMessage()
+                            {
+                                ChangedType = ClientChangedType.Add,
+                                UserCode = userCode,
+                                WindowNumber = winNum
+                            });
                         }
                         break;
                     case "ratesubmit":

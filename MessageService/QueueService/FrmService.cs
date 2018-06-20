@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using QueueMessage;
 
 namespace QueueService
@@ -25,7 +25,7 @@ namespace QueueService
             if (!this.service.clientListChanged)
                 return;
             this.listView1.Items.Clear();
-            foreach (var client in service.clientList.Dictionary.Values)
+            foreach (var client in service.clientList.Dictionary.Values.ToArray())
             {
                 var item = this.listView1.Items.Add(client.ID.ToString());
                 item.SubItems.Add(client.IP);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace RateService
@@ -23,7 +24,7 @@ namespace RateService
             if (!this.service.deviceListChanged)
                 return;
             this.listView1.Items.Clear();
-            foreach (var client in service.deviceList.Dictionary.Values)
+            foreach (var client in service.deviceList.Dictionary.Values.ToArray())
             {
                 var item = this.listView1.Items.Add(client.ID.ToString());
                 item.SubItems.Add(client.IP);

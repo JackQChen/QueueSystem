@@ -101,27 +101,58 @@ namespace QueueService
                     }
                     #endregion
                     break;
+                case MessageName.ClientQueryMessage:
+                    #region clientQuery
+                    {
+                        var msg = message as ClientQueryMessage;
+                        var allClient = this.clientList.Dictionary.Values.ToArray();
+                        if (msg.QueryType == ClientQueryType.Request)
+                        {
+                            msg.QueryClientID = connId;
+                            var bytes = this.process.FormatterMessageBytes(message);
+                            var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.RateService);
+                            foreach (var client in listRate)
+                                this.Send(client.ID, bytes, bytes.Length);
+                        }
+                        else
+                        {
+                            var bytes = this.process.FormatterMessageBytes(message);
+                            var listWin = allClient.Where(p => p.Type == ClientType.Window.ToString() && p.ID == msg.QueryClientID);
+                            foreach (var client in listWin)
+                                this.Send(client.ID, bytes, bytes.Length);
+                        }
+                    }
+                    #endregion
+                    break;
+                case MessageName.ClientChangedMessage:
+                    #region clientChanged
+                    {
+                        var msg = message as ClientChangedMessage;
+                        var bytes = this.process.FormatterMessageBytes(message);
+                        var allClient = this.clientList.Dictionary.Values.ToArray();
+                        var listWin = allClient.Where(p => p.Type == ClientType.Window.ToString());
+                        foreach (var client in listWin)
+                            this.Send(client.ID, bytes, bytes.Length);
+                    }
+                    #endregion
+                    break;
                 case MessageName.CallMessage:
                     #region call
                     {
                         var msg = message as CallMessage;
-                        if (this.ConnectionCount > 0)
+                        var bytes = this.process.FormatterMessageBytes(message);
+                        var allClient = this.clientList.Dictionary.Values.ToArray();
+                        if (msg.IsSoundMessage)
                         {
-                            var bytes = this.process.FormatterMessageBytes(message);
-                            var allClient = new ClientInfo[this.clientList.Dictionary.Count];
-                            this.clientList.Dictionary.Values.CopyTo(allClient, 0);
-                            if (msg.IsSoundMessage)
-                            {
-                                var list = allClient.Where(p => p.Type == ClientType.SoundPlayer.ToString() && p.Name.Split(',').Contains(msg.AreaNo)).ToList();
-                                foreach (var client in list)
-                                    this.Send(client.ID, bytes, bytes.Length);
-                            }
-                            if (msg.IsLEDMessage)
-                            {
-                                var list = allClient.Where(p => p.Type == ClientType.LEDDisplay.ToString()).ToList();
-                                foreach (var client in list)
-                                    this.Send(client.ID, bytes, bytes.Length);
-                            }
+                            var listSound = allClient.Where(p => p.Type == ClientType.SoundPlayer.ToString() && p.Name.Split(',').Contains(msg.AreaNo));
+                            foreach (var client in listSound)
+                                this.Send(client.ID, bytes, bytes.Length);
+                        }
+                        if (msg.IsLEDMessage)
+                        {
+                            var listLED = allClient.Where(p => p.Type == ClientType.LEDDisplay.ToString());
+                            foreach (var client in listLED)
+                                this.Send(client.ID, bytes, bytes.Length);
                         }
                         var resultMsg = new ResultMessage();
                         resultMsg.Operate = OperateName.Call;
@@ -136,15 +167,14 @@ namespace QueueService
                         var msg = message as RateMessage;
                         //cq 2018-01-08 发出评价请求时更新LED屏显示内容
                         var bytes = this.process.FormatterMessageBytes(message);
-                        var allClient = new ClientInfo[this.clientList.Dictionary.Count];
-                        this.clientList.Dictionary.Values.CopyTo(allClient, 0);
-                        var list = allClient.Where(p => p.Type == ClientType.LEDDisplay.ToString()).ToList();
-                        foreach (var client in list)
+                        var allClient = this.clientList.Dictionary.Values.ToArray();
+                        var listLED = allClient.Where(p => p.Type == ClientType.LEDDisplay.ToString());
+                        foreach (var client in listLED)
                             this.Send(client.ID, bytes, bytes.Length);
-                        //LED屏发送完成 
-                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.RateService).ToList();
-                        foreach (var service in listRate)
-                            this.SendMessage(service.ID, message);
+                        //向评价服务转发
+                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.RateService);
+                        foreach (var client in listRate)
+                            this.SendMessage(client.ID, message);
                     }
                     #endregion
                     break;
@@ -154,15 +184,14 @@ namespace QueueService
                         var msg = message as OperateMessage;
                         //cq 2018-01-08 发出评价请求时更新LED屏显示内容
                         var bytes = this.process.FormatterMessageBytes(message);
-                        var allClient = new ClientInfo[this.clientList.Dictionary.Count];
-                        this.clientList.Dictionary.Values.CopyTo(allClient, 0);
-                        var list = allClient.Where(p => p.Type == ClientType.LEDDisplay.ToString()).ToList();
-                        foreach (var client in list)
+                        var allClient = this.clientList.Dictionary.Values.ToArray();
+                        var listLED = allClient.Where(p => p.Type == ClientType.LEDDisplay.ToString());
+                        foreach (var client in listLED)
                             this.Send(client.ID, bytes, bytes.Length);
-                        //LED屏发送完成
-                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.RateService).ToList();
-                        foreach (var service in listRate)
-                            this.SendMessage(service.ID, message);
+                        //向评价服务转发
+                        var listRate = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.RateService);
+                        foreach (var client in listRate)
+                            this.SendMessage(client.ID, message);
                     }
                     #endregion
                     break;
@@ -171,10 +200,9 @@ namespace QueueService
                     {
                         var msg = message as WeChatMessage;
                         var bytes = this.process.FormatterMessageBytes(message);
-                        var allClient = new ClientInfo[this.clientList.Dictionary.Count];
-                        this.clientList.Dictionary.Values.CopyTo(allClient, 0);
-                        var list = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.WeChatService).ToList();
-                        foreach (var client in list)
+                        var allClient = this.clientList.Dictionary.Values.ToArray();
+                        var listWeChat = allClient.Where(p => p.Type == ClientType.Service.ToString() && p.Name == ServiceName.WeChatService);
+                        foreach (var client in listWeChat)
                             this.Send(client.ID, bytes, bytes.Length);
                     }
                     #endregion

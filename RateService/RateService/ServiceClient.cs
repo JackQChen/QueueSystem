@@ -19,12 +19,11 @@ namespace RateService
 
         HandleResult ServiceClient_OnConnect(TcpClient sender)
         {
-            var bytes = this.process.FormatterMessageBytes(new LoginMessage()
+            this.SendMessage(new LoginMessage()
             {
                 ClientType = ClientType.Service,
                 ClientName = ServiceName.RateService
             });
-            this.Send(bytes, bytes.Length);
             return HandleResult.Ignore;
         }
 
@@ -38,6 +37,12 @@ namespace RateService
         {
             if (this.ReceiveMessage != null)
                 this.ReceiveMessage(connId, message);
+        }
+
+        public void SendMessage(Message message)
+        {
+            var bytes = this.process.FormatterMessageBytes(message);
+            this.Send(bytes, bytes.Length);
         }
     }
 }

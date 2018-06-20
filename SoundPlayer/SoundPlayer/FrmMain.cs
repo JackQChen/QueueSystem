@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading;
 using System.Windows.Forms;
 using MessageClient;
-using MessageLib;
 using QueueMessage;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace SoundPlayer
 {
@@ -74,7 +72,7 @@ namespace SoundPlayer
                         arePlay.Set();
                     };
                     isOk = true;
-                    PlaySound("语音服务器初始化成功。");
+                    PlaySound("语音播放器初始化成功。");
                 }
                 catch (Exception ex)
                 {

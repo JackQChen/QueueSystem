@@ -33,6 +33,12 @@ namespace MessageClientTest
             client.ClientName = "张三";
             client.OnResult += new Action<string, string>(client_OnResult);
             client.OnMessage += new Action<QueueMessage.Message>(client_OnMessage);
+            client.OnConnect += new Action(client_OnConnect);
+        }
+
+        void client_OnConnect()
+        {
+            this.client.SendMessage(new ClientQueryMessage());
         }
 
         void client_OnMessage(QueueMessage.Message obj)

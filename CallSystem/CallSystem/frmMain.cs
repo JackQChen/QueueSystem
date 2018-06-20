@@ -53,6 +53,7 @@ namespace CallSystem
         Dictionary<int, Dictionary<string, int>> wReCall;//重呼限制
         Dictionary<int, List<TWindowBusinessModel>> wlBusy;
         Dictionary<int, List<TWindowBusinessModel>> wbBusy;//属于绿色通道的窗口业务
+        Dictionary<string, string> wUser;//窗口以及对应的当前登录用户
         Dictionary<string, int> wCall;
         Client client = new Client();
         object objLock = new object();
@@ -107,6 +108,7 @@ namespace CallSystem
             wlBusy = new Dictionary<int, List<TWindowBusinessModel>>();
             wbBusy = new Dictionary<int, List<TWindowBusinessModel>>();
             wReCall = new Dictionary<int, Dictionary<string, int>>();
+            wUser = new Dictionary<string, string>();
             //根据配置分区窗口
             var areaList = areaNo.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             wList = wList.Where(w => areaList.Contains(w.AreaName.ToString())).ToList();
@@ -165,15 +167,21 @@ namespace CallSystem
             client.ServerPort = ushort.Parse(port);
             client.ClientType = ClientType.Window;
             client.ClientName = clientName;
-            client.Start();
             this.client.OnResult += (msgType, msgText) =>
             {
                 this.messageIndicator1.SetState(StateType.Success, msgText);
+            };
+            this.client.OnConnect += () =>
+            {
+                this.client.SendMessage(new ClientQueryMessage());
             };
             this.client.OnDisconnect += () =>
             {
                 this.messageIndicator1.SetState(StateType.Error, "未连接");
             };
+            this.client.OnMessage += new Action<QueueMessage.Message>(client_OnMessage);
+            client.Start();
+
             new Thread(() =>
             {
                 while (isBool)
@@ -391,6 +399,37 @@ namespace CallSystem
             thread.Start();
             this.Hide();
             this.ShowInTaskbar = false;
+        }
+
+        void client_OnMessage(QueueMessage.Message obj)
+        {
+            switch (obj.GetType().Name)
+            {
+                case MessageName.ClientQueryMessage:
+                    {
+                        wUser = new Dictionary<string, string>();
+                        var msg = obj as ClientQueryMessage;
+                        foreach (var li in msg.ClientList)
+                        {
+                            if (!wUser.ContainsKey(li.Key))
+                            {
+                                wUser.Add(li.Key, li.Value);
+                            }
+                        }
+                    }
+                    break;
+                case MessageName.ClientChangedMessage:
+                    {
+                        var msg = obj as ClientChangedMessage;
+                        if (msg.ChangedType == ClientChangedType.Add)
+                        {
+                            wUser[msg.WindowNumber] = msg.UserCode;
+                        }
+                        else
+                            wUser[msg.WindowNumber] = "";
+                    }
+                    break;
+            }
         }
 
         void Process()
@@ -767,7 +806,10 @@ namespace CallSystem
 
                         try
                         {
-                            var model = cBll.CallNo(wlBusy[adress], wbBusy[adress], wNum[adress], "");//用户暂时为空
+                            var userCode = "";
+                            if (wUser.ContainsKey(wNum[adress]))
+                                userCode = wUser[wNum[adress]];
+                            var model = cBll.CallNo(wlBusy[adress], wbBusy[adress], wNum[adress], userCode);//用户暂时为空
                             if (model != null)
                             {
                                 if (wModel.ContainsKey(adress))
@@ -802,6 +844,17 @@ namespace CallSystem
                 });
             }
         }
+
+        string userCode = "";
+        AutoResetEvent are = new AutoResetEvent(false);
+
+        string GetUserCode(string winNo)
+        {
+            client.Send("");
+            are.WaitOne();
+            return userCode;
+        }
+
         //重呼
         private void ReCallNo(int adress)
         {

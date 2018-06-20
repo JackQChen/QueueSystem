@@ -19,6 +19,7 @@ namespace MessageClient
         public event Action<string, string> OnResult;
         public event Action<Message> OnMessage;
         public event Action OnRestart;
+        public new event Action OnConnect;
         public event Action OnDisconnect;
         private AutoResetEvent areConn = new AutoResetEvent(false);
 
@@ -36,7 +37,11 @@ namespace MessageClient
                     while (isRun)
                     {
                         if (this.Login())
+                        {
+                            if (this.OnConnect != null)
+                                this.OnConnect();
                             break;
+                        }
                         else
                         {
                             if (this.OnDisconnect != null)
@@ -66,6 +71,7 @@ namespace MessageClient
             {
                 case MessageName.RestartMessage:
                     {
+                        isRun = false;
                         if (this.OnRestart != null)
                             this.OnRestart();
                         //以无参方式重启
@@ -95,8 +101,6 @@ namespace MessageClient
 
         public void SendMessage(Message message)
         {
-            if (!this.IsStarted)
-                this.Connect(this.ServerIP, this.ServerPort, false);
             var bytes = this.process.FormatterMessageBytes(message);
             this.Send(bytes, bytes.Length);
         }

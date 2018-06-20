@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace QueueMessage
 {
@@ -53,6 +54,35 @@ namespace QueueMessage
     #endregion
 
     #region 业务消息
+
+    [Serializable]
+    public class ClientQueryMessage : Message
+    {
+        public ClientQueryMessage()
+        {
+            this.QueryType = ClientQueryType.Request;
+        }
+
+        public IntPtr QueryClientID { get; set; }
+
+        public ClientQueryType QueryType { get; set; }
+
+        public Dictionary<string, string> ClientList { get; set; }
+    }
+
+    [Serializable]
+    public class ClientChangedMessage : Message
+    {
+        public ClientChangedMessage()
+        {
+        }
+
+        public ClientChangedType ChangedType { get; set; }
+
+        public string WindowNumber { get; set; }
+
+        public string UserCode { get; set; }
+    }
 
     [Serializable]
     public class CallMessage : Message
