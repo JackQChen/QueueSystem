@@ -51,12 +51,16 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             return View(model);
         }
 
-        public ActionResult QueryUserID(string code, string name)
+        public ActionResult QueryUserInfo(string code, string name)
         {
-            code = code.Trim();
             name = name.Trim();
-            var model = this.bll.GetModel(p => p.Code == code || p.Name == name);
-            return Content(JsonConvert.SerializeObject(new { userID = model == null ? -1 : model.ID }));
+            var codeModel = this.bll.GetModel(p => p.Code == code);
+            var nameModel = this.bll.GetModel(p => p.Name == name);
+            return Content(JsonConvert.SerializeObject(new
+            {
+                code = codeModel == null ? "" : code,
+                name = nameModel == null ? "" : name
+            }));
         }
 
         [HttpPost]
@@ -65,6 +69,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         {
             if (!string.IsNullOrEmpty(avatar))
                 model.Photo = Convert.FromBase64String(avatar.Split(',')[1]);
+            if (this.bll.GetModel(p => p.Code == model.Code && p.ID != model.ID) != null)
+                return Content("用户编号重复，请核查");
             if (model.ID == -1)
                 this.bll.Insert(model);
             else

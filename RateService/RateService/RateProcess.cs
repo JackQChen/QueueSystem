@@ -29,6 +29,11 @@ namespace RateService
             return new TWindowBLL().RS_GetUserPhoto(userCode);
         }
 
+        public string GetUserIdByCode(string userCode)
+        {
+            return new TUserBLL().GetModel(p => p.Code == userCode).ID.ToString();
+        }
+
         public bool Login(string winNum, string userCode)
         {
             if (userCode == "QueueService" && winNum == serviceKey)

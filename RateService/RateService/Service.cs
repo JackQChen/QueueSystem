@@ -50,7 +50,7 @@ namespace RateService
                         Dictionary<string, string> dic = new Dictionary<string, string>();
                         foreach (var client in allClient)
                         {
-                            dic[client.WindowNumber] = client.UserCode;
+                            dic[client.WindowNumber] = client.UserID;
                         }
                         msg.QueryType = ClientQueryType.Response;
                         msg.ClientList = dic;
@@ -115,7 +115,7 @@ namespace RateService
             this.client.SendMessage(new ClientChangedMessage()
             {
                 ChangedType = ClientChangedType.Remove,
-                UserCode = deviceInfo.UserCode,
+                UserID = deviceInfo.UserID,
                 WindowNumber = deviceInfo.WindowNumber
             });
             this.deviceList.Remove(connId);
@@ -248,6 +248,7 @@ namespace RateService
                             ResponseData rData = null;
                             var param = requestData.param as Dictionary<string, object>;
                             string winNum = param["winNum"].ToString(), userCode = param["userCode"].ToString();
+                            string userId = rateProcess.GetUserIdByCode(userCode);
                             if (rateProcess.Login(winNum, userCode))
                             {
                                 string ip = "";
@@ -258,6 +259,7 @@ namespace RateService
                                     ID = connId,
                                     IP = ip + ":" + port,
                                     WindowNumber = winNum,
+                                    UserID = userId,
                                     UserCode = userCode,
                                     ConnTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                                 });
@@ -270,7 +272,7 @@ namespace RateService
                             this.client.SendMessage(new ClientChangedMessage()
                             {
                                 ChangedType = ClientChangedType.Add,
-                                UserCode = userCode,
+                                UserID = userId,
                                 WindowNumber = winNum
                             });
                         }

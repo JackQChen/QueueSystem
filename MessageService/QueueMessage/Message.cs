@@ -81,7 +81,7 @@ namespace QueueMessage
 
         public string WindowNumber { get; set; }
 
-        public string UserCode { get; set; }
+        public string UserID { get; set; }
     }
 
     [Serializable]

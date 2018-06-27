@@ -40,6 +40,10 @@
         $.submitForm({
             url: "SubmitForm",
             data: $('form').serializeForm(),
+            success: function (data) {
+                if(data.indexOf("成功")<0)
+                    alert(data);
+            },
             callback: callback
         });
     }

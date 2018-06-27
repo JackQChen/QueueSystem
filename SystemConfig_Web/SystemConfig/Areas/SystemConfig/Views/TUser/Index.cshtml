@@ -46,14 +46,22 @@ function Add()
         var doc = $($.modalContent().document); 
         $.ajax({
                 async: false, 
-                url: "TUser/QueryUserID?code="+ doc .find('form [name=Code]').val() + "&name="+ doc .find('form [name=Name]').val(), 
+                url: "TUser/QueryUserInfo?code="+ doc .find('form [name=Code]').val() + "&name="+ doc .find('form [name=Name]').val(), 
                 dataType: "json",
                 success: function (data) {
-                if(data.userID != -1)
+                if(data.code=="")
                 {
-                    window.parent.modalConfirm({
+                    if(data.name =="")
+                    {   
+                            $.modalContent().submitForm(function(){
+                            Refresh();
+                            });
+                    }
+                    else
+                    {
+                        window.parent.modalConfirm({
                         title : "提示",
-                        text:"该姓名或工号已经存在，确定继续添加？",
+                        text:"该姓名已经存在，确定继续添加？",
                         callback:function(){
                             $.modalContent().submitForm(function(){
                             Refresh();
@@ -61,14 +69,13 @@ function Add()
                             window.parent.modalConfirmClose();
                             window.parent.modalClose();
                             }
-                     }); 
+                        }); 
+                    }
                 }
-                else 
+                else
                 {
-                            $.modalContent().submitForm(function(){
-                            Refresh();
-                            });
-                }
+                    alert("用户编号重复，请核查");
+                }  
                 }
             }); 
         }
