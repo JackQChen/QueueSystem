@@ -281,7 +281,7 @@ namespace RateService
                         {
                             var param = requestData.param as Dictionary<string, object>;
                             ResponseData rData = null;
-                            if (rateProcess.RateSubmit(device.UserCode, device.WindowNumber, param["rateId"].ToString(), param["attitude"].ToString(), param["quality"].ToString(), param["efficiency"].ToString(), param["honest"].ToString()))
+                            if (rateProcess.RateSubmit(device.UserID, device.WindowNumber, param["rateId"].ToString(), param["attitude"].ToString(), param["quality"].ToString(), param["efficiency"].ToString(), param["honest"].ToString()))
                                 rData = new ResponseData { code = "0", request = requestData.method, result = "评价成功!" };
                             else
                                 rData = new ResponseData { code = "1003", request = requestData.method, result = "评价失败!" };

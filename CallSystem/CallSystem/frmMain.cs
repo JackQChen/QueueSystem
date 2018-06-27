@@ -423,7 +423,7 @@ namespace CallSystem
                         var msg = obj as ClientChangedMessage;
                         if (msg.ChangedType == ClientChangedType.Add)
                         {
-                            wUser[msg.WindowNumber] = msg.UserCode;
+                            wUser[msg.WindowNumber] = msg.UserID;
                         }
                         else
                             wUser[msg.WindowNumber] = "";

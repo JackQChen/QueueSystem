@@ -37,7 +37,7 @@ namespace CallClient
         TCallStateBLL csBll = new TCallStateBLL();
         TCallStateModel stateModel;
         List<TQueueModel> qList;
-        string userCode = "";
+        string userId = "";
         public frmMain()
         {
             InitializeComponent();
@@ -218,9 +218,9 @@ namespace CallClient
                     {
                         var msg = obj as ClientQueryMessage;
                         if (msg.ClientList.ContainsKey(windowNo))
-                            userCode = msg.ClientList[windowNo];
+                            userId = msg.ClientList[windowNo];
                         else
-                            userCode = "";
+                            userId = "";
                     }
                     break;
                 case MessageName.ClientChangedMessage:
@@ -228,10 +228,10 @@ namespace CallClient
                         var msg = obj as ClientChangedMessage;
                         if (msg.ChangedType == ClientChangedType.Add)
                         {
-                            userCode = msg.UserCode;
+                            userId = msg.UserID;
                         }
                         else
-                            userCode = "";
+                            userId = "";
                     }
                     break;
             }
@@ -331,7 +331,7 @@ namespace CallClient
                     {
                         try
                         {
-                            var model = cBll.CallNo(windowBusys, windowBusyGreens, windowNo, userCode);
+                            var model = cBll.CallNo(windowBusys, windowBusyGreens, windowNo, userId);
                             if (model != null)
                             {
                                 stateModel.callId = model.id;
@@ -782,7 +782,7 @@ namespace CallClient
         {
             this.txtWindow.Text = windowName;
             this.lblWindow.Text = windowName;
-            this.txtUserCode.Text = userCode;
+            this.txtUserCode.Text = userId;
             stateModel = csBll.GetModel(windowNo);
             if (stateModel != null)
             {
