@@ -31,7 +31,7 @@ namespace QueueClient
         string GetBusiness = System.Configuration.ConfigurationManager.AppSettings["GetBusiness"];
         string RegisterUser = System.Configuration.ConfigurationManager.AppSettings["RegisterUser"]; //暂停使用
         string UpdateAppoint = "";// System.Configuration.ConfigurationManager.AppSettings["UpdateAppoint"];
-        string GetCard = System.Configuration.ConfigurationManager.AppSettings["GetCard"];
+        string GetCard = "";
         string AppointmentOnline = System.Configuration.ConfigurationManager.AppSettings["AppointmentOnline"];
         string ExitPwd = System.Configuration.ConfigurationManager.AppSettings["ExitPwd"];
         string GetEvaluate = System.Configuration.ConfigurationManager.AppSettings["GetEvaluate"];
@@ -50,6 +50,7 @@ namespace QueueClient
         string InvestmentUnit = "";//投资部门
         string InvestmentBusy = "";//投资业务
         string GetAppointmentLimit = "";//获取预约数
+        string FilterUnitStr = "";//办事业务下过滤出证业务类型
         #endregion
 
         #region
@@ -168,7 +169,7 @@ namespace QueueClient
             pwd.Location = new Point(0, 0);
 
             main.Work += new Action(Work);
-            //main.GetCard += new Action(GetCardAction);
+            main.GetCard += new Action(GetCardAction);
             //main.Consult += new Action(Consult);
             main.Investment += new Action(Investment);
             main.Evaluate += new Action(Evaluate);
@@ -248,6 +249,8 @@ namespace QueueClient
             SetConfigValue("InvestmentBusy", "http://19.136.14.62/CommonService/api/reserve/reserveTypeList/query.v?pageRowNum=1000&unitSeq=@unitSeq");
             SetConfigValue("GetAppLimit", "http://19.136.14.62/CommonService/api/reserve/reserveInfoList/query.v?pageRowNum=1000&reserveDate=@currentDate&unitSeq=@unitSeq&busiSeq=@busiSeq&areaSeq=@areaSeq");
             SetConfigValue("UpdateApp", "http://19.136.14.62/CommonService/api/reserve/syncReserveInfo/update.v?reserveSeq=@reserveSeq&syncStatus=1");
+            SetConfigValue("GetCardNew", "http://19.136.14.62/CommonService/api/control/controlInfoList/query.v?custCardId=@custCardId&approveStatus=14");
+            SetConfigValue("FilterUnitStr", "领证");
             UpdateAppoint = System.Configuration.ConfigurationManager.AppSettings["UpdateApp"];
             GetAppointmentLimit = System.Configuration.ConfigurationManager.AppSettings["GetAppLimit"];
             BidUrl1 = System.Configuration.ConfigurationManager.AppSettings["BidUrl1"];
@@ -257,6 +260,8 @@ namespace QueueClient
             TimeInterval = System.Configuration.ConfigurationManager.AppSettings["TimeInterval"];
             InvestmentUnit = System.Configuration.ConfigurationManager.AppSettings["InvestmentUnit"];
             InvestmentBusy = System.Configuration.ConfigurationManager.AppSettings["InvestmentBusy"];
+            GetCard = System.Configuration.ConfigurationManager.AppSettings["GetCardNew"];
+            FilterUnitStr = System.Configuration.ConfigurationManager.AppSettings["FilterUnitStr"];
             int iPort;
             for (iPort = 1001; iPort <= 1016; iPort++)
             {
@@ -453,7 +458,7 @@ namespace QueueClient
                         pbReturn_Click(null, null);
                         return;
                     }
-                    OutQueueNo(ap);
+                    OutQueueNo(ap, "0", "");
                 }
                 pbReturn_Click(null, null);
             }
@@ -662,7 +667,7 @@ namespace QueueClient
                     }
                 }
             }
-            OutQueueNo(app); //出号
+            OutQueueNo(app, "0", ""); //出号
             pbReturn_Click(null, null);
         }
 
@@ -847,7 +852,7 @@ namespace QueueClient
                 if (max <= mList.Count + amount)
                 {
                     frmMsg frm = new frmMsg();
-                    frm.msgInfo = "当前时间段排队数量已达上限！";
+                    frm.msgInfo = "排队号已取完,若窗口空闲可直接到窗口办理！";
                     frm.ShowDialog();
                     return false;
                 }
@@ -959,7 +964,9 @@ namespace QueueClient
                 isGreen = "网上预约";
             else if (queue.type == 1 && isGreen == "")
                 isGreen = "网上申办";
-            Print(queue, area, windowStr, waitNo, "补打", isGreen);
+            var isGetCard = queue.type == 2 ? "1" : "0";
+            var serialNo = queue.type == 2 ? queue.reserveSeq : "";
+            Print(queue, area, windowStr, waitNo, "补打", isGreen, isGetCard, serialNo);
         }
 
         void gotoFirst()
@@ -1384,35 +1391,80 @@ namespace QueueClient
                     else
                     {
                         Dictionary<string, object> data = dataArr.FirstOrDefault() as Dictionary<string, object>;
-                        var busiSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
-                        var busiName = data["approveName"] == null ? "" : data["approveName"].ToString();
+                        var approveSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
+                        var approveName = data["approveName"] == null ? "" : data["approveName"].ToString();
                         var unitSeq = data["unitSeq"] == null ? "" : data["unitSeq"].ToString();
                         var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
                         var controlSeq = data["controlSeq"] == null ? "" : data["controlSeq"].ToString();
                         var beginDate = data["beginDate"] == null ? "" : data["beginDate"].ToString();
+                        var busiSeq = "";
+                        var busiName = "";
                         selectUnit = uList.Where(u => u.unitSeq == unitSeq).FirstOrDefault();
                         if (selectUnit != null)
                         {
-                            selectBusy = bList.Where(b => b.busiSeq == busiSeq).FirstOrDefault();
-                            if (selectBusy != null)
+                            if (approveSeq != "")
                             {
-                                TGetCardModel model = new TGetCardModel();
-                                model.controlSeq = controlSeq;
-                                model.unitName = unitName;
-                                model.unitSeq = unitSeq;
-                                model.busTypeSeq = busiSeq;
-                                model.busTypeName = busiName;
-                                model.custCardId = idNo;
-                                model.outCardTime = DateTime.Now;
-                                model.sysFlag = 0;
-                                if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq, false))
+                                #region  根据事项名称获取业务类型 默认取第一条
+                                var bid2 = BidUrl2.Replace("@approveItem", approveSeq);
+                                var blist = http.HttpGet(bid2, "");
+                                var bds = script.DeserializeObject(blist) as Dictionary<string, object>;
+                                if (bds != null)
                                 {
+                                    var dQuery = bds["data"] as Dictionary<string, object>;
+                                    var dArr = dQuery["dataList"] as object[];
+                                    if (dArr == null || dArr.Count() == 0)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        foreach (Dictionary<string, object> dt in dArr)
+                                        {
+                                            busiSeq = dt["businessSeq"] == null ? "" : dt["businessSeq"].ToString();
+                                            busiName = dt["businessName"] == null ? "" : dt["businessName"].ToString();
+                                            unitSeq = dt["unitSeq"] == null ? "" : dt["unitSeq"].ToString();
+                                            var u = uList.FirstOrDefault(f => f.unitSeq == unitSeq);
+                                            unitName = unitSeq == "" ? "" : u != null ? u.unitName : "";
+                                            if (busiSeq != "" && busiName != "")
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            if (busiSeq != "" && busiName != "")
+                            {
+                                //selectBusy = bList.Where(b => b.unitSeq == unitSeq).Where(b => 1 == 1).FirstOrDefault();//根据
+                                selectBusy = bList.Where(b => b.busiSeq == busiSeq).FirstOrDefault();
+                                if (selectBusy != null)
+                                {
+                                    TGetCardModel model = new TGetCardModel();
+                                    model.controlSeq = controlSeq;
+                                    model.unitName = unitName;
+                                    model.unitSeq = unitSeq;
+                                    model.busTypeSeq = busiSeq;
+                                    model.busTypeName = busiName;
+                                    model.custCardId = idNo;
+                                    model.outCardTime = DateTime.Now;
+                                    model.sysFlag = 0;
+                                    if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq, false))
+                                    {
+                                        pbReturn_Click(null, null);
+                                        return;
+                                    }
+                                    gBll.Insert(model);
+                                    OutQueueNo(null, "1", approveSeq);
                                     pbReturn_Click(null, null);
+                                }
+                                else
+                                {
+                                    frmMsg frm = new frmMsg();//提示
+                                    frm.msgInfo = "当前办证业务未找到！";
+                                    frm.ShowDialog();
                                     return;
                                 }
-                                gBll.Insert(model);
-                                OutQueueNo(null);
-                                pbReturn_Click(null, null);
                             }
                             else
                             {
@@ -1973,11 +2025,11 @@ namespace QueueClient
             var list = new List<TUnitModel>();
             if (busyType == BusyType.Investment)
             {
-                list = uList.Where(u => u.isInvestment).ToList();
+                list = uList.Where(u => u.isInvestment && u.unitName != FilterUnitStr).ToList();
             }
             else
             {
-                list = uList.Where(u => !u.isInvestment).ToList();
+                list = uList.Where(u => !u.isInvestment && u.unitName != FilterUnitStr).ToList();
             }
             ucUnit.uList = list;
             ucUnit.cureentPage = 0;
@@ -2015,7 +2067,7 @@ namespace QueueClient
         #endregion
 
         #region  出号
-        private void OutQueueNo(TAppointmentModel app)
+        private void OutQueueNo(TAppointmentModel app, string isGetCard, string serialNo)
         {
             //try
             //{
@@ -2049,7 +2101,7 @@ namespace QueueClient
             {
                 //预留 发送 等候人数预警值
             }
-            var queue = InsertQueue(app, ticketStart);
+            var queue = InsertQueue(app, ticketStart, isGetCard, serialNo);
             var area = "";
             var windowStr = "";
             var windowList = wbList.Where(w => w.unitSeq == selectUnit.unitSeq && w.busiSeq == selectBusy.busiSeq);
@@ -2090,7 +2142,7 @@ namespace QueueClient
                 isGreen = "网上预约";
             else if (queue.type == 1 && isGreen == "")
                 isGreen = "网上申办";
-            Print(queue, area, windowStr, waitNo, "", isGreen);
+            Print(queue, area, windowStr, waitNo, "", isGreen, isGetCard, serialNo);
             //}
             //catch (Exception ex)
             //{
@@ -2101,11 +2153,11 @@ namespace QueueClient
             //}
         }
         //出票
-        private void Print(TQueueModel model, string area, string windowStr, int wait, string flag, string vip)
+        private void Print(TQueueModel model, string area, string windowStr, int wait, string flag, string vip, string isGetCard, string serialNo)
         {
             try
             {
-                DataTable table = GetQueue(model, area, windowStr, wait, flag, vip);
+                DataTable table = GetQueue(model, area, windowStr, wait, flag, vip, isGetCard, serialNo);
                 PrintManager print = new PrintManager();
                 //PrintManager.CanDesign = true;
                 print.InitReport("排队小票");
@@ -2121,11 +2173,12 @@ namespace QueueClient
             }
         }
         //组织票数据
-        private DataTable GetQueue(TQueueModel model, string area, string windowStr, int wait, string flag, string vip)
+        private DataTable GetQueue(TQueueModel model, string area, string windowStr, int wait, string flag, string vip, string isGetCard, string serialNo)
         {
             DataTable table = new DataTable("table");
             table.Columns.AddRange(new DataColumn[] 
             {
+                new DataColumn ("isGetCard",typeof(string)),
                 new DataColumn ("flag",typeof(string)),
                 new DataColumn ("area",typeof(string)),
                 new DataColumn ("windowStr",typeof(string)),
@@ -2138,6 +2191,7 @@ namespace QueueClient
                 new DataColumn ("vip",typeof(string)),
             });
             DataRow row = table.NewRow();
+            row["isGetCard"] = isGetCard;
             row["area"] = area;
             row["windowStr"] = windowStr;
             row["waitCount"] = wait.ToString();
@@ -2146,18 +2200,25 @@ namespace QueueClient
             row["ticketNumber"] = model.ticketNumber;
             row["flag"] = flag;
             row["cardId"] = string.IsNullOrEmpty(model.idCard) ? "" : model.idCard.Length > 6 ? model.idCard.Substring(model.idCard.Length - 6, 6) : model.idCard;
-            row["reserveSeq"] = model.reserveSeq;
+            if (isGetCard == "1")
+            {
+                row["reserveSeq"] = serialNo;
+            }
+            else
+            {
+                row["reserveSeq"] = model.reserveSeq;
+            }
             row["vip"] = vip;
             table.Rows.Add(row);
             return table;
         }
         //插入排队数据
-        private TQueueModel InsertQueue(TAppointmentModel app, string ticketStart)
+        private TQueueModel InsertQueue(TAppointmentModel app, string ticketStart, string isGetCard, string serialNo)
         {
             string idCard = person == null ? "" : person.idcard;
             string qNmae = person == null ? "" : person.name;
             string reserveSeq = app == null ? "" : app.reserveSeq;
-            var line = qBll.QueueLine(selectBusy, selectUnit, ticketStart, idCard, qNmae, app);
+            var line = qBll.QueueLine(selectBusy, selectUnit, ticketStart, idCard, qNmae, app, isGetCard, serialNo);
             if (app != null)
             {
                 app.sysFlag = 0;

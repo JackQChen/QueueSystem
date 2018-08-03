@@ -91,7 +91,7 @@ namespace Model
         public int appType { get; set; }
 
         /// <summary>
-        /// 类型 0：预约 1： 申办
+        /// 类型 0：预约 1： 申办  2 :领证
         /// </summary>
         public int type { get; set; }
 

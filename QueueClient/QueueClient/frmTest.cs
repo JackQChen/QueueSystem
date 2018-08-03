@@ -67,7 +67,7 @@ namespace QueueClient
             string idCard = "";
             string qNmae = "";
             string reserveSeq = app == null ? "" : app.reserveSeq;
-            var line = qBll.QueueLine(selectBusy, selectUnit, ticketStart, idCard, qNmae, app);
+            var line = qBll.QueueLine(selectBusy, selectUnit, ticketStart, idCard, qNmae, app, "0", "");
             if (app != null)
             {
                 app.sysFlag = 0;

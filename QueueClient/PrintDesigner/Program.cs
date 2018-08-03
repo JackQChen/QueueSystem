@@ -24,10 +24,13 @@ namespace PrintDesigner
                 new DataColumn ("busyName",typeof(string)),
                 new DataColumn ("ticketNumber",typeof(string)),
                 new DataColumn ("reserveSeq",typeof(string)),
+                new DataColumn ("isGetCard",typeof(string)),
             });
             DataRow row = table.NewRow();
             row["area"] = "测试地区";
             row["waitCount"] = "2";
+            row["isGetCard"] = "0";
+
             row["unitName"] = "测试单位";
             row["busyName"] = "测试业务";
             row["ticketNumber"] = "C008";

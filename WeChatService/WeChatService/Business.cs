@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -7,24 +8,23 @@ using System.Threading;
 using System.Web.Script.Serialization;
 using BLL;
 using Model;
-using System.Collections;
 
 namespace WeChatService
 {
     public class Business
     {
-        TWindowBLL wBll = new TWindowBLL();
-        TWindowAreaBLL waBll = new TWindowAreaBLL();
-        TBusinessAttributeBLL attBll = new TBusinessAttributeBLL();
-        TCallBLL cBll = new TCallBLL();
-        TQueueBLL qBll = new TQueueBLL();
-        TAppointmentBLL aBll = new TAppointmentBLL();
-        TWindowBusinessBLL wbBll = new TWindowBusinessBLL();
+        //TWindowBLL wBll = new TWindowBLL();
+        //TWindowAreaBLL waBll = new TWindowAreaBLL();
+        //TBusinessAttributeBLL attBll = new TBusinessAttributeBLL();
+        //TCallBLL cBll = new TCallBLL();
+        //TQueueBLL qBll = new TQueueBLL();
+        //TAppointmentBLL aBll = new TAppointmentBLL();
+        //TWindowBusinessBLL wbBll = new TWindowBusinessBLL();
+        //TOprateLogBLL oBll = new TOprateLogBLL();
         List<TBusinessAttributeModel> baList = new List<TBusinessAttributeModel>();
         List<TWindowBusinessModel> wbList = new List<TWindowBusinessModel>();
         List<TWindowModel> wList = new List<TWindowModel>();
         List<TWindowAreaModel> waList = new List<TWindowAreaModel>();
-        TOprateLogBLL oBll = new TOprateLogBLL();
         JavaScriptSerializer script = new JavaScriptSerializer();
 
         public Business()
@@ -34,10 +34,10 @@ namespace WeChatService
 
         void GetAttribute()
         {
-            baList = attBll.GetModelList();
-            wbList = wbBll.GetModelList();
-            waList = waBll.GetModelList();
-            wList = wBll.GetModelList();
+            baList = new TBusinessAttributeBLL().GetModelList();
+            wbList = new TWindowBusinessBLL().GetModelList();
+            waList = new TWindowAreaBLL().GetModelList();
+            wList = new TWindowBLL().GetModelList();
         }
 
         //验证是否符合取票条件
@@ -118,6 +118,7 @@ namespace WeChatService
         //推送提醒
         public object PushNotify(string Id)
         {
+            var qBll = new TQueueBLL();
             var oId = Convert.ToInt32(Id);
             object obj = new object();
             var model = qBll.GetModel(oId);
@@ -150,7 +151,7 @@ namespace WeChatService
                 }
             }
             var list = qBll.GetModelList(model.busTypeSeq, model.unitSeq, 0);
-            var cModel = cBll.GetModel(f => f.qId == oId && f.state != 2);
+            var cModel = new TCallBLL().GetModel(f => f.qId == oId && f.state != 2);
             var areaWindowStr = GetAreaWindowsStr(model.unitSeq, model.busTypeSeq);
             var waitNo = 1;
             //返回该条数据以及三条待叫号数据
@@ -208,7 +209,7 @@ namespace WeChatService
             WriterReceiveLog("GetWaitInfo", script.Serialize(json));
             var unitSeq = json["unitSeq"].ToString();
             var busiSeq = json["busiSeq"].ToString();
-            var list = qBll.GetModelList(busiSeq, unitSeq, 0);
+            var list = new TQueueBLL().GetModelList(busiSeq, unitSeq, 0);
             return new
             {
                 method = "GetWaitInfo",
@@ -228,7 +229,7 @@ namespace WeChatService
         {
             WriterReceiveLog("GetWaitInfoByUnit", script.Serialize(json));
             var unitSeq = json["unitSeq"].ToString();
-            var list = qBll.GetModelList(unitSeq, 0);
+            var list = new TQueueBLL().GetModelList(unitSeq, 0);
             return new
             {
                 method = "GetWaitInfoByUnit",
@@ -245,7 +246,7 @@ namespace WeChatService
         //获取排队等候人数 按部门业务分组
         public object GetWaitInfoAll()
         {
-            var list = qBll.GetModelList(c => c.ticketTime.Date == DateTime.Now.Date && c.state == 0);
+            var list = new TQueueBLL().GetModelList(c => c.ticketTime.Date == DateTime.Now.Date && c.state == 0);
             var glist = list.GroupBy(g => g.unitSeq).ToList();
             var grlist = list.GroupBy(g => new { g.unitSeq, g.busTypeSeq }).ToList();
             return new
@@ -312,6 +313,7 @@ namespace WeChatService
         //3.取号数量验证
         ArrayList CheckLimit(string methodName, string idCard, string unitSeq, string busiSeq)
         {
+            var qBll = new TQueueBLL();
             ArrayList arry = new ArrayList();
             arry.Add(true);
             //验证同一个身份证不能在一个部门一个业务排队2次（未处理的）
@@ -426,6 +428,7 @@ namespace WeChatService
         private object OutQueueNo(TAppointmentModel app, string unitSeq, string unitName, string busiSeq, string busiName, string personName, string idCard, string wxId)
         {
             #region 验证业务扩展属性
+            var qBll = new TQueueBLL();
             var ticketStart = "";
             var att = baList.Where(b => b.unitSeq == unitSeq && b.busiSeq == busiSeq).FirstOrDefault();
             var list = qBll.GetModelList(busiSeq, unitSeq, 0);
@@ -454,7 +457,7 @@ namespace WeChatService
             if (app != null)
             {
                 app.sysFlag = 0;
-                aBll.Insert(app);
+                new TAppointmentBLL().Insert(app);
             }
             #endregion
 
@@ -462,7 +465,7 @@ namespace WeChatService
             string strLog = string.Format("已出票：部门[{0}]，业务[{1}]，票号[{2}]，预约号[{3}]，身份证号[{4}]，姓名[{5}]，时间[{6}]。",
                 queue.unitName, queue.busTypeName, queue.ticketNumber, queue.reserveSeq, idCard, personName, DateTime.Now);
             WriterQueueLog(strLog);
-            oBll.Insert(new TOprateLogModel()
+            new TOprateLogBLL().Insert(new TOprateLogModel()
             {
                 oprateFlag = wxId,
                 oprateType = "微信端排队",
@@ -581,6 +584,7 @@ namespace WeChatService
         //获取当前排队信息
         private object GetQueueById(int Id)
         {
+            var qBll = new TQueueBLL();
             object obj = new object();
             var model = qBll.GetModel(Id);
             if (model == null)
@@ -603,7 +607,7 @@ namespace WeChatService
             if (model.state == 1)
             {
                 //已叫号/已处理
-                var call = cBll.GetModel(f => f.qId == Id && f.state != 2);
+                var call = new TCallBLL().GetModel(f => f.qId == Id && f.state != 2);
                 if (call == null)
                 {
                     return new

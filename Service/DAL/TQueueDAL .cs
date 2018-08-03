@@ -210,7 +210,7 @@ namespace DAL
         /// <param name="name"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        public TQueueModel QueueLine(TBusinessModel selectBusy, TUnitModel selectUnit, string ticketStart, string idCard, string name, TAppointmentModel app)
+        public TQueueModel QueueLine(TBusinessModel selectBusy, TUnitModel selectUnit, string ticketStart, string idCard, string name, TAppointmentModel app,string isGetCard,string serialNo)
         {
             TQueueModel qModel = null;
             try
@@ -235,13 +235,21 @@ namespace DAL
                       line.qNmae = name;
                       line.qType = 0;
                       line.sysFlag = 0;
-                      if (app != null)
+                      if (isGetCard == "1")
                       {
-                          line.appType = app.appType;
-                          line.reserveSeq = app.reserveSeq;
-                          line.reserveStartTime = app.reserveStartTime;
-                          line.reserveEndTime = app.reserveEndTime;
-                          line.type = app.type;
+                          line.reserveSeq = serialNo;
+                          line.type = 2;
+                      }
+                      else
+                      {
+                          if (app != null)
+                          {
+                              line.appType = app.appType;
+                              line.reserveSeq = app.reserveSeq;
+                              line.reserveStartTime = app.reserveStartTime;
+                              line.reserveEndTime = app.reserveEndTime;
+                              line.type = app.type;
+                          }
                       }
                       line = this.Insert(line);
                       if (maxNo == null)

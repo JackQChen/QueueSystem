@@ -66,9 +66,9 @@ namespace BLL
         {
             return new TQueueDAL().QueueLine(selectBusy, selectUnit, ticketStart, idCard, name, reserveSeq);
         }
-        public TQueueModel QueueLine(TBusinessModel selectBusy, TUnitModel selectUnit, string ticketStart, string idCard, string name, TAppointmentModel app)
+        public TQueueModel QueueLine(TBusinessModel selectBusy, TUnitModel selectUnit, string ticketStart, string idCard, string name, TAppointmentModel app,string isGetCard,string serialNo)
         {
-            return new TQueueDAL().QueueLine(selectBusy, selectUnit, ticketStart, idCard, name, app);
+            return new TQueueDAL().QueueLine(selectBusy, selectUnit, ticketStart, idCard, name, app, isGetCard, serialNo);
         }
         public TQueueModel QueueLine(string unitSeq, string unitName, string busiSeq, string busiName, string ticketStart, string idCard, string name, string wxId,TAppointmentModel app)
         {
