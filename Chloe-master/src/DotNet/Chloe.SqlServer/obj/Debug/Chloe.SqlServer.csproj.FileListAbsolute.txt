@@ -1,14 +1,7 @@
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.SqlServer\bin\Debug\Chloe.SqlServer.dll
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.SqlServer\bin\Debug\Chloe.SqlServer.pdb
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.SqlServer\bin\Debug\Chloe.dll
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.SqlServer\bin\Debug\Chloe.pdb
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.SqlServer\obj\Debug\Chloe.SqlServer.csprojResolveAssemblyReference.cache
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.SqlServer\obj\Debug\Chloe.SqlServer.dll
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.SqlServer\obj\Debug\Chloe.SqlServer.pdb
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SqlServer\bin\Debug\Chloe.SqlServer.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SqlServer\bin\Debug\Chloe.SqlServer.pdb
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SqlServer\bin\Debug\Chloe.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SqlServer\bin\Debug\Chloe.pdb
-D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SqlServer\obj\Debug\Chloe.SqlServer.csprojResolveAssemblyReference.cache
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SqlServer\obj\Debug\Chloe.SqlServer.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SqlServer\obj\Debug\Chloe.SqlServer.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.SqlServer\obj\Debug\Chloe.SqlServer.csprojResolveAssemblyReference.cache

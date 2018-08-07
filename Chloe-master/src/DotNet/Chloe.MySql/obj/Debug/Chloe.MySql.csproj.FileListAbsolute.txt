@@ -1,14 +1,7 @@
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.MySql\bin\Debug\Chloe.MySql.dll
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.MySql\bin\Debug\Chloe.MySql.pdb
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.MySql\bin\Debug\Chloe.dll
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.MySql\bin\Debug\Chloe.pdb
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.MySql\obj\Debug\Chloe.MySql.csprojResolveAssemblyReference.cache
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.MySql\obj\Debug\Chloe.MySql.dll
-D:\SourceCode\Chloe-master\src\DotNet\Chloe.MySql\obj\Debug\Chloe.MySql.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.MySql\obj\Debug\Chloe.MySql.csprojResolveAssemblyReference.cache
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.MySql\bin\Debug\Chloe.MySql.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.MySql\bin\Debug\Chloe.MySql.pdb
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.MySql\bin\Debug\Chloe.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.MySql\bin\Debug\Chloe.pdb
-D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.MySql\obj\Debug\Chloe.MySql.csprojResolveAssemblyReference.cache
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.MySql\obj\Debug\Chloe.MySql.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.MySql\obj\Debug\Chloe.MySql.pdb

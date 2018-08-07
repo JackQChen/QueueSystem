@@ -51,6 +51,8 @@ namespace QueueClient
         string InvestmentBusy = "";//投资业务
         string GetAppointmentLimit = "";//获取预约数
         string FilterUnitStr = "";//办事业务下过滤出证业务类型
+        string OutCardUnitSeq = "";
+        string OutCardBusySeq = "";
         #endregion
 
         #region
@@ -250,7 +252,9 @@ namespace QueueClient
             SetConfigValue("GetAppLimit", "http://19.136.14.62/CommonService/api/reserve/reserveInfoList/query.v?pageRowNum=1000&reserveDate=@currentDate&unitSeq=@unitSeq&busiSeq=@busiSeq&areaSeq=@areaSeq");
             SetConfigValue("UpdateApp", "http://19.136.14.62/CommonService/api/reserve/syncReserveInfo/update.v?reserveSeq=@reserveSeq&syncStatus=1");
             SetConfigValue("GetCardNew", "http://19.136.14.62/CommonService/api/control/controlInfoList/query.v?custCardId=@custCardId&approveStatus=14");
-            SetConfigValue("FilterUnitStr", "领证");
+            SetConfigValue("FilterBusyStr", "出件");
+            SetConfigValue("OutCardUnitSeq", "99");
+            SetConfigValue("OutCardBusySeq", "9902");
             UpdateAppoint = System.Configuration.ConfigurationManager.AppSettings["UpdateApp"];
             GetAppointmentLimit = System.Configuration.ConfigurationManager.AppSettings["GetAppLimit"];
             BidUrl1 = System.Configuration.ConfigurationManager.AppSettings["BidUrl1"];
@@ -261,7 +265,9 @@ namespace QueueClient
             InvestmentUnit = System.Configuration.ConfigurationManager.AppSettings["InvestmentUnit"];
             InvestmentBusy = System.Configuration.ConfigurationManager.AppSettings["InvestmentBusy"];
             GetCard = System.Configuration.ConfigurationManager.AppSettings["GetCardNew"];
-            FilterUnitStr = System.Configuration.ConfigurationManager.AppSettings["FilterUnitStr"];
+            FilterUnitStr = System.Configuration.ConfigurationManager.AppSettings["FilterBusyStr"];
+            OutCardUnitSeq = System.Configuration.ConfigurationManager.AppSettings["OutCardUnitSeq"];
+            OutCardBusySeq = System.Configuration.ConfigurationManager.AppSettings["OutCardBusySeq"];
             int iPort;
             for (iPort = 1001; iPort <= 1016; iPort++)
             {
@@ -543,9 +549,9 @@ namespace QueueClient
             ucBusy.cureentPage = 0;
             var list = new List<TBusinessModel>();
             if (busyType == BusyType.Investment)
-                list = bList.Where(b => b.unitSeq == selectUnit.unitSeq && b.isInvestment).ToList();
+                list = bList.Where(b => b.unitSeq == selectUnit.unitSeq && b.isInvestment && b.busiName != FilterUnitStr).ToList();
             else
-                list = bList.Where(b => b.unitSeq == selectUnit.unitSeq && !b.isInvestment).ToList();
+                list = bList.Where(b => b.unitSeq == selectUnit.unitSeq && !b.isInvestment && b.busiName != FilterUnitStr).ToList();
             ucBusy.bList = list;
             ucBusy.BringToFront();
             ucBusy.CreateBusiness();
@@ -1393,83 +1399,70 @@ namespace QueueClient
                         Dictionary<string, object> data = dataArr.FirstOrDefault() as Dictionary<string, object>;
                         var approveSeq = data["approveSeq"] == null ? "" : data["approveSeq"].ToString();
                         var approveName = data["approveName"] == null ? "" : data["approveName"].ToString();
-                        var unitSeq = data["unitSeq"] == null ? "" : data["unitSeq"].ToString();
-                        var unitName = data["unitName"] == null ? "" : data["unitName"].ToString();
                         var controlSeq = data["controlSeq"] == null ? "" : data["controlSeq"].ToString();
                         var beginDate = data["beginDate"] == null ? "" : data["beginDate"].ToString();
-                        var busiSeq = "";
-                        var busiName = "";
-                        selectUnit = uList.Where(u => u.unitSeq == unitSeq).FirstOrDefault();
+                        selectUnit = uList.Where(u => u.unitSeq == OutCardUnitSeq).FirstOrDefault();
                         if (selectUnit != null)
                         {
-                            if (approveSeq != "")
-                            {
-                                #region  根据事项名称获取业务类型 默认取第一条
-                                var bid2 = BidUrl2.Replace("@approveItem", approveSeq);
-                                var blist = http.HttpGet(bid2, "");
-                                var bds = script.DeserializeObject(blist) as Dictionary<string, object>;
-                                if (bds != null)
-                                {
-                                    var dQuery = bds["data"] as Dictionary<string, object>;
-                                    var dArr = dQuery["dataList"] as object[];
-                                    if (dArr == null || dArr.Count() == 0)
-                                    {
+                            #region
+                            //if (approveSeq != "")
+                            //{
+                            //    #region  根据事项名称获取业务类型 默认取第一条
+                            //    var bid2 = BidUrl2.Replace("@approveItem", approveSeq);
+                            //    var blist = http.HttpGet(bid2, "");
+                            //    var bds = script.DeserializeObject(blist) as Dictionary<string, object>;
+                            //    if (bds != null)
+                            //    {
+                            //        var dQuery = bds["data"] as Dictionary<string, object>;
+                            //        var dArr = dQuery["dataList"] as object[];
+                            //        if (dArr == null || dArr.Count() == 0)
+                            //        {
 
-                                    }
-                                    else
-                                    {
-                                        foreach (Dictionary<string, object> dt in dArr)
-                                        {
-                                            busiSeq = dt["businessSeq"] == null ? "" : dt["businessSeq"].ToString();
-                                            busiName = dt["businessName"] == null ? "" : dt["businessName"].ToString();
-                                            unitSeq = dt["unitSeq"] == null ? "" : dt["unitSeq"].ToString();
-                                            var u = uList.FirstOrDefault(f => f.unitSeq == unitSeq);
-                                            unitName = unitSeq == "" ? "" : u != null ? u.unitName : "";
-                                            if (busiSeq != "" && busiName != "")
-                                            {
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                                #endregion
-                            }
-                            if (busiSeq != "" && busiName != "")
+                            //        }
+                            //        else
+                            //        {
+                            //            foreach (Dictionary<string, object> dt in dArr)
+                            //            {
+                            //                busiSeq = dt["businessSeq"] == null ? "" : dt["businessSeq"].ToString();
+                            //                busiName = dt["businessName"] == null ? "" : dt["businessName"].ToString();
+                            //                unitSeq = dt["unitSeq"] == null ? "" : dt["unitSeq"].ToString();
+                            //                var u = uList.FirstOrDefault(f => f.unitSeq == unitSeq);
+                            //                unitName = unitSeq == "" ? "" : u != null ? u.unitName : "";
+                            //                if (busiSeq != "" && busiName != "")
+                            //                {
+                            //                    break;
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //    #endregion
+                            //}
+                            #endregion
+                            selectBusy = bList.Where(b => b.unitSeq == selectUnit.unitSeq && b.busiSeq == OutCardBusySeq).FirstOrDefault();
+                            if (selectBusy != null)
                             {
-                                //selectBusy = bList.Where(b => b.unitSeq == unitSeq).Where(b => 1 == 1).FirstOrDefault();//根据
-                                selectBusy = bList.Where(b => b.busiSeq == busiSeq).FirstOrDefault();
-                                if (selectBusy != null)
+                                TGetCardModel model = new TGetCardModel();
+                                model.controlSeq = controlSeq;
+                                model.unitName = selectUnit.unitName;
+                                model.unitSeq = selectUnit.unitSeq;
+                                model.busTypeSeq = selectBusy.busiSeq;
+                                model.busTypeName = selectBusy.busiName;
+                                model.custCardId = idNo;
+                                model.outCardTime = DateTime.Now;
+                                model.sysFlag = 0;
+                                if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq, false))
                                 {
-                                    TGetCardModel model = new TGetCardModel();
-                                    model.controlSeq = controlSeq;
-                                    model.unitName = unitName;
-                                    model.unitSeq = unitSeq;
-                                    model.busTypeSeq = busiSeq;
-                                    model.busTypeName = busiName;
-                                    model.custCardId = idNo;
-                                    model.outCardTime = DateTime.Now;
-                                    model.sysFlag = 0;
-                                    if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq, false))
-                                    {
-                                        pbReturn_Click(null, null);
-                                        return;
-                                    }
-                                    gBll.Insert(model);
-                                    OutQueueNo(null, "1", approveSeq);
                                     pbReturn_Click(null, null);
-                                }
-                                else
-                                {
-                                    frmMsg frm = new frmMsg();//提示
-                                    frm.msgInfo = "当前办证业务未找到！";
-                                    frm.ShowDialog();
                                     return;
                                 }
+                                gBll.Insert(model);
+                                OutQueueNo(null, "1", approveSeq);
+                                pbReturn_Click(null, null);
                             }
                             else
                             {
                                 frmMsg frm = new frmMsg();//提示
-                                frm.msgInfo = "当前办证业务未找到！";
+                                frm.msgInfo = "当前办证业务未找到或者出证业务类型配置错误！";
                                 frm.ShowDialog();
                                 return;
                             }
@@ -1477,7 +1470,7 @@ namespace QueueClient
                         else
                         {
                             frmMsg frm = new frmMsg();//提示
-                            frm.msgInfo = "当前办证部门未找到！";
+                            frm.msgInfo = "当前办证部门未找到或者出证部门配置错误！";
                             frm.ShowDialog();
                             return;
                         }
