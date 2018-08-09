@@ -55,6 +55,7 @@
             this.pbInvestment.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbInvestment.TabIndex = 19;
             this.pbInvestment.TabStop = false;
+            this.pbInvestment.Visible = false;
             this.pbInvestment.Click += new System.EventHandler(this.pbInvestment_Click);
             this.pbInvestment.Paint += new System.Windows.Forms.PaintEventHandler(this.pbWork_Paint);
             // 

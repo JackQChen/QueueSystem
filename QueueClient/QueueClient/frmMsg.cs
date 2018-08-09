@@ -16,6 +16,8 @@ namespace QueueClient
         int exitTime = 10;
         int rowLength = 14;
         public string msgInfo;
+        public bool isMsg = false;
+        public int eTime = 0;
         public frmMsg()
         {
             InitializeComponent();
@@ -32,6 +34,7 @@ namespace QueueClient
             this.FormBorderStyle = FormBorderStyle.None;
             this.Width = img.Width;
             this.Height = img.Height;
+           
         }
 
         #region 无边框移动
@@ -147,7 +150,7 @@ namespace QueueClient
                             e.Graphics.DrawString(last, font, new SolidBrush(Color.Black), 25, 260);
 
                         }
-                        
+
                     }
 
                 }
@@ -158,7 +161,10 @@ namespace QueueClient
 
         private void frmMsg_Load(object sender, EventArgs e)
         {
-
+            if (isMsg)
+            {
+                this.pbOk.Visible = false;
+            }
         }
 
         private void pbOk_Click(object sender, EventArgs e)
@@ -189,13 +195,26 @@ namespace QueueClient
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (exitTime == 0)
+            if (!isMsg)
             {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                if (exitTime == 0)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                    exitTime--;
             }
             else
-                exitTime--;
+            {
+                if (eTime == 0)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                    eTime--;
+            }
         }
     }
 }

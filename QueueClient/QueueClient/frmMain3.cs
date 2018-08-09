@@ -251,10 +251,10 @@ namespace QueueClient
             SetConfigValue("InvestmentBusy", "http://19.136.14.62/CommonService/api/reserve/reserveTypeList/query.v?pageRowNum=1000&unitSeq=@unitSeq");
             SetConfigValue("GetAppLimit", "http://19.136.14.62/CommonService/api/reserve/reserveInfoList/query.v?pageRowNum=1000&reserveDate=@currentDate&unitSeq=@unitSeq&busiSeq=@busiSeq&areaSeq=@areaSeq");
             SetConfigValue("UpdateApp", "http://19.136.14.62/CommonService/api/reserve/syncReserveInfo/update.v?reserveSeq=@reserveSeq&syncStatus=1");
-            SetConfigValue("GetCardNew", "http://19.136.14.62/CommonService/api/control/controlInfoList/query.v?custCardId=@custCardId&approveStatus=14");
+            SetConfigValue("GetCardNew1", "http://19.136.14.62/CommonService/api/control/controlInfoList/query.v?custCardId=@custCardId&approveStatus=13");
             SetConfigValue("FilterBusyStr", "出件");
-            SetConfigValue("OutCardUnitSeq", "99");
-            SetConfigValue("OutCardBusySeq", "9902");
+            SetConfigValue("OutCardUnitSeqNew", "3024");
+            SetConfigValue("OutCardBusySeqNew", "3724");
             UpdateAppoint = System.Configuration.ConfigurationManager.AppSettings["UpdateApp"];
             GetAppointmentLimit = System.Configuration.ConfigurationManager.AppSettings["GetAppLimit"];
             BidUrl1 = System.Configuration.ConfigurationManager.AppSettings["BidUrl1"];
@@ -264,10 +264,10 @@ namespace QueueClient
             TimeInterval = System.Configuration.ConfigurationManager.AppSettings["TimeInterval"];
             InvestmentUnit = System.Configuration.ConfigurationManager.AppSettings["InvestmentUnit"];
             InvestmentBusy = System.Configuration.ConfigurationManager.AppSettings["InvestmentBusy"];
-            GetCard = System.Configuration.ConfigurationManager.AppSettings["GetCardNew"];
+            GetCard = System.Configuration.ConfigurationManager.AppSettings["GetCardNew1"];
             FilterUnitStr = System.Configuration.ConfigurationManager.AppSettings["FilterBusyStr"];
-            OutCardUnitSeq = System.Configuration.ConfigurationManager.AppSettings["OutCardUnitSeq"];
-            OutCardBusySeq = System.Configuration.ConfigurationManager.AppSettings["OutCardBusySeq"];
+            OutCardUnitSeq = System.Configuration.ConfigurationManager.AppSettings["OutCardUnitSeqNew"];
+            OutCardBusySeq = System.Configuration.ConfigurationManager.AppSettings["OutCardBusySeqNew"];
             int iPort;
             for (iPort = 1001; iPort <= 1016; iPort++)
             {
@@ -1456,7 +1456,12 @@ namespace QueueClient
                                     return;
                                 }
                                 gBll.Insert(model);
-                                OutQueueNo(null, "1", approveSeq);
+                                OutQueueNo(null, "1", controlSeq);
+                                frmMsg frm = new frmMsg();//提示
+                                frm.msgInfo = "正在打印小票，请取票。。。";
+                                frm.isMsg = true;
+                                frm.eTime = 2;
+                                frm.ShowDialog();
                                 pbReturn_Click(null, null);
                             }
                             else
