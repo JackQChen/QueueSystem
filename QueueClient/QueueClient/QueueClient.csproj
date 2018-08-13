@@ -121,203 +121,132 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppointmentCard.cs">
+    <Compile Include="function\AsyncWork.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AppointmentCard.Designer.cs">
-      <DependentUpon>AppointmentCard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AsyncWork.cs">
+    <Compile Include="function\BoShiPrinter.cs" />
+    <Compile Include="function\BusyType.cs" />
+    <Compile Include="function\CardIdentity.cs" />
+    <Compile Include="function\CVRSDK.cs" />
+    <Compile Include="uc\ucEvaluateCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BoShiPrinter.cs" />
-    <Compile Include="BusyType.cs" />
-    <Compile Include="CardIdentity.cs" />
-    <Compile Include="CVRSDK.cs" />
-    <Compile Include="EvaluateCard.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="uc\ucEvaluateCard.Designer.cs">
+      <DependentUpon>ucEvaluateCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="EvaluateCard.Designer.cs">
-      <DependentUpon>EvaluateCard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMsg.cs">
+    <Compile Include="ui\frmMsg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMsg.Designer.cs">
+    <Compile Include="ui\frmMsg.Designer.cs">
       <DependentUpon>frmMsg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form3.cs">
+    <Compile Include="ui\frmTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form3.Designer.cs">
-      <DependentUpon>Form3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMessage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMessage.Designer.cs">
-      <DependentUpon>frmMessage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMsg2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMsg2.Designer.cs">
-      <DependentUpon>frmMsg2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmTest.Designer.cs">
+    <Compile Include="ui\frmTest.Designer.cs">
       <DependentUpon>frmTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="HttpHelper.cs" />
-    <Compile Include="LogHelper.cs" />
-    <Compile Include="PageLocation.cs" />
-    <Compile Include="Person.cs" />
-    <Compile Include="TxPrn.cs" />
-    <Compile Include="ucpnAppointment.cs">
+    <Compile Include="function\HttpHelper.cs" />
+    <Compile Include="function\LogHelper.cs" />
+    <Compile Include="function\PageLocation.cs" />
+    <Compile Include="function\Person.cs" />
+    <Compile Include="uc\ucpnCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucpnAppointment.Designer.cs">
-      <DependentUpon>ucpnAppointment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ucpnCard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ucpnCard.Designer.cs">
+    <Compile Include="uc\ucpnCard.Designer.cs">
       <DependentUpon>ucpnCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="ucpnEvaluate.cs">
+    <Compile Include="uc\ucpnEvaluate.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucpnEvaluate.Designer.cs">
+    <Compile Include="uc\ucpnEvaluate.Designer.cs">
       <DependentUpon>ucpnEvaluate.cs</DependentUpon>
     </Compile>
-    <Compile Include="ucpnMain.cs">
+    <Compile Include="uc\ucpnMain.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucpnMain.Designer.cs">
+    <Compile Include="uc\ucpnMain.Designer.cs">
       <DependentUpon>ucpnMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="ucpnPwd.cs">
+    <Compile Include="uc\ucpnPwd.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucpnPwd.Designer.cs">
+    <Compile Include="uc\ucpnPwd.Designer.cs">
       <DependentUpon>ucpnPwd.cs</DependentUpon>
     </Compile>
-    <Compile Include="ucpnReadCard.cs">
+    <Compile Include="uc\ucpnReadCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucpnReadCard.Designer.cs">
+    <Compile Include="uc\ucpnReadCard.Designer.cs">
       <DependentUpon>ucpnReadCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="PrintHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="frmMain2.cs">
+    <Compile Include="ui\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMain2.Designer.cs">
-      <DependentUpon>frmMain2.cs</DependentUpon>
+    <Compile Include="ui\frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmMain3.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMain3.Designer.cs">
-      <DependentUpon>frmMain3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ucpnSelectBusy.cs">
+    <Compile Include="uc\ucpnSelectBusy.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucpnSelectBusy.Designer.cs">
+    <Compile Include="uc\ucpnSelectBusy.Designer.cs">
       <DependentUpon>ucpnSelectBusy.cs</DependentUpon>
     </Compile>
-    <Compile Include="ucpnSelectUnit.cs">
+    <Compile Include="uc\ucpnSelectUnit.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ucpnSelectUnit.Designer.cs">
+    <Compile Include="uc\ucpnSelectUnit.Designer.cs">
       <DependentUpon>ucpnSelectUnit.cs</DependentUpon>
     </Compile>
-    <Compile Include="VirtualControlContainer.cs">
+    <Compile Include="uc\VirtualControlContainer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="frmThankMsg.cs">
+    <Compile Include="ui\frmThankMsg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmThankMsg.Designer.cs">
+    <Compile Include="ui\frmThankMsg.Designer.cs">
       <DependentUpon>frmThankMsg.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmTimeMsg.cs">
+    <Compile Include="ui\frmTimeMsg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmTimeMsg.Designer.cs">
+    <Compile Include="ui\frmTimeMsg.Designer.cs">
       <DependentUpon>frmTimeMsg.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmRePrint.cs">
+    <Compile Include="ui\frmRePrint.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmRePrint.Designer.cs">
+    <Compile Include="ui\frmRePrint.Designer.cs">
       <DependentUpon>frmRePrint.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AppointmentCard.resx">
-      <DependentUpon>AppointmentCard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AsyncWork.resx">
+    <EmbeddedResource Include="function\AsyncWork.resx">
       <DependentUpon>AsyncWork.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EvaluateCard.resx">
-      <DependentUpon>EvaluateCard.cs</DependentUpon>
+    <EmbeddedResource Include="uc\ucEvaluateCard.resx">
+      <DependentUpon>ucEvaluateCard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmMsg.resx">
+    <EmbeddedResource Include="ui\frmMsg.resx">
       <DependentUpon>frmMsg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form3.resx">
-      <DependentUpon>Form3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMain.resx">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMessage.resx">
-      <DependentUpon>frmMessage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMsg2.resx">
-      <DependentUpon>frmMsg2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmTest.resx">
+    <EmbeddedResource Include="ui\frmTest.resx">
       <DependentUpon>frmTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ucpnAppointment.resx">
-      <DependentUpon>ucpnAppointment.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ucpnCard.resx">
+    <EmbeddedResource Include="uc\ucpnCard.resx">
       <DependentUpon>ucpnCard.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ucpnEvaluate.resx">
+    <EmbeddedResource Include="uc\ucpnEvaluate.resx">
       <DependentUpon>ucpnEvaluate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ucpnMain.resx">
+    <EmbeddedResource Include="uc\ucpnMain.resx">
       <DependentUpon>ucpnMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ucpnPwd.resx">
+    <EmbeddedResource Include="uc\ucpnPwd.resx">
       <DependentUpon>ucpnPwd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ucpnReadCard.resx">
+    <EmbeddedResource Include="uc\ucpnReadCard.resx">
       <DependentUpon>ucpnReadCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -330,25 +259,22 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="frmMain2.resx">
-      <DependentUpon>frmMain2.cs</DependentUpon>
+    <EmbeddedResource Include="ui\frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmMain3.resx">
-      <DependentUpon>frmMain3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ucpnSelectBusy.resx">
+    <EmbeddedResource Include="uc\ucpnSelectBusy.resx">
       <DependentUpon>ucpnSelectBusy.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ucpnSelectUnit.resx">
+    <EmbeddedResource Include="uc\ucpnSelectUnit.resx">
       <DependentUpon>ucpnSelectUnit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmThankMsg.resx">
+    <EmbeddedResource Include="ui\frmThankMsg.resx">
       <DependentUpon>frmThankMsg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmTimeMsg.resx">
+    <EmbeddedResource Include="ui\frmTimeMsg.resx">
       <DependentUpon>frmTimeMsg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmRePrint.resx">
+    <EmbeddedResource Include="ui\frmRePrint.resx">
       <DependentUpon>frmRePrint.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config">
@@ -410,6 +336,7 @@
     <Content Include="bin\Debug\UnPack.dll" />
     <Content Include="bin\Debug\wrapper.dll" />
     <Content Include="queue.ico" />
+    <None Include="Resources\矩形 16 拷贝 2.png" />
     <None Include="Resources\评价 拷贝 3.png" />
     <None Include="Resources\L首页按钮.png" />
     <None Include="Resources\L评价 拷贝 3.png" />
@@ -456,7 +383,7 @@
     <None Include="Resources\首页按钮.png" />
     <None Include="Resources\办事指南.png" />
     <None Include="Resources\办事.png" />
-    <None Include="Resources\title.png" />
+    <Content Include="Resources\title.png" />
     <None Include="Resources\咨询.png" />
     <None Include="Resources\请选择您要办理的类型.png" />
     <None Include="Resources\评价.png" />

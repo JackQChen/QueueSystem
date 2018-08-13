@@ -9,14 +9,14 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
     public class TBusinessController : BaseController
     {
         TBusinessBLL bll;
-        TDictionaryBLL dicBll;
+        FDictionaryBLL dicBll;
         TUnitBLL unitBll;
 
         public TBusinessController()
         {
-            bll = new TBusinessBLL(this.AreaNo);
-            dicBll = new TDictionaryBLL(this.AreaNo);
-            unitBll = new TUnitBLL(this.AreaNo);
+            bll = new TBusinessBLL("MySQL", this.AreaNo);
+            dicBll = new FDictionaryBLL("MySQL", this.AreaNo);
+            unitBll = new TUnitBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -39,10 +39,10 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         {
             var model = this.bll.GetModel(id);
             if (model == null)
-                model = new TBusinessModel() { id = -1 };
+                model = new TBusinessModel() { ID = -1 };
             var unitModel = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq);
             model.unitName = unitModel == null ? "" : unitModel.unitName;
-            this.ViewBag.busiType = dicBll.GetModelList(DictionaryString.AppointmentType);
+            this.ViewBag.busiType = dicBll.GetModelListByName(FDictionaryString.AppointmentType);
             this.ViewBag.unitList = JsonConvert.SerializeObject(unitBll.GetModelList());
             return View(model);
         }
@@ -51,7 +51,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(TBusinessModel model)
         {
-            if (model.id == -1)
+            if (model.ID == -1)
                 this.bll.Insert(model);
             else
                 this.bll.Update(model);
@@ -62,8 +62,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id));
-            this.bll.ResetIndex();
+            this.bll.Delete(this.bll.GetModel(id)); 
             return Content("操作成功！");
         }
     }

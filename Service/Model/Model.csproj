@@ -22,7 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Model.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,23 +45,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DictionaryString.cs" />
-    <Compile Include="LockKey.cs" />
+    <Compile Include="Common\AbstractBLLBase.cs" />
+    <Compile Include="Common\AbstractDALBase.cs" />
+    <Compile Include="Common\FDictionaryString.cs" />
+    <Compile Include="Common\FLockKey.cs" />
+    <Compile Include="Common\ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TAppointmentModel.cs" />
     <Compile Include="TBusinessAttributeModel.cs" />
     <Compile Include="TBusinessModel.cs" />
-    <Compile Include="TCallModel.cs" />
-    <Compile Include="TCallStateModel.cs" />
-    <Compile Include="TDictionaryModel.cs" />
-    <Compile Include="TEvaluateModel.cs" />
-    <Compile Include="TGetCardModel.cs" />
+    <Compile Include="BCallModel.cs" />
+    <Compile Include="FCallStateModel.cs" />
+    <Compile Include="FDictionaryModel.cs" />
+    <Compile Include="BEvaluateModel.cs" />
     <Compile Include="TLedControllerModel.cs" />
     <Compile Include="TLedWindowModel.cs" />
-    <Compile Include="TLineUpMaxNoModel.cs" />
+    <Compile Include="BLineUpMaxNoModel.cs" />
     <Compile Include="TOprateLogModel.cs" />
-    <Compile Include="TQueueModel.cs" />
-    <Compile Include="TRegisterModel.cs" />
+    <Compile Include="BQueueModel.cs" />
     <Compile Include="TUnitModel.cs" />
     <Compile Include="TUserModel.cs" />
     <Compile Include="TWindowAreaModel.cs" />

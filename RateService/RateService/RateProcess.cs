@@ -47,10 +47,10 @@ namespace RateService
             try
             {
                 //先不判断重复
-                TCallModel cl = new TCallBLL().GetModelByHandleId(RateId);
-                TEvaluateModel ev = new TEvaluateModel();
+                BCallModel cl = new BCallBLL().GetModelByHandleId(RateId);
+                BEvaluateModel ev = new BEvaluateModel();
                 ev.type = 1;
-                ev.handId = cl.id;
+                ev.handId = cl.ID;
                 ev.unitSeq = cl.unitSeq;
                 ev.windowNumber = WindowNo;
                 ev.handleTime = DateTime.Now;
@@ -62,7 +62,7 @@ namespace RateService
                 ev.evaluateEfficiency = int.Parse(efficiency);
                 ev.evaluateHonest = int.Parse(honest);
                 ev.evaluateQuality = int.Parse(quality);
-                new TEvaluateBLL().Insert(ev);
+                new BEvaluateBLL().Insert(ev);
             }
             catch (Exception ex)
             {

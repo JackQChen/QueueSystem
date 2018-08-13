@@ -141,7 +141,7 @@ namespace QueueClient
 
         }
 
-        public void Print(TQueueModel model, string area, int wait)
+        public void Print(BQueueModel model, string area, int wait)
         {
             var open= TxOpenPrinter(0, 0);
             var state = TxGetStatus2();

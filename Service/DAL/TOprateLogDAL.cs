@@ -8,57 +8,22 @@ using Model;
 
 namespace DAL
 {
-    public class TOprateLogDAL
+    public class TOprateLogDAL : DALBase<TOprateLogModel>
     {
-        DbContext db;
         public TOprateLogDAL()
+            : base()
         {
-            this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TOprateLogDAL(string dbKey)
+        public TOprateLogDAL(string connName)
+            : base(connName)
         {
-            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
-        #region CommonMethods
-
-        public List<TOprateLogModel> GetModelList()
+        public TOprateLogDAL(string connName, string areaNo)
+            : base(connName, areaNo)
         {
-            return db.Query<TOprateLogModel>().ToList();
         }
-
-        public List<TOprateLogModel> GetModelList(Expression<Func<TOprateLogModel, bool>> predicate)
-        {
-            return db.Query<TOprateLogModel>().Where(predicate).ToList();
-        }
-
-        public TOprateLogModel GetModel(int id)
-        {
-            return db.Query<TOprateLogModel>().Where(p => p.id == id).FirstOrDefault();
-        }
-
-        public TOprateLogModel GetModel(Expression<Func<TOprateLogModel, bool>> predicate)
-        {
-            return db.Query<TOprateLogModel>().Where(predicate).FirstOrDefault();
-        }
-
-        public TOprateLogModel Insert(TOprateLogModel model)
-        {
-            return db.Insert(model);
-        }
-
-        public int Update(TOprateLogModel model)
-        {
-            return this.db.Update(model);
-        }
-
-        public int Delete(TOprateLogModel model)
-        {
-            return this.db.Delete(model);
-        }
-
-        #endregion
 
         public Dictionary<string, List<string>> GetQueryParams()
         {
@@ -81,7 +46,7 @@ namespace DAL
                   .ToList()
                   .Select(s => new
                   {
-                      id = s.id,
+                      id = s.ID,
                       tType = s.oprateType,
                       tName = s.oprateFlag,
                       oType = s.oprateClassifyType,

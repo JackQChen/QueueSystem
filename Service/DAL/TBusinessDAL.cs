@@ -8,78 +8,43 @@ using Model;
 
 namespace DAL
 {
-    public class TBusinessDAL
+    public class TBusinessDAL : DALBase<TBusinessModel>
     {
-        DbContext db;
-
         public TBusinessDAL()
+            : base()
         {
-            this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TBusinessDAL(string dbKey)
+        public TBusinessDAL(string connName)
+            : base(connName)
         {
-            this.db = Factory.Instance.CreateDbContext(dbKey);
+        }
+
+        public TBusinessDAL(string connName, string areaNo)
+            : base(connName, areaNo)
+        {
         }
 
         public TBusinessDAL(DbContext db)
+            : base(db)
         {
-            this.db = db;
         }
 
-        #region CommonMethods
-
-        public List<TBusinessModel> GetModelList()
+        public TBusinessDAL(DbContext db, string areaNo)
+            : base(db, areaNo)
         {
-            return db.Query<TBusinessModel>().ToList();
-        }
-
-        public List<TBusinessModel> GetModelList(Expression<Func<TBusinessModel, bool>> predicate)
-        {
-            return db.Query<TBusinessModel>().Where(predicate).ToList();
-        }
-
-        public TBusinessModel GetModel(int id)
-        {
-            return db.Query<TBusinessModel>().Where(p => p.id == id).FirstOrDefault();
-        }
-
-        public TBusinessModel GetModel(Expression<Func<TBusinessModel, bool>> predicate)
-        {
-            return db.Query<TBusinessModel>().Where(predicate).FirstOrDefault();
-        }
-
-        public TBusinessModel Insert(TBusinessModel model)
-        {
-            return db.Insert(model);
-        }
-
-        public int Update(TBusinessModel model)
-        {
-            return this.db.Update(model);
-        }
-
-        public int Delete(TBusinessModel model)
-        {
-            return this.db.Delete(model);
-        }
-
-        #endregion
-
-        public void ResetIndex()
-        {
-            this.db.Session.ExecuteNonQuery("alter table t_business AUTO_INCREMENT=1", new DbParam[] { });
         }
 
         public object GetGridData()
         {
-            var dicType = new TDictionaryDAL(this.db).GetModelQuery(DictionaryString.AppointmentType);
-            return db.Query<TBusinessModel>()
+            var dicType = new FDictionaryDAL(this.db, this.areaNo).GetModelQueryByName(FDictionaryString.AppointmentType);
+            var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
+            return this.GetQuery()
                 .LeftJoin(dicType, (m, t) => m.busiType.ToString() == t.Value)
-                .LeftJoin<TUnitModel>((m, t, u) => m.unitSeq == u.unitSeq)
+                .LeftJoin(unitQuery, (m, t, u) => m.unitSeq == u.unitSeq)
                 .Select((m, t, u) => new
                 {
-                    m.id,
+                    m.ID,
                     u.unitName,
                     m.unitSeq,
                     m.busiSeq,
@@ -91,7 +56,7 @@ namespace DAL
                     askBusi = m.askBusi ? "是" : "否",
                     Model = m
                 })
-                .OrderBy(k => k.id)
+                .OrderBy(k => k.ID)
                 .ToList();
         }
     }

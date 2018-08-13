@@ -1,19 +1,15 @@
 ﻿using Chloe.Entity;
+using System;
 
 namespace Model
 {
     /// <summary>
     /// 业务操作
-    /// </summary>
+    /// </summary> 
+    [Serializable]
     [Table("T_Business")]
-    public class TBusinessModel
+    public class TBusinessModel : ModelBase
     {
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int id { get; set; }
-
         /// <summary>
         /// 业务所属部门名称
         /// </summary>
@@ -57,21 +53,6 @@ namespace Model
         /// 是否可预约咨询
         /// </summary>
         public bool askBusi { get; set; }
-
-        /// <summary>
-        /// 同步状态：0:同步新增 1：同步修改 2：已同步 3：已删除
-        /// </summary>
-        public int sysFlag { get; set; }
-
-        /// <summary>
-        /// 区域编号
-        /// </summary>
-        public int areaCode { get; set; }
-
-        /// <summary>
-        /// 编号
-        /// </summary>
-        public int areaId { get; set; }
 
         /// <summary>
         /// 是否投资的业务

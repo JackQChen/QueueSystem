@@ -1,92 +1,57 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Chloe;
+﻿using Chloe;
 using Model;
 
 namespace DAL
 {
-    public class TUserDAL
+    public class TUserDAL : DALBase<TUserModel>
     {
-        DbContext db;
         public TUserDAL()
+            : base()
         {
-            this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TUserDAL(string dbKey)
+        public TUserDAL(string connName)
+            : base(connName)
         {
-            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
-        #region CommonMethods
-
-        public List<TUserModel> GetModelList()
+        public TUserDAL(string connName, string areaNo)
+            : base(connName, areaNo)
         {
-            return db.Query<TUserModel>().ToList();
         }
 
-        public List<TUserModel> GetModelList(Expression<Func<TUserModel, bool>> predicate)
+        public TUserDAL(DbContext db)
+            : base(db)
         {
-            return db.Query<TUserModel>().Where(predicate).ToList();
         }
 
-        public TUserModel GetModel(int id)
+        public TUserDAL(DbContext db, string areaNo)
+            : base(db, areaNo)
         {
-            return db.Query<TUserModel>().Where(p => p.ID == id).FirstOrDefault();
-        }
-
-        public TUserModel GetModel(Expression<Func<TUserModel, bool>> predicate)
-        {
-            return db.Query<TUserModel>().Where(predicate).FirstOrDefault();
-        }
-
-        public TUserModel Insert(TUserModel model)
-        {
-            return db.Insert(model);
-        }
-
-        public int Update(TUserModel model)
-        {
-            return this.db.Update(model);
-        }
-
-        public int Delete(TUserModel model)
-        {
-            return this.db.Delete(model);
-        }
-
-        #endregion
-
-        public void ResetIndex()
-        {
-            this.db.Session.ExecuteNonQuery("alter table t_user AUTO_INCREMENT=1", new DbParam[] { });
         }
 
         public object GetGridData()
         {
-            var dicState = new TDictionaryDAL(this.db).GetModelQuery(DictionaryString.WorkState);
-            var dicSex = new TDictionaryDAL(this.db).GetModelQuery(DictionaryString.UserSex);
-            return db.Query<TUserModel>()
-                .LeftJoin(dicState, (u, d) => u.State == d.Value)
-                .LeftJoin(dicSex, (u, d, s) => u.Sex == s.Value)
-                .LeftJoin<TUnitModel>((u, d, s, u2) => u.unitSeq == u2.unitSeq)
-                .Select((u, d, s, u2) => new
-                {
-                    u.ID,
-                    u.Code,
-                    u.Name,
-                    u2.unitName,
-                    Sex = s.Name,
-                    State = d.Name,
-                    u.Photo,
-                    u.Remark,
-                    Model = u
-                })
-                .OrderBy(k => k.ID)
-                .ToList();
+            var dicState = new FDictionaryDAL(this.db, this.areaNo).GetModelQueryByName(FDictionaryString.WorkState);
+            var dicSex = new FDictionaryDAL(this.db, this.areaNo).GetModelQueryByName(FDictionaryString.UserSex);
+            var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
+            return this.GetQuery()
+                     .LeftJoin(dicState, (u, d) => u.State == d.Value)
+                     .LeftJoin(dicSex, (u, d, s) => u.Sex == s.Value)
+                     .LeftJoin(unitQuery, (u, d, s, u2) => u.unitSeq == u2.unitSeq)
+                     .Select((u, d, s, u2) => new
+                     {
+                         u.ID,
+                         u.Code,
+                         u.Name,
+                         u2.unitName,
+                         Sex = s.Name,
+                         State = d.Name,
+                         u.Photo,
+                         u.Remark,
+                         Model = u
+                     })
+                     .OrderBy(k => k.ID).ToList();
         }
     }
 }

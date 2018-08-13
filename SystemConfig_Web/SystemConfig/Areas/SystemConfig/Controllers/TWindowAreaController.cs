@@ -12,7 +12,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         public TWindowAreaController()
         {
-            this.bll = new TWindowAreaBLL(this.AreaNo);
+            this.bll = new TWindowAreaBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -35,7 +35,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         {
             var model = this.bll.GetModel(id);
             if (model == null)
-                model = new TWindowAreaModel() { id = -1 };
+                model = new TWindowAreaModel() { ID = -1 };
             return View(model);
         }
 
@@ -43,7 +43,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(TWindowAreaModel model)
         {
-            if (model.id == -1)
+            if (model.ID == -1)
                 this.bll.Insert(model);
             else
                 this.bll.Update(model);
@@ -54,8 +54,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id));
-            this.bll.ResetIndex();
+            this.bll.Delete(this.bll.GetModel(id)); 
             return Content("操作成功！");
         }
     }

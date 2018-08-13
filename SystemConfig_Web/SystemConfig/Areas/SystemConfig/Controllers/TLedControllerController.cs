@@ -12,7 +12,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         public TLedControllerController()
         {
-            this.bll = new TLedControllerBLL(this.AreaNo);
+            this.bll = new TLedControllerBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -55,8 +55,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id));
-            this.bll.ResetIndex();
+            this.bll.Delete(this.bll.GetModel(id)); 
             return Content("操作成功！");
         }
 

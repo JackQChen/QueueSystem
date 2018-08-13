@@ -8,69 +8,40 @@ using Model;
 
 namespace DAL
 {
-    public class TBusinessAttributeDAL
+    public class TBusinessAttributeDAL : DALBase<TBusinessAttributeModel>
     {
-        DbContext db;
         public TBusinessAttributeDAL()
+            : base()
         {
-            this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TBusinessAttributeDAL(string dbKey)
+        public TBusinessAttributeDAL(string connName)
+            : base(connName)
         {
-            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
-        #region CommonMethods
-
-        public List<TBusinessAttributeModel> GetModelList()
+        public TBusinessAttributeDAL(string connName, string areaNo)
+            : base(connName, areaNo)
         {
-            return db.Query<TBusinessAttributeModel>().ToList();
         }
 
-        public List<TBusinessAttributeModel> GetModelList(Expression<Func<TBusinessAttributeModel, bool>> predicate)
+        public TBusinessAttributeDAL(DbContext db)
+            : base(db)
         {
-            return db.Query<TBusinessAttributeModel>().Where(predicate).ToList();
         }
 
-        public TBusinessAttributeModel GetModel(int id)
+        public TBusinessAttributeDAL(DbContext db, string areaNo)
+            : base(db, areaNo)
         {
-            return db.Query<TBusinessAttributeModel>().Where(p => p.id == id).FirstOrDefault();
-        }
-
-        public TBusinessAttributeModel GetModel(Expression<Func<TBusinessAttributeModel, bool>> predicate)
-        {
-            return db.Query<TBusinessAttributeModel>().Where(predicate).FirstOrDefault();
-        }
-
-        public TBusinessAttributeModel Insert(TBusinessAttributeModel model)
-        {
-            return db.Insert(model);
-        }
-
-        public int Update(TBusinessAttributeModel model)
-        {
-            return this.db.Update(model);
-        }
-
-        public int Delete(TBusinessAttributeModel model)
-        {
-            return this.db.Delete(model);
-        }
-
-        #endregion
-
-        public void ResetIndex()
-        {
-            this.db.Session.ExecuteNonQuery("alter table t_businessattribute AUTO_INCREMENT=1", new DbParam[] { });
         }
 
         public object GetGridData()
         {
-            return db.Query<TBusinessModel>()
+            var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
+            return this.GetQuery()
                 .GroupBy(k => k.unitSeq)
                 .Select(s => new { s.unitSeq })
-                .LeftJoin<TUnitModel>((b, u) => b.unitSeq == u.unitSeq)
+                .LeftJoin(unitQuery, (b, u) => b.unitSeq == u.unitSeq)
                 .Select((b, u) => u)
             .OrderBy(k => k.unitSeq)
             .ToList();
@@ -78,9 +49,9 @@ namespace DAL
 
         public object GetGridDataByUnitSeq(string unitSeq)
         {
-            var dicType = new TDictionaryDAL(this.db).GetModelQuery(DictionaryString.AppointmentType);
-            return db.Query<TBusinessModel>()
-                .LeftJoin(dicType, (m, t) => m.busiType.ToString() == t.Value)
+            var busiQuery = new TBusinessDAL(this.db, this.areaNo).GetQuery();
+            var dicType = new FDictionaryDAL(this.db, this.areaNo).GetModelQueryByName(FDictionaryString.AppointmentType);
+            return busiQuery.LeftJoin(dicType, (m, t) => m.busiType.ToString() == t.Value)
                 .Where((m, t) => m.unitSeq == unitSeq)
                 .Select((m, t) => new
                 {
@@ -99,30 +70,32 @@ namespace DAL
 
         public object GetGridDetailData(string unitSeq, string busiSeq)
         {
-            return db.JoinQuery<TBusinessAttributeModel, TUnitModel, TBusinessModel>((m, u, b) => new object[] {
-                JoinType.LeftJoin, m.unitSeq == u.unitSeq  ,
-                JoinType.LeftJoin,m.busiSeq == b.busiSeq && m.unitSeq == b.unitSeq
-            })
-            .Where((m, u, b) => m.unitSeq == unitSeq && m.busiSeq == busiSeq)
-          .Select((m, u, b) => new
-          {
-              m.id,
-              u.unitSeq,
-              u.unitName,
-              b.busiSeq,
-              b.busiCode,
-              b.busiName,
-              m.timeInterval,
-              m.ticketRestriction,
-              m.lineUpMax,
-              m.lineUpWarningMax,
-              m.ticketPrefix,
-              isGreenChannel = m.isGreenChannel == 1 ? "是" : "否",
-              m.remark,
-              Model = m
-          })
-          .OrderBy(k => k.id)
-          .ToList();
+            var busiAttrQuery = new TBusinessAttributeDAL(this.db, this.areaNo).GetQuery();
+            var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
+            var busiQuery = new TBusinessDAL(this.db, this.areaNo).GetQuery();
+            return busiAttrQuery
+                .LeftJoin(unitQuery, (m, u) => m.unitSeq == u.unitSeq)
+                .LeftJoin(busiQuery, (m, u, b) => m.busiSeq == b.busiSeq && m.unitSeq == b.unitSeq)
+                .Where((m, u, b) => m.unitSeq == unitSeq && m.busiSeq == busiSeq)
+                .Select((m, u, b) => new
+                {
+                    m.ID,
+                    u.unitSeq,
+                    u.unitName,
+                    b.busiSeq,
+                    b.busiCode,
+                    b.busiName,
+                    m.timeInterval,
+                    m.ticketRestriction,
+                    m.lineUpMax,
+                    m.lineUpWarningMax,
+                    m.ticketPrefix,
+                    isGreenChannel = m.isGreenChannel == 1 ? "是" : "否",
+                    m.remark,
+                    Model = m
+                })
+                .OrderBy(k => k.ID)
+                .ToList();
         }
     }
 }

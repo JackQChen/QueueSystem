@@ -8,69 +8,31 @@ using Model;
 
 namespace DAL
 {
-    public class TWindowBusinessDAL
+    public class TWindowBusinessDAL : DALBase<TWindowBusinessModel>
     {
-        DbContext db;
         public TWindowBusinessDAL()
+            : base()
         {
-            this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TWindowBusinessDAL(string dbKey)
+        public TWindowBusinessDAL(string connName)
+            : base(connName)
         {
-            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
-        #region CommonMethods
-
-        public List<TWindowBusinessModel> GetModelList()
+        public TWindowBusinessDAL(string connName, string areaNo)
+            : base(connName, areaNo)
         {
-            return db.Query<TWindowBusinessModel>().ToList();
-        }
-
-        public List<TWindowBusinessModel> GetModelList(Expression<Func<TWindowBusinessModel, bool>> predicate)
-        {
-            return db.Query<TWindowBusinessModel>().Where(predicate).ToList();
-        }
-
-        public TWindowBusinessModel GetModel(int id)
-        {
-            return db.Query<TWindowBusinessModel>().Where(p => p.ID == id).FirstOrDefault();
-        }
-
-        public TWindowBusinessModel GetModel(Expression<Func<TWindowBusinessModel, bool>> predicate)
-        {
-            return db.Query<TWindowBusinessModel>().Where(predicate).FirstOrDefault();
-        }
-
-        public TWindowBusinessModel Insert(TWindowBusinessModel model)
-        {
-            return db.Insert(model);
-        }
-
-        public int Update(TWindowBusinessModel model)
-        {
-            return this.db.Update(model);
-        }
-
-        public int Delete(TWindowBusinessModel model)
-        {
-            return this.db.Delete(model);
-        }
-
-        #endregion
-
-        public void ResetIndex()
-        {
-            this.db.Session.ExecuteNonQuery("alter table t_windowbusiness AUTO_INCREMENT=1", new DbParam[] { });
         }
 
         public object GetGridBusiData(int winId)
         {
-            return this.db.Query<TWindowBusinessModel>()
+            var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
+            var busiQuery = new TBusinessDAL(this.db, this.areaNo).GetQuery();
+            return this.GetQuery()
                 .Where(m => m.WindowID == winId)
-                .InnerJoin<TUnitModel>((m, u) => m.unitSeq == u.unitSeq)
-                .InnerJoin<TBusinessModel>((m, u, b) => m.busiSeq == b.busiSeq && m.unitSeq == b.unitSeq)
+                .InnerJoin(unitQuery, (m, u) => m.unitSeq == u.unitSeq)
+                .InnerJoin(busiQuery, (m, u, b) => m.busiSeq == b.busiSeq && m.unitSeq == b.unitSeq)
                 .Select((m, u, b) => new
                 {
                     m.ID,
@@ -86,11 +48,12 @@ namespace DAL
 
         public object GetGridUserData(int winId)
         {
-            return this.db.Query<TWindowBusinessModel>()
+            var userQuery = new TUserDAL(this.db, this.areaNo).GetQuery();
+            return this.GetQuery()
                 .Where(m => m.WindowID == winId)
                 .GroupBy(k => k.unitSeq)
                 .Select(s => new { s.ID, s.unitSeq })
-                .InnerJoin<TUserModel>((m, u) => m.unitSeq == u.unitSeq)
+                .InnerJoin(userQuery, (m, u) => m.unitSeq == u.unitSeq)
                 .Select((m, u) => new
                 {
                     ID = m.ID,

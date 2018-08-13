@@ -10,14 +10,14 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
     public class TUserController : BaseController
     {
         TUserBLL bll;
-        TDictionaryBLL dicBll;
+        FDictionaryBLL dicBll;
         TUnitBLL unitBll;
 
         public TUserController()
         {
-            this.bll = new TUserBLL(this.AreaNo);
-            this.dicBll = new TDictionaryBLL(this.AreaNo);
-            this.unitBll = new TUnitBLL(this.AreaNo);
+            this.bll = new TUserBLL("MySQL", this.AreaNo);
+            this.dicBll = new FDictionaryBLL("MySQL", this.AreaNo);
+            this.unitBll = new TUnitBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -46,8 +46,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             var unitModel = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq);
             this.ViewBag.unitName = unitModel == null ? "" : unitModel.unitName;
             this.ViewBag.unitList = JsonConvert.SerializeObject(unitBll.GetModelList());
-            this.ViewBag.Sex = dicBll.GetModelList(DictionaryString.UserSex);
-            this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
+            this.ViewBag.Sex = dicBll.GetModelListByName(FDictionaryString.UserSex);
+            this.ViewBag.State = dicBll.GetModelListByName(FDictionaryString.WorkState);
             return View(model);
         }
 
@@ -82,8 +82,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id));
-            this.bll.ResetIndex();
+            this.bll.Delete(this.bll.GetModel(id)); 
             return Content("操作成功！");
         }
 

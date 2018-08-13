@@ -13,7 +13,7 @@
             dataSource: @Html.Raw(this.ViewBag.unitList),
             colModel: [{
                         label: 'ID',
-                        name: 'id',
+                        name: 'ID',
                         width: 30,
                         key: true
                     }, {
@@ -38,7 +38,8 @@
     <div class="row">
         <div class="col-xs-12">
             <form class="form-horizontal" style="margin-top: 30px">
-            <input  type="hidden" name= "id" value="@Model.id" />
+            <input  type="hidden" name= "ID" value="@Model.ID" />
+            <input  type="hidden" name= "AreaNo" value="@Model.AreaNo" />
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
                     ID
@@ -46,7 +47,7 @@
                 <div class="col-sm-9 col-xs-9">
                     <input id="txtId" readonly type="text" class="col-xs-10 col-sm-10" />
                     <script>
-                        var id = $("form input[name='id']").val();
+                        var id = $("form input[name='ID']").val();
                         if (id == -1)
                             $("#txtId").val("新增");
                         else

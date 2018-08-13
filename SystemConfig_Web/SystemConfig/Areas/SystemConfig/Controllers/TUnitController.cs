@@ -13,7 +13,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         public TUnitController()
         {
-            this.bll = new TUnitBLL(this.AreaNo);
+            this.bll = new TUnitBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -36,7 +36,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         {
             var model = this.bll.GetModel(id);
             if (model == null)
-                model = new TUnitModel() { id = -1 };
+                model = new TUnitModel() { ID = -1 };
             return View(model);
         }
 
@@ -44,7 +44,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(TUnitModel model)
         {
-            if (model.id == -1)
+            if (model.ID == -1)
                 this.bll.Insert(model);
             else
                 this.bll.Update(model);
@@ -55,8 +55,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id));
-            this.bll.ResetIndex();
+            this.bll.Delete(this.bll.GetModel(id)); 
             return Content("操作成功！");
         }
     }

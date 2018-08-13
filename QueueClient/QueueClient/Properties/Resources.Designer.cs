@@ -522,6 +522,13 @@ namespace QueueClient.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap 矩形_16_拷贝_2 {
+            get {
+                object obj = ResourceManager.GetObject("矩形_16_拷贝_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap 确认_button1 {
             get {
                 object obj = ResourceManager.GetObject("确认_button1", resourceCulture);

@@ -32,31 +32,54 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLLInterface.cs" />
-    <Compile Include="LockAction.cs" />
+    <Compile Include="Common\BLLBase.cs" />
+    <Compile Include="Expression\ExpressionConverter.cs" />
+    <Compile Include="Expression\Evaluator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Expression\ExpressionSerializer %28GenerateXmlFromExpressionCore%29.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Expression\ExpressionSerializer%28Deserialize%29.cs" />
+    <Compile Include="Expression\ExpressionSerializer%28Serialize%29.cs" />
+    <Compile Include="Expression\LinqHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Expression\Query.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Expression\QueryCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Expression\QueryExpressionXmlConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Expression\TypeResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Common\LockAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TAppointmentBLL.cs" />
     <Compile Include="TBusinessAttributeBLL.cs" />
     <Compile Include="TBusinessBLL.cs" />
-    <Compile Include="TCallBLL.cs" />
-    <Compile Include="TCallstateBLL.cs" />
-    <Compile Include="TDictionaryBLL.cs" />
-    <Compile Include="TEvaluateBLL.cs" />
-    <Compile Include="TGetCardBLL.cs" />
+    <Compile Include="BCallBLL.cs" />
+    <Compile Include="FCallstateBLL.cs" />
+    <Compile Include="FDictionaryBLL.cs" />
+    <Compile Include="BEvaluateBLL.cs" />
     <Compile Include="TLedControllerBLL.cs" />
     <Compile Include="TLedWindowBLL.cs" />
-    <Compile Include="TLineUpMaxNoBLL.cs" />
+    <Compile Include="BLineUpMaxNoBLL.cs" />
     <Compile Include="TOprateLogBLL.cs" />
-    <Compile Include="TQueueBLL.cs" />
-    <Compile Include="TRegisterBLL.cs" />
+    <Compile Include="BQueueBLL.cs" />
     <Compile Include="TUnitBLL.cs" />
     <Compile Include="TUserBLL.cs" />
     <Compile Include="TWindowAreaBLL.cs" />

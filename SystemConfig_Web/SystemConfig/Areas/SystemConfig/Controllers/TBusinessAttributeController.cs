@@ -14,9 +14,9 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         public TBusinessAttributeController()
         {
-            this.bll = new TBusinessAttributeBLL(this.AreaNo);
-            this.unitBll = new TUnitBLL(this.AreaNo);
-            this.busiBll = new TBusinessBLL(this.AreaNo);
+            this.bll = new TBusinessAttributeBLL("MySQL", this.AreaNo);
+            this.unitBll = new TUnitBLL("MySQL", this.AreaNo);
+            this.busiBll = new TBusinessBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -52,7 +52,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             if (model == null)
                 model = new TBusinessAttributeModel()
                 {
-                    id = -1,
+                    ID = -1,
                     unitSeq = unitSeq,
                     busiSeq = busiSeq
                 };
@@ -67,7 +67,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult SubmitForm(TBusinessAttributeModel model)
         {
             model.isGreenChannel = bool.Parse(this.Request["greenChannel"]) ? 1 : 0;
-            if (model.id == -1)
+            if (model.ID == -1)
                 this.bll.Insert(model);
             else
                 this.bll.Update(model);
@@ -79,7 +79,6 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult DeleteForm(int id)
         {
             this.bll.Delete(this.bll.GetModel(id));
-            this.bll.ResetIndex();
             return Content("操作成功！");
         }
 

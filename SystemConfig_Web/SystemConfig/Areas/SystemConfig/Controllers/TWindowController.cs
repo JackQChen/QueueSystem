@@ -13,7 +13,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         TWindowBLL bll;
         TWindowBusinessBLL winBusiBll;
-        TDictionaryBLL dicBll;
+        FDictionaryBLL dicBll;
         TWindowAreaBLL areaBll;
         TUnitBLL unitBll;
         TBusinessBLL busiBll;
@@ -21,13 +21,13 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         public TWindowController()
         {
-            this.bll = new TWindowBLL(this.AreaNo);
-            this.winBusiBll = new TWindowBusinessBLL(this.AreaNo);
-            this.dicBll = new TDictionaryBLL(this.AreaNo);
-            this.areaBll = new TWindowAreaBLL(this.AreaNo);
-            this.unitBll = new TUnitBLL(this.AreaNo);
-            this.busiBll = new TBusinessBLL(this.AreaNo);
-            this.userBll = new TUserBLL(this.AreaNo);
+            this.bll = new TWindowBLL("MySQL", this.AreaNo);
+            this.winBusiBll = new TWindowBusinessBLL("MySQL", this.AreaNo);
+            this.dicBll = new FDictionaryBLL("MySQL", this.AreaNo);
+            this.areaBll = new TWindowAreaBLL("MySQL", this.AreaNo);
+            this.unitBll = new TUnitBLL("MySQL", this.AreaNo);
+            this.busiBll = new TBusinessBLL("MySQL", this.AreaNo);
+            this.userBll = new TUserBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -63,9 +63,9 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             var model = this.bll.GetModel(id);
             if (model == null)
                 model = new TWindowModel() { ID = -1 };
-            this.ViewBag.State = dicBll.GetModelList(DictionaryString.WorkState);
+            this.ViewBag.State = dicBll.GetModelListByName(FDictionaryString.WorkState);
             this.ViewBag.areaList = JsonConvert.SerializeObject(this.areaBll.GetModelList());
-            var areaModel = this.areaBll.GetModel(p => p.id == model.AreaName);
+            var areaModel = this.areaBll.GetModel(p => p.ID == model.AreaName);
             this.ViewBag.AreaText = areaModel == null ? "" : areaModel.areaName;
             return View(model);
         }
@@ -85,8 +85,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id));
-            this.bll.ResetIndex();
+            this.bll.Delete(this.bll.GetModel(id)); 
             return Content("操作成功！");
         }
         #endregion
@@ -136,7 +135,6 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         public ActionResult DeleteBusiForm(int id)
         {
             this.winBusiBll.Delete(this.winBusiBll.GetModel(id));
-            this.winBusiBll.ResetIndex();
             return Content("操作成功！");
         }
         #endregion

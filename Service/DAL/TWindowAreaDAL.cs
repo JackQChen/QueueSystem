@@ -8,73 +8,43 @@ using Model;
 
 namespace DAL
 {
-    public class TWindowAreaDAL
+    public class TWindowAreaDAL : DALBase<TWindowAreaModel>
     {
-        DbContext db;
         public TWindowAreaDAL()
+            : base()
         {
-            this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TWindowAreaDAL(string dbKey)
+        public TWindowAreaDAL(string connName)
+            : base(connName)
         {
-            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
-        #region CommonMethods
-
-        public List<TWindowAreaModel> GetModelList()
+        public TWindowAreaDAL(string connName, string areaNo)
+            : base(connName, areaNo)
         {
-            return db.Query<TWindowAreaModel>().ToList();
         }
 
-        public List<TWindowAreaModel> GetModelList(Expression<Func<TWindowAreaModel, bool>> predicate)
+        public TWindowAreaDAL(DbContext db)
+            : base(db)
         {
-            return db.Query<TWindowAreaModel>().Where(predicate).ToList();
         }
 
-        public TWindowAreaModel GetModel(int id)
+        public TWindowAreaDAL(DbContext db, string areaNo)
+            : base(db, areaNo)
         {
-            return db.Query<TWindowAreaModel>().Where(p => p.id == id).FirstOrDefault();
-        }
-
-        public TWindowAreaModel GetModel(Expression<Func<TWindowAreaModel, bool>> predicate)
-        {
-            return db.Query<TWindowAreaModel>().Where(predicate).FirstOrDefault();
-        }
-
-        public TWindowAreaModel Insert(TWindowAreaModel model)
-        {
-            return db.Insert(model);
-        }
-
-        public int Update(TWindowAreaModel model)
-        {
-            return this.db.Update(model);
-        }
-
-        public int Delete(TWindowAreaModel model)
-        {
-            return this.db.Delete(model);
-        }
-
-        #endregion
-
-        public void ResetIndex()
-        {
-            this.db.Session.ExecuteNonQuery("alter table t_windowarea AUTO_INCREMENT=1", new DbParam[] { });
         }
 
         public object GetGridData()
         {
-            return db.Query<TWindowAreaModel>().Select(s => new
+            return this.GetQuery().Select(s => new
             {
-                s.id,
+                s.ID,
                 s.areaName,
                 s.remark,
                 Model = s
             })
-            .OrderBy(k => k.id)
+            .OrderBy(k => k.ID)
             .ToList();
         }
 

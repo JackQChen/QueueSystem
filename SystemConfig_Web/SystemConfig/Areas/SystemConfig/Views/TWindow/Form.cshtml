@@ -13,7 +13,7 @@
             dataSource: @Html.Raw(this.ViewBag.areaList),
             colModel: [{
                         label: 'ID',
-                        name: 'id',
+                        name: 'ID',
                         width: 30,
                         key: true
                     }, {
@@ -36,6 +36,7 @@
         <div class="col-xs-12">
             <form class="form-horizontal" style="margin-top: 30px">
             <input  type="hidden" name= "ID" value="@Model.ID" />
+            <input  type="hidden" name= "AreaNo" value="@Model.AreaNo" />
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
                     ID
@@ -96,7 +97,8 @@
                     区域名称
                 </label>
                 <div class="col-sm-9 col-xs-9">
-                    <input id="areaSearch" displaymember='areaName' valuemember='id' type="text" autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input id="areaSearch" displaymember='areaName' valuemember='id' type="text" autocomplete="off"
+                        class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>

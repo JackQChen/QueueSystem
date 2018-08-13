@@ -51,23 +51,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factory.cs" />
-    <Compile Include="LockAction.cs" />
-    <Compile Include="MySqlConnectionFactory.cs" />
-    <Compile Include="TAppointmentDAL.cs" />
+    <Compile Include="Common\DALBase.cs" />
+    <Compile Include="Common\Factory.cs" />
+    <Compile Include="Common\LockAction.cs" />
+    <Compile Include="Common\MySqlConnectionFactory.cs" />
     <Compile Include="TBusinessAttributeDAL.cs" />
     <Compile Include="TBusinessDAL.cs" />
-    <Compile Include="TCallDAL.cs" />
-    <Compile Include="TCallstateDAL.cs" />
-    <Compile Include="TDictionaryDAL.cs" />
-    <Compile Include="TEvaluateDAL.cs" />
-    <Compile Include="TGetCardDAL.cs" />
+    <Compile Include="BCallDAL.cs" />
+    <Compile Include="FCallstateDAL.cs" />
+    <Compile Include="FDictionaryDAL.cs" />
+    <Compile Include="BEvaluateDAL.cs" />
     <Compile Include="TLedControllerDAL.cs" />
     <Compile Include="TLedWindowDAL.cs" />
-    <Compile Include="TLineUpMaxNoDAL.cs" />
+    <Compile Include="BLineUpMaxNoDAL.cs" />
     <Compile Include="TOprateLogDAL.cs" />
-    <Compile Include="TQueueDAL .cs" />
-    <Compile Include="TRegisterDAL.cs" />
+    <Compile Include="BQueueDAL .cs" />
     <Compile Include="TUnitDAL.cs" />
     <Compile Include="TUserDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

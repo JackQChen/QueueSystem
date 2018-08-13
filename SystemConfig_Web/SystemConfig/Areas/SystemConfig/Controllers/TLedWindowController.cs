@@ -15,9 +15,9 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         public TLedWindowController()
         {
-            windowBll = new TWindowBLL(this.AreaNo);
-            lcBll = new TLedControllerBLL(this.AreaNo);
-            ledWinBll = new TLedWindowBLL(this.AreaNo);
+            windowBll = new TWindowBLL("MySQL", this.AreaNo);
+            lcBll = new TLedControllerBLL("MySQL", this.AreaNo);
+            ledWinBll = new TLedWindowBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -74,8 +74,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.ledWinBll.Delete(this.ledWinBll.GetModel(id));
-            this.ledWinBll.ResetIndex();
+            this.ledWinBll.Delete(this.ledWinBll.GetModel(id)); 
             return Content("操作成功！");
         }
     }

@@ -8,80 +8,50 @@ using Model;
 
 namespace DAL
 {
-    public class TUnitDAL
+    public class TUnitDAL : DALBase<TUnitModel>
     {
-        DbContext db;
         public TUnitDAL()
+            : base()
         {
-            this.db = Factory.Instance.CreateDbContext();
         }
 
-        public TUnitDAL(string dbKey)
+        public TUnitDAL(string connName)
+            : base(connName)
         {
-            this.db = Factory.Instance.CreateDbContext(dbKey);
         }
 
-        #region CommonMethods
-
-        public List<TUnitModel> GetModelList()
+        public TUnitDAL(string connName, string areaNo)
+            : base(connName, areaNo)
         {
-            return db.Query<TUnitModel>().ToList();
         }
 
-        public List<TUnitModel> GetModelList(Expression<Func<TUnitModel, bool>> predicate)
+        public TUnitDAL(DbContext db)
+            : base(db)
         {
-            return db.Query<TUnitModel>().Where(predicate).ToList();
         }
 
-        public TUnitModel GetModel(int id)
+        public TUnitDAL(DbContext db, string areaNo)
+            : base(db, areaNo)
         {
-            return db.Query<TUnitModel>().Where(p => p.id == id).FirstOrDefault();
-        }
-
-        public TUnitModel GetModel(Expression<Func<TUnitModel, bool>> predicate)
-        {
-            return db.Query<TUnitModel>().Where(predicate).FirstOrDefault();
-        }
-
-        public TUnitModel Insert(TUnitModel model)
-        {
-            return db.Insert(model);
-        }
-
-        public int Update(TUnitModel model)
-        {
-            return this.db.Update(model);
-        }
-
-        public int Delete(TUnitModel model)
-        {
-            return this.db.Delete(model);
-        }
-
-        #endregion
-
-        public void ResetIndex()
-        {
-            this.db.Session.ExecuteNonQuery("alter table t_unit AUTO_INCREMENT=1", new DbParam[] { });
         }
 
         public object GetGridData()
         {
-            return db.Query<TUnitModel>().Select(s => new
+            return this.GetQuery().Select(s => new
             {
-                s.id,
+                s.ID,
                 s.unitSeq,
                 s.unitName,
                 s.orderNum,
                 Model = s
             })
-            .OrderBy(k => k.id)
+            .OrderBy(k => k.ID)
             .ToList();
         }
 
         public TUnitModel GetModel(int areaCode, int areaId)
         {
-            return db.Query<TUnitModel>().Where(p => p.areaCode == areaCode && p.areaId == areaId).FirstOrDefault();
+            return db.Query<TUnitModel>().Where(p => 1 == 1).FirstOrDefault();
         }
 
         public ArrayList UploadUnitAndBusy(List<TUnitModel> uList, List<TBusinessModel> bList)
@@ -89,7 +59,7 @@ namespace DAL
             ArrayList arr = null;
             try
             {
-                LockAction.Run(LockKey.Upload, () =>
+                LockAction.Run(FLockKey.Upload, () =>
                 {
                     var businessList = new TBusinessDAL().GetModelList();
                     var unitList = new TUnitDAL().GetModelList();
@@ -126,7 +96,7 @@ namespace DAL
                         if (uList.Where(u => u.unitSeq == unit.unitSeq && u.unitName == unit.unitName).Count() == 0)
                             deleteUnit.Add(unit);
                     }
-                    
+
                     foreach (var u in inserUlist)
                         this.Insert(u);
                     foreach (var d in deleteUnit)
@@ -136,7 +106,7 @@ namespace DAL
                     foreach (var d in deleteBusy)
                         busyBll.Delete(d);
                     arr = new ArrayList();
-                    arr.Add(uList.OrderBy(o=>o.orderNum).ToList());
+                    arr.Add(uList.OrderBy(o => o.orderNum).ToList());
                     arr.Add(serchBlist);
                 });
                 return arr;
