@@ -175,7 +175,7 @@ namespace DAL
         }
 
         /// <summary>
-        /// 综合显示
+        /// 综合显示：按照区域查询
         /// </summary>
         /// <param name="AreaNo"></param>
         /// <returns></returns>
@@ -185,6 +185,25 @@ namespace DAL
             var window = db.Query<TWindowModel>().Where(a => a.AreaNo == this.areaNo).Where(q => areaList.Contains(q.AreaName.ToString())).Select(s => s.Number).ToList();
             var list = db.Query<BCallModel>().Where(a => a.AreaNo == this.areaNo).Where(q => q.ticketTime.Date == DateTime.Now.Date && (q.state == 0 || q.state == 3)).Where(q => window.Contains(q.windowNumber))
                 .OrderByDesc(o => o.handleTime).ToList();//按照处理时间排序
+            var gList = from u in list
+                        group u by u.windowNumber into g
+                        select g;
+            List<BCallModel> cList = new List<BCallModel>();
+            foreach (var u in gList)
+            {
+                var m = list.Where(c => c.windowNumber == u.Key).OrderByDescending(o => o.handleTime).First();
+                cList.Add(m);
+            }
+            return cList;
+        }
+
+        /// <summary>
+        /// 综合显示屏：查询所有需要显示的叫号信息
+        /// </summary>
+        /// <returns></returns>
+        public List<BCallModel> ScreenAllList()
+        {
+            var list = db.Query<BCallModel>().Where(a => a.AreaNo == this.areaNo).Where(q => q.ticketTime.Date == DateTime.Now.Date && (q.state == 0 || q.state == 3)).OrderByDesc(o => o.handleTime).ToList();//按照处理时间排序
             var gList = from u in list
                         group u by u.windowNumber into g
                         select g;

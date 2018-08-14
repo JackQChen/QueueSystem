@@ -67,6 +67,7 @@
     <Compile Include="TWindowAreaModel.cs" />
     <Compile Include="TWindowBusinessModel.cs" />
     <Compile Include="TWindowModel.cs" />
+    <Compile Include="TScreenConfigModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

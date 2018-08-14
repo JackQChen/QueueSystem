@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using MessageLib;
-using System.Threading.Tasks;
-using System.Threading;
+using BLL;
+using System.Linq;
+using System.Collections.Generic;
+using Model;
 
 namespace ScreenDisplayService
 {
@@ -13,9 +16,12 @@ namespace ScreenDisplayService
         JavaScriptSerializer convert = new JavaScriptSerializer();
         byte[] btDisConn = new byte[] { 0x3, 0xe9 };
         internal Extra<IntPtr, DeviceInfo> deviceList = new Extra<IntPtr, DeviceInfo>();
-
-        byte[] btQueueInfo;
-
+        BCallBLL callBLL = new BCallBLL();
+        TWindowBLL wBll = new TWindowBLL();
+        TScreenConfigBLL sBll = new TScreenConfigBLL();
+        List<BCallModel> aList = new List<BCallModel>();
+        List<TWindowModel> wList = new List<TWindowModel>();
+        List<TScreenConfigModel> screeList = new List<TScreenConfigModel>();
         public Service()
         {
             this.OnAccept += new TcpServerEvent.OnAcceptEventHandler(Service_OnAccept);
@@ -23,12 +29,19 @@ namespace ScreenDisplayService
             this.OnWSMessageBody += new WebSocketEvent.OnWSMessageBodyEventHandler(Service_OnWSMessageBody);
             Task.Factory.StartNew(() =>
             {
-                var data = new ResponseData { code = "0", result = "" };
                 while (true)
                 {
-                    data.result = Guid.NewGuid().ToString();
-                    btQueueInfo = data.ToBytes();
-                    Thread.Sleep(1000);
+                    wList = wBll.GetModelList();
+                    screeList = sBll.GetModelList();
+                    Thread.Sleep(2 * 60 * 1000);
+                }
+            });
+            Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    aList = callBLL.ScreenAllList();
+                    Thread.Sleep(1500);
                 }
             });
         }
@@ -75,9 +88,27 @@ namespace ScreenDisplayService
                 var method = requestData.method.Trim().ToLower();
                 switch (method)
                 {
+                    case "getconfig":
+                        {
+                            var rData = new ResponseData { code = "0", result = "" };
+                            var ip = this.deviceList.Get(connId).IP;
+                            var config = screeList.Where(s => s.IP == ip).FirstOrDefault().Config;
+                            var param = convert.DeserializeObject(config);
+                            rData.result = param;
+                            var btQueueInfo = rData.ToBytes();
+                            this.SendWSMessage(connId, btQueueInfo);
+                        }
+                        break;
                     case "getqueuelist":
                         {
-                            //var param = requestData.param as Dictionary<string, object>; 
+                            var rData = new ResponseData { code = "0", result = "" };
+                            var ip = this.deviceList.Get(connId).IP;
+                            var config = screeList.Where(s => s.IP == ip).FirstOrDefault().Config;
+                            var param = convert.DeserializeObject(config) as Dictionary<string, object>;
+                            var winAreaNo = param["winArea"].ToString();
+                            var arr = GetCallByArea(winAreaNo);
+                            rData.result = arr;
+                            var btQueueInfo = rData.ToBytes();
                             this.SendWSMessage(connId, btQueueInfo);
                         }
                         break;
@@ -98,6 +129,15 @@ namespace ScreenDisplayService
                 this.SDK_OnError(this, connId, ex);
             }
             return HandleResult.Ok;
+        }
+
+        Array GetCallByArea(string areas)
+        {
+            string[] areaList = areas.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var winList = wList.Where(q => areaList.Contains(q.AreaName.ToString())).Select(s => s.Number).ToList();
+            var callList = aList.Where(q => winList.Contains(q.windowNumber)).ToList();
+            var arr = callList.Select(s => new { ticketNo = s.ticketNumber, winNo = s.windowNumber }).ToArray();
+            return arr;
         }
 
         #region IServiceUI 成员

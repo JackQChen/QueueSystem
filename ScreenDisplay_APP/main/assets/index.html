@@ -1,49 +1,73 @@
 ﻿<!doctype html>
 <html>
-    <head>
-        <script language="javascript" type="text/javascript">
-	var webSocket;
-	function getData()
-	{
-		var data = {
-                method: 'GetQueueList', 
-		param: {
-			winNum: ''
-                	}
-		};
-		websocket.send(JSON.stringify(data));
-	}
-	function init()
-	{
-		websocket = new WebSocket("ws://127.0.0.1:3350");
-		websocket.onopen = function (evt) {
-		console.log("CONNECTED");
-		};
-		websocket.onclose = function (evt) {
-		console.log("DISCONNECTED");
-		};
-		websocket.onmessage = function (evt) {
-		console.log('RESPONSE:' + evt.data);
-		};
-		websocket.onerror = function (evt) {
-		console.log('ERROR:' + evt.data);
-		};
-		window.setInterval(getData,3000); 
-	}
-        </script>
-    </head>
-    <body style="background-color: black;" onload="init()">
-	<table style="color:white;width:100%;font-size: 40px;">
-		<tr>
-			<td>请</td>
-			<td style="color:#FFFF00;">C100</td>
-			<td>到</td>
-			<td style="color:#88F092;">100</td>
-			<td>号窗口办理</td>
-		</tr>
-	</table>
-        <marquee style="positioin:fixed;bottom:0px;position: fixed;">
-            <span style="font-weight: bolder;font-size: 40px;color: #88F092;">取号后请在休息区等候，注意留意电视大屏和语音叫号！</span>
-        </marquee>
-    </body>
+  
+  <head>
+    <script language="javascript" type="text/javascript">var webSocket;
+      function getData() {
+        var data = {
+          method: 'GetQueueList',
+          param: {
+            winNum: ''
+          }
+        };
+        websocket.send(JSON.stringify(data));
+      }
+      //字符串格式化
+      String.prototype.format = function(args) {
+        var result = this;
+        if (arguments.length > 0) {
+          if (arguments.length == 1 && typeof(args) == "object") {
+            for (var key in args) {
+              var reg = new RegExp("({" + key + "})", "g");
+              result = result.replace(reg, args[key] == undefined ? '': args[key]);
+            }
+          } else {
+            for (var i = 0; i < arguments.length; i++) {
+              if (arguments[i] != undefined) {
+                var reg = new RegExp("({)" + i + "(})", "g");
+                result = result.replace(reg, arguments[i] == undefined ? '': arguments[i]);
+              }
+            }
+          }
+        }
+        return result;
+      }
+      function init() {
+        websocket = new WebSocket("ws://cysoft.uicp.net:3350");
+        websocket.onopen = function(evt) {
+          console.log("CONNECTED");
+        };
+        websocket.onclose = function(evt) {
+          console.log("DISCONNECTED");
+        };
+        var template = "<tr><td>请</td><td>{ticketNo}</td><td>到</td><td>{winNo}</td><td>号窗口办理</td></tr>";
+        websocket.onmessage = function(evt) {
+          var msg = "<tbody>";
+          var data = JSON.parse(evt.data).result;
+          for (var i = 0; i < data.length; i++) {
+            msg += template.format(data[i]);
+          }
+          msg += "</tbody>";
+          document.getElementById('tbData').innerHTML = msg;
+        };
+        websocket.onerror = function(evt) {
+          console.log('ERROR:' + evt.data);
+        };
+        window.setInterval(getData, 3000);
+      }</script>
+    <style>tr td:nth-child(2) {color:#FFFF00; } tr td:nth-child(4) {color:#88F092; }</style></head>
+  
+  <body style="background-color: black;" onload="init()">
+    <table id="tbData" style="color:white;width:100%;font-size: 40px;">
+      <tr>
+        <td>请</td>
+        <td style="color:#FFFF00;">C100</td>
+        <td>到</td>
+        <td style="color:#88F092;">100</td>
+        <td>号窗口办理</td></tr>
+    </table>
+    <marquee style="positioin:fixed;bottom:0px;position: fixed;">
+      <span style="font-weight: bolder;font-size: 40px;color: #88F092;">取号后请在休息区等候，注意 留意电视大屏和语音叫号！</span></marquee>
+  </body>
+
 </html>

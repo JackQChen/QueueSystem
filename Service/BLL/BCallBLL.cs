@@ -26,6 +26,14 @@ namespace BLL
             return new BCallDAL().CallNo(wlBusy, gwlBusy, windowNumber, windowUser);
         }
 
+        /// <summary>
+        /// 综合显示屏：查询所有需要显示的叫号信息
+        /// </summary>
+        /// <returns></returns>
+        public List<BCallModel> ScreenAllList()
+        {
+            return new BCallDAL().ScreenAllList();
+        }
         public List<BCallModel> ScreenShowByArea(string AreaNo)
         {
             return new BCallDAL().ScreenShowByArea(AreaNo);

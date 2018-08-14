@@ -85,6 +85,7 @@
     <Compile Include="TWindowAreaBLL.cs" />
     <Compile Include="TWindowBLL.cs" />
     <Compile Include="TWindowBusinessBLL.cs" />
+    <Compile Include="TScreenConfigBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">

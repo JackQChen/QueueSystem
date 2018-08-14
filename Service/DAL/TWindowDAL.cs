@@ -35,6 +35,18 @@ namespace DAL
         {
         }
 
+        /// <summary>
+        /// 根据窗口区域获取窗口号列表
+        /// </summary>
+        /// <param name="aList"></param>
+        /// <returns></returns>
+        public List<string> GetWindowByArea(string aList)
+        {
+            string[] areaList = aList.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var window = db.Query<TWindowModel>().Where(a => a.AreaNo == this.areaNo).Where(q => areaList.Contains(q.AreaName.ToString())).Select(s => s.Number).ToList();
+            return window;
+        }
+ 
         public object GetGridData()
         {
             var dic = new FDictionaryDAL(this.db, this.areaNo).GetModelQueryByName(FDictionaryString.WorkState);

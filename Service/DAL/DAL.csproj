@@ -72,6 +72,7 @@
     <Compile Include="TWindowAreaDAL.cs" />
     <Compile Include="TWindowBusinessDAL.cs" />
     <Compile Include="TWindowDAL.cs" />
+    <Compile Include="TScreenConfigDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">
