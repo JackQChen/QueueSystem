@@ -11,7 +11,7 @@
             output = document.getElementById('output');
         }
         function testWebSocket() {
-            websocket = new WebSocket("ws://127.0.0.1:3348");
+            websocket = new WebSocket("ws://cysoft.uicp.net:3348");
             websocket.onopen = function (evt) {
                 writeToScreen("CONNECTED");
             };

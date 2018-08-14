@@ -29,5 +29,10 @@ namespace DAL
             : base(connName, areaNo)
         {
         }
+
+        public FCallStateModel GetModelByWindowNo(string windowNo)
+        {
+            return db.Query<FCallStateModel>().Where(a => a.AreaNo == this.areaNo && a.windowNo == windowNo).FirstOrDefault();
+        }
     }
 }

@@ -1,162 +1,49 @@
 ﻿<!doctype html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <title>用文本绘图</title>
-        <style>
-            html, body {
-                width: 100%;
-                height: 100%;
-                margin: 0px;
-                overflow: hidden;
-                background-color: #F0F0F0;
-            }
-
-            html:hover span, body:hover span {
-                display: none;
-            }
-
-            canvas {
-                cursor: crosshair;
-            }
-
-            span {
-                font-family: 'Georgia', cursive;
-                font-size: 40px;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                color: #000;
-                margin-top: -40px;
-                margin-left: -200px;
-            }
-        </style>
-    </head>
-    <body>
-        <canvas id='canvas'></canvas>
-        <span id='info'>点击并拖动进行绘制</span>
-        <script>
-            // Drawing with text. Ported from Generative Design book - http://www.generative-gestaltung.de - Original licence: http://www.apache.org/licenses/LICENSE-2.0
-
-            // Application variables
-            var position = {
-                x: 0,
-                y: window.innerHeight / 2
-            };
-            var counter = 0;
-            var minFontSize = 3;
-            var angleDistortion = 0;
-            var letters = "从前有座山,山上有座庙,庙里有个老和尚和一个小和尚,有一天,老和尚对小和尚说:从前有座山,山上有座庙,庙里有个老和尚和一个小和尚,有一天,老和尚对小和尚说:";
-
-            // Drawing variables
-            var canvas;
-            var context;
-            var mouse = {
-                x: 0,
-                y: 0,
-                down: false
-            }
-
-            function init() {
-                canvas = document.getElementById('canvas');
-                context = canvas.getContext('2d');
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-
-                canvas.addEventListener('touchmove', mouseMove, false);
-                canvas.addEventListener('touchstart', mouseDown, false);
-                canvas.addEventListener('touchend', mouseUp, false);
-                canvas.addEventListener('dblclick', doubleClick, false);
-
-                var gradient = context.createLinearGradient(0, 0, 100, 0);
-                gradient.addColorStop("0", "magenta");
-                gradient.addColorStop("0.5", "blue");
-                gradient.addColorStop("1.0", "red");
-                context.fillStyle = gradient;
-
-                window.onresize = function(event) {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                }
-            }
-
-            function mouseMove(event) {
-                mouse.x = event.touches[0].pageX;
-                mouse.y = event.touches[0].pageY;
-                draw();
-            }
-
-            function draw() {
-                if (mouse.down) {
-                    var d = distance(position, mouse);
-                    var fontSize = minFontSize + d / 2;
-                    var letter = letters[counter];
-                    var stepSize = textWidth(letter, fontSize);
-
-                    if (d > stepSize) {
-                        var angle = Math.atan2(mouse.y - position.y, mouse.x - position.x);
-
-                        context.font = fontSize + "px Georgia";
-                        context.save();
-                        context.translate(position.x, position.y);
-                        context.rotate(angle);
-                        context.fillText(letter, 0, 0);
-                        context.restore();
-
-                        counter++;
-                        if (counter > letters.length - 1) {
-                            counter = 0;
-                        }
-
-                        //console.log (position.x + Math.cos( angle ) * stepSize)
-                        position.x = position.x + Math.cos(angle) * stepSize;
-                        position.y = position.y + Math.sin(angle) * stepSize;
-
-                    }
-                }
-            }
-
-            function distance(pt, pt2) {
-
-                var xs = 0;
-                var ys = 0;
-
-                xs = pt2.x - pt.x;
-                xs = xs * xs;
-
-                ys = pt2.y - pt.y;
-                ys = ys * ys;
-
-                return Math.sqrt(xs + ys);
-            }
-
-            function mouseDown(event) {
-                mouse.down = true;
-                position.x = event.touches[0].pageX;
-                position.y = event.touches[0].pageY;
-
-                document.getElementById('info').style.display = 'none';
-            }
-
-            function mouseUp(event) {
-                mouse.down = false;
-            }
-
-            function doubleClick(event) {
-                canvas.width = canvas.width;
-            }
-
-            function textWidth(string, size) {
-                context.font = size + "px Georgia";
-
-                if (context.fillText) {
-                    return context.measureText(string).width;
-                } else if (context.mozDrawText) {
-                    return context.mozMeasureText(string);
-                }
-
-            }
-            ;init();
+        <script language="javascript" type="text/javascript">
+	var webSocket;
+	function getData()
+	{
+		var data = {
+                method: 'GetQueueList', 
+		param: {
+			winNum: ''
+                	}
+		};
+		websocket.send(JSON.stringify(data));
+	}
+	function init()
+	{
+		websocket = new WebSocket("ws://127.0.0.1:3350");
+		websocket.onopen = function (evt) {
+		console.log("CONNECTED");
+		};
+		websocket.onclose = function (evt) {
+		console.log("DISCONNECTED");
+		};
+		websocket.onmessage = function (evt) {
+		console.log('RESPONSE:' + evt.data);
+		};
+		websocket.onerror = function (evt) {
+		console.log('ERROR:' + evt.data);
+		};
+		window.setInterval(getData,3000); 
+	}
         </script>
+    </head>
+    <body style="background-color: black;" onload="init()">
+	<table style="color:white;width:100%;font-size: 40px;">
+		<tr>
+			<td>请</td>
+			<td style="color:#FFFF00;">C100</td>
+			<td>到</td>
+			<td style="color:#88F092;">100</td>
+			<td>号窗口办理</td>
+		</tr>
+	</table>
+        <marquee style="positioin:fixed;bottom:0px;position: fixed;">
+            <span style="font-weight: bolder;font-size: 40px;color: #88F092;">取号后请在休息区等候，注意留意电视大屏和语音叫号！</span>
+        </marquee>
     </body>
 </html>

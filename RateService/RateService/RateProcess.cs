@@ -49,6 +49,7 @@ namespace RateService
                 //先不判断重复
                 BCallModel cl = new BCallBLL().GetModelByHandleId(RateId);
                 BEvaluateModel ev = new BEvaluateModel();
+                ev.ID = new BEvaluateBLL().GetMaxId();
                 ev.type = 1;
                 ev.handId = cl.ID;
                 ev.unitSeq = cl.unitSeq;

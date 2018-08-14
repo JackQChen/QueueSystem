@@ -111,6 +111,7 @@
             this.cmbSelect.Name = "cmbSelect";
             this.cmbSelect.Size = new System.Drawing.Size(203, 20);
             this.cmbSelect.TabIndex = 2;
+            this.cmbSelect.SelectedIndexChanged += new System.EventHandler(this.cmbSelect_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -195,7 +196,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 31);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(379, 518);
+            this.panel1.Size = new System.Drawing.Size(397, 483);
             this.panel1.TabIndex = 4;
             // 
             // groupBox3
@@ -484,7 +485,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(183)))), ((int)(((byte)(214)))));
-            this.ClientSize = new System.Drawing.Size(385, 552);
+            this.ClientSize = new System.Drawing.Size(403, 517);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;

@@ -61,10 +61,12 @@ namespace DAL
 
         public object RS_GetWindowList()
         {
-            return this.db.Query<TWindowBusinessModel>()
+            var winBusiQuery = new TWindowBusinessDAL(this.db, this.areaNo).GetQuery();
+            var winQuery = this.GetQuery();
+            return winBusiQuery
                 .GroupBy(k => k.WindowID)
                 .Select(s => s.WindowID)
-                .InnerJoin<TWindowModel>((m, w) => m == w.ID)
+                .InnerJoin(winQuery, (m, w) => m == w.ID)
                 .Select((m, w) => new
                 {
                     WindowNumber = w.Number,
@@ -76,13 +78,16 @@ namespace DAL
 
         public object RS_GetUserListByWindowNo(string winNum)
         {
-            return this.db.Query<TWindowBusinessModel>()
-                .InnerJoin<TWindowModel>((m, w) => m.WindowID == w.ID)
+            var winBusiQuery = new TWindowBusinessDAL(this.db, this.areaNo).GetQuery();
+            var winQuery = this.GetQuery();
+            var userQuery = new TUserDAL(this.db, this.areaNo).GetQuery();
+            return winBusiQuery
+                .InnerJoin(winQuery, (m, w) => m.WindowID == w.ID)
                 .Where((m, w) => w.Number == winNum)
                 .Select((m, w) => m)
                 .GroupBy(k => k.unitSeq)
                 .Select(s => s.unitSeq)
-                .InnerJoin<TUserModel>((s, u) => s == u.unitSeq)
+                .InnerJoin(userQuery, (s, u) => s == u.unitSeq)
                 .Select((s, u) => new
                 {
                     UserCode = u.Code,
@@ -94,9 +99,8 @@ namespace DAL
 
         public string RS_GetUserPhoto(string userCode)
         {
-            var user = this.db.Query<TUserModel>()
-                .Where(p => p.Code == userCode)
-                .FirstOrDefault();
+            var userQuery = new TUserDAL(this.db, this.areaNo).GetQuery();
+            var user = userQuery.Where(p => p.Code == userCode).FirstOrDefault();
             if (user != null)
                 if (user.Photo != null)
                     return Convert.ToBase64String(user.Photo);
@@ -105,9 +109,11 @@ namespace DAL
 
         public object RS_GetModel(string winNum, string userCode)
         {
-            return this.db.Query<TWindowBusinessModel>()
-                  .InnerJoin<TWindowModel>((m, w) => m.WindowID == w.ID)
-                  .InnerJoin<TUserModel>((m, w, u) => m.unitSeq == u.unitSeq)
+            var winBusiQuery = new TWindowBusinessDAL(this.db, this.areaNo).GetQuery();
+            var userQuery = new TUserDAL(this.db, this.areaNo).GetQuery();
+            return winBusiQuery
+                  .InnerJoin(this.GetQuery(), (m, w) => m.WindowID == w.ID)
+                  .InnerJoin(userQuery, (m, w, u) => m.unitSeq == u.unitSeq)
                   .Where((m, w, u) => w.Number == winNum && u.Code == userCode)
                   .Select((m, w, u) => u).FirstOrDefault();
         }

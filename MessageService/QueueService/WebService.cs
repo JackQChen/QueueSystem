@@ -7,23 +7,17 @@ using System.Web.Script.Serialization;
 using MessageLib;
 using QueueMessage;
 
-namespace RateService
+namespace QueueService
 {
-    public class Service : WebSocketServer, IServiceUI
+    public class WebService : WebSocketServer, IServiceUI
     {
         JavaScriptSerializer convert = new JavaScriptSerializer();
-        RateProcess rateProcess = new RateProcess();
-        List<string> loginOperation = new List<string>();
         byte[] btDisConn = new byte[] { 0x3, 0xe9 };
-        internal Extra<IntPtr, DeviceInfo> deviceList = new Extra<IntPtr, DeviceInfo>();
+        internal Extra<DeviceInfo> deviceList = new Extra<DeviceInfo>();
         internal bool deviceListChanged = false;
-        ServiceClient client = new ServiceClient();
-        OperateIni ini;
 
-        public Service()
+        public WebService()
         {
-            ini = new OperateIni(AppDomain.CurrentDomain.BaseDirectory + "RateUpdate.ini");
-            this.client.ReceiveMessage += new Action<IntPtr, Message>(client_ReceiveMessage);
             this.OnPrepareListen += new TcpServerEvent.OnPrepareListenEventHandler(Service_OnPrepareListen);
             this.OnClose += new TcpServerEvent.OnCloseEventHandler(Service_OnClose);
             this.OnWSMessageBody += new WebSocketEvent.OnWSMessageBodyEventHandler(Service_OnWSMessageBody);

@@ -19,5 +19,10 @@ namespace BLL
             : base(connName, areaNo)
         {
         }
+
+        public FCallStateModel GetModelByWindowNo(string windowNo)
+        {
+            return new FCallStateDAL().GetModelByWindowNo(windowNo);
+        }
     }
 }

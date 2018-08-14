@@ -17,12 +17,12 @@ namespace CallClient
         string ip = "";
         string port = "";
         TOprateLogBLL oBll = new TOprateLogBLL();
-        TQueueBLL qBll = new TQueueBLL();
+        BQueueBLL qBll = new BQueueBLL();
         TWindowBLL wBll = new TWindowBLL();
         TWindowBusinessBLL wbBll = new TWindowBusinessBLL();
         TBusinessAttributeBLL baBll = new TBusinessAttributeBLL();
         List<TBusinessAttributeModel> baList = new List<TBusinessAttributeModel>();
-        TCallBLL cBll = new TCallBLL();
+        BCallBLL cBll = new BCallBLL();
         List<TWindowBusinessModel> wbList;
         Client client = new Client();
         Hotkey hotkey;
@@ -34,9 +34,9 @@ namespace CallClient
         List<TWindowBusinessModel> windowBusys;//窗口业务
         List<TWindowBusinessModel> windowBusyGreens;//绿色通道
         TWindowModel windowModel;
-        TCallStateBLL csBll = new TCallStateBLL();
-        TCallStateModel stateModel;
-        List<TQueueModel> qList;
+        FCallStateBLL csBll = new FCallStateBLL();
+        FCallStateModel stateModel;
+        List<BQueueModel> qList;
         string userId = "";
         public frmMain()
         {
@@ -80,8 +80,15 @@ namespace CallClient
                 Application.ExitThread();
                 return;
             }
-            qList = new List<TQueueModel>();
+            qList = new List<BQueueModel>();
             windowModel = wBll.GetModelList().Where(w => w.State == "1" && w.Number == windowNo).FirstOrDefault();
+            if (windowModel == null)
+            {
+                frmConfig frm = new frmConfig();
+                frm.ShowDialog();
+                Application.ExitThread();
+                return;
+            }
             wbList = wbBll.GetModelList();
             baList = baBll.GetModelList();
             windowBusys = new List<TWindowBusinessModel>();
@@ -313,10 +320,10 @@ namespace CallClient
             {
                 LockAction.RunWindowLock(windowNo, () =>
                 {
-                    stateModel = csBll.GetModel(windowNo);
+                    stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
                     {
-                        stateModel = new TCallStateModel();
+                        stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
                         csBll.Insert(stateModel);
@@ -334,13 +341,13 @@ namespace CallClient
                             var model = cBll.CallNo(windowBusys, windowBusyGreens, windowNo, userId);
                             if (model != null)
                             {
-                                stateModel.callId = model.id;
+                                stateModel.callId = model.ID;
                                 var callString = "请" + model.ticketNumber + "号到 " + windowNo + "号窗口办理 ";
                                 client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = windowNo, AreaNo = windowModel.AreaName.ToString(), IsLEDMessage = true, IsSoundMessage = true });
                                 client.SendMessage(new WeChatMessage() { ID = model.qId.ToString() });
                                 stateModel.workState = (int)WorkState.Call;
                                 stateModel.ticketNo = model.ticketNumber;
-                                stateModel.callId = model.id;
+                                stateModel.callId = model.ID;
                                 stateModel.reCallTimes = 0;
                                 csBll.Update(stateModel);
                                 this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
@@ -363,7 +370,7 @@ namespace CallClient
             {
                 LockAction.RunWindowLock(windowNo, () =>
                 {
-                    stateModel = csBll.GetModel(windowNo);
+                    stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
                     {
                         return;
@@ -408,10 +415,10 @@ namespace CallClient
             {
                 LockAction.RunWindowLock(windowNo, () =>
                 {
-                    stateModel = csBll.GetModel(windowNo);
+                    stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
                     {
-                        stateModel = new TCallStateModel();
+                        stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
                         csBll.Insert(stateModel);
@@ -432,7 +439,6 @@ namespace CallClient
                                 return;
                             }
                             model.state = 1;
-                            model.sysFlag = 1;
                             cBll.Update(model);
                             stateModel.workState = (int)WorkState.Evaluate;
                             //stateModel.callId = 0;
@@ -476,7 +482,7 @@ namespace CallClient
             {
                 LockAction.RunWindowLock(windowNo, () =>
                 {
-                    stateModel = csBll.GetModel(windowNo);
+                    stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
                     {
                         return;
@@ -498,7 +504,6 @@ namespace CallClient
                             }
                             string mess = model.ticketNumber + "号已弃号。";
                             model.state = -1;
-                            model.sysFlag = 1;
                             cBll.Update(model);
                             stateModel.workState = (int)WorkState.Evaluate;
                             stateModel.callId = 0;
@@ -524,10 +529,10 @@ namespace CallClient
             {
                 LockAction.RunWindowLock(windowNo, () =>
                 {
-                    stateModel = csBll.GetModel(windowNo);
+                    stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
                     {
-                        stateModel = new TCallStateModel();
+                        stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
                         csBll.Insert(stateModel);
@@ -552,10 +557,10 @@ namespace CallClient
             {
                 LockAction.RunWindowLock(windowNo, () =>
                 {
-                    stateModel = csBll.GetModel(windowNo);
+                    stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
                     {
-                        stateModel = new TCallStateModel();
+                        stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
                         csBll.Insert(stateModel);
@@ -596,10 +601,10 @@ namespace CallClient
             {
                 LockAction.RunWindowLock(windowNo, () =>
                 {
-                    stateModel = csBll.GetModel(windowNo);
+                    stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
                     {
-                        stateModel = new TCallStateModel();
+                        stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
                         csBll.Insert(stateModel);
@@ -617,15 +622,13 @@ namespace CallClient
                         {
                             return;
                         }
-
                         model.state = 3;
-                        model.sysFlag = 1;
                         cBll.Update(model);
                         var callString = model.ticketNumber + "号已挂起";
                         this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
                         //SendWait(adress);
                         stateModel.workState = (int)WorkState.Defalt;
-                        stateModel.hangId = model.id;
+                        stateModel.hangId = model.ID;
                         stateModel.callId = 0;
                         stateModel.ticketNo = "";
                         stateModel.reCallTimes = 0;
@@ -642,7 +645,7 @@ namespace CallClient
             {
                 LockAction.RunWindowLock(windowNo, () =>
                 {
-                    stateModel = csBll.GetModel(windowNo);
+                    stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
                     {
                         return;
@@ -670,7 +673,6 @@ namespace CallClient
                             }
                         }
                         model.state = 0;
-                        model.sysFlag = 1;
                         cBll.Update(model);
                         var callString = model.ticketNumber + "号回呼";
                         client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = windowNo, AreaNo = windowModel.AreaName.ToString(), IsLEDMessage = true, IsSoundMessage = true });
@@ -678,7 +680,7 @@ namespace CallClient
                         //SendTicket(adress, wHang[adress].ticketNumber.Substring(wHang[adress].ticketNumber.Length - 3, 3));
                         stateModel.workState = (int)WorkState.Call;
                         stateModel.ticketNo = model.ticketNumber;
-                        stateModel.callId = model.id;
+                        stateModel.callId = model.ID;
                         stateModel.reCallTimes = 0;
                         stateModel.hangId = 0;
                         csBll.Update(stateModel);
@@ -768,7 +770,6 @@ namespace CallClient
                 oprateClassifyType = otype,
                 oprateTime = DateTime.Now,
                 oprateLog = text,
-                sysFlag = 0
             });
         }
 
@@ -781,9 +782,9 @@ namespace CallClient
         void RefreshInfo()
         {
             this.txtWindow.Text = windowName;
-            this.lblWindow.Text = windowName;
+            this.lblWindow.Text = windowNo;
             this.txtUserCode.Text = userId;
-            stateModel = csBll.GetModel(windowNo);
+            stateModel = csBll.GetModelByWindowNo(windowNo);
             if (stateModel != null)
             {
                 this.txtTicket.Text = stateModel.workState == (int)WorkState.Call ? stateModel.ticketNo : "";
@@ -803,7 +804,7 @@ namespace CallClient
             this.txtAlready.Text = list2.Count.ToString();
             foreach (var l in list.OrderByDescending(o => o.ticketTime).ToList())
             {
-                if (qList.FirstOrDefault(q => q.id == l.id) == null)
+                if (qList.FirstOrDefault(q => q.ID == l.ID) == null)
                 {
                     frmMsg frm = new frmMsg();
                     frm.Ticket = l.qNumber;
@@ -838,7 +839,7 @@ namespace CallClient
         {
             if (DialogResult.OK == MessageBox.Show("确定对当前窗口所有业务的排队票进行批量弃号？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question))
             {
-                stateModel = csBll.GetModel(windowNo);
+                stateModel = csBll.GetModelByWindowNo(windowNo);
                 if (stateModel != null)
                 {
                     stateModel.callId = 0;

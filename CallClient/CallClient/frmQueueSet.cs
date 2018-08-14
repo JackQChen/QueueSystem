@@ -15,7 +15,7 @@ namespace CallClient
     {
         List<TWindowModel> wList;
         TWindowBLL wBll = new TWindowBLL();
-        TCallBLL cBll = new TCallBLL();
+        BCallBLL cBll = new BCallBLL();
         public frmQueueSet()
         {
             InitializeComponent();
@@ -51,9 +51,8 @@ namespace CallClient
         private void btnGiveUp_Click(object sender, EventArgs e)
         {
             object item = listView1.SelectedItems[0].Tag;
-            var call = item as TCallModel;
+            var call = item as BCallModel;
             call.state = -1;
-            call.sysFlag = 1;
             cBll.Update(call);
             btnQuery_Click(null, null);
         }
@@ -61,9 +60,8 @@ namespace CallClient
         private void btnFinish_Click(object sender, EventArgs e)
         {
             object item = listView1.SelectedItems[0].Tag;
-            var call = item as TCallModel;
+            var call = item as BCallModel;
             call.state = 1;
-            call.sysFlag = 1;
             cBll.Update(call);
             btnQuery_Click(null, null);
         }

@@ -42,6 +42,8 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel4 = new CustomSkin.Windows.Forms.Panel();
+            this.txtUserCode = new CustomSkin.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblWindow = new System.Windows.Forms.Label();
             this.txtAlready = new CustomSkin.Windows.Forms.TextBox();
@@ -66,8 +68,6 @@
             this.btnReCall = new CustomSkin.Windows.Forms.Button();
             this.btnEv = new CustomSkin.Windows.Forms.Button();
             this.btnCance = new CustomSkin.Windows.Forms.Button();
-            this.txtUserCode = new CustomSkin.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -160,10 +160,10 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listView1.Location = new System.Drawing.Point(265, 15);
+            this.listView1.Location = new System.Drawing.Point(274, 4);
             this.listView1.Margin = new System.Windows.Forms.Padding(4);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(340, 326);
+            this.listView1.Size = new System.Drawing.Size(336, 352);
             this.listView1.TabIndex = 8;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -195,8 +195,32 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(265, 360);
+            this.panel4.Size = new System.Drawing.Size(272, 360);
             this.panel4.TabIndex = 0;
+            // 
+            // txtUserCode
+            // 
+            this.txtUserCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtUserCode.Font = new System.Drawing.Font("宋体", 15F);
+            this.txtUserCode.Location = new System.Drawing.Point(118, 318);
+            this.txtUserCode.Margin = new System.Windows.Forms.Padding(4);
+            this.txtUserCode.Name = "txtUserCode";
+            this.txtUserCode.ReadOnly = true;
+            this.txtUserCode.Size = new System.Drawing.Size(131, 30);
+            this.txtUserCode.TabIndex = 35;
+            this.txtUserCode.WatermarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.txtUserCode.WatermarkText = null;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Location = new System.Drawing.Point(1, 324);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(127, 16);
+            this.label7.TabIndex = 34;
+            this.label7.Text = "当前用户编号：";
             // 
             // label1
             // 
@@ -217,9 +241,9 @@
             this.lblWindow.Font = new System.Drawing.Font("黑体", 50F, System.Drawing.FontStyle.Bold);
             this.lblWindow.Location = new System.Drawing.Point(117, 15);
             this.lblWindow.Name = "lblWindow";
-            this.lblWindow.Size = new System.Drawing.Size(142, 70);
+            this.lblWindow.Size = new System.Drawing.Size(148, 70);
             this.lblWindow.TabIndex = 32;
-            this.lblWindow.Text = "--";
+            this.lblWindow.Text = "---";
             this.lblWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txtAlready
@@ -514,30 +538,6 @@
             this.btnCance.UseVisualStyleBackColor = true;
             this.btnCance.Click += new System.EventHandler(this.btnCance_Click);
             // 
-            // txtUserCode
-            // 
-            this.txtUserCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtUserCode.Font = new System.Drawing.Font("宋体", 15F);
-            this.txtUserCode.Location = new System.Drawing.Point(118, 318);
-            this.txtUserCode.Margin = new System.Windows.Forms.Padding(4);
-            this.txtUserCode.Name = "txtUserCode";
-            this.txtUserCode.ReadOnly = true;
-            this.txtUserCode.Size = new System.Drawing.Size(131, 30);
-            this.txtUserCode.TabIndex = 35;
-            this.txtUserCode.WatermarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
-            this.txtUserCode.WatermarkText = null;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(1, 324);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(127, 16);
-            this.label7.TabIndex = 34;
-            this.label7.Text = "当前用户编号：";
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -556,7 +556,6 @@
             this.SkinButtonVisible = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "叫号系统";
-            this.TitleColor = System.Drawing.Color.White;
             this.TitleStyle = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);

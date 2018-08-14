@@ -132,5 +132,10 @@ namespace CallClient
             if (window != null)
                 cmbSelect.SelectedValue = window.Number;
         }
+
+        private void cmbSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

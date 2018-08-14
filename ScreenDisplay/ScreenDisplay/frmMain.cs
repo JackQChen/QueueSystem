@@ -20,8 +20,8 @@ namespace ScreenDisplay
         private string messInfo = System.Configuration.ConfigurationManager.AppSettings["MsgInfo"]; //滚动字幕
         private string msgErrorInfo = System.Configuration.ConfigurationManager.AppSettings["MsgErrorInfo"];
         private int isShowError = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["IsShowError"]);
-        private int areaNo = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["AreaNo"]);
-        private string areaList = System.Configuration.ConfigurationManager.AppSettings["AreaNo"];
+        private int areaNo = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["WinAreaNo"]);
+        private string areaList = System.Configuration.ConfigurationManager.AppSettings["WinAreaNo"];
         private int interval = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["Interval"]);
         private int distance = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["Distance"]);
         private int rowCount = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["RowCount"]);
@@ -45,7 +45,7 @@ namespace ScreenDisplay
         private Color c;//背景颜色
         private PointF p;  //绘制文本的左上角
         private int ScreenWidth = 1080;
-        private TCallBLL cBll = new TCallBLL();
+        private BCallBLL cBll = new BCallBLL();
         private Color main;
         private Color green;// System.Drawing.Color.FromArgb(136, 240, 146);
         private Color gray;//= System.Drawing.Color.FromArgb(61, 60, 60);
@@ -62,7 +62,7 @@ namespace ScreenDisplay
         List<TBusinessAttributeModel> baList = new List<TBusinessAttributeModel>();//
         TWindowBusinessBLL wbBll = new TWindowBusinessBLL();
         List<TWindowBusinessModel> wbList = new List<TWindowBusinessModel>();
-        TQueueBLL qBll = new TQueueBLL();
+        BQueueBLL qBll = new BQueueBLL();
         string[] areaStrList;
         public frmMain()
         {
@@ -107,7 +107,7 @@ namespace ScreenDisplay
         {
             List<msInfo> mList = new List<msInfo>();
             #region 正式数据
-            var vList = new List<TCallModel>();
+            var vList = new List<BCallModel>();
             try
             {
                 vList = cBll.ScreenShowByArea(areaList).Take(rowCount).ToList();
@@ -132,10 +132,10 @@ namespace ScreenDisplay
             foreach (var v in vList)
             {
                 var bam = baList.Where(b => b.busiSeq == v.busiSeq && b.unitSeq == v.unitSeq).FirstOrDefault();
-                TQueueModel queue = null;
+                BQueueModel queue = null;
                 try
                 {
-                    queue = qBll.GetModel(q => q.id == v.qId);
+                    queue = qBll.GetModel(q => q.ID == v.qId);
                 }
                 catch (Exception ex)
                 {

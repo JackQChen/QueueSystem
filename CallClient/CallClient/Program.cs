@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using System.Runtime.Remoting;
 
 namespace CallClient
 {
@@ -44,6 +45,8 @@ namespace CallClient
                 string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
+                var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "Client.xml";
+                RemotingConfiguration.Configure(remotingConfigPath, false);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);

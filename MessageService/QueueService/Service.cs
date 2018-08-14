@@ -11,7 +11,7 @@ namespace QueueService
     public class Service : TcpServer<ExtraData>, IServiceUI
     {
         Process process;
-        internal Extra<ClientInfo> clientList = new Extra<ClientInfo>();
+        internal Extra<IntPtr, ClientInfo> clientList = new Extra<IntPtr, ClientInfo>();
         internal bool clientListChanged = false;
         JavaScriptSerializer convert = new JavaScriptSerializer();
 

@@ -25,6 +25,16 @@ namespace DAL
         {
         }
 
+        public TWindowBusinessDAL(DbContext db)
+            : base(db)
+        {
+        }
+
+        public TWindowBusinessDAL(DbContext db, string areaNo)
+            : base(db, areaNo)
+        {
+        }
+
         public object GetGridBusiData(int winId)
         {
             var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
