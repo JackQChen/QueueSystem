@@ -123,6 +123,7 @@
     <Compile Include="Areas\SystemConfig\Controllers\TBusinessController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TLedControllerController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TLedWindowController.cs" />
+    <Compile Include="Areas\SystemConfig\Controllers\TScreenConfigController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TUnitController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TUserController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TWindowAreaController.cs" />
@@ -287,6 +288,8 @@
     </Content>
     <Content Include="Areas\SystemConfig\Views\TLedWindow\Form.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TLedWindow\Index.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TScreenConfig\Form.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TScreenConfig\Index.cshtml" />
     <None Include="Content\font\font.woff2" />
     <None Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Views\Home\Index.cshtml" />

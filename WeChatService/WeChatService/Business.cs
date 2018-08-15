@@ -34,10 +34,17 @@ namespace WeChatService
 
         void GetAttribute()
         {
-            baList = new TBusinessAttributeBLL().GetModelList();
-            wbList = new TWindowBusinessBLL().GetModelList();
-            waList = new TWindowAreaBLL().GetModelList();
-            wList = new TWindowBLL().GetModelList();
+            try
+            {
+                baList = new TBusinessAttributeBLL().GetModelList();
+                wbList = new TWindowBusinessBLL().GetModelList();
+                waList = new TWindowAreaBLL().GetModelList();
+                wList = new TWindowBLL().GetModelList();
+            }
+            catch (Exception ex)
+            {
+                WriterErrorLog("获取基础数据错误，请核查网络：" + ex.Message);
+            }
         }
 
         //验证是否符合取票条件

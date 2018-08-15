@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script>
+    function submitForm(callback) {
+        var config = {
+            "winArea": $('form [name=winArea]').val(),
+            "scrollText": $('form [name=scrollText]').val(),
+            "scrollSpeed": $('form [name=scrollSpeed]').val(),
+            "lineHeight": $('form [name=lineHeight]').val(),
+            "fontSize": $('form [name=fontSize]').val(),
+            "ticketColor": $('form [name=ticketColor]').val(),
+            "winColor": $('form [name=winColor]').val(),
+            "otherColor": $('form [name=otherColor]').val(),
+        };
+        $('form [name=Config]').val(JSON.stringify(config));
+        $.submitForm({
+            url: "SubmitForm",
+            data: $('form').serializeForm(),
+            callback: callback
+        });
+    }
+</script>
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" style="margin-top: 30px">
+            <input  type="hidden" name= "ID" value="@Model.ID" />
+            <input  type="hidden" name= "AreaNo" value="@Model.AreaNo" />
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    ID
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input id="txtId" readonly type="text" class="col-xs-10 col-sm-10" />
+                    <script>
+                        var id = $("form input[name='ID']").val();
+                        if (id == -1)
+                            $("#txtId").val("新增");
+                        else
+                            $("#txtId").val(id);
+                    </script>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    名称
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="Name" value="@Model.Name" autocomplete="off" class="col-xs-10 col-sm-10"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    IP
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="IP" value="@Model.IP"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <input  type="hidden" name= "Config" value="@Model.Config" />
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    窗口区域
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="winArea" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    滚动文本
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="scrollText" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    滚动速度
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="scrollSpeed" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+                <label class="col-sm-2 col-xs-2" style="text-align: right">
+                    行高
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="lineHeight" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    字体大小
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="fontSize" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+                <label class="col-sm-2 col-xs-2">
+                    票号颜色
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="ticketColor" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    窗口号颜色
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="winColor" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+                <label class="col-sm-2 col-xs-2">
+                    其他颜色
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="otherColor" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var configString = $('form [name=Config]').val();
+            if (configString == "")
+                return;
+            var config = JSON.parse(configString);
+            $('form [name=winArea]').val(config.winArea);
+            $('form [name=scrollText]').val(config.scrollText);
+            $('form [name=scrollSpeed]').val(config.scrollSpeed);
+            $('form [name=lineHeight]').val(config.lineHeight);
+            $('form [name=fontSize]').val(config.fontSize);
+            $('form [name=ticketColor]').val(config.ticketColor);
+            $('form [name=winColor]').val(config.winColor);
+            $('form [name=otherColor]').val(config.otherColor);
+        })();
+    </script>
+</div>

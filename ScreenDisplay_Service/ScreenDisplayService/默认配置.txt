@@ -1,0 +1,10 @@
+{
+    "winArea": "0,5",
+    "scrollText": "Çë1001ºÅµ½1ºÅ´°¿Ú",
+	"scrollSpeed": 10,
+	"lineHeight": 15,
+	"fontSize":12,
+	"ticketColor":"#FFFFFF",
+	"winColor":"#FFFFFF",
+	"OtherColor":"#FFFFFF"
+}

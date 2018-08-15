@@ -10,11 +10,11 @@ namespace DAL
     public class DALBase<T> : AbstractDALBase<T> where T : ModelBase
     {
         protected DbContext db;
-        protected string areaNo;
+        protected string connName = "MySQL", areaNo;
 
         public DALBase()
         {
-            this.db = Factory.Instance.CreateDbContext();
+            this.db = Factory.Instance.CreateDbContext(connName);
             this.areaNo = ConfigurationManager.AppSettings["AreaNo"];
         }
 
@@ -22,12 +22,14 @@ namespace DAL
         {
             this.db = Factory.Instance.CreateDbContext(connName);
             this.areaNo = ConfigurationManager.AppSettings["AreaNo"];
+            this.connName = connName;
         }
 
         public DALBase(string connName, string areaNo)
         {
             this.db = Factory.Instance.CreateDbContext(connName);
             this.areaNo = areaNo;
+            this.connName = connName;
         }
 
         public DALBase(DbContext db)
@@ -92,16 +94,42 @@ namespace DAL
 
         public override int GetMaxId()
         {
-            var maxId = this.db.Session.ExecuteScalar(string.Format(
-                //"select max(convert(int,{0}))+1 from {1}",   //sql
-                "select max(cast({0} as SIGNED INTEGER))+1 from {1} where areaNo={2}",  //mysql
-                "ID",
-                tableName,
-                this.areaNo), null).ToString();
-            if (string.IsNullOrEmpty(maxId))
-                return 1;
-            else
-                return Convert.ToInt32(maxId);
+            int maxId = -1;
+            using (var maxDb = Factory.Instance.CreateDbContext(this.connName))
+            {
+                try
+                {
+                    var paraList = new DbParam[]{
+                    new DbParam("areaNo",this.areaNo),
+                    new DbParam("tableName",this.tableName),
+                    new DbParam("maxId", null)
+                    };
+                    maxDb.Session.CommandTimeout = 60;
+                    maxDb.Session.BeginTransaction();
+                    var maxObj = maxDb.Session.ExecuteScalar("select maxId+1 from f_maxid where areaNo=@areaNo and tableName=@tableName FOR UPDATE;", paraList);
+                    if (maxObj == null)
+                    {
+                        maxId = 1;
+                        paraList[2].Value = maxId;
+                        var insertSql = "insert into f_maxid(areaNo,tableName,maxId) values(@areaNo,@tableName,@maxId) ";
+                        maxDb.Session.ExecuteNonQuery(insertSql, paraList);
+                    }
+                    else
+                    {
+                        maxId = Convert.ToInt32(maxObj);
+                        paraList[2].Value = maxId;
+                        var updateSql = "update f_maxid set maxId=@maxId where areaNo=@areaNo and tableName=@tableName";
+                        maxDb.Session.ExecuteNonQuery(updateSql, paraList);
+                    }
+                    maxDb.Session.CommitTransaction();
+                    return maxId;
+                }
+                catch (Exception ex)
+                {
+                    maxDb.Session.RollbackTransaction();
+                    throw ex;
+                }
+            }
         }
 
         #endregion

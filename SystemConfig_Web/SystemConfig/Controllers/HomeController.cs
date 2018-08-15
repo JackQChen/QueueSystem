@@ -31,6 +31,7 @@ namespace SystemConfig.Controllers
                 dicMenu.Add("TBusinessAttribute", "业务属性扩展");
                 dicMenu.Add("TLedController", "LED控制卡维护");
                 dicMenu.Add("TLedWindow", "LED屏幕维护");
+                dicMenu.Add("TScreenConfig", "综合屏配置");
             }
             return View(dicMenu);
         }

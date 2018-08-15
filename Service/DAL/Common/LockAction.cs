@@ -13,7 +13,7 @@ namespace DAL
 
         public static void Run(FLockKey key, Action action)
         {
-            using (var db = Factory.Instance.CreateDbContext())
+            using (var db = Factory.Instance.CreateDbContext("MySQL"))
             {
                 try
                 {
@@ -33,9 +33,9 @@ namespace DAL
             }
         }
 
-        public static void RunWindowLock(string  windowNo, Action action)
+        public static void RunWindowLock(string windowNo, Action action)
         {
-            using (var db = Factory.Instance.CreateDbContext())
+            using (var db = Factory.Instance.CreateDbContext("MySQL"))
             {
                 try
                 {

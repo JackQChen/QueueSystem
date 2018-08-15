@@ -227,10 +227,24 @@ namespace QueueClient
                 thread.IsBackground = true;
                 thread.Start();
             }
-            new AsyncWork(this).Start(act =>
+            AsyncGetBasic();
+        }
+
+        void AsyncGetBasic()
+        {
+            try
             {
-                GetBasic();
-            }, AsyncType.Loading);
+                new AsyncWork(this).Start(act =>
+                {
+                    GetBasic();
+                }, AsyncType.Loading);
+            }
+            catch (Exception ex)
+            {
+                frmMsg frm = new frmMsg();
+                frm.msgInfo = "数据更新失败，请核查网络！";
+                frm.ShowDialog();
+            }
         }
 
         #region action
@@ -1121,10 +1135,7 @@ namespace QueueClient
         #region 更新基础数据
         private void timer1_Tick(object sender, EventArgs e)
         {
-            new AsyncWork(this).Start(act =>
-            {
-                GetBasic();
-            }, AsyncType.Loading);
+            AsyncGetBasic();
         }
         private void GetBasic()
         {
@@ -1324,7 +1335,7 @@ namespace QueueClient
             row["ticketNumber"] = model.ticketNumber;
             row["flag"] = flag;
             row["cardId"] = string.IsNullOrEmpty(model.idCard) ? "" : model.idCard.Length > 6 ? model.idCard.Substring(model.idCard.Length - 6, 6) : model.idCard;
-            row["reserveSeq"] = model.reserveSeq;
+            //row["reserveSeq"] = model.reserveSeq;
             row["vip"] = vip;
             table.Rows.Add(row);
             return table;

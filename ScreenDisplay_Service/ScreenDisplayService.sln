@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenDisplayService", "ScreenDisplayService\ScreenDisplayService.csproj", "{6AB56DA0-8AD4-4C25-99E0-D0B5AB8FB3AA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{0956461D-DEA8-452D-843A-12F8B49DFE46}"
+	ProjectSection(SolutionItems) = preProject
+		Doc\index.html = Doc\index.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

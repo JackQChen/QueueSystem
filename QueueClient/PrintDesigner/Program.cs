@@ -25,6 +25,8 @@ namespace PrintDesigner
                 new DataColumn ("ticketNumber",typeof(string)),
                 new DataColumn ("reserveSeq",typeof(string)),
                 new DataColumn ("isGetCard",typeof(string)),
+                  new DataColumn ("flag",typeof(string)),
+                     new DataColumn ("cardId",typeof(string)),
             });
             DataRow row = table.NewRow();
             row["area"] = "测试地区";
@@ -35,6 +37,8 @@ namespace PrintDesigner
             row["busyName"] = "测试业务";
             row["ticketNumber"] = "C008";
             row["reserveSeq"] = "002";
+            row["flag"] = "补打";
+            row["cardId"] = "622723198702160719";
             table.Rows.Add(row);
             PrintManager print = new PrintManager();
             PrintManager.CanDesign = true;

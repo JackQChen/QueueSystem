@@ -19,16 +19,17 @@ namespace DAL
 
         public DbContext CreateDbContext()
         {
-            return this.CreateDbContext("MySQL", ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString);
+            return this.CreateDbContext("MySQL");
         }
 
         public DbContext CreateDbContext(string connName)
         {
-            return this.CreateDbContext("MySQL", ConfigurationManager.ConnectionStrings[connName].ConnectionString);
+            return this.CreateDbContext("MySQL", connName);
         }
 
-        public DbContext CreateDbContext(string dbType, string connString)
+        public DbContext CreateDbContext(string dbType, string connName)
         {
+            var connString = ConfigurationManager.ConnectionStrings[connName].ConnectionString;
             switch (dbType)
             {
                 case "MySQL":

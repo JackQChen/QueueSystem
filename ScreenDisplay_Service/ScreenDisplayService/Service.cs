@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
-using MessageLib;
 using BLL;
-using System.Linq;
-using System.Collections.Generic;
+using MessageLib;
 using Model;
 
 namespace ScreenDisplayService
@@ -26,6 +27,7 @@ namespace ScreenDisplayService
         {
             this.OnAccept += new TcpServerEvent.OnAcceptEventHandler(Service_OnAccept);
             this.OnClose += new TcpServerEvent.OnCloseEventHandler(Service_OnClose);
+            this.OnWSMessageHeader += new WebSocketEvent.OnWSMessageHeaderEventHandler(Service_OnWSMessageHeader);
             this.OnWSMessageBody += new WebSocketEvent.OnWSMessageBodyEventHandler(Service_OnWSMessageBody);
             Task.Factory.StartNew(() =>
             {
@@ -69,6 +71,13 @@ namespace ScreenDisplayService
             return HandleResult.Ignore;
         }
 
+        HandleResult Service_OnWSMessageHeader(IntPtr connId, bool final, byte reserved, byte operationCode, byte[] mask, ulong bodyLength)
+        {
+            if (operationCode == 0x8)
+                this.Disconnect(connId);
+            return HandleResult.Ignore;
+        }
+
         HandleResult Service_OnWSMessageBody(IntPtr connId, byte[] data)
         {
             try
@@ -88,26 +97,36 @@ namespace ScreenDisplayService
                 var method = requestData.method.Trim().ToLower();
                 switch (method)
                 {
+                    case "gethtml":
+                        {
+                            var rData = new ResponseData
+                            {
+                                code = "0",
+                                result = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ScreenDisplay.html")
+                            };
+                            this.SendWSMessage(connId, rData.ToBytes());
+                        }
+                        break;
                     case "getconfig":
                         {
                             var rData = new ResponseData { code = "0", result = "" };
                             var ip = this.deviceList.Get(connId).IP;
-                            var config = screeList.Where(s => s.IP == ip).FirstOrDefault().Config;
-                            var param = convert.DeserializeObject(config);
-                            rData.result = param;
-                            var btQueueInfo = rData.ToBytes();
-                            this.SendWSMessage(connId, btQueueInfo);
+                            var config = screeList.Where(s => s.IP == ip).FirstOrDefault();
+                            if (config != null)
+                            {
+                                var param = convert.DeserializeObject(config.Config);
+                                rData.result = param;
+                                this.SendWSMessage(connId, rData.ToBytes());
+                            }
                         }
                         break;
                     case "getqueuelist":
                         {
                             var rData = new ResponseData { code = "0", result = "" };
-                            var ip = this.deviceList.Get(connId).IP;
-                            var config = screeList.Where(s => s.IP == ip).FirstOrDefault().Config;
-                            var param = convert.DeserializeObject(config) as Dictionary<string, object>;
-                            var winAreaNo = param["winArea"].ToString();
-                            var arr = GetCallByArea(winAreaNo);
-                            rData.result = arr;
+                            //var param = convert.DeserializeObject(requestData.param) as Dictionary<string, object>;
+                            //var winAreaNo = param["winArea"].ToString();
+                            var winAreaNo = "1";
+                            rData.result = GetCallByArea(winAreaNo);
                             var btQueueInfo = rData.ToBytes();
                             this.SendWSMessage(connId, btQueueInfo);
                         }
