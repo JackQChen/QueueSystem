@@ -33,5 +33,10 @@ namespace ScreenDisplayService
             }
             this.service.deviceList.Changed = false;
         }
+
+        private void btnRefreshConfig_Click(object sender, EventArgs e)
+        {
+            this.service.RefreshConfig();
+        }
     }
 }

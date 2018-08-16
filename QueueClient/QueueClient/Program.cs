@@ -8,6 +8,7 @@ using System.IO;
 using ReportManager;
 using Register;
 using System.Runtime.Remoting;
+using System.Configuration;
 
 namespace QueueClient
 {
@@ -21,6 +22,7 @@ namespace QueueClient
         [STAThread]
         static void Main(string[] args)
         {
+            var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "RemotingConfig.xml";
             var updatePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUpdate.exe";
             if (args.Length == 0)
             {
@@ -38,14 +40,18 @@ namespace QueueClient
                     File.Delete(updatePath);
                     File.Move(newUpdatePath, updatePath);
                 }
+                //有新的更新内容
+                if (bool.Parse(args[1]))
+                {
+                    var config = File.ReadAllText(remotingConfigPath).Replace("0.0.0.0:0000", ConfigurationManager.AppSettings["RemotingConfig"]);
+                    File.WriteAllText(remotingConfigPath, config);
+                }
             }
             PrintManager.ShowProgress = false;
             string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
-            //var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "Client.xml";
-            //RemotingConfiguration.Configure(remotingConfigPath, false);
-
+            RemotingConfiguration.Configure(remotingConfigPath, false);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             Application.Run(new frmMain());
         }

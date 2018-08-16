@@ -33,10 +33,10 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnDisConn = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnRefreshConfig = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -47,7 +47,6 @@
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
-            this.columnHeader4,
             this.columnHeader5});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
@@ -70,38 +69,44 @@
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "窗口号";
+            this.columnHeader3.Text = "设备名称";
             this.columnHeader3.Width = 100;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "用户编号";
-            this.columnHeader4.Width = 100;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "连接时间";
             this.columnHeader5.Width = 140;
             // 
-            // button1
+            // btnDisConn
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(422, 14);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "下线";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnDisConn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDisConn.Enabled = false;
+            this.btnDisConn.Location = new System.Drawing.Point(422, 14);
+            this.btnDisConn.Name = "btnDisConn";
+            this.btnDisConn.Size = new System.Drawing.Size(75, 23);
+            this.btnDisConn.TabIndex = 1;
+            this.btnDisConn.Text = "下线";
+            this.btnDisConn.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btnRefreshConfig);
+            this.panel1.Controls.Add(this.btnDisConn);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 312);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(534, 50);
             this.panel1.TabIndex = 2;
+            // 
+            // btnRefreshConfig
+            // 
+            this.btnRefreshConfig.Location = new System.Drawing.Point(341, 14);
+            this.btnRefreshConfig.Name = "btnRefreshConfig";
+            this.btnRefreshConfig.Size = new System.Drawing.Size(75, 23);
+            this.btnRefreshConfig.TabIndex = 2;
+            this.btnRefreshConfig.Text = "刷新配置";
+            this.btnRefreshConfig.UseVisualStyleBackColor = true;
+            this.btnRefreshConfig.Click += new System.EventHandler(this.btnRefreshConfig_Click);
             // 
             // timer1
             // 
@@ -133,10 +138,10 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnDisConn;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button btnRefreshConfig;
     }
 }

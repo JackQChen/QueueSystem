@@ -33,7 +33,28 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         {
             var model = this.bll.GetModel(id);
             if (model == null)
-                model = new TScreenConfigModel() { ID = -1 };
+            {
+                model = new TScreenConfigModel()
+                {
+                    ID = -1,
+                    Config = JsonConvert.SerializeObject(new
+                    {
+                        winArea = "1",
+                        columnSize = "10%,25%,10%,10%,45%",
+                        scrollText = "取号后请在休息区等候，注意留意电视大屏和语音叫号！",
+                        scrollSpeed = 10,
+                        scrollColor = "#88F092",
+                        scrollSize = 100,
+                        lineHeight = 50,
+                        fontSize = 80,
+                        ticketColor = "#FFFF00",
+                        winColor = "#88F092",
+                        otherColor = "#EEEEEE",
+                        oddBackColor = "#3D3C3C",
+                        evenBackColor = "#207EC0"
+                    })
+                };
+            }
             return View(model);
         }
 

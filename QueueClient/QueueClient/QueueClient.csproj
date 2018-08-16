@@ -113,7 +113,6 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -128,6 +127,10 @@
     <Compile Include="function\BusyType.cs" />
     <Compile Include="function\CardIdentity.cs" />
     <Compile Include="function\CVRSDK.cs" />
+    <Compile Include="uc\MouseAwareButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="function\WndProcHooker.cs" />
     <Compile Include="uc\ucEvaluateCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -330,6 +333,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\img\title.png" />
+    <Content Include="bin\Debug\RemotingConfig.xml" />
     <Content Include="bin\Debug\sdtapi.dll" />
     <Content Include="bin\Debug\termb.dll" />
     <Content Include="bin\Debug\TxPrnMod.dll" />

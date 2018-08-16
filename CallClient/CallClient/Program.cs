@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.Remoting;
+using System.Configuration;
 
 namespace CallClient
 {
@@ -14,6 +15,7 @@ namespace CallClient
         [STAThread]
         static void Main(string[] args)
         {
+            var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "RemotingConfig.xml";
             bool createdNew;
             Mutex instance = new Mutex(true, "CallClient", out createdNew);
             var ini = new OperateIni(Application.StartupPath + @"\WindowConfig.ini");
@@ -41,11 +43,16 @@ namespace CallClient
                         File.Delete(updatePath);
                         File.Move(newUpdatePath, updatePath);
                     }
+                    //有新的更新内容
+                    if (bool.Parse(args[1]))
+                    {
+                        var config = File.ReadAllText(remotingConfigPath).Replace("0.0.0.0:0000", ConfigurationManager.AppSettings["RemotingConfig"]);
+                        File.WriteAllText(remotingConfigPath, config);
+                    }
                 }
                 string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
-                var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "Client.xml";
                 RemotingConfiguration.Configure(remotingConfigPath, false);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);

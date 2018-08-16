@@ -44,6 +44,12 @@ namespace QueueClient
                 Work();
         }
 
+        private void pbWorking2_Click(object sender, EventArgs e)
+        {
+            if (Work != null)
+                Work();
+        }
+
         private void pbGetCard_Click(object sender, EventArgs e)
         {
             if (GetCard != null)
@@ -78,14 +84,10 @@ namespace QueueClient
             }
             else if (pic.Name == "pbWorking2")
             {
-                e.Graphics.DrawString("领证", fontMain, new SolidBrush(Color.White), 140, 60);
+                e.Graphics.DrawString("咨询", fontMain, new SolidBrush(Color.White), 140, 60);
             }
         }
 
-        private void pbWorking2_Click(object sender, EventArgs e)
-        {
-            if (GetCard != null)
-                GetCard();
-        }
+        
     }
 }

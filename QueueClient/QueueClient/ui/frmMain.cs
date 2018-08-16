@@ -13,15 +13,16 @@ using System.Configuration;
 using System.Collections;
 using System.Printing;
 using System.Linq.Expressions;
+using System.Xml;
 
 namespace QueueClient
 {
     public partial class frmMain : Form
     {
         #region
-        string TimeInterval = "";
-        string NumberRestriction = "";
-        string ClientName = "";
+        string ClientName = System.Configuration.ConfigurationManager.AppSettings["ClientName"];
+        string NumberRestriction = System.Configuration.ConfigurationManager.AppSettings["NumberRestriction"];
+        string TimeInterval = System.Configuration.ConfigurationManager.AppSettings["TimeInterval"];
         string ExitPwd = System.Configuration.ConfigurationManager.AppSettings["ExitPwd"];
         string ExitTime = System.Configuration.ConfigurationManager.AppSettings["ExitTime"];
         string EvaluateTime = System.Configuration.ConfigurationManager.AppSettings["Evaluate"];
@@ -69,7 +70,7 @@ namespace QueueClient
         Dictionary<string, int> ucTimer = new Dictionary<string, int>();
         #endregion
 
-        #region 构造函数，初始化，读卡
+        #region 构造函数，初始化
 
         public static void SetConfigValue(string key, string value)
         {
@@ -84,6 +85,36 @@ namespace QueueClient
             catch
             {
             }
+        }
+
+        //保留注释
+        public static void SaveAppSettingsMethod2(string key, string value)
+        {
+            XmlDocument xml = new XmlDocument();
+            string configPath = Application.ExecutablePath + ".config";
+            xml.Load(configPath);
+            XmlNodeList nodeList = xml.GetElementsByTagName("appSettings");
+            if (nodeList != null)
+            {
+                if (nodeList.Count >= 1)
+                {
+                    XmlNode node = nodeList[0];
+                    foreach (XmlNode item in node)
+                    {
+                        if (item.NodeType == XmlNodeType.Comment)
+                        {
+                            continue;
+                        }
+                        XmlAttribute xaKey = item.Attributes["key"];
+                        XmlAttribute xaValue = item.Attributes["value"];
+                        if (xaKey != null && xaValue != null && xaKey.Value.Equals(key))
+                        {
+                            xaValue.Value = value;
+                        }
+                    }
+                }
+            }
+            xml.Save(configPath);
         }
 
         protected override void WndProc(ref Message m)
@@ -200,32 +231,28 @@ namespace QueueClient
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            SetConfigValue("NumberRestriction", "200,200");
-            SetConfigValue("ClientName", "1号取票机");
-            SetConfigValue("FilterBusyStr", "出件");
-            SetConfigValue("OutCardUnitSeqNew", "3024");
-            SetConfigValue("OutCardBusySeqNew", "3724");
-            ClientName = System.Configuration.ConfigurationManager.AppSettings["ClientName"];
-            NumberRestriction = System.Configuration.ConfigurationManager.AppSettings["NumberRestriction"];
-            TimeInterval = System.Configuration.ConfigurationManager.AppSettings["TimeInterval"];
-            int iPort;
-            for (iPort = 1001; iPort <= 1016; iPort++)
+            //SetConfigValue("NumberRestriction", "200,200");
+            if (CanNotUseCard == 0)
             {
-                iRetUSB = CVRSDK.CVR_InitComm(iPort);
-                if (iRetUSB == 1)
-                    break;
-            }
-            if (iRetUSB != 1)
-            {
-                frmMsg frm = new frmMsg();
-                frm.msgInfo = "身份证读卡器初始化失败！";
-                frm.ShowDialog();
-            }
-            else
-            {
-                thread = new Thread(new ThreadStart(ReadIDCard));
-                thread.IsBackground = true;
-                thread.Start();
+                int iPort;
+                for (iPort = 1001; iPort <= 1016; iPort++)
+                {
+                    iRetUSB = CVRSDK.CVR_InitComm(iPort);
+                    if (iRetUSB == 1)
+                        break;
+                }
+                if (iRetUSB != 1)
+                {
+                    frmMsg frm = new frmMsg();
+                    frm.msgInfo = "身份证读卡器初始化失败！";
+                    frm.ShowDialog();
+                }
+                else
+                {
+                    thread = new Thread(new ThreadStart(ReadIDCard));
+                    thread.IsBackground = true;
+                    thread.Start();
+                }
             }
             AsyncGetBasic();
         }
@@ -247,7 +274,9 @@ namespace QueueClient
             }
         }
 
-        #region action
+        #endregion
+
+        #region action 回调
 
         void pwd_Exit()
         {
@@ -677,7 +706,7 @@ namespace QueueClient
             return null;
         }
 
-        bool CheckLimit(string unitSeq, string busiSeq )
+        bool CheckLimit(string unitSeq, string busiSeq)
         {
             if (person != null && !string.IsNullOrEmpty(person.idcard))
             {
@@ -889,10 +918,6 @@ namespace QueueClient
         }
         #endregion
 
-        #endregion
-
-        #region 二级菜单
-
         #region 页面跳转 刷身份证 读身份证 ******** 入口
 
         /// <summary>
@@ -1062,7 +1087,7 @@ namespace QueueClient
             pageLocation = PageLocation.Main;
             person = new Person();
         }
-        
+
         //返回上一页面
         private void pbLastPage_Click(object sender, EventArgs e)
         {
@@ -1130,13 +1155,13 @@ namespace QueueClient
 
         #endregion
 
-        #endregion
-
         #region 更新基础数据
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             AsyncGetBasic();
         }
+
         private void GetBasic()
         {
             waList = waBll.GetModelList();
@@ -1289,6 +1314,7 @@ namespace QueueClient
             });
             Print(queue, area, windowStr, waitNo, "", isGreen);
         }
+
         //出票
         private void Print(BQueueModel model, string area, string windowStr, int wait, string flag, string vip)
         {
@@ -1309,6 +1335,7 @@ namespace QueueClient
                 frm.ShowDialog();
             }
         }
+
         //组织票数据
         private DataTable GetQueue(BQueueModel model, string area, string windowStr, int wait, string flag, string vip)
         {

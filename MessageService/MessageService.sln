@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueMessage", "QueueMessag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageClientTest", "MessageClientTest\MessageClientTest.csproj", "{08A9A22D-551D-45B1-AFA5-C60DCE4608AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageServer", "MessageServer\MessageServer.csproj", "{C65F6384-A1B3-4EF8-8617-283D76983262}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,16 @@ Global
 		{08A9A22D-551D-45B1-AFA5-C60DCE4608AF}.Release|Mixed Platforms.Build.0 = Release|x86
 		{08A9A22D-551D-45B1-AFA5-C60DCE4608AF}.Release|x86.ActiveCfg = Release|x86
 		{08A9A22D-551D-45B1-AFA5-C60DCE4608AF}.Release|x86.Build.0 = Release|x86
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C65F6384-A1B3-4EF8-8617-283D76983262}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

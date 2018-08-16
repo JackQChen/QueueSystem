@@ -33,8 +33,7 @@ namespace ScreenDisplayService
             {
                 while (true)
                 {
-                    wList = wBll.GetModelList();
-                    screeList = sBll.GetModelList();
+                    this.RefreshConfig();
                     Thread.Sleep(2 * 60 * 1000);
                 }
             });
@@ -46,6 +45,12 @@ namespace ScreenDisplayService
                     Thread.Sleep(1500);
                 }
             });
+        }
+
+        internal void RefreshConfig()
+        {
+            wList = wBll.GetModelList();
+            screeList = sBll.GetModelList();
         }
 
         HandleResult Service_OnAccept(TcpServer sender, IntPtr connId, IntPtr pClient)
@@ -101,6 +106,7 @@ namespace ScreenDisplayService
                         {
                             var rData = new ResponseData
                             {
+                                method = method,
                                 code = "0",
                                 result = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ScreenDisplay.html")
                             };
@@ -109,32 +115,40 @@ namespace ScreenDisplayService
                         break;
                     case "getconfig":
                         {
-                            var rData = new ResponseData { code = "0", result = "" };
-                            var ip = this.deviceList.Get(connId).IP;
+                            var rData = new ResponseData { code = "0", method = method, result = "" };
+                            var device = this.deviceList.Get(connId);
+                            var ip = device.IP;
                             var config = screeList.Where(s => s.IP == ip).FirstOrDefault();
                             if (config != null)
                             {
-                                var param = convert.DeserializeObject(config.Config);
-                                rData.result = param;
+                                device.DeviceName = config.Name;
+                                this.deviceList.Set(connId, device);
+                                rData.result = convert.DeserializeObject(config.Config);
+                                this.SendWSMessage(connId, rData.ToBytes());
+                            }
+                            else
+                            {
+                                device.DeviceName = "未配置的设备";
+                                this.deviceList.Set(connId, device);
+                                rData.code = "-1";
+                                rData.result = "未获取到该设备的配置内容";
                                 this.SendWSMessage(connId, rData.ToBytes());
                             }
                         }
                         break;
                     case "getqueuelist":
                         {
-                            var rData = new ResponseData { code = "0", result = "" };
-                            //var param = convert.DeserializeObject(requestData.param) as Dictionary<string, object>;
-                            //var winAreaNo = param["winArea"].ToString();
-                            var winAreaNo = "1";
-                            rData.result = GetCallByArea(winAreaNo);
-                            var btQueueInfo = rData.ToBytes();
-                            this.SendWSMessage(connId, btQueueInfo);
+                            var rData = new ResponseData { code = "0", method = method, result = "" };
+                            var param = requestData.param as Dictionary<string, object>;
+                            rData.result = GetCallByArea(param["winArea"].ToString());
+                            this.SendWSMessage(connId, rData.ToBytes());
                         }
                         break;
                     default:
                         {
                             var rData = new ResponseData
                             {
+                                method = method,
                                 code = "999",
                                 result = "未知指令"
                             };
@@ -155,7 +169,7 @@ namespace ScreenDisplayService
             string[] areaList = areas.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             var winList = wList.Where(q => areaList.Contains(q.AreaName.ToString())).Select(s => s.Number).ToList();
             var callList = aList.Where(q => winList.Contains(q.windowNumber)).ToList();
-            var arr = callList.Select(s => new { ticketNo = s.ticketNumber, winNo = s.windowNumber }).ToArray();
+            var arr = callList.OrderBy(o => o.handleTime).Select(s => new { ticketNo = s.ticketNumber, winNo = s.windowNumber }).ToArray();
             return arr;
         }
 

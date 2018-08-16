@@ -16,6 +16,7 @@ namespace LEDDisplay
         [STAThread]
         static void Main(string[] args)
         {
+            var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "RemotingConfig.xml";
             var updatePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUpdate.exe";
             if (args.Length == 0)
             {
@@ -33,15 +34,14 @@ namespace LEDDisplay
                     File.Delete(updatePath);
                     File.Move(newUpdatePath, updatePath);
                 }
-                //var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "RemotingConfig.xml";
                 //有新的更新内容
-                //if (bool.Parse(args[1]))
-                //{
-                //    var config = File.ReadAllText(remotingConfigPath).Replace("0.0.0.0:0000", ConfigurationManager.AppSettings["RemotingConfig"]);
-                //    File.WriteAllText(remotingConfigPath, config);
-                //}
-                //RemotingConfiguration.Configure(remotingConfigPath, false);
+                if (bool.Parse(args[1]))
+                {
+                    var config = File.ReadAllText(remotingConfigPath).Replace("0.0.0.0:0000", string.Format("{0}:{1}", ConfigurationManager.AppSettings["IP"], ConfigurationManager.AppSettings["Port"]));
+                    File.WriteAllText(remotingConfigPath, config);
+                }
             }
+            RemotingConfiguration.Configure(remotingConfigPath, false);
             //if (!Validate.Check())
             //    return;
             Application.EnableVisualStyles();

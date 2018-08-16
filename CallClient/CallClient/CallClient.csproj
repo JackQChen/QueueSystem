@@ -151,7 +151,7 @@
     <Folder Include="bin\Debug\Log\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\Client.xml" />
+    <Content Include="bin\Debug\RemotingConfig.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

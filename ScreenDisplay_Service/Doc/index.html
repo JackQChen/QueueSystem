@@ -1,33 +1,40 @@
 ﻿<!doctype html>
 <html>
-  
-  <head>
-    <script language="javascript" type="text/javascript">var webSocket;
-      function init() {
-        websocket = new WebSocket("ws://127.0.0.1:3350");
-        websocket.onopen = function(evt) {
-          console.log("CONNECTED");
-          var data = {
-            method: 'GetHtml'
-          };
-          websocket.send(JSON.stringify(data));
-        };
-        websocket.onclose = function(evt) {
-          console.log("DISCONNECTED");
-        };
-        websocket.onmessage = function(evt) {
-          var data = JSON.parse(evt.data).result;
-          document.getElementById('iPage').srcdoc = data;
-          websocket.close();
-        };
-        websocket.onerror = function(evt) {
-          console.log('ERROR:' + evt.data);
-        };
-      }</script>
-    <style>html,body{ height: 100%; margin: 0px; overflow:scroll; overflow-y:hidden; overflow-x:hidden; }</style></head>
-  
-  <body onload="init()">
-    <iframe id="iPage" style="width:100%;height:100%;border:none;"></iframe>
-  </body>
+    
+    <head>
+        <script language="javascript" type="text/javascript">
+            var webSocket;
+            function init() {
+                websocket = new WebSocket("ws://127.0.0.1:3350");
+                websocket.onopen = function(evt) {
+                    console.log("CONNECTED");
+                    var data = {
+                        method: 'GetHtml'
+                    };
+                    websocket.send(JSON.stringify(data));
+                };
+                websocket.onclose = function(evt) {
+                    console.log("DISCONNECTED");
+                };
+                websocket.onmessage = function(evt) {
+                    var data = JSON.parse(evt.data).result;
+                    document.getElementById('iPage').srcdoc = data;
+                    websocket.close();
+                };
+                websocket.onerror = function(evt) {
+                    console.log('ERROR:' + evt.data);
+                };
+            }
+        </script>
+        <style>
+            html, body { background-color: Blue; height: 100%; margin: 0px; overflow:
+            scroll; overflow-y: hidden; overflow-x: hidden; }
+        </style>
+    </head>
+    
+    <body onload="init()">
+        <iframe id="iPage" style="width: 100%; height: 100%; border: none;">
+        </iframe>
+    </body>
 
 </html>

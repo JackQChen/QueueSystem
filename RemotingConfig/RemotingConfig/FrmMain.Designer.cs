@@ -35,7 +35,7 @@
             // 
             // btnGenerate
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(95, 110);
+            this.btnGenerate.Location = new System.Drawing.Point(85, 83);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(94, 43);
             this.btnGenerate.TabIndex = 0;
@@ -58,13 +58,13 @@
             this.txtUri.Name = "txtUri";
             this.txtUri.Size = new System.Drawing.Size(192, 21);
             this.txtUri.TabIndex = 2;
-            this.txtUri.Text = "cysoft.uicp.net:5566";
+            this.txtUri.Text = "0.0.0.0:0000";
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(266, 223);
             this.Controls.Add(this.txtUri);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnGenerate);

@@ -25,6 +25,7 @@ namespace ScreenDisplayService
 
     public class ResponseData : MessageData
     {
+        public string method { get; set; }
         public string code { get; set; }
         public object result { get; set; }
     }

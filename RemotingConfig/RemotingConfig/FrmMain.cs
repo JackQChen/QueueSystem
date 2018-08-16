@@ -54,8 +54,8 @@ namespace RemotingConfig
         <wellknown type=""{0},BLL"" url=""tcp://{1}/{2}""/>",
                     tp.FullName, this.txtUri.Text, tp.Name));
             }
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "Server.xml", string.Format(strServer, sbServer));
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "Client.xml", string.Format(strClient, sbClient));
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "RemotingConfig_Server.xml", string.Format(strServer, sbServer));
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "RemotingConfig.xml", string.Format(strClient, sbClient));
             MessageBox.Show("完成");
         }
     }

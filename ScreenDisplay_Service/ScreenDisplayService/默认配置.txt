@@ -1,10 +1,13 @@
 {
-    "winArea": "0,5",
-    "scrollText": "请1001号到1号窗口",
-	"scrollSpeed": 10,
-	"lineHeight": 15,
-	"fontSize":12,
-	"ticketColor":"#FFFFFF",
-	"winColor":"#FFFFFF",
-	"OtherColor":"#FFFFFF"
+    "winArea": "1",														--屏幕所属区域，多个区域中间用逗号分隔
+    "scrollText": "取号后请在休息区等候，注意留意电视大屏和语音叫号！", --滚动频幕默认显示文本
+	"scrollSpeed": 10,													--滚动文本滚动速度
+	"scrollColor":"##88F092",											--滚动字幕颜色
+	"lineHeight": 15,													--行高
+	"fontSize":12,														--字体大小
+	"ticketColor":"#FFFF00",											--票号颜色
+	"winColor":"#88F092",												--窗口号颜色
+	"otherColor":"#FFFFFF",												--其他字体颜色
+	"oddBackColor":"#3D3C3C",											--奇数行 背景色
+	"evenBackColor":"#207EC0"											--偶数行 背景色
 }

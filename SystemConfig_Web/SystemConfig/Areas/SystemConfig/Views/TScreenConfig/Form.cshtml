@@ -6,13 +6,18 @@
     function submitForm(callback) {
         var config = {
             "winArea": $('form [name=winArea]').val(),
+            "columnSize": $('form [name=columnSize]').val(),
             "scrollText": $('form [name=scrollText]').val(),
+            "scrollSize": $('form [name=scrollSize]').val(),
             "scrollSpeed": $('form [name=scrollSpeed]').val(),
+            "scrollColor": $('form [name=scrollColor]').val(),
             "lineHeight": $('form [name=lineHeight]').val(),
             "fontSize": $('form [name=fontSize]').val(),
             "ticketColor": $('form [name=ticketColor]').val(),
             "winColor": $('form [name=winColor]').val(),
             "otherColor": $('form [name=otherColor]').val(),
+            "oddBackColor": $('form [name=oddBackColor]').val(),
+            "evenBackColor": $('form [name=evenBackColor]').val(),
         };
         $('form [name=Config]').val(JSON.stringify(config));
         $.submitForm({
@@ -22,6 +27,15 @@
         });
     }
 </script>
+<style>
+    form input[type=color]
+    {
+        padding: 0px;
+        border: none;
+        height: 35px;
+        margin-top: -4px;
+    }
+</style>
 <div class="page-content">
     <div class="row">
         <div class="col-xs-12">
@@ -70,6 +84,14 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
+                    列宽比例
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="columnSize" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
                     滚动文本
                 </label>
                 <div class="col-sm-9 col-xs-9">
@@ -84,38 +106,72 @@
                     <input type="text" name="scrollSpeed" autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
                 <label class="col-sm-2 col-xs-2" style="text-align: right">
-                    行高
+                    滚动颜色
                 </label>
                 <div class="col-sm-3 col-xs-3">
-                    <input type="text" name="lineHeight" autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="scrollColor" autocomplete="off" class="col-xs-8 col-sm-8" />
+                    <input type="color" target="scrollColor" class="col-xs-2 col-sm-2" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
+                    滚动字体大小
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="scrollSize" autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+                <label class="col-sm-2 col-xs-2">
                     字体大小
                 </label>
                 <div class="col-sm-3 col-xs-3">
                     <input type="text" name="fontSize" autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
-                <label class="col-sm-2 col-xs-2">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
                     票号颜色
                 </label>
                 <div class="col-sm-3 col-xs-3">
-                    <input type="text" name="ticketColor" autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="ticketColor" autocomplete="off" class="col-xs-8 col-sm-8" />
+                    <input type="color" target="ticketColor" class="col-xs-2 col-sm-2" />
+                </div>
+                <label class="col-sm-2 col-xs-2">
+                    窗口号颜色
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="winColor" autocomplete="off" class="col-xs-8 col-sm-8" />
+                    <input type="color" target="winColor" class="col-xs-2 col-sm-2" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-xs-3">
-                    窗口号颜色
-                </label>
-                <div class="col-sm-3 col-xs-3">
-                    <input type="text" name="winColor" autocomplete="off" class="col-xs-10 col-sm-10" />
-                </div>
-                <label class="col-sm-2 col-xs-2">
                     其他颜色
                 </label>
                 <div class="col-sm-3 col-xs-3">
-                    <input type="text" name="otherColor" autocomplete="off" class="col-xs-10 col-sm-10" />
+                    <input type="text" name="otherColor" autocomplete="off" class="col-xs-8 col-sm-8" />
+                    <input type="color" target="otherColor" class="col-xs-2 col-sm-2" />
+                </div>
+                <label class="col-sm-2 col-xs-2">
+                    奇数行颜色
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="oddBackColor" autocomplete="off" class="col-xs-8 col-sm-8" />
+                    <input type="color" target="oddBackColor" class="col-xs-2 col-sm-2" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    偶数行颜色
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="evenBackColor" autocomplete="off" class="col-xs-8 col-sm-8" />
+                    <input type="color" target="evenBackColor" class="col-xs-2 col-sm-2" />
+                </div>
+                <label class="col-sm-2 col-xs-2">
+                    行高
+                </label>
+                <div class="col-sm-3 col-xs-3">
+                    <input type="text" name="lineHeight" autocomplete="off" class="col-xs-10 col-sm-10" />
                 </div>
             </div>
             </form>
@@ -123,18 +179,32 @@
     </div>
     <script>
         (function () {
-            var configString = $('form [name=Config]').val();
-            if (configString == "")
-                return;
-            var config = JSON.parse(configString);
+            var config = JSON.parse($('form [name=Config]').val());
             $('form [name=winArea]').val(config.winArea);
+            $('form [name=columnSize]').val(config.columnSize);
             $('form [name=scrollText]').val(config.scrollText);
+            $('form [name=scrollSize]').val(config.scrollSize);
             $('form [name=scrollSpeed]').val(config.scrollSpeed);
+            $('form [name=scrollColor]').val(config.scrollColor);
+            $('form [target=scrollColor]').val(config.scrollColor);
             $('form [name=lineHeight]').val(config.lineHeight);
             $('form [name=fontSize]').val(config.fontSize);
             $('form [name=ticketColor]').val(config.ticketColor);
+            $('form [target=ticketColor]').val(config.ticketColor);
             $('form [name=winColor]').val(config.winColor);
+            $('form [target=winColor]').val(config.winColor);
             $('form [name=otherColor]').val(config.otherColor);
+            $('form [target=otherColor]').val(config.otherColor);
+            $('form [name=oddBackColor]').val(config.oddBackColor);
+            $('form [target=oddBackColor]').val(config.oddBackColor);
+            $('form [name=evenBackColor]').val(config.evenBackColor);
+            $('form [target=evenBackColor]').val(config.evenBackColor);
+
+            $('form [type=color]').on('change', function () {
+                var s = $(this);
+                $('form [name=' + s.attr('target') + ']').val(s.val());
+            });
+
         })();
     </script>
 </div>
