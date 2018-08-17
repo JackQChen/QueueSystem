@@ -65,9 +65,14 @@ namespace MessageServer
             };
             actLog = (name, log) =>
             {
-                this.txtLog.AppendText(log);
-                this.tabControl1.SelectedTab = this.tabLog;
+                this.txtLog.AppendText(string.Format("{0} - {1}\r\n{2}\r\n",
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                            name, log));
             };
+            //handleCreate 
+            this.tabServer.SelectedTab = this.tabLog;
+            this.tabServer.SelectedTab = this.tabPerformance;
+            this.tabServer.SelectedTab = this.tabMain;
             this.lvClient.ListViewItemSorter = new ListViewItemComparer<int>(0);
             this.InitService();
             this.tsStart.PerformClick();
@@ -126,17 +131,17 @@ namespace MessageServer
                 serviceItem.SubItems.Add("准备就绪");
                 serviceItem.Tag = new ServiceInfo(service);
                 this.clientList.Set(cfg.Name, new Extra<string, string>());
+                service.OnLog += (srv, log) =>
+                {
+                    if (this.txtLog.IsHandleCreated)
+                        this.txtLog.Invoke(actLog, srv.Name, log);
+                    return HandleResult.Ok;
+                };
                 service.OnError += (srv, connId, ex) =>
                 {
-                    if (this.tabControl1.IsHandleCreated)
-                        this.tabControl1.Invoke(actLog,
-                            srv.Name,
-                            string.Format("{0} - {1}\r\n{2}:{3}\r\n",
-                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                            srv.Name,
+                    srv.Log(string.Format("{0}:{1}",
                             this.clientList.Get(srv.Name).Get(connId.ToString()),
-                            ex.Message)
-                        );
+                            ex.Message));
                     return HandleResult.Ok;
                 };
                 service.OnPrepareListen += (srv, so) =>

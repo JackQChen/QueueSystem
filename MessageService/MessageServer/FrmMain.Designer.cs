@@ -49,8 +49,8 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerServerState = new System.Windows.Forms.Timer(this.components);
-            this.tabControl1 = new MessageServer.TabControlEx();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabServer = new MessageServer.TabControlEx();
+            this.tabMain = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lvService = new System.Windows.Forms.ListView();
@@ -71,12 +71,12 @@
             this.pgService = new System.Windows.Forms.PropertyGrid();
             this.tabLog = new System.Windows.Forms.TabPage();
             this.txtLog = new System.Windows.Forms.TextBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPerformance = new System.Windows.Forms.TabPage();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.tabServer.SuspendLayout();
+            this.tabMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -194,7 +194,7 @@
             // labPlaceHolder
             // 
             this.labPlaceHolder.Name = "labPlaceHolder";
-            this.labPlaceHolder.Size = new System.Drawing.Size(583, 17);
+            this.labPlaceHolder.Size = new System.Drawing.Size(689, 17);
             this.labPlaceHolder.Spring = true;
             // 
             // labRegInfo
@@ -246,28 +246,28 @@
             this.timerServerState.Interval = 1000;
             this.timerServerState.Tick += new System.EventHandler(this.timerServerState_Tick);
             // 
-            // tabControl1
+            // tabServer
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabLog);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 48);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(792, 503);
-            this.tabControl1.TabIndex = 6;
+            this.tabServer.Controls.Add(this.tabMain);
+            this.tabServer.Controls.Add(this.tabLog);
+            this.tabServer.Controls.Add(this.tabPerformance);
+            this.tabServer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabServer.Location = new System.Drawing.Point(0, 48);
+            this.tabServer.Name = "tabServer";
+            this.tabServer.SelectedIndex = 0;
+            this.tabServer.Size = new System.Drawing.Size(792, 503);
+            this.tabServer.TabIndex = 6;
             // 
-            // tabPage1
+            // tabMain
             // 
-            this.tabPage1.Controls.Add(this.splitContainer1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(784, 477);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "服务";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabMain.Controls.Add(this.splitContainer1);
+            this.tabMain.Location = new System.Drawing.Point(4, 22);
+            this.tabMain.Name = "tabMain";
+            this.tabMain.Padding = new System.Windows.Forms.Padding(3);
+            this.tabMain.Size = new System.Drawing.Size(784, 477);
+            this.tabMain.TabIndex = 0;
+            this.tabMain.Text = "服务";
+            this.tabMain.UseVisualStyleBackColor = true;
             // 
             // splitContainer1
             // 
@@ -464,21 +464,21 @@
             this.txtLog.TabIndex = 0;
             this.txtLog.DoubleClick += new System.EventHandler(this.txtLog_DoubleClick);
             // 
-            // tabPage3
+            // tabPerformance
             // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(784, 477);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "性能";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPerformance.Location = new System.Drawing.Point(4, 22);
+            this.tabPerformance.Name = "tabPerformance";
+            this.tabPerformance.Size = new System.Drawing.Size(784, 477);
+            this.tabPerformance.TabIndex = 2;
+            this.tabPerformance.Text = "性能";
+            this.tabPerformance.UseVisualStyleBackColor = true;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 573);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabServer);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -493,8 +493,8 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.contextMenuStrip.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
+            this.tabServer.ResumeLayout(false);
+            this.tabMain.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -535,10 +535,10 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.PropertyGrid pgService;
         private System.Windows.Forms.GroupBox groupBox2;
-        private TabControlEx tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private TabControlEx tabServer;
+        private System.Windows.Forms.TabPage tabMain;
         private System.Windows.Forms.TabPage tabLog;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPerformance;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox txtLog;
