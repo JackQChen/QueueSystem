@@ -78,7 +78,7 @@ namespace ScreenDisplayService
 
         HandleResult Service_OnWSMessageHeader(IntPtr connId, bool final, byte reserved, byte operationCode, byte[] mask, ulong bodyLength)
         {
-            if (operationCode == 0x8)
+            if ((WSOpcode)operationCode == WSOpcode.Close)
                 this.Disconnect(connId);
             return HandleResult.Ignore;
         }
@@ -106,7 +106,7 @@ namespace ScreenDisplayService
                         {
                             var rData = new ResponseData
                             {
-                                method = method,
+                                method = requestData.method,
                                 code = "0",
                                 result = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ScreenDisplay.html")
                             };
@@ -115,7 +115,7 @@ namespace ScreenDisplayService
                         break;
                     case "getconfig":
                         {
-                            var rData = new ResponseData { code = "0", method = method, result = "" };
+                            var rData = new ResponseData { code = "0", method = requestData.method, result = "" };
                             var device = this.deviceList.Get(connId);
                             var ip = device.IP;
                             var config = screeList.Where(s => s.IP == ip).FirstOrDefault();
@@ -138,7 +138,7 @@ namespace ScreenDisplayService
                         break;
                     case "getqueuelist":
                         {
-                            var rData = new ResponseData { code = "0", method = method, result = "" };
+                            var rData = new ResponseData { code = "0", method = requestData.method, result = "" };
                             var param = requestData.param as Dictionary<string, object>;
                             rData.result = GetCallByArea(param["winArea"].ToString());
                             this.SendWSMessage(connId, rData.ToBytes());
@@ -148,7 +148,7 @@ namespace ScreenDisplayService
                         {
                             var rData = new ResponseData
                             {
-                                method = method,
+                                method = requestData.method,
                                 code = "999",
                                 result = "未知指令"
                             };

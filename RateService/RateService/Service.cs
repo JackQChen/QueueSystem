@@ -16,7 +16,6 @@ namespace RateService
         List<string> loginOperation = new List<string>();
         byte[] btDisConn = new byte[] { 0x3, 0xe9 };
         internal Extra<IntPtr, DeviceInfo> deviceList = new Extra<IntPtr, DeviceInfo>();
-        internal bool deviceListChanged = false;
         ServiceClient client = new ServiceClient();
         OperateIni ini;
 
@@ -26,6 +25,7 @@ namespace RateService
             this.client.ReceiveMessage += new Action<IntPtr, Message>(client_ReceiveMessage);
             this.OnPrepareListen += new TcpServerEvent.OnPrepareListenEventHandler(Service_OnPrepareListen);
             this.OnClose += new TcpServerEvent.OnCloseEventHandler(Service_OnClose);
+            this.OnWSMessageHeader += new WebSocketEvent.OnWSMessageHeaderEventHandler(Service_OnWSMessageHeader);
             this.OnWSMessageBody += new WebSocketEvent.OnWSMessageBodyEventHandler(Service_OnWSMessageBody);
             loginOperation.AddRange("raterequest,rateoperate,ratesubmit".Split(','));
         }
@@ -119,7 +119,14 @@ namespace RateService
                 WindowNumber = deviceInfo.WindowNumber
             });
             this.deviceList.Remove(connId);
-            deviceListChanged = true;
+            this.deviceList.Changed = true;
+            return HandleResult.Ignore;
+        }
+
+        HandleResult Service_OnWSMessageHeader(IntPtr connId, bool final, byte reserved, byte operationCode, byte[] mask, ulong bodyLength)
+        {
+            if ((WSOpcode)operationCode == WSOpcode.Close)
+                this.Disconnect(connId);
             return HandleResult.Ignore;
         }
 
@@ -264,7 +271,7 @@ namespace RateService
                                     ConnTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                                 });
                                 rData = new ResponseData { code = "0", request = requestData.method, result = "登录成功!" };
-                                deviceListChanged = true;
+                                this.deviceList.Changed = true;
                             }
                             else
                                 rData = new ResponseData { code = "1002", request = requestData.method, result = "窗口或用户信息不正确!" };
