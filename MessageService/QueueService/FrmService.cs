@@ -17,12 +17,12 @@ namespace QueueService
 
         private void FrmService_Load(object sender, EventArgs e)
         {
-            this.service.clientListChanged = true;
+            this.service.clientList.Changed = true;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!this.service.clientListChanged)
+            if (!this.service.clientList.Changed)
                 return;
             this.listView1.Items.Clear();
             foreach (var client in service.clientList.Dictionary.Values.ToArray())
@@ -34,7 +34,7 @@ namespace QueueService
                 item.SubItems.Add(client.ConnTime);
                 item.Tag = client.ID;
             }
-            this.service.clientListChanged = false;
+            this.service.clientList.Changed = false;
         }
 
         private void btnRestart_Click(object sender, EventArgs e)

@@ -3,8 +3,6 @@ using System.Linq;
 using System.Web.Script.Serialization;
 using MessageLib;
 using QueueMessage;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace QueueService
 {
@@ -12,7 +10,6 @@ namespace QueueService
     {
         Process process;
         internal Extra<IntPtr, ClientInfo> clientList = new Extra<IntPtr, ClientInfo>();
-        internal bool clientListChanged = false;
         JavaScriptSerializer convert = new JavaScriptSerializer();
 
         public Service()
@@ -34,7 +31,7 @@ namespace QueueService
         {
             this.RemoveExtra(connId);
             this.clientList.Remove(connId);
-            this.clientListChanged = true;
+            this.clientList.Changed = true;
             return HandleResult.Ok;
         }
 
@@ -94,7 +91,7 @@ namespace QueueService
                                 Type = msg.ClientType.ToString(),
                                 ConnTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                             });
-                            clientListChanged = true;
+                            this.clientList.Changed = true;
                         }
                         var resultMsg = new ResultMessage();
                         resultMsg.Operate = OperateName.Login;
