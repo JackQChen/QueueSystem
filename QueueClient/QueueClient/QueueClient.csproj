@@ -137,6 +137,18 @@
     <Compile Include="uc\ucEvaluateCard.Designer.cs">
       <DependentUpon>ucEvaluateCard.cs</DependentUpon>
     </Compile>
+    <Compile Include="uc\ucpnSelectUnitArea.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="uc\ucpnSelectUnitArea.Designer.cs">
+      <DependentUpon>ucpnSelectUnitArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ui\frmBroadcast.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ui\frmBroadcast.Designer.cs">
+      <DependentUpon>frmBroadcast.cs</DependentUpon>
+    </Compile>
     <Compile Include="ui\frmMsg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -229,6 +241,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="uc\ucEvaluateCard.resx">
       <DependentUpon>ucEvaluateCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\ucpnSelectUnitArea.resx">
+      <DependentUpon>ucpnSelectUnitArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui\frmBroadcast.resx">
+      <DependentUpon>frmBroadcast.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\frmMsg.resx">
       <DependentUpon>frmMsg.cs</DependentUpon>
@@ -332,6 +350,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\img\Broadcast\1.jpeg" />
+    <Content Include="bin\Debug\img\Broadcast\2.jpeg" />
+    <Content Include="bin\Debug\img\Broadcast\3.jpeg" />
+    <Content Include="bin\Debug\img\Broadcast\4.jpeg" />
+    <Content Include="bin\Debug\img\Broadcast\5.jpeg" />
+    <Content Include="bin\Debug\img\FloorDistribution\1.jpg" />
+    <Content Include="bin\Debug\img\FloorDistribution\2.jpg" />
+    <Content Include="bin\Debug\img\FloorDistribution\3.jpg" />
     <Content Include="bin\Debug\img\title.png" />
     <Content Include="bin\Debug\RemotingConfig.xml" />
     <Content Include="bin\Debug\sdtapi.dll" />

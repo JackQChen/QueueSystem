@@ -65,6 +65,9 @@
         $.modalOpen = function (opt) {
             window.parent.modalOpen(opt);
         };
+        $.modalClose = function () {
+            window.parent.modalClose();
+        };
         $.modalContent = function () {
             return $(window.parent.document).find("#dialog-editor iframe")[0].contentWindow;
         }

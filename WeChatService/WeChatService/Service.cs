@@ -178,7 +178,7 @@ namespace WeChatService
 
         object asyncObj = new object();
 
-        void Log(string strLog)
+        public override void Log(string strLog)
         {
             lock (asyncObj)
             {

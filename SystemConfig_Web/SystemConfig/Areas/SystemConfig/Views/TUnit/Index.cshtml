@@ -57,7 +57,7 @@ function Edit()
     $.modalOpen({
         title :"单位管理 - 编辑",
         url: "SystemConfig/TUnit/Form?id="+ sid ,
-        callback:function(){  
+        callback:function(){
             $.modalContent().submitForm(function(){
                 Refresh();
             });

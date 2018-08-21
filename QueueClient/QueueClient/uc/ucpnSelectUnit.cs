@@ -145,47 +145,5 @@ namespace QueueClient
         }
     }
 
-    class UnitCard : VirtualControl
-    {
-        public UnitCard()
-        {
-        }
-
-        public Image Image;
-        public SolidBrush Brush;
-        public override void Draw(Graphics g)
-        {
-            g.DrawImage(Image, Rectangle, 0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel);
-            TUnitModel unit = this.Tag as TUnitModel;
-            Font font = new Font("黑体", 22, FontStyle.Bold);
-            if (Brush == null)
-                Brush = new SolidBrush(Color.Black);
-            string unitName = unit.unitName;
-            if (unit.unitName.Trim().Length > 8)
-                unitName = unitName.Substring(0, 8);
-            int rowLength = 4;
-            int cX = 23;
-            if (unitName.Length <= rowLength)
-                g.DrawString(unitName, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 32);//只有三个字，那就居中
-            else
-            {
-                var firstLine = unitName.Substring(0, rowLength);
-                var remain = unitName.Substring(rowLength, unitName.Length - rowLength);
-                if (remain.Length <= rowLength)
-                {
-                    g.DrawString(firstLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 15);
-                    g.DrawString(remain, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 55);
-                }
-                //else
-                //{
-                //    g.DrawString(firstLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 13);
-                //    var secondLine = remain.Substring(0, rowLength);
-                //    g.DrawString(secondLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 58);
-                //    var last = remain.Substring(rowLength, remain.Length - rowLength);
-                //    g.DrawString(last, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 103);
-                //}
-
-            }
-        }
-    }
+    
 }

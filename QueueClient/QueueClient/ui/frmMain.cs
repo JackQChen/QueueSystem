@@ -14,6 +14,7 @@ using System.Collections;
 using System.Printing;
 using System.Linq.Expressions;
 using System.Xml;
+using System.IO;
 
 namespace QueueClient
 {
@@ -31,6 +32,7 @@ namespace QueueClient
         string UnitTime = System.Configuration.ConfigurationManager.AppSettings["Unit"];
         string ReadcardTime = System.Configuration.ConfigurationManager.AppSettings["Readcard"];
         string CardTime = System.Configuration.ConfigurationManager.AppSettings["Card"];
+        string MainTime = System.Configuration.ConfigurationManager.AppSettings["MainTime"];
         int CanNotUseCard = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CanNotUseCard"]);
         #endregion
 
@@ -59,8 +61,9 @@ namespace QueueClient
         BusyType busyType;
         Person person;
         bool suppend = true;
-        int pageStopTime = 100;
+        int pageStopTime = 99;
         int iRetUSB = 0;
+        int FloorImgCount = 2;
         string idCard = "";//身份证号码
         Thread thread;
         Thread wait;
@@ -153,7 +156,7 @@ namespace QueueClient
             ucpnCard card = new ucpnCard();
             card.Size = new Size(1920, 1080);
             card.Location = new Point(0, 0);
-            ucpnSelectUnit unit = new ucpnSelectUnit();
+            ucpnSelectUnitArea unit = new ucpnSelectUnitArea();
             unit.Size = new Size(1920, 1080);
             unit.Location = new Point(0, 0);
             ucpnSelectBusy busy = new ucpnSelectBusy();
@@ -205,6 +208,7 @@ namespace QueueClient
             uc.Add("main", main);
 
             //页面停留时间 单位：秒
+            ucTimer.Add("main", Convert.ToInt32(MainTime));
             ucTimer.Add("pwd", Convert.ToInt32(ExitTime));
             ucTimer.Add("evaluate", Convert.ToInt32(EvaluateTime));
             ucTimer.Add("appoint", Convert.ToInt32(AppointTime));
@@ -214,7 +218,7 @@ namespace QueueClient
             ucTimer.Add("card", Convert.ToInt32(CardTime));
 
             uc["main"].BringToFront();
-
+            pageStopTime = ucTimer["main"];
             try
             {
                 Image img = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "img\\title.png");
@@ -231,7 +235,8 @@ namespace QueueClient
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            //SetConfigValue("NumberRestriction", "200,200");
+            FloorImgCount = GetFloorImgCount();
+            SetConfigValue("BroadcastInterval", "5");
             if (CanNotUseCard == 0)
             {
                 int iPort;
@@ -459,11 +464,9 @@ namespace QueueClient
 
         void unit_previous(object sender)
         {
-            var ctl = ((ucpnSelectUnit)uc["unit"]);
+            var ctl = ((ucpnSelectUnitArea)uc["unit"]);
             pageStopTime = ucTimer["unit"];
-            int max = ctl.uList.Count / ctl.pageCount;
-            if ((ctl.uList.Count % ctl.pageCount) > 0)
-                max++;
+            int max = FloorImgCount;
             PictureBox pb = sender as PictureBox;
             if (pb.Name == "pbPrevious")
             {
@@ -486,6 +489,15 @@ namespace QueueClient
             ctl.CreateUnit();
         }
 
+        int GetFloorImgCount()
+        {
+            string path = AppDomain.CurrentDomain.BaseDirectory + "img\\FloorDistribution";
+            DirectoryInfo root = new DirectoryInfo(path);
+            FileInfo[] files = root.GetFiles();
+            if (files.Count() > 0)
+                return files.Count();
+            return 1;
+        }
         void busy_previous(object sender)
         {
             var ctl = ((ucpnSelectBusy)uc["busy"]);
@@ -518,7 +530,7 @@ namespace QueueClient
 
         void unit_SelectedUnit()
         {
-            var ucUnit = ((ucpnSelectUnit)uc["unit"]);
+            var ucUnit = ((ucpnSelectUnitArea)uc["unit"]);
             var ucBusy = ((ucpnSelectBusy)uc["busy"]);
             selectUnit = ucUnit.selectUnit;
             ucBusy.cureentPage = 0;
@@ -1068,7 +1080,7 @@ namespace QueueClient
         //主页
         private void pbReturn_Click(object sender, EventArgs e)
         {
-            var sUnit = ((ucpnSelectUnit)uc["unit"]);
+            var sUnit = ((ucpnSelectUnitArea)uc["unit"]);
             var sBusy = ((ucpnSelectBusy)uc["busy"]);
             var sCard = ((ucpnCard)uc["card"]);
             var uCard = ((ucpnReadCard)uc["readcard"]);
@@ -1085,6 +1097,7 @@ namespace QueueClient
             selectUnit = null;
             busyType = BusyType.Default;
             pageLocation = PageLocation.Main;
+            pageStopTime = ucTimer["main"]; ;
             person = new Person();
         }
 
@@ -1214,7 +1227,7 @@ namespace QueueClient
         private void SelectUnit()
         {
             Start(false);
-            var ucUnit = ((ucpnSelectUnit)uc["unit"]);
+            var ucUnit = ((ucpnSelectUnitArea)uc["unit"]);
             ucUnit.uList = uList;
             ucUnit.cureentPage = 0;
             ucUnit.CreateUnit();
@@ -1391,27 +1404,30 @@ namespace QueueClient
         {
             lblTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss dddd");
         }
+        frmBroadcast frmB = new frmBroadcast();
         //页面停留
         private void timer3_Tick(object sender, EventArgs e)
         {
-            if (pageLocation == PageLocation.Main)
+            if (pageStopTime <= 1)
             {
-                lblMes.Visible = false;
-
-                return;
-            }
-            else
-            {
-                if (pageStopTime <= 1)
+                if (pageLocation == PageLocation.Main)
                 {
-                    pbReturn_Click(null, null);
+                    if (!frmB.Visible)
+                    {
+                        frmB.ShowDialog();
+                        pageStopTime = ucTimer["main"]; ;
+                    }
                 }
                 else
                 {
-                    lblMes.Visible = true;
-                    lblMes.Text = string.Format("剩余操作时间：{0}秒", pageStopTime.ToString("00"));
-                    pageStopTime--;
+                    pbReturn_Click(null, null);
                 }
+            }
+            else
+            {
+                lblMes.Visible = true;
+                lblMes.Text = string.Format("剩余操作时间：{0}秒", pageStopTime.ToString("00"));
+                pageStopTime--;
             }
         }
 

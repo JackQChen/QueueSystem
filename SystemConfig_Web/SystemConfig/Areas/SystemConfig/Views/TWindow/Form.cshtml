@@ -24,10 +24,17 @@
         });
     });
     function submitForm(callback) {
-        $.submitForm({
+          $.submitForm({
             url: "SubmitForm",
             data: $('form').serializeForm(),
-            callback: callback
+            callback: callback,
+            success: function (data) {
+                if(data.indexOf("成功")<0)
+                {
+                    alert(data);
+                    this.close = false;
+                }
+            }
         });
     }
 </script>

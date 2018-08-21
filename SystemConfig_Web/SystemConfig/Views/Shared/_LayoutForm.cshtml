@@ -41,18 +41,24 @@
     <script src="@Url.Content("~/Content/js/search.js")"></script>
     <script>
         $.submitForm = function (arg) {
-            $('#divLoading').css("display", "block");
             var btns = $(window.parent.document).find("#dialog-editor").parent().find(".ui-dialog-buttonpane button");
-            btns.attr('disabled', 'disabled');
+            arg.beforeSend = function () {
+                $('#divLoading').css("display", "block");
+                btns.attr('disabled', 'disabled');
+            };
+            arg.close = true;
             arg.type = "POST";
             var token = $("input[name=__RequestVerificationToken]");
             arg.data = arg.data + "&__RequestVerificationToken=" + token[0].value;
-            if (arg.complete == null)
-                arg.complete = function () {
+            arg.complete = function () {
+                $('#divLoading').css("display", "none");
+                btns.removeAttr('disabled');
+                if (this.close) {
                     window.parent.modalClose();
                     if (arg.callback != null)
                         arg.callback();
-                };
+                }
+            };
             $.ajax(arg);
         };
         $.fn.extend({

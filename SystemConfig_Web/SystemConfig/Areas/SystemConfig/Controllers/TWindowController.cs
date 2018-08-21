@@ -18,6 +18,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         TUnitBLL unitBll;
         TBusinessBLL busiBll;
         TUserBLL userBll;
+        TLedWindowBLL ledWinBll;
 
         public TWindowController()
         {
@@ -28,6 +29,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             this.unitBll = new TUnitBLL("MySQL", this.AreaNo);
             this.busiBll = new TBusinessBLL("MySQL", this.AreaNo);
             this.userBll = new TUserBLL("MySQL", this.AreaNo);
+            this.ledWinBll = new TLedWindowBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -74,10 +76,22 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(TWindowModel model)
         {
+            if (this.bll.GetModel(p => p.Number == model.Number && p.ID != model.ID) != null)
+                return Content("窗口号重复，请核查");
             if (model.ID == -1)
                 this.bll.Insert(model);
             else
+            {
+                //通过原有窗口号更新
+                var originModel = this.bll.GetModel(model.ID);
+                var ledWinModels = this.ledWinBll.GetModelList(p => p.WindowNumber == originModel.Number);
+                foreach (var ledWinModel in ledWinModels)
+                {
+                    ledWinModel.WindowNumber = model.Number;
+                    this.ledWinBll.Update(ledWinModel);
+                }
                 this.bll.Update(model);
+            }
             return Content("操作成功！");
         }
 
@@ -85,7 +99,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id)); 
+            this.bll.Delete(this.bll.GetModel(id));
             return Content("操作成功！");
         }
         #endregion

@@ -89,10 +89,22 @@ namespace DAL
         {
             if (model.AreaNo != this.areaNo)
                 return -1;
-            return this.db.Delete(model);
+            var result = this.db.Delete(model);
+            this.ResetMaxId();
+            return result;
         }
 
         public override int GetMaxId()
+        {
+            return this.GetMaxId(false);
+        }
+
+        public override int ResetMaxId()
+        {
+            return this.GetMaxId(true);
+        }
+
+        private int GetMaxId(bool isReset)
         {
             int maxId = -1;
             using (var maxDb = Factory.Instance.CreateDbContext(this.connName))
@@ -106,17 +118,25 @@ namespace DAL
                     };
                     maxDb.Session.CommandTimeout = 60;
                     maxDb.Session.BeginTransaction();
-                    var maxObj = maxDb.Session.ExecuteScalar("select maxId+1 from f_maxid where areaNo=@areaNo and tableName=@tableName FOR UPDATE;", paraList);
-                    if (maxObj == null)
+                    //数据行锁
+                    object maxObj = maxDb.Session.ExecuteScalar("select maxId+1 from f_maxid where areaNo=@areaNo and tableName=@tableName FOR UPDATE", paraList);
+                    object resetObj = null;
+                    if (isReset || maxObj == null || maxObj == DBNull.Value)
                     {
-                        maxId = 1;
+                        resetObj = maxDb.Session.ExecuteScalar(string.Format("select max(id) from {0} where areaNo=@areaNo", this.tableName), paraList);
+                        if (resetObj == null || resetObj == DBNull.Value)
+                            resetObj = 0;
+                    }
+                    if (maxObj == null || maxObj == DBNull.Value)
+                    {
+                        maxId = Convert.ToInt32(resetObj) + (isReset ? 0 : 1);
                         paraList[2].Value = maxId;
                         var insertSql = "insert into f_maxid(areaNo,tableName,maxId) values(@areaNo,@tableName,@maxId) ";
                         maxDb.Session.ExecuteNonQuery(insertSql, paraList);
                     }
                     else
                     {
-                        maxId = Convert.ToInt32(maxObj);
+                        maxId = isReset ? Convert.ToInt32(resetObj) : Convert.ToInt32(maxObj);
                         paraList[2].Value = maxId;
                         var updateSql = "update f_maxid set maxId=@maxId where areaNo=@areaNo and tableName=@tableName";
                         maxDb.Session.ExecuteNonQuery(updateSql, paraList);

@@ -35,5 +35,7 @@ namespace Model
 
         public abstract int GetMaxId();
 
+        public abstract int ResetMaxId();
+
     }
 }

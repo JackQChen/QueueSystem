@@ -74,7 +74,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.ledWinBll.Delete(this.ledWinBll.GetModel(id)); 
+            this.ledWinBll.Delete(this.ledWinBll.GetModel(id));
             return Content("操作成功！");
         }
     }
