@@ -73,11 +73,6 @@ namespace MessageServer
             this.tabServer.SelectedTab = this.tabLog;
             this.tabServer.SelectedTab = this.tabPerformance;
             this.tabServer.SelectedTab = this.tabMain;
-            this.tabServer.SelectedIndexChanged += (s, a) =>
-            {
-                if (this.tabServer.SelectedTab == this.tabLog)
-                    this.txtLog.ScrollToCaret();
-            };
             this.lvClient.ListViewItemSorter = new ListViewItemComparer<int>(0);
             this.InitService();
             this.tsStart.PerformClick();
@@ -400,6 +395,12 @@ namespace MessageServer
                 return string.Format("{0:####0.00} KB", ((Double)fileSize) / 1024);
             else
                 return string.Format("{0} Bytes", fileSize);
+        }
+
+        private void tabServer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.tabServer.SelectedTab == this.tabLog)
+                this.txtLog.ScrollToCaret();
         }
 
         private void txtLog_DoubleClick(object sender, EventArgs e)

@@ -257,6 +257,7 @@
             this.tabServer.SelectedIndex = 0;
             this.tabServer.Size = new System.Drawing.Size(792, 503);
             this.tabServer.TabIndex = 6;
+            this.tabServer.SelectedIndexChanged += new System.EventHandler(this.tabServer_SelectedIndexChanged);
             // 
             // tabMain
             // 
