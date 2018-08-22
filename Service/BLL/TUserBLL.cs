@@ -22,7 +22,7 @@ namespace BLL
 
         public object GetGridData()
         {
-            return this.dal.GetGridData();
+            return this.CreateDAL().GetGridData();
         }
     }
 }

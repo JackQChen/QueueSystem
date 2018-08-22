@@ -3,7 +3,7 @@ using Model;
 
 namespace BLL
 {
-    public class TLedWindowBLL : BLLBase<TLedWindowDAL, TLedWindowModel> 
+    public class TLedWindowBLL : BLLBase<TLedWindowDAL, TLedWindowModel>
     {
         public TLedWindowBLL()
             : base()
@@ -27,7 +27,7 @@ namespace BLL
 
         public object GetGridDataByControllerId(int controllerId)
         {
-            return this.dal.GetGridDataByControllerId(controllerId);
+            return this.CreateDAL().GetGridDataByControllerId(controllerId);
         }
     }
 }

@@ -3,13 +3,13 @@ using Model;
 
 namespace BLL
 {
-    public class TWindowBusinessBLL : BLLBase<TWindowBusinessDAL, TWindowBusinessModel> 
+    public class TWindowBusinessBLL : BLLBase<TWindowBusinessDAL, TWindowBusinessModel>
     {
         public TWindowBusinessBLL()
             : base()
         {
         }
-        
+
         public TWindowBusinessBLL(string connName)
             : base(connName)
         {
@@ -27,12 +27,12 @@ namespace BLL
 
         public object GetGridBusiData(int winId)
         {
-            return this.dal.GetGridBusiData(winId);
+            return this.CreateDAL().GetGridBusiData(winId);
         }
 
         public object GetGridUserData(int winId)
         {
-            return this.dal.GetGridUserData(winId);
+            return this.CreateDAL().GetGridUserData(winId);
         }
     }
 }

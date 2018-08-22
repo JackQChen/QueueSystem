@@ -24,12 +24,12 @@ namespace BLL
 
         public object GetGridData()
         {
-            return this.dal.GetGridData();
+            return this.CreateDAL().GetGridData();
         }
 
         public ArrayList UploadUnitAndBusy(List<TUnitModel> uList, List<TBusinessModel> bList)
         {
-            return this.dal.UploadUnitAndBusy(uList, bList);
+            return this.CreateDAL().UploadUnitAndBusy(uList, bList);
         }
     }
 }

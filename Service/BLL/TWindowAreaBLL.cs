@@ -3,13 +3,13 @@ using Model;
 
 namespace BLL
 {
-    public class TWindowAreaBLL : BLLBase<TWindowAreaDAL, TWindowAreaModel> 
+    public class TWindowAreaBLL : BLLBase<TWindowAreaDAL, TWindowAreaModel>
     {
         public TWindowAreaBLL()
             : base()
         {
         }
-        
+
         public TWindowAreaBLL(string connName)
             : base(connName)
         {
@@ -22,7 +22,7 @@ namespace BLL
 
         public object GetGridData()
         {
-            return this.dal.GetGridData();
+            return this.CreateDAL().GetGridData();
         }
     }
 }

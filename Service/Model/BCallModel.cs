@@ -72,6 +72,7 @@ namespace Model
         /// 预约号
         /// </summary>
         public string reserveSeq { get; set; }
+
     }
 }
 

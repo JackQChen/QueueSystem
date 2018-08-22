@@ -25,7 +25,7 @@ namespace BLL
 
         public BQueueModel QueueLine(TBusinessModel selectBusy, TUnitModel selectUnit, string ticketStart, string idCard, string name)
         {
-            return new BQueueDAL().QueueLine(selectBusy, selectUnit, ticketStart, idCard, name );
+            return new BQueueDAL().QueueLine(selectBusy, selectUnit, ticketStart, idCard, name);
         }
         public BQueueModel QueueLine(string unitSeq, string unitName, string busiSeq, string busiName, string ticketStart, string idCard, string name, string wxId)
         {

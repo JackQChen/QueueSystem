@@ -3,13 +3,13 @@ using Model;
 
 namespace BLL
 {
-    public class TScreenConfigBLL : BLLBase<TScreenConfigDAL, TScreenConfigModel> 
+    public class TScreenConfigBLL : BLLBase<TScreenConfigDAL, TScreenConfigModel>
     {
         public TScreenConfigBLL()
             : base()
         {
         }
-        
+
         public TScreenConfigBLL(string connName)
             : base(connName)
         {

@@ -3,7 +3,7 @@ using Model;
 
 namespace BLL
 {
-    public class TBusinessAttributeBLL : BLLBase<TBusinessAttributeDAL, TBusinessAttributeModel> 
+    public class TBusinessAttributeBLL : BLLBase<TBusinessAttributeDAL, TBusinessAttributeModel>
     {
         public TBusinessAttributeBLL()
             : base()
@@ -22,17 +22,17 @@ namespace BLL
 
         public object GetGridData()
         {
-            return this.dal.GetGridData();
+            return this.CreateDAL().GetGridData();
         }
 
         public object GetGridDataByUnitSeq(string unitSeq)
         {
-            return this.dal.GetGridDataByUnitSeq(unitSeq);
+            return this.CreateDAL().GetGridDataByUnitSeq(unitSeq);
         }
 
         public object GetGridDetailData(string unitSeq, string busiSeq)
         {
-            return this.dal.GetGridDetailData(unitSeq, busiSeq);
+            return this.CreateDAL().GetGridDetailData(unitSeq, busiSeq);
         }
 
 

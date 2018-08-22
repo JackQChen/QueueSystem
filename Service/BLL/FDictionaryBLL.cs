@@ -23,7 +23,7 @@ namespace BLL
 
         public List<FDictionaryModel> GetModelListByName(string name)
         {
-            return this.dal.GetModelListByName(name);
+            return this.CreateDAL().GetModelListByName(name);
         }
     }
 }

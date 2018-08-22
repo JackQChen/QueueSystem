@@ -10,7 +10,7 @@ namespace BLL
         public TOprateLogBLL()
             : base()
         {
-        } 
+        }
 
         public TOprateLogBLL(string connName)
             : base(connName)
@@ -24,12 +24,12 @@ namespace BLL
 
         public Dictionary<string, List<string>> GetQueryParams()
         {
-            return this.dal.GetQueryParams();
+            return this.CreateDAL().GetQueryParams();
         }
 
         public object Query(string tType, string tName, string oType, DateTime dtStart, DateTime dtEnd, string log)
         {
-            return this.dal.Query(tType, tName, oType, dtStart, dtEnd, log);
+            return this.CreateDAL().Query(tType, tName, oType, dtStart, dtEnd, log);
         }
     }
 }

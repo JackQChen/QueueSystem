@@ -22,7 +22,7 @@ namespace BLL
 
         public FCallStateModel GetModelByWindowNo(string windowNo)
         {
-            return new FCallStateDAL().GetModelByWindowNo(windowNo);
+            return this.CreateDAL().GetModelByWindowNo(windowNo);
         }
     }
 }

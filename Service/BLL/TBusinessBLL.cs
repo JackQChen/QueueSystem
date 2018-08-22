@@ -3,7 +3,7 @@ using Model;
 
 namespace BLL
 {
-    public class TBusinessBLL : BLLBase<TBusinessDAL, TBusinessModel> 
+    public class TBusinessBLL : BLLBase<TBusinessDAL, TBusinessModel>
     {
         public TBusinessBLL()
             : base()
@@ -22,7 +22,7 @@ namespace BLL
 
         public object GetGridData()
         {
-            return this.dal.GetGridData();
+            return this.CreateDAL().GetGridData();
         }
     }
 }
