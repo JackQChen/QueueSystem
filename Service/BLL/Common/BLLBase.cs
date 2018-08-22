@@ -9,11 +9,11 @@ namespace BLL
         where TDAL : AbstractDALBase<TModel>
         where TModel : ModelBase
     {
-        object[] ctorArgs;
+        object[] args;
 
         public TDAL CreateDAL()
         {
-            return Activator.CreateInstance(typeof(TDAL), ctorArgs) as TDAL;
+            return Activator.CreateInstance(typeof(TDAL), args) as TDAL;
         }
 
         public BLLBase()
@@ -22,12 +22,12 @@ namespace BLL
 
         public BLLBase(string connName)
         {
-            ctorArgs = new object[] { connName };
+            args = new object[] { connName };
         }
 
         public BLLBase(string connName, string areaNo)
         {
-            ctorArgs = new object[] { connName, areaNo };
+            args = new object[] { connName, areaNo };
         }
 
         public override List<TModel> GetModelList()
