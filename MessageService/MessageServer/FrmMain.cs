@@ -73,6 +73,11 @@ namespace MessageServer
             this.tabServer.SelectedTab = this.tabLog;
             this.tabServer.SelectedTab = this.tabPerformance;
             this.tabServer.SelectedTab = this.tabMain;
+            this.tabServer.SelectedIndexChanged += (s, a) =>
+            {
+                if (this.tabServer.SelectedTab == this.tabLog)
+                    this.txtLog.ScrollToCaret();
+            };
             this.lvClient.ListViewItemSorter = new ListViewItemComparer<int>(0);
             this.InitService();
             this.tsStart.PerformClick();
