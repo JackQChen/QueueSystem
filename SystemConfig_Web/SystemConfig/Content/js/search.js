@@ -80,8 +80,7 @@ function init_Control(opt) {
         dataGrid.clearGridData();
         dataGrid.setGridParam({
             datatype: 'local',
-            data: newData,
-            rowNum: newData.length,
+            data: newData
         }).trigger("reloadGrid");
     };
     tBox.onblur = function(e) {

@@ -9,6 +9,10 @@ namespace RateService
     {
 
         const string serviceKey = "D840F2A3-C421-4B3A-B385-12B25727F70F";
+        TWindowBLL winBll = new TWindowBLL();
+        TUserBLL userBll = new TUserBLL();
+        BCallBLL callBll = new BCallBLL();
+        BEvaluateBLL evalBll = new BEvaluateBLL();
 
         public RateProcess()
         {
@@ -16,22 +20,22 @@ namespace RateService
 
         public object RS_GetWindowList()
         {
-            return new TWindowBLL().RS_GetWindowList();
+            return this.winBll.RS_GetWindowList();
         }
 
         public object RS_GetUserListByWindowNo(string winNum)
         {
-            return new TWindowBLL().RS_GetUserListByWindowNo(winNum);
+            return this.winBll.RS_GetUserListByWindowNo(winNum);
         }
 
         public object GetUserPhoto(string userCode)
         {
-            return new TWindowBLL().RS_GetUserPhoto(userCode);
+            return this.winBll.RS_GetUserPhoto(userCode);
         }
 
         public string GetUserIdByCode(string userCode)
         {
-            return new TUserBLL().GetModel(p => p.Code == userCode).ID.ToString();
+            return this.userBll.GetModel(p => p.Code == userCode).ID.ToString();
         }
 
         public bool Login(string winNum, string userCode)
@@ -39,7 +43,7 @@ namespace RateService
             if (userCode == "QueueService" && winNum == serviceKey)
                 return true;
             else
-                return new TWindowBLL().RS_GetModel(winNum, userCode) != null;
+                return this.winBll.RS_GetModel(winNum, userCode) != null;
         }
 
         public bool RateSubmit(string WindowUser, string WindowNo, string RateId, string attitude, string quality, string efficiency, string honest)
@@ -47,9 +51,9 @@ namespace RateService
             try
             {
                 //先不判断重复
-                BCallModel cl = new BCallBLL().GetModelByHandleId(RateId);
+                BCallModel cl = this.callBll.GetModelByHandleId(RateId);
                 BEvaluateModel ev = new BEvaluateModel();
-                ev.ID = new BEvaluateBLL().GetMaxId();
+                //ev.ID = this.evalBll.GetMaxId();
                 ev.type = 1;
                 ev.handId = cl.ID;
                 ev.unitSeq = cl.unitSeq;
@@ -63,7 +67,7 @@ namespace RateService
                 ev.evaluateEfficiency = int.Parse(efficiency);
                 ev.evaluateHonest = int.Parse(honest);
                 ev.evaluateQuality = int.Parse(quality);
-                new BEvaluateBLL().Insert(ev);
+                this.evalBll.Insert(ev);
             }
             catch (Exception ex)
             {

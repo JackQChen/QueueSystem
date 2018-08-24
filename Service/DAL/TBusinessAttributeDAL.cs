@@ -37,8 +37,9 @@ namespace DAL
 
         public object GetGridData()
         {
+            var busiQuery = new TBusinessDAL(this.db, this.areaNo).GetQuery();
             var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
-            return this.GetQuery()
+            return busiQuery
                 .GroupBy(k => k.unitSeq)
                 .Select(s => new { s.unitSeq })
                 .LeftJoin(unitQuery, (b, u) => b.unitSeq == u.unitSeq)
