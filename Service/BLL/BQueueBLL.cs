@@ -66,6 +66,6 @@ namespace BLL
         public ArrayList IsCanQueueO(string idCard, string busiSeq, string unitSeq)
         {
             return new BQueueDAL().IsCanQueueO(idCard, busiSeq, unitSeq);
-        }
+        }    
     }
 }

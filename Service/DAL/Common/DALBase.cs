@@ -104,51 +104,53 @@ namespace DAL
             return this.GetMaxId(true);
         }
 
+        static LockDictionary lockDic = new LockDictionary();
+
         private int GetMaxId(bool isReset)
         {
             int maxId = -1;
-            using (var maxDb = Factory.Instance.CreateDbContext(this.connName))
+            try
             {
-                try
+                lock (lockDic.GetLockObject(this.tableName))
                 {
-                    var paraList = new DbParam[]{
-                    new DbParam("areaNo",this.areaNo),
-                    new DbParam("tableName",this.tableName),
-                    new DbParam("maxId", null)
-                    };
-                    maxDb.Session.CommandTimeout = 60;
-                    maxDb.Session.BeginTransaction();
-                    //数据行锁
-                    object maxObj = maxDb.Session.ExecuteScalar("select maxId+1 from f_maxid where areaNo=@areaNo and tableName=@tableName FOR UPDATE", paraList);
-                    object resetObj = null;
-                    if (isReset || maxObj == null || maxObj == DBNull.Value)
+                    using (var maxDb = Factory.Instance.CreateDbContext(this.connName))
                     {
-                        resetObj = maxDb.Session.ExecuteScalar(string.Format("select max(id) from {0} where areaNo=@areaNo", this.tableName), paraList);
-                        if (resetObj == null || resetObj == DBNull.Value)
-                            resetObj = 0;
+                        var paraList = new DbParam[]{
+                            new DbParam("areaNo",this.areaNo),
+                            new DbParam("tableName",this.tableName),
+                            new DbParam("maxId", null)
+                        };
+                        object maxObj = maxDb.Session.ExecuteScalar("select maxId+1 from f_maxid where areaNo=@areaNo and tableName=@tableName", paraList);
+                        object resetObj = null;
+                        if (isReset || maxObj == null || maxObj == DBNull.Value)
+                        {
+                            resetObj = maxDb.Session.ExecuteScalar(string.Format("select max(id) from {0} where areaNo=@areaNo", this.tableName), paraList);
+                            if (resetObj == null || resetObj == DBNull.Value)
+                                resetObj = 0;
+                        }
+                        if (maxObj == null || maxObj == DBNull.Value)
+                        {
+                            maxId = Convert.ToInt32(resetObj) + (isReset ? 0 : 1);
+                            paraList[2].Value = maxId;
+                            var insertSql = "insert into f_maxid(areaNo,tableName,maxId) values(@areaNo,@tableName,@maxId) ";
+                            maxDb.Session.ExecuteNonQuery(insertSql, paraList);
+                        }
+                        else
+                        {
+                            maxId = isReset ? Convert.ToInt32(resetObj) : Convert.ToInt32(maxObj);
+                            paraList[2].Value = maxId;
+                            var updateSql = "update f_maxid set maxId=@maxId where areaNo=@areaNo and tableName=@tableName";
+                            maxDb.Session.ExecuteNonQuery(updateSql, paraList);
+                        }
+                        return maxId;
                     }
-                    if (maxObj == null || maxObj == DBNull.Value)
-                    {
-                        maxId = Convert.ToInt32(resetObj) + (isReset ? 0 : 1);
-                        paraList[2].Value = maxId;
-                        var insertSql = "insert into f_maxid(areaNo,tableName,maxId) values(@areaNo,@tableName,@maxId) ";
-                        maxDb.Session.ExecuteNonQuery(insertSql, paraList);
-                    }
-                    else
-                    {
-                        maxId = isReset ? Convert.ToInt32(resetObj) : Convert.ToInt32(maxObj);
-                        paraList[2].Value = maxId;
-                        var updateSql = "update f_maxid set maxId=@maxId where areaNo=@areaNo and tableName=@tableName";
-                        maxDb.Session.ExecuteNonQuery(updateSql, paraList);
-                    }
-                    maxDb.Session.CommitTransaction();
-                    return maxId;
                 }
-                catch (Exception ex)
-                {
-                    maxDb.Session.RollbackTransaction();
-                    throw ex;
-                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                    throw ex.InnerException;
+                throw ex;
             }
         }
 

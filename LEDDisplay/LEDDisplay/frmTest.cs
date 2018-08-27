@@ -224,6 +224,18 @@ namespace LEDDisplay
             cmbBaudRate.SelectedIndex = 0;
             LEDSender.Do_LED_Startup();
             //LEDSender.Do_LED_CloseDeviceOnTerminate(1);
+
+            ptr = (UInt32)this.Handle;
+            fontName = ConfigurationManager.AppSettings["FontName"];
+            fontColor = Convert.ToInt32(ConfigurationManager.AppSettings["FontColor"], 16);
+            fontSize = Convert.ToInt32(ConfigurationManager.AppSettings["FontSize"]);
+            fontStyle = Convert.ToInt32(ConfigurationManager.AppSettings["FontStyle"]);
+            var position = ConfigurationManager.AppSettings["Position"].Split(',');
+            rectText = new Rectangle(
+                Convert.ToInt32(position[0]),
+                Convert.ToInt32(position[1]),
+                Convert.ToInt32(position[2]),
+                Convert.ToInt32(position[3]));
         }
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -324,7 +336,7 @@ namespace LEDDisplay
             EncodeDateTime(ref T, 2013, 1, 1, 12, 30, 0, 0);
             SystemTimeToTimeStamp(ref T, ref totime);
             //LEDSender.Do_AddChapterEx(K, 30000, LEDSender.WAIT_CHILD, 1, (ushort)(LEDSender.CS_MON + LEDSender.CS_WED), ref fromtime, ref totime);
-            LEDSender.Do_AddChapterEx(K, 30000, LEDSender.WAIT_CHILD, 1, 127, ref fromtime, ref totime);
+            //LEDSender.Do_AddChapterEx(K, 30000, LEDSender.WAIT_CHILD, 1, 127, ref fromtime, ref totime);
             LEDSender.Do_AddRegion(K, 0, 0, 64, 64, 0);
 
             //第1页面
@@ -340,7 +352,7 @@ namespace LEDDisplay
             EncodeDateTime(ref T, 2013, 1, 1, 12, 35, 0, 0);
             SystemTimeToTimeStamp(ref T, ref totime);
             //LEDSender.Do_AddChapterEx(K, 30000, LEDSender.WAIT_CHILD, 1, (ushort)(LEDSender.CS_MON + LEDSender.CS_WED), ref fromtime, ref totime);
-            LEDSender.Do_AddChapterEx(K, 30000, LEDSender.WAIT_CHILD, 1, 127, ref fromtime, ref totime);
+            //LEDSender.Do_AddChapterEx(K, 30000, LEDSender.WAIT_CHILD, 1, 127, ref fromtime, ref totime);
             LEDSender.Do_AddRegion(K, 0, 0, 64, 64, 0);
 
             //第1页面
@@ -1276,7 +1288,7 @@ namespace LEDDisplay
                 Convert.ToInt32(position[1]),
                 Convert.ToInt32(position[2]),
                 Convert.ToInt32(position[3]));
-            this.SendLEDMessage(ptr, this.eRemoteHost.Text, ushort.Parse(eLocalPort.Text), "0", "0,0,0,3", "请A003号");
+            //this.SendLEDMessage(ptr, this.eRemoteHost.Text, ushort.Parse(eLocalPort.Text), "0", "0,0,0,3", "请A003号");
             //new Thread(() =>
             //{ 
             //    this.SendLEDMessage(ptr, this.eRemoteHost.Text, ushort.Parse(eLocalPort.Text), "0", "0,0,0,3", "请A003号");
@@ -1291,7 +1303,8 @@ namespace LEDDisplay
             //})
             //{ IsBackground = true }.Start();
         }
-        void SendLEDMessage(UInt32 handle, string ip, ushort port, string deviceAddr, string position, string text)
+
+        int SendLEDMessage(string ip, ushort port, string deviceAddr, string position, string text, bool isFlash)
         {
             var strArr = position.Split(',');
             int ChapterIndex = Convert.ToInt32(strArr[0]),
@@ -1305,16 +1318,34 @@ namespace LEDDisplay
             param.devParam.rmtPort = 6666;
             param.devParam.dstAddr = ushort.Parse(deviceAddr);
             param.notifyMode = LEDSender.NOTIFY_EVENT;
-            param.wmHandle = handle;
+            param.wmHandle = this.ptr;
             param.wmMessage = WM_LED_NOTIFY;
             //这个操作中，ChapterIndex=0，RegionIndex=0，LeafIndex=0，ObjectIndex=0 只更新控制卡内第1个节目中的第1个分区中的第1个页面中的第1个对象
             //如果ChapterIndex=1，RegionIndex=2，LeafIndex=1，ObjectIndex=2只更新控制卡内第2个节目中的第3个分区中的第2个页面中的第3个对象
             //以此类推 
             ushort K = (ushort)LEDSender.Do_MakeObject(LEDSender.ROOT_PLAY_OBJECT, LEDSender.ACTMODE_REPLACE,
                 ChapterIndex, RegionIndex, LeafIndex, ObjectIndex,
-                LEDSender.COLOR_MODE_DOUBLE);
-            LEDSender.Do_AddText(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0, text, this.fontName, this.fontSize, this.fontColor, this.fontStyle, LEDSender.V_FALSE, 0, 1, 5, 1, 5, 1, 1000, 10000);
+                LEDSender.COLOR_MODE_THREE
+                );
+
+            LEDSender.Do_AddText(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0,
+                text, fontName, fontSize, fontColor, fontStyle, 0, 1,
+                1, 5, 1, 5, 0, 1000, 10000);
+            //CLEDSender.AddTextEx3(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0,
+            //     text, "宋体", 24, 0xff, LEDSender.WFS_NONE, 0, 1, LEDSender.V_TRUE, 0, 0, 0, 1,
+            //     1, 5, 1, 5, 0, 1000, 10000);
+
+            //CLEDSender.AddTextEx3(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0,
+            //     text, fontName, fontSize, fontColor, fontStyle, 0, LEDSender.V_TRUE, 0, 0, 1, 0, LEDSender.V_TRUE,
+            //     1, 5, 1, 5, 0, 1000, 10000);
+
             var result = LEDSender.Do_LED_SendToScreen(ref param, K);
+            return result;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.SendLEDMessage(txtip.Text, ushort.Parse(txtport.Text), "0", txtposition.Text.Trim(), "请A003号测试 ", false);
         }
 
     }

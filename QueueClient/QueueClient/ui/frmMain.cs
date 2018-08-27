@@ -32,7 +32,7 @@ namespace QueueClient
         string UnitTime = System.Configuration.ConfigurationManager.AppSettings["Unit"];
         string ReadcardTime = System.Configuration.ConfigurationManager.AppSettings["Readcard"];
         string CardTime = System.Configuration.ConfigurationManager.AppSettings["Card"];
-        string MainTime = System.Configuration.ConfigurationManager.AppSettings["MainTime"];
+        string MainTime = "";// System.Configuration.ConfigurationManager.AppSettings["MainTime"];
         int CanNotUseCard = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CanNotUseCard"]);
         #endregion
 
@@ -146,7 +146,6 @@ namespace QueueClient
                 true);
             InitializeComponent();
             busyType = BusyType.Default;
-
             ucpnMain main = new ucpnMain();
             main.Size = new Size(1920, 1080);
             main.Location = new Point(0, 0);
@@ -206,19 +205,6 @@ namespace QueueClient
             uc.Add("readcard", readCard);
             uc.Add("card", card);
             uc.Add("main", main);
-
-            //页面停留时间 单位：秒
-            ucTimer.Add("main", Convert.ToInt32(MainTime));
-            ucTimer.Add("pwd", Convert.ToInt32(ExitTime));
-            ucTimer.Add("evaluate", Convert.ToInt32(EvaluateTime));
-            ucTimer.Add("appoint", Convert.ToInt32(AppointTime));
-            ucTimer.Add("busy", Convert.ToInt32(BusyTime));
-            ucTimer.Add("unit", Convert.ToInt32(UnitTime));
-            ucTimer.Add("readcard", Convert.ToInt32(ReadcardTime));
-            ucTimer.Add("card", Convert.ToInt32(CardTime));
-
-            uc["main"].BringToFront();
-            pageStopTime = ucTimer["main"];
             try
             {
                 Image img = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "img\\title.png");
@@ -236,7 +222,24 @@ namespace QueueClient
         private void frmMain_Load(object sender, EventArgs e)
         {
             FloorImgCount = GetFloorImgCount();
+            SetConfigValue("MainTime", "20");//
             SetConfigValue("BroadcastInterval", "5");
+            SetConfigValue("Units1", "2,3,1,5");
+            SetConfigValue("Units2", "6,7");
+            MainTime = System.Configuration.ConfigurationManager.AppSettings["MainTime"];
+            //页面停留时间 单位：秒
+            ucTimer.Add("main", Convert.ToInt32(MainTime));
+            ucTimer.Add("pwd", Convert.ToInt32(ExitTime));
+            ucTimer.Add("evaluate", Convert.ToInt32(EvaluateTime));
+            ucTimer.Add("appoint", Convert.ToInt32(AppointTime));
+            ucTimer.Add("busy", Convert.ToInt32(BusyTime));
+            ucTimer.Add("unit", Convert.ToInt32(UnitTime));
+            ucTimer.Add("readcard", Convert.ToInt32(ReadcardTime));
+            ucTimer.Add("card", Convert.ToInt32(CardTime));
+            pageStopTime = ucTimer["main"];
+            uc["main"].BringToFront();
+            timer3.Enabled = true;
+            timer3.Start();
             if (CanNotUseCard == 0)
             {
                 int iPort;

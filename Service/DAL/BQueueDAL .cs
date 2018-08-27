@@ -5,11 +5,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using Chloe;
 using Model;
+using System.Threading;
 
 namespace DAL
 {
     public class BQueueDAL : DALBase<BQueueModel>
     {
+        static object obj = new object();
         public BQueueDAL()
             : base()
         {
@@ -20,7 +22,7 @@ namespace DAL
         {
         }
         public BQueueDAL(DbContext db, string areaNo)
-            : base(db,areaNo)
+            : base(db, areaNo)
         {
         }
         public BQueueDAL(string connName)
@@ -80,52 +82,52 @@ namespace DAL
             BQueueModel qModel = null;
             try
             {
-                LockAction.Run(FLockKey.Queue, () =>
-                  {
-                      var dal = new BLineUpMaxNoDAL(this.db, this.areaNo);
-                      var maxNo = dal.GetModelList().Where(a => a.AreaNo == this.areaNo).Where(l => l.unitSeq == selectUnit.unitSeq && l.busiSeq == selectBusy.busiSeq).FirstOrDefault();
-                      int ticketNo = maxNo == null ? 1 : maxNo.lineDate.Date != DateTime.Now.Date ? 1 : maxNo.maxNo + 1;
-                      BQueueModel line = new BQueueModel();
-                      line.ID = this.GetMaxId();
-                      line.AreaNo = this.areaNo;
-                      line.busTypeName = selectBusy.busiName;
-                      line.busTypeSeq = selectBusy.busiSeq;
-                      line.qNumber = ticketNo.ToString();
-                      line.state = 0;
-                      line.ticketNumber = ticketStart + ticketNo.ToString("000");
-                      line.ticketTime = DateTime.Now;
-                      line.unitName = selectUnit.unitName;
-                      line.unitSeq = selectUnit.unitSeq;
-                      line.vipLever = "";
-                      line.windowName = "";
-                      line.windowNumber = "";
-                      line.idCard = idCard;
-                      line.qNmae = name;
-                      line.qType = 0;
-                      line = this.Insert(line);
-                      if (maxNo == null)
-                      {
-                          maxNo = new BLineUpMaxNoModel();
-                          maxNo.ID = dal.GetMaxId();
-                          maxNo.AreaNo = this.areaNo;
-                          maxNo.areaSeq = "";
-                          maxNo.busiSeq = selectBusy.busiSeq;
-                          maxNo.lineDate = DateTime.Now;
-                          maxNo.maxNo = 1;
-                          maxNo.unitSeq = selectUnit.unitSeq;
-                          dal.Insert(maxNo);
-                      }
-                      else
-                      {
-                          if (maxNo.lineDate.Date != DateTime.Now.Date)
-                              maxNo.maxNo = 1;
-                          else
-                              maxNo.maxNo = maxNo.maxNo + 1;
-                          maxNo.lineDate = DateTime.Now;
-                          dal.Update(maxNo);
-                      }
-                      qModel = line;
-                  });
+                lock (obj)
+                {
+                    var dal = new BLineUpMaxNoDAL(this.db, this.areaNo);
+                    var maxNo = dal.GetModelList().Where(a => a.AreaNo == this.areaNo).Where(l => l.unitSeq == selectUnit.unitSeq && l.busiSeq == selectBusy.busiSeq).FirstOrDefault();
+                    int ticketNo = maxNo == null ? 1 : maxNo.lineDate.Date != DateTime.Now.Date ? 1 : maxNo.maxNo + 1;
+                    BQueueModel line = new BQueueModel();
+                    line.ID = this.GetMaxId();
+                    line.AreaNo = this.areaNo;
+                    line.busTypeName = selectBusy.busiName;
+                    line.busTypeSeq = selectBusy.busiSeq;
+                    line.qNumber = ticketNo.ToString();
+                    line.state = 0;
+                    line.ticketNumber = ticketStart + ticketNo.ToString("000");
+                    line.ticketTime = DateTime.Now;
+                    line.unitName = selectUnit.unitName;
+                    line.unitSeq = selectUnit.unitSeq;
+                    line.vipLever = "";
+                    line.windowName = "";
+                    line.windowNumber = "";
+                    line.idCard = idCard;
+                    line.qNmae = name;
+                    line.qType = 0;
+                    line = this.Insert(line);
+                    if (maxNo == null)
+                    {
+                        maxNo = new BLineUpMaxNoModel();
+                        maxNo.ID = dal.GetMaxId();
+                        maxNo.AreaNo = this.areaNo;
+                        maxNo.areaSeq = "";
+                        maxNo.busiSeq = selectBusy.busiSeq;
+                        maxNo.lineDate = DateTime.Now;
+                        maxNo.maxNo = 1;
+                        maxNo.unitSeq = selectUnit.unitSeq;
+                        dal.Insert(maxNo);
+                    }
+                    else
+                    {
+                        if (maxNo.lineDate.Date != DateTime.Now.Date)
+                            maxNo.maxNo = 1;
+                        else
+                            maxNo.maxNo = maxNo.maxNo + 1;
+                        maxNo.lineDate = DateTime.Now;
+                        dal.Update(maxNo);
+                    }
+                    qModel = line;
+                }
             }
             catch
             {
@@ -149,7 +151,7 @@ namespace DAL
             BQueueModel qModel = null;
             try
             {
-                LockAction.Run(FLockKey.Queue, () =>
+                lock (obj)
                 {
                     var dal = new BLineUpMaxNoDAL(this.db, this.areaNo);
                     var maxNo = dal.GetModelList().Where(a => a.AreaNo == this.areaNo).Where(l => l.unitSeq == unitSeq && l.busiSeq == busiSeq).FirstOrDefault();
@@ -195,7 +197,7 @@ namespace DAL
                         dal.Update(maxNo);
                     }
                     qModel = line;
-                });
+                }
             }
             catch
             {
@@ -203,7 +205,6 @@ namespace DAL
             }
             return qModel;
         }
-
 
         public bool IsCanQueue(string idCard, string busiSeq, string unitSeq)
         {

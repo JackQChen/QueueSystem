@@ -26,14 +26,14 @@ namespace QueueClient
         public TUnitModel selectUnit { get; set; }
         public int pageCount = 30;//
         public int cureentPage = 0;//目前按照固定2个页面 。如果页码为0 加载图1 ，页面为2加载图2
-        string[] units1 = new string[] { "1", "2", "3", "4" };//页面1固定部门编号 
-        string[] units2 = new string[] { "5", "6", "", "" };//页面2固定部门编号 
-        Image page1Img = null;//页面1图
-        Image page2Img = null;//页面2图
+        string[] units1 = null;
+        string[] units2 = null;
         Image[] imgList = null;
         //动态创建部门
         public void CreateUnit()
         {
+            units1 = System.Configuration.ConfigurationManager.AppSettings["Units1"].ToString().Split(',');//页面1固定部门编号 
+            units2 = System.Configuration.ConfigurationManager.AppSettings["Units2"].ToString().Split(',');//页面2固定部门编号 
             this.pnUnit.ClearControl();
             pnUnit.BackgroundImage = imgList[cureentPage];
             if (cureentPage == 0)
@@ -202,9 +202,9 @@ namespace QueueClient
             if (Brush == null)
                 Brush = new SolidBrush(Color.Black);
             string unitName = unit.unitName;
-            if (unit.unitName.Trim().Length > 8)
-                unitName = unitName.Substring(0, 8);
-            int rowLength = 4;
+            if (unit.unitName.Trim().Length > 20)
+                unitName = unitName.Substring(0, 20);
+            int rowLength = 10;
             int cX = 23;
             if (unitName.Length <= rowLength)
                 g.DrawString(unitName, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 20);//只有三个字，那就居中

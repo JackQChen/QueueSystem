@@ -34,7 +34,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.btnDisConn = new System.Windows.Forms.Button();
+            this.btnRestart = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnRefreshConfig = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -77,21 +77,21 @@
             this.columnHeader5.Text = "连接时间";
             this.columnHeader5.Width = 140;
             // 
-            // btnDisConn
+            // btnRestart
             // 
-            this.btnDisConn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisConn.Enabled = false;
-            this.btnDisConn.Location = new System.Drawing.Point(422, 14);
-            this.btnDisConn.Name = "btnDisConn";
-            this.btnDisConn.Size = new System.Drawing.Size(75, 23);
-            this.btnDisConn.TabIndex = 1;
-            this.btnDisConn.Text = "下线";
-            this.btnDisConn.UseVisualStyleBackColor = true;
+            this.btnRestart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRestart.Location = new System.Drawing.Point(422, 14);
+            this.btnRestart.Name = "btnRestart";
+            this.btnRestart.Size = new System.Drawing.Size(75, 23);
+            this.btnRestart.TabIndex = 1;
+            this.btnRestart.Text = "重启客户端";
+            this.btnRestart.UseVisualStyleBackColor = true;
+            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.btnRefreshConfig);
-            this.panel1.Controls.Add(this.btnDisConn);
+            this.panel1.Controls.Add(this.btnRestart);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 312);
             this.panel1.Name = "panel1";
@@ -139,7 +139,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.Button btnDisConn;
+        private System.Windows.Forms.Button btnRestart;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button btnRefreshConfig;

@@ -47,10 +47,10 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("宋体", 16F);
+            this.label1.Font = new System.Drawing.Font("黑体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.Location = new System.Drawing.Point(17, 76);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(252, 22);
+            this.label1.Size = new System.Drawing.Size(252, 21);
             this.label1.TabIndex = 0;
             this.label1.Text = "有新的排队数据，票号：";
             // 
@@ -58,7 +58,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("宋体", 16F);
+            this.label2.Font = new System.Drawing.Font("黑体", 16F);
             this.label2.Location = new System.Drawing.Point(136, 145);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(120, 22);
@@ -69,7 +69,7 @@
             // 
             this.lblTimes.AutoSize = true;
             this.lblTimes.BackColor = System.Drawing.Color.Transparent;
-            this.lblTimes.Font = new System.Drawing.Font("宋体", 16F);
+            this.lblTimes.Font = new System.Drawing.Font("黑体", 16F);
             this.lblTimes.ForeColor = System.Drawing.Color.Red;
             this.lblTimes.Location = new System.Drawing.Point(256, 145);
             this.lblTimes.Name = "lblTimes";
@@ -81,7 +81,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("宋体", 16F);
+            this.label4.Font = new System.Drawing.Font("黑体", 16F);
             this.label4.Location = new System.Drawing.Point(293, 145);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 22);
@@ -108,6 +108,7 @@
             this.Controls.Add(this.lblTimes);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Font = new System.Drawing.Font("黑体", 9F);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmMsg";

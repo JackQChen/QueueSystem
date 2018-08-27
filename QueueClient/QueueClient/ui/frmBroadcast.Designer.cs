@@ -57,6 +57,7 @@
             this.Controls.Add(this.pbMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmBroadcast";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmBroadcast";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

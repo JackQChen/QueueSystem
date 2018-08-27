@@ -30,6 +30,7 @@ namespace ScreenDisplayService
                 item.SubItems.Add(client.IP);
                 item.SubItems.Add(client.DeviceName);
                 item.SubItems.Add(client.ConnTime);
+                item.Tag = client.ID;
             }
             this.service.deviceList.Changed = false;
         }
@@ -37,6 +38,20 @@ namespace ScreenDisplayService
         private void btnRefreshConfig_Click(object sender, EventArgs e)
         {
             this.service.RefreshConfig();
+        }
+
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.listView1.SelectedItems)
+            {
+                var rData = new ResponseData
+                {
+                    method = "Restart",
+                    code = "0",
+                    result = ""
+                };
+                this.service.SendWSMessage((IntPtr)item.Tag, rData.ToBytes());
+            }
         }
     }
 }

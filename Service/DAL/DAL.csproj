@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="Common\DALBase.cs" />
     <Compile Include="Common\Factory.cs" />
-    <Compile Include="Common\LockAction.cs" />
+    <Compile Include="Common\LockDAL.cs" />
     <Compile Include="Common\MySqlConnectionFactory.cs" />
     <Compile Include="TBusinessAttributeDAL.cs" />
     <Compile Include="TBusinessDAL.cs" />

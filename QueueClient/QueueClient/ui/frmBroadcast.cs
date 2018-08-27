@@ -15,10 +15,11 @@ namespace QueueClient
         {
             InitializeComponent();
         }
-        int interval = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["BroadcastInterval"]);//轮播间隔
+        int interval = 1;
         int startImg = 1;
         private void frmBroadcast_Load(object sender, EventArgs e)
         {
+            interval = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["BroadcastInterval"]);//轮播间隔
             Image img = null;
             try
             {

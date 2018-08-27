@@ -86,6 +86,7 @@
     <Compile Include="frmQueueSet.Designer.cs">
       <DependentUpon>frmQueueSet.cs</DependentUpon>
     </Compile>
+    <Compile Include="LockAction.cs" />
     <Compile Include="OperateIni.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

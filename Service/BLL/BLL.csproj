@@ -67,7 +67,7 @@
     <Compile Include="Expression\TypeResolver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Common\LockAction.cs" />
+    <Compile Include="Common\LockBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TBusinessAttributeBLL.cs" />
     <Compile Include="TBusinessBLL.cs" />

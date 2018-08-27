@@ -30,7 +30,7 @@ namespace CallSystem
         string ip = "";// System.Configuration.ConfigurationManager.AppSettings["IP"];
         string port = "";// System.Configuration.ConfigurationManager.AppSettings["Port"];
         string clientName;
-        string areaNo = "";
+        string areaId = "";
         int EvaluatorType = 0;
         //string test = "";
         BEvaluateBLL eBll = new BEvaluateBLL();
@@ -61,6 +61,7 @@ namespace CallSystem
         Thread thread;
         bool isBool = true;
         object Obj = new object();
+        LockAction action = new LockAction();
         public frmMain()
         {
             InitializeComponent();
@@ -83,9 +84,9 @@ namespace CallSystem
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            SetConfigValue("AreaNo", "1,2");
+            SetConfigValue("AreaId", "1,2");
             SetConfigValue("EvaluatorType", "0");
-            areaNo = System.Configuration.ConfigurationManager.AppSettings["AreaNo"];
+            areaId = System.Configuration.ConfigurationManager.AppSettings["AreaId"];
             clientName = System.Configuration.ConfigurationManager.AppSettings["ClientName"];
             clearTime = System.Configuration.ConfigurationManager.AppSettings["ClearTime"];
             ip = System.Configuration.ConfigurationManager.AppSettings["IP"];
@@ -110,21 +111,21 @@ namespace CallSystem
             wReCall = new Dictionary<int, Dictionary<string, int>>();
             wUser = new Dictionary<string, string>();
             //根据配置分区窗口
-            var areaList = areaNo.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var areaList = areaId.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             wList = wList.Where(w => areaList.Contains(w.AreaName.ToString())).ToList();
             foreach (var w in wList)
             {
-                wArea.Add(w.Number, w.AreaName.ToString());
-                wCall.Add(w.Number, w.CallNumber);
-                wNum.Add(w.CallNumber, w.Number);
-                wState.Add(w.CallNumber, WorkState.Defalt);
-                csState.Add(w.CallNumber, new FCallStateModel());
+                wArea[w.Number] = w.AreaName.ToString();
+                wCall[w.Number] = w.CallNumber;
+                wNum[w.CallNumber] = w.Number;
+                wState[w.CallNumber] = WorkState.Defalt;
+                csState[w.CallNumber] = new FCallStateModel();
                 var busyList = wbList.Where(b => b.WindowID == w.ID).ToList().OrderBy(o => o.priorityLevel).ToList();
                 var busy = busyList.FirstOrDefault();
                 if (busy != null)
                 {
-                    wlBusy.Add(w.CallNumber, busyList);
-                    wBusy.Add(w.CallNumber, busy);
+                    wlBusy[w.CallNumber] = busyList;
+                    wBusy[w.CallNumber] = busy;
                     var gbList = new List<TWindowBusinessModel>();
                     foreach (var bs in busyList)
                     {
@@ -132,7 +133,7 @@ namespace CallSystem
                         if (gb != null)
                             gbList.Add(bs);
                     }
-                    wbBusy.Add(w.CallNumber, gbList);
+                    wbBusy[w.CallNumber] = gbList;
                 }
             }
             serialPort = new SerialPort();
@@ -576,15 +577,15 @@ namespace CallSystem
             DateTime start = DateTime.Now;
             if (GetWindowByAdress(adress, 0))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         csState[adress] = new FCallStateModel();
                         csState[adress].windowNo = wNum[adress];
                         csState[adress].workState = (int)WorkState.Defalt;
-                        csBll.Insert(csState[adress]);
+                        csState[adress] = csBll.Insert(csState[adress]);
                     }
                     if (csState[adress].workState == (int)WorkState.PauseService)
                     {
@@ -651,9 +652,9 @@ namespace CallSystem
         {
             if (GetWindowByAdress(adress, 1))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         return;
@@ -694,15 +695,15 @@ namespace CallSystem
         {
             if (GetWindowByAdress(adress, 2))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         csState[adress] = new FCallStateModel();
                         csState[adress].windowNo = wNum[adress];
                         csState[adress].workState = (int)WorkState.Defalt;
-                        csBll.Insert(csState[adress]);
+                        csState[adress] = csBll.Insert(csState[adress]);
                     }
                     if (csState[adress].workState == (int)WorkState.PauseService)
                     {
@@ -761,9 +762,9 @@ namespace CallSystem
         {
             if (GetWindowByAdress(adress, 4))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         return;
@@ -808,15 +809,15 @@ namespace CallSystem
         {
             if (GetWindowByAdress(adress, 3))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         csState[adress] = new FCallStateModel();
                         csState[adress].windowNo = wNum[adress];
                         csState[adress].workState = (int)WorkState.Defalt;
-                        csBll.Insert(csState[adress]);
+                        csState[adress] = csBll.Insert(csState[adress]);
                     }
                     if (csState[adress].workState != (int)WorkState.PauseService)
                     {
@@ -836,15 +837,15 @@ namespace CallSystem
         {
             if (GetWindowByAdress(adress, 5))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         csState[adress] = new FCallStateModel();
                         csState[adress].windowNo = wNum[adress];
                         csState[adress].workState = (int)WorkState.Defalt;
-                        csBll.Insert(csState[adress]);
+                        csState[adress] = csBll.Insert(csState[adress]);
                     }
                     if (csState[adress].workState == (int)WorkState.PauseService)
                     {
@@ -880,15 +881,15 @@ namespace CallSystem
         {
             if (GetWindowByAdress(adress, 6))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         csState[adress] = new FCallStateModel();
                         csState[adress].windowNo = wNum[adress];
                         csState[adress].workState = (int)WorkState.Defalt;
-                        csBll.Insert(csState[adress]);
+                        csState[adress] = csBll.Insert(csState[adress]);
                     }
                     if (csState[adress].workState == (int)WorkState.PauseService)
                     {
@@ -924,9 +925,9 @@ namespace CallSystem
         {
             if (GetWindowByAdress(adress, 7))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         return;
@@ -1088,9 +1089,9 @@ namespace CallSystem
         {
             if (GetWindowByAdress(adress, 2))
             {
-                LockAction.RunWindowLock(wNum[adress], () =>
+                action.lockWin(wNum[adress], () =>
                 {
-                    csState[adress] = csBll.GetModel(wNum[adress]);
+                    csState[adress] = csBll.GetModelByWindowNo(wNum[adress]);
                     if (csState[adress] == null)
                     {
                         return;
@@ -1206,7 +1207,7 @@ namespace CallSystem
                     var tList = cBll.GiveUpAll();
                     foreach (var t in tList.Select(s => s.windowNumber).Distinct())
                     {
-                        var stateModel = csBll.GetModel(t);
+                        var stateModel = csBll.GetModelByWindowNo(t);
                         if (stateModel != null)
                         {
                             stateModel.callId = 0;

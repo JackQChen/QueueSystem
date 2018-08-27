@@ -1,4 +1,4 @@
-﻿var isFuncKey = false , inGrid = false;
+﻿var isFuncKey = false, inGrid = false;
 
 function initSearchControl(opt) {
     var txtSearch = $("#" + opt.id);
@@ -24,7 +24,7 @@ function init_Control(opt) {
     txtVal.val(opt.value == null ? null : opt.value);
     txtBox.val(opt.displayText);
     txtBox.attr('displayText', opt.displayText);
-    tBox.onkeydown = function(e) {
+    tBox.onkeydown = function (e) {
         isFuncKey = true;
         if (e.keyCode == 13) {
             onSearchClose(opt, true);
@@ -58,19 +58,20 @@ function init_Control(opt) {
                 divDataGrid.css('display', 'block');
         }
     };
-    tBox.onkeyup = function(e) {
+    tBox.onkeyup = function (e) {
         if (isFuncKey)
             return;
         var newData = new Array();
         var ds = opt.dataSource;
-        var txt = $.trim(txtBox.val());
+        var txt = $.trim(txtBox.val()).toLowerCase();
         if (opt.filter == null) {
-            ds.forEach(function(obj) {
+            ds.forEach(function (obj) {
                 for (var name in obj) {
-                    if ((obj[name].toString()).indexOf(txt) >= 0) {
-                        newData.push(obj);
-                        break;
-                    }
+                    if (obj[name] != null)
+                        if (obj[name].toString().toLowerCase().indexOf(txt) >= 0) {
+                            newData.push(obj);
+                            break;
+                        }
                 }
             });
         } else {
@@ -83,7 +84,7 @@ function init_Control(opt) {
             data: newData
         }).trigger("reloadGrid");
     };
-    tBox.onblur = function(e) {
+    tBox.onblur = function (e) {
         if (!inGrid) {
             onSearchClose(opt, false);
         }
@@ -94,10 +95,10 @@ function init_Control(opt) {
     divDataGrid.width(opt.width);
     divDataGrid.height(opt.height);
     divDataGrid.css('display', 'none');
-    divDataGrid[0].onmouseenter = function(e) {
+    divDataGrid[0].onmouseenter = function (e) {
         inGrid = true;
     };
-    divDataGrid[0].onmouseleave = function(e) {
+    divDataGrid[0].onmouseleave = function (e) {
         tBox.focus();
         inGrid = false;
     };
@@ -110,10 +111,10 @@ function init_Grid(opt) {
         colModel: opt.colModel,
         width: opt.width,
         height: opt.height - 45,
-        ondblClickRow: function(id, irow, icol, e) {
+        ondblClickRow: function (id, irow, icol, e) {
             onSearchClose(opt, true);
         },
-        loadComplete: function() {
+        loadComplete: function () {
             //选中第一行
             var ids = dataGrid.jqGrid('getDataIDs');
             if (ids.length > 0)

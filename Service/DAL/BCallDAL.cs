@@ -10,6 +10,7 @@ namespace DAL
 {
     public class BCallDAL : DALBase<BCallModel>
     {
+        static object obj = new object();
         public BCallDAL()
             : base()
         {
@@ -48,7 +49,7 @@ namespace DAL
             BCallModel tcModel = null;
             try
             {
-                LockAction.Run(FLockKey.Call, () =>
+                lock (obj)
                 {
                     if (gwlBusy == null)
                         gwlBusy = new List<TWindowBusinessModel>();
@@ -64,7 +65,7 @@ namespace DAL
                         var lineQueue = db.Query<BQueueModel>().Where(a => a.AreaNo == this.areaNo).Where(q => busyList.Contains(q.busTypeSeq) && unitList.Contains(q.unitSeq) && q.state == 0 && q.ticketTime.Date == date.Date).OrderBy(o => o.ID).ToList();//取到当天 窗口业务排队队列
                         line = lineQueue.FirstOrDefault();
                         if (line == null)
-                            return;
+                            return null;
                     }
                     else
                         line = lineGreen;
@@ -88,7 +89,7 @@ namespace DAL
                     call.windowUser = windowUser;
                     var ret = this.Insert(call);
                     tcModel = ret;
-                });
+                }
             }
             catch
             {
@@ -107,7 +108,7 @@ namespace DAL
                 List<BCallModel> tList = new List<BCallModel>();
                 this.db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                 var lineQueue = db.Query<BQueueModel>().Where(a => a.AreaNo == this.areaNo).Where(q => q.state == 0).ToList();
-                var qDal = new BQueueDAL(this.db,this.areaNo);
+                var qDal = new BQueueDAL(this.db, this.areaNo);
                 foreach (var q in lineQueue)
                 {
                     q.state = 1;
@@ -147,7 +148,7 @@ namespace DAL
                 var busyList = windowBusys.Select(w => w.busiSeq).ToList();
                 var unitList = windowBusys.Select(w => w.unitSeq).ToList();
                 var lineQueue = db.Query<BQueueModel>().Where(a => a.AreaNo == this.areaNo).Where(q => busyList.Contains(q.busTypeSeq) && unitList.Contains(q.unitSeq) && q.state == 0).ToList();
-                var qDal = new BQueueDAL(this.db,this.areaNo);
+                var qDal = new BQueueDAL(this.db, this.areaNo);
                 foreach (var q in lineQueue)
                 {
                     q.state = 1;
@@ -249,7 +250,7 @@ namespace DAL
                 this.db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                 call.state = 2;
                 this.Update(call);
-                BQueueDAL dal = new BQueueDAL(this.db,this.areaNo);
+                BQueueDAL dal = new BQueueDAL(this.db, this.areaNo);
                 var model = dal.GetModel(call.qId);
                 model.state = 0;
                 dal.Update(model);

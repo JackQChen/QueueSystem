@@ -240,8 +240,11 @@ namespace LEDDisplay
             //以此类推 
             ushort K = (ushort)LEDSender.Do_MakeObject(LEDSender.ROOT_PLAY_OBJECT, LEDSender.ACTMODE_REPLACE,
                 ChapterIndex, RegionIndex, LeafIndex, ObjectIndex,
-                LEDSender.COLOR_MODE_FULL_32BIT);
-            LEDSender.Do_AddText(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0, text, this.fontName, this.fontSize, this.fontColor, this.fontStyle, LEDSender.V_FALSE, 0, 1, 5, 1, 5, isFlash ? 1 : 0, 1000, 10000);
+                //全彩无灰度
+                LEDSender.COLOR_MODE_THREE);
+            LEDSender.Do_AddText(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0,
+                text, this.fontName, this.fontSize, this.fontColor, this.fontStyle, LEDSender.V_FALSE, 1,
+                1, 5, 1, 5, isFlash ? 1 : 0, 1000, 10000);
             var result = LEDSender.Do_LED_SendToScreen(ref param, K);
             if (result == LEDSender.R_DEVICE_READY)
                 this.messageIndicator1.SetState(StateType.Success, "发送成功");

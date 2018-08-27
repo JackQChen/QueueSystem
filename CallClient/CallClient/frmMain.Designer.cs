@@ -119,7 +119,6 @@
             this.messageIndicator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.messageIndicator1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.messageIndicator1.Location = new System.Drawing.Point(4, 466);
-            this.messageIndicator1.Margin = new System.Windows.Forms.Padding(4);
             this.messageIndicator1.Name = "messageIndicator1";
             this.messageIndicator1.Size = new System.Drawing.Size(614, 40);
             this.messageIndicator1.TabIndex = 7;

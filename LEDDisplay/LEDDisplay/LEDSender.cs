@@ -43,10 +43,10 @@ namespace LEDDisplay
         public ushort command;
         public Int32 result;
         public Int32 status;
-        TSenderParam param;
+        public TSenderParam param;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 512)]
         public byte[] buffer;
-        UInt32 size;
+        public UInt32 size;
     }
 
     //SYSTEMTIME型日期时间结构
@@ -69,6 +69,25 @@ namespace LEDDisplay
         public Int32 date;
     }
 
+    public struct TPowerSchedule
+    {
+        public UInt32 Enabled;
+        public UInt32 Mode;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public TTimeStamp[] OpenTime;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public TTimeStamp[] CloseTime;
+        public UInt32 Checksum;
+    }
+
+    public struct TBrightSchedule
+    {
+        public UInt32 Enabled;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
+        public byte[] Bright;
+        public UInt32 Checksum;
+    }
+
     class CLEDSender
     {
         //通讯设备类型
@@ -86,8 +105,10 @@ namespace LEDDisplay
         public readonly UInt32 NOTIFY_NONE  = 1;
         //是否阻塞方式；是则等到发送完成或者超时，才返回；否则立即返回
         public readonly UInt32 NOTIFY_BLOCK = 2;
-        //是否将发送结果以Windows窗体消息方式送到调用得应用
+        //多线程异步方式，一个本地端口发一个屏
         public readonly UInt32 NOTIFY_EVENT = 4;
+        //一个本地端口并行发送多个屏
+        public readonly UInt32 NOTIFY_MULTI = 8;
 
         public readonly Int32 R_DEVICE_READY    = 0;
         public readonly Int32 R_DEVICE_INVALID  = -1;
@@ -130,7 +151,16 @@ namespace LEDDisplay
         public readonly ushort PKC_SET_POWER   = 10;
         public readonly ushort PKC_GET_BRIGHT  = 11;
         public readonly ushort PKC_SET_BRIGHT  = 12;
+        public readonly ushort PKC_COM_TRANSFER = 21;
+        public readonly ushort PKC_MODEM_TRANSFER = 22;
+        public readonly ushort PKC_SET_EXSTRING = 29;
+        public readonly ushort PKC_GET_TRANSFER_ACK = 33;
         public readonly ushort PKC_GET_TEMPERATURE_HUMIDITY = 24;
+        public readonly ushort PKC_SET_POWER_SCHEDULE = 61;
+        public readonly ushort PKC_SET_BRIGHT_SCHEDULE = 63;
+        public readonly ushort PKC_GET_CHAPTER_COUNT = 66;
+        public readonly ushort PKC_GET_CURRENT_CHAPTER = 67;
+        public readonly ushort PKC_SET_CURRENT_CHAPTER = 68;
 
         //电源开关参数值
         public readonly Int32 LED_POWER_ON  = 1;
@@ -147,8 +177,8 @@ namespace LEDDisplay
         //显示屏基色类型
         public readonly Int32 COLOR_MODE_MONO       = 1;  //单色
         public readonly Int32 COLOR_MODE_DOUBLE     = 2;  //双色
-        public readonly Int32 COLOR_MODE_FULL_16BIT = 3;  //16位全彩
-        public readonly Int32 COLOR_MODE_FULL_32BIT = 4;  //32位全彩
+        public readonly Int32 COLOR_MODE_THREE      = 3;  //全彩无灰度
+        public readonly Int32 COLOR_MODE_FULLCOLOR  = 4;  //全彩
 
         //显示数据命令
         public readonly Int32 ROOT_UPDATE       = 0x13;  //更新下位机程序
@@ -178,10 +208,10 @@ namespace LEDDisplay
         public readonly Int32 FONT_SET_24 = 1;      //24点阵字符
   
         //正计时、倒计时type参数
-        public readonly Int32 CT_COUNTUP   = 0;      //正计时
-        public readonly Int32 CT_COUNTDOWN = 1;      //倒计时
-        public readonly Int32 CT_COUNTUP_EX = 2;     //倒计时
-        public readonly Int32 CT_COUNTDOWN_EX = 3;   //倒计时
+        public readonly Int32 CT_COUNTUP = 0;        //目标正计时
+        public readonly Int32 CT_COUNTDOWN = 1;      //目标倒计时
+        public readonly Int32 CT_COUNTUP_EX = 2;     //普通正计时
+        public readonly Int32 CT_COUNTDOWN_EX = 3;   //普通倒计时
         
         //正计时、倒计时format参数
         public readonly Int32 CF_HNS    = 0;      //时分秒（相对值）
@@ -208,6 +238,7 @@ namespace LEDDisplay
         public readonly ushort CS_THU = 16;
         public readonly ushort CS_FRI = 32;
         public readonly ushort CS_SAT = 64;
+        public readonly ushort CS_EVERYDAY = 127;
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         //接口函数导入
@@ -334,9 +365,54 @@ namespace LEDDisplay
         [DllImport("LEDSender2010.dll")]
         private static extern int LED_AdjustTimeEx(ref TSenderParam param, ref TSystemTime time);
 
+        //function LED_SetVarStringSingle(AParam: PSenderParam; AIndex: Integer; Str: PChar; Color: Integer): Integer; stdcall; external LedSender;
+        //设置变量字符串
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_SetVarStringSingle(ref TSenderParam param, Int32 index, string str, Int32 color);
+
+        //设置定时开关屏
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_SetPowerSchedule(ref TSenderParam param, ref TPowerSchedule schedule);
+
+        //设置定时亮度调节
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_SetBrightSchedule(ref TSenderParam param, ref TBrightSchedule schedule);
+
+        //读取节目数量
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_GetChapterCount(ref TSenderParam param);
+
+        //设置当前播放节目
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_SetCurChapter(ref TSenderParam param, Int32 value);
+
+        //读取当前播放节目
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_GetCurChapter(ref TSenderParam param);
+
         //发送节目数据 index为MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject函数的返回值
         [DllImport("LEDSender2010.dll")]
         private static extern int LED_SendToScreen(ref TSenderParam param, Int32 index);
+
+        //直接发送字符串UDP包到显示屏
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_SendStringDirectly(ref TSenderParam param, string text);
+
+        //直接发送十六进制字符串UDP包到显示屏
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_SendHexDirectly(ref TSenderParam param, string text);
+
+        //232口转发协议数据（用于控制外接设备）
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_ComTransferHex(ref TSenderParam param, string text, Int32 delayaftertransfer);
+
+        //485口转发协议数据（用于控制外接设备）
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_ModemTransferHex(ref TSenderParam param, string text, Int32 delayaftertransfer);
+
+        //接收转发的应答数据（用于控制外接设备）
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_GetTransferAck(ref TSenderParam param);
 
         //设置UDP通讯的参数
         [DllImport("LEDSender2010.dll")]
@@ -388,6 +464,10 @@ namespace LEDDisplay
         [DllImport("LEDSender2010.dll")]
         private static extern int LED_Cache_GetBoardParam_Brightness();
 
+        //取得控制卡设备单步时间
+        [DllImport("LEDSender2010.dll")]
+        private static extern int LED_Cache_GetBoardParam_Frequency();
+
         //设置控制卡IP地址
         [DllImport("LEDSender2010.dll")]
         private static extern void LED_Cache_SetBoardParam_IP(String value);
@@ -411,6 +491,10 @@ namespace LEDDisplay
         //设置控制卡设备亮度
         [DllImport("LEDSender2010.dll")]
         private static extern void LED_Cache_SetBoardParam_Brightness(Int32 value);
+
+        //设置控制卡设备单步时间
+        [DllImport("LEDSender2010.dll")]
+        private static extern void LED_Cache_SetBoardParam_Frequency(Int32 value);
 
         //设置控制卡参数
         [DllImport("LEDSender2010.dll")]
@@ -481,6 +565,16 @@ namespace LEDDisplay
         [DllImport("LEDSender2010.dll")]
         private static extern int MakeRoot(Int32 RootType, Int32 ColorMode, Int32 survive);
 
+        //生成节目数据
+        //  RootType 为节目类型；=ROOT_PLAY表示更新控制卡RAM中的节目(掉电丢失)；=ROOT_DOWNLOAD表示更新控制卡Flash中的节目(掉电不丢失)
+        //  ColorMode 为颜色模式；取值为COLOR_MODE_MONO或者COLOR
+        //  survive 为RAM节目生存时间，在RootType=ROOT_PLAY时有效，当RAM节目播放达到时间后，恢复显示FLASH中的节目
+        //  rotate 旋转方式 =0不旋转 =1逆时针旋转90度 =2顺时针旋转90度
+        //  metrix_width 显示屏宽度
+        //  metrix_height 显示屏高度
+        [DllImport("LEDSender2010.dll")]
+        private static extern int MakeRootEx(Int32 RootType, Int32 ColorMode, Int32 survive, Int32 rotate, Int32 metrix_width, Int32 metrix_height);
+
         //生成节目数据，后续需要调用[AddRegion]->[AddLeaf]->[AddObject]->[AddWindows/AddDateTime等]
         //  RootType 必须设为ROOT_PLAY_CHAPTER
         //  ActionMode 必须设为0
@@ -542,12 +636,13 @@ namespace LEDDisplay
         //  time 播放的时间长度(单位为毫秒)
         //  wait 等待模式，=WAIT_CHILD，表示当达到播放时间长度时，需要等待子节目播放完成再切换；
         //                 =WAIT_USE_TIME，表示当达到播放时间长度时，不等待子节目播放完成，直接切换下一节目
+        //  priority 优先级，如果同时有不同优先级的节目，那么只播放高优先级的节目
         //  kind 播放计划类型，=0始终播放，=1按照一周每日时间播放，=2按照指定起止日期时间播放，=3不播放
         //  week 一周有效日期，bit0到bit6表示周日到周六有效，当kind=1时，本参数起作用
         //  fromtime 有效起始时间
         //  totime 有效结束时间
         [DllImport("LEDSender2010.dll")]
-        private static extern int AddChapterEx(ushort num, UInt32 time, ushort wait, ushort kind, ushort week, ref TTimeStamp fromtime, ref TTimeStamp totime);
+        private static extern int AddChapterEx(ushort num, UInt32 time, ushort wait, ushort priority, ushort kind, ushort week, ref TTimeStamp fromtime, ref TTimeStamp totime);
 
         //添加区域/分区
         //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter的返回值
@@ -787,6 +882,90 @@ namespace LEDDisplay
         private static extern int AddChildTextEx(ushort num, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 autofitsize, Int32 wordwrap, Int32 vertical, Int32 alignment,Int32 verticalspace, Int32 horizontalfit, 
             Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime);
 
+        //添加图片组的子图片 此函数要跟在AddWindows后面调用
+        //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
+        //  dc 源图片DC句柄
+        //  width 图片宽度
+        //  height 图片高度
+        //  inmethod 引入方式(下面有列表说明)
+        //  inspeed 引入速度(取值范围0-5，从快到慢)
+        //  outmethod 引出方式(下面有列表说明)
+        //  outspeed 引出速度(取值范围0-5，从快到慢)
+        //  stopmethod 停留方式(下面有列表说明)
+        //  stopspeed 停留速度(取值范围0-5，从快到慢)
+        //  stoptime 停留时间(单位毫秒)
+        //  kind 播放计划类型，=0始终播放，=1按照一周每日时间播放，=2按照指定起止日期时间播放，=3不播放
+        //  week 一周有效日期，bit0到bit6表示周日到周六有效，当kind=1时，本参数起作用
+        //  fromtime 有效起始时间，格式请用“yyyy-mm-dd hh:nn:ss”
+        //  totime 有效结束时间，格式请用“yyyy-mm-dd hh:nn:ss”
+        [DllImport("LEDSender2010.dll")]
+        private static extern int AddChildScheduleWindow(ushort num, UInt32 dc, Int32 width, Int32 height, Int32 alignment,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime, ushort kind, ushort week, string fromtime, string totime);
+
+        //添加图片组的子图片 此函数要跟在AddWindows后面调用
+        //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
+        //  filename 图片文件名
+        //  inmethod 引入方式(下面有列表说明)
+        //  inspeed 引入速度(取值范围0-5，从快到慢)
+        //  outmethod 引出方式(下面有列表说明)
+        //  outspeed 引出速度(取值范围0-5，从快到慢)
+        //  stopmethod 停留方式(下面有列表说明)
+        //  stopspeed 停留速度(取值范围0-5，从快到慢)
+        //  stoptime 停留时间(单位毫秒)
+        //  kind 播放计划类型，=0始终播放，=1按照一周每日时间播放，=2按照指定起止日期时间播放，=3不播放
+        //  week 一周有效日期，bit0到bit6表示周日到周六有效，当kind=1时，本参数起作用
+        //  fromtime 有效起始时间，格式请用“yyyy-mm-dd hh:nn:ss”
+        //  totime 有效结束时间，格式请用“yyyy-mm-dd hh:nn:ss”
+        [DllImport("LEDSender2010.dll")]
+        private static extern int AddChildSchedulePicture(ushort num, string filename, Int32 alignment,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime, ushort kind, ushort week, string fromtime, string totime);
+
+        //添加图片组的子图片 此函数要跟在AddWindows后面调用
+        //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
+        //  str 文字字符串
+        //  fontname 字体名称
+        //  fontsize 字体大小
+        //  fontcolor 字体颜色
+        //  fontstyle 字体样式 举例：=WFS_BOLD表示粗体；=WFS_ITALIC表示斜体；=WFS_BOLD+WFS_ITALIC表示粗斜体
+        //  wordwrap 是否自动换行 =1自动换行；=0不自动换行
+        //  inmethod 引入方式(下面有列表说明)
+        //  inspeed 引入速度(取值范围0-5，从快到慢)
+        //  outmethod 引出方式(下面有列表说明)
+        //  outspeed 引出速度(取值范围0-5，从快到慢)
+        //  stopmethod 停留方式(下面有列表说明)
+        //  stopspeed 停留速度(取值范围0-5，从快到慢)
+        //  stoptime 停留时间(单位毫秒)
+        //  kind 播放计划类型，=0始终播放，=1按照一周每日时间播放，=2按照指定起止日期时间播放，=3不播放
+        //  week 一周有效日期，bit0到bit6表示周日到周六有效，当kind=1时，本参数起作用
+        //  fromtime 有效起始时间，格式请用“yyyy-mm-dd hh:nn:ss”
+        //  totime 有效结束时间，格式请用“yyyy-mm-dd hh:nn:ss”
+        [DllImport("LEDSender2010.dll")]
+        private static extern int AddChildScheduleText(ushort num, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 wordwrap, Int32 alignment,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime, ushort kind, ushort week, string fromtime, string totime);
+
+        //添加图片组的子图片 此函数要跟在AddWindows后面调用
+        //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
+        //  str 文字字符串
+        //  fontname 字体名称
+        //  fontsize 字体大小
+        //  fontcolor 字体颜色
+        //  fontstyle 字体样式 举例：=WFS_BOLD表示粗体；=WFS_ITALIC表示斜体；=WFS_BOLD+WFS_ITALIC表示粗斜体
+        //  wordwrap 是否自动换行 =1自动换行；=0不自动换行
+        //  inmethod 引入方式(下面有列表说明)
+        //  inspeed 引入速度(取值范围0-5，从快到慢)
+        //  outmethod 引出方式(下面有列表说明)
+        //  outspeed 引出速度(取值范围0-5，从快到慢)
+        //  stopmethod 停留方式(下面有列表说明)
+        //  stopspeed 停留速度(取值范围0-5，从快到慢)
+        //  stoptime 停留时间(单位毫秒)
+        //  kind 播放计划类型，=0始终播放，=1按照一周每日时间播放，=2按照指定起止日期时间播放，=3不播放
+        //  week 一周有效日期，bit0到bit6表示周日到周六有效，当kind=1时，本参数起作用
+        //  fromtime 有效起始时间，格式请用“yyyy-mm-dd hh:nn:ss”
+        //  totime 有效结束时间，格式请用“yyyy-mm-dd hh:nn:ss”
+        [DllImport("LEDSender2010.dll")]
+        private static extern int AddChildScheduleTextEx(ushort num, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 autofitsize, Int32 wordwrap, Int32 vertical, Int32 alignment, Int32 verticalspace, Int32 horizontalfit,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime, ushort kind, ushort week, string fromtime, string totime);
+
         //添加内码文字组播放
         //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
         //  left、top、width、height 左、上、宽度、高度
@@ -846,6 +1025,10 @@ namespace LEDDisplay
         //  stoptime 停留时间(单位毫秒)
         [DllImport("LEDSender2010.dll")]
         private static extern int AddPicture(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 border, string filename, Int32 alignment, 
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime);
+        //  stretch 图片拉伸 =1拉伸 =0不拉伸
+        [DllImport("LEDSender2010.dll")]
+        private static extern int AddPictureEx(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 border, string filename, Int32 alignment, Int32 stretch, 
             Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime);
 
         //添加表格
@@ -917,6 +1100,56 @@ namespace LEDDisplay
             Int32 vertical, Int32 alignment, Int32 verticalspace, Int32 horizontalfit,
             Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime);
 
+        //添加文字播放
+        //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
+        //  left、top、width、height 左、上、宽度、高度
+        //  transparent 是否透明 =1表示透明；=0表示不透明
+        //  flag 保留
+        //  str 文字字符串
+        //  charset 字符集，置0
+        //  fontname 字体名称
+        //  fontsize 字体大小
+        //  fontcolor 字体颜色
+        //  fontstyle 字体样式 举例：=WFS_BOLD表示粗体；=WFS_ITALIC表示斜体；=WFS_BOLD+WFS_ITALIC表示粗斜体
+        //  autofitsize 字体自适应显示区域
+        //  wordwrap 是否自动换行 =1自动换行；=0不自动换行
+        //  vertical 是否纵向显示 =0正常 =1逆时针旋转纵向显示 =2顺时针旋转纵向显示
+        //  alignment 对齐方式 =0靠左 =1居中 =2靠右
+        //  verticalspace 行间距
+        //  horizontalfit 横向自适应
+        //  inmethod 引入方式(下面有列表说明)
+        //  inspeed 引入速度(取值范围0-5，从快到慢)
+        //  outmethod 引出方式(下面有列表说明)
+        //  outspeed 引出速度(取值范围0-5，从快到慢)
+        //  stopmethod 停留方式(下面有列表说明)
+        //  stopspeed 停留速度(取值范围0-5，从快到慢)
+        //  stoptime 停留时间(单位毫秒)
+        [DllImport("LEDSender2010.dll")]
+        private static extern int AddTextEx4(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 flag,
+            string str, Int32 charset, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 bkcolor, Int32 autofitsize, Int32 wordwrap,
+            Int32 vertical, Int32 alignment, Int32 verticalspace, Int32 horizontalfit,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime);
+
+        //添加RTF文字播放
+        //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
+        //  left、top、width、height 左、上、宽度、高度
+        //  transparent 是否透明 =1表示透明；=0表示不透明
+        //  flag 保留
+        //  filename rtf文件
+        //  alignment 对齐方式 =0靠左 =1居中 =2靠右
+        //  wordwrap 是否自动换行 =1自动换行；=0不自动换行
+        //  inmethod 引入方式(下面有列表说明)
+        //  inspeed 引入速度(取值范围0-5，从快到慢)
+        //  outmethod 引出方式(下面有列表说明)
+        //  outspeed 引出速度(取值范围0-5，从快到慢)
+        //  stopmethod 停留方式(下面有列表说明)
+        //  stopspeed 停留速度(取值范围0-5，从快到慢)
+        //  stoptime 停留时间(单位毫秒)
+        [DllImport("LEDSender2010.dll")]
+        private static extern int AddRtf(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 flag,
+            string filename, Int32 alignment, Int32 wordwrap, Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime);
+
+
         //添加内码文字播放
         //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
         //  left、top、width、height 左、上、宽度、高度
@@ -963,6 +1196,98 @@ namespace LEDDisplay
         private static extern int AddHumidity(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 border,
             string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle);
 
+        //>>----------------------------------------------------------------------------------------------------------
+        // 下面几个函数，是用户自定义绘制相关接口
+
+        //初始化用户自定义绘制的画布图片大小
+        //  width 画布图片宽度
+        //  height 画布图片高度
+        [DllImport("LEDSender2010.dll")]
+        private static extern int UserCanvas_Init(Int32 width, Int32 height);
+
+        //绘制直线
+        //  X, Y 起点
+        //  X1, Y1 终点
+        //  linewidth 线宽
+        //  linecolor 颜色
+        [DllImport("LEDSender2010.dll")]
+        private static extern int UserCanvas_Draw_Line(Int32 X, Int32 Y, Int32 X1, Int32 Y1, Int32 linewidth, Int32 linecolor);
+
+        //绘制矩形
+        //  X, Y, X1, Y1 两个对角点坐标
+        //  linewidth 线宽
+        //  linecolor 边框颜色
+        //  fillcolor 填充颜色
+        [DllImport("LEDSender2010.dll")]
+        private static extern int UserCanvas_Draw_Rectangle(Int32 X, Int32 Y, Int32 X1, Int32 Y1, Int32 linewidth, Int32 linecolor, Int32 fillcolor);
+
+        //绘制椭圆形
+        //  X, Y, X1, Y1 两个对角点坐标
+        //  linewidth 线宽
+        //  linecolor 边框颜色
+        //  fillcolor 填充颜色
+        [DllImport("LEDSender2010.dll")]
+        private static extern int UserCanvas_Draw_Ellipse(Int32 X, Int32 Y, Int32 X1, Int32 Y1, Int32 linewidth, Int32 linecolor, Int32 fillcolor);
+
+        //绘制圆角矩形
+        //  X, Y, X1, Y1 两个对角点坐标
+        //  linewidth 线宽
+        //  linecolor 边框颜色
+        //  fillcolor 填充颜色
+        //  roundx, roundy 圆角弧度
+        [DllImport("LEDSender2010.dll")]
+        private static extern int UserCanvas_Draw_RoundRect(Int32 X, Int32 Y, Int32 X1, Int32 Y1, Int32 linewidth, Int32 linecolor, Int32 fillcolor, Int32 roundx, Int32 roundy);
+
+        //绘制文字
+        //  left, top, width, height 左、上、宽度、高度，文字在画布上的显示区域
+        //  str 文字字符串
+        //  fontname 字体名称
+        //  fontsize 字体大小
+        //  fontcolor 字体颜色
+        //  fontstyle 字体样式 举例：=WFS_BOLD表示粗体；=WFS_ITALIC表示斜体；=WFS_BOLD+WFS_ITALIC表示粗斜体
+        [DllImport("LEDSender2010.dll")]
+        private static extern int UserCanvas_Draw_Text(Int32 left, Int32 top, Int32 width, Int32 height, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 alignment);
+
+        //计算自动换行文字的高度
+        //  width 宽度
+        //  str 文字字符串
+        //  fontname 字体名称
+        //  fontsize 字体大小
+        //  fontcolor 字体颜色
+        //  fontstyle 字体样式 举例：=WFS_BOLD表示粗体；=WFS_ITALIC表示斜体；=WFS_BOLD+WFS_ITALIC表示粗斜体
+        [DllImport("LEDSender2010.dll")]
+        private static extern int UserCanvas_Calc_MatrixHeight(Int32 width, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle);
+
+        //绘制多行文字（自动换行）
+        //  left, top, width, height 左、上、宽度、高度，文字在画布上的显示区域
+        //  str 文字字符串
+        //  fontname 字体名称
+        //  fontsize 字体大小
+        //  fontcolor 字体颜色
+        //  fontstyle 字体样式 举例：=WFS_BOLD表示粗体；=WFS_ITALIC表示斜体；=WFS_BOLD+WFS_ITALIC表示粗斜体
+        //  alignment 对齐方式 0=靠左，1=居中，2=靠右
+        [DllImport("LEDSender2010.dll")]
+        private static extern int UserCanvas_Draw_TextEx(Int32 left, Int32 top, Int32 width, Int32 height, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 alignment);
+
+        //添加用户自定义绘制画布图片
+        //  num 节目数据缓冲区编号，是MakeRoot、MakeChapter、MakeRegion、MakeLeaf、MakeObject的返回值
+        //  left、top、width、height 左、上、宽度、高度
+        //  transparent 是否透明 =1表示透明；=0表示不透明
+        //  border 流水边框(未实现)
+        //  inmethod 引入方式(下面有列表说明)
+        //  inspeed 引入速度(取值范围0-5，从快到慢)
+        //  outmethod 引出方式(下面有列表说明)
+        //  outspeed 引出速度(取值范围0-5，从快到慢)
+        //  stopmethod 停留方式(下面有列表说明)
+        //  stopspeed 停留速度(取值范围0-5，从快到慢)
+        //  stoptime 停留时间(单位毫秒)
+        [DllImport("LEDSender2010.dll")]
+        private static extern int AddUserCanvas(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 border, 
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime);
+
+        //----------------------------------------------------------------------------------------------------------<<
+
+        
         // ====引入动作方式列表(数值从0开始)====
         //    0 = '随机',
         //    1 = '立即显示',
@@ -1065,6 +1390,11 @@ namespace LEDDisplay
             return LED_Cache_GetBoardParam_Brightness();
         }
 
+        public int Do_LED_Cache_GetBoardParam_Frequency()
+        {
+            return LED_Cache_GetBoardParam_Frequency();
+        }
+
         public void Do_LED_Cache_SetBoardParam_IP(String value)
         {
             LED_Cache_SetBoardParam_IP(value);
@@ -1093,6 +1423,11 @@ namespace LEDDisplay
         public void Do_LED_Cache_SetBoardParam_Brightness(int value)
         {
             LED_Cache_SetBoardParam_Brightness(value);
+        }
+
+        public void Do_LED_Cache_SetBoardParam_Frequency(int value)
+        {
+            LED_Cache_SetBoardParam_Frequency(value);
         }
 
         public int Do_LED_Cache_SetBoardParam(ref TSenderParam param)
@@ -1210,6 +1545,36 @@ namespace LEDDisplay
             return LED_AdjustTimeEx(ref param, ref time);
         }
 
+        public int Do_LED_SetVarStringSingle(ref TSenderParam param, Int32 index, string str, Int32 color)
+        {
+            return LED_SetVarStringSingle(ref param, index, str, color);
+        }
+
+        public int Do_LED_SetPowerSchedule(ref TSenderParam param, ref TPowerSchedule schedule)
+        {
+            return LED_SetPowerSchedule(ref param, ref schedule);
+        }
+
+        public int Do_LED_SetBrightSchedule(ref TSenderParam param, ref TBrightSchedule schedule)
+        {
+            return LED_SetBrightSchedule(ref param, ref schedule);
+        }
+
+        public int Do_LED_GetChapterCount(ref TSenderParam param)
+        {
+            return LED_GetChapterCount(ref param);
+        }
+
+        public int Do_LED_SetCurChapter(ref TSenderParam param, Int32 value)
+        {
+            return LED_SetCurChapter(ref param, value);
+        }
+
+        public int Do_LED_GetCurChapter(ref TSenderParam param)
+        {
+            return LED_GetCurChapter(ref param);
+        }
+
         public int Do_LED_Compress(Int32 index)
         {
             return LED_Compress(index);
@@ -1217,8 +1582,32 @@ namespace LEDDisplay
         
         public int Do_LED_SendToScreen(ref TSenderParam param, Int32 index)
         {
-            LED_Compress(index);
             return LED_SendToScreen(ref param, index);
+        }
+
+        public int Do_LED_SendStringDirectly(ref TSenderParam param, string text)
+        {
+            return LED_SendStringDirectly(ref param, text);
+        }
+
+        public int Do_LED_SendHexDirectly(ref TSenderParam param, string text)
+        {
+            return LED_SendHexDirectly(ref param, text);
+        }
+
+        public int Do_LED_ComTransferHex(ref TSenderParam param, string text, Int32 delayaftertransfer)
+        {
+            return LED_ComTransferHex(ref param, text, delayaftertransfer);
+        }
+
+        public int Do_LED_ModemTransferHex(ref TSenderParam param, string text, Int32 delayaftertransfer)
+        {
+            return LED_ModemTransferHex(ref param, text, delayaftertransfer);
+        }
+
+        public int Do_LED_GetTransferAck(ref TSenderParam param)
+        {
+            return LED_GetTransferAck(ref param);
         }
 
         public int Do_LED_UDP_SenderParam(Int32 param_index, Int32 locport, string host, Int32 rmtport, Int32 address, Int32 notifymode, Int32 wmhandle, Int32 wmmessage)
@@ -1251,6 +1640,11 @@ namespace LEDDisplay
             return MakeRoot(RootType, ColorMode, survive);
         }
 
+        public int Do_MakeRootEx(Int32 RootType, Int32 ColorMode, Int32 survive, Int32 rotate, Int32 metrix_width, Int32 metrix_height)
+        {
+            return MakeRootEx(RootType, ColorMode, survive, rotate, metrix_width, metrix_height);
+        }
+
         public int Do_MakeChapter(Int32 RootType, Int32 ActionMode, Int32 ChapterIndex, Int32 ColorMode, UInt32 time, ushort wait)
         {
             return MakeChapter(RootType, ActionMode, ChapterIndex, ColorMode, time, wait);
@@ -1278,9 +1672,9 @@ namespace LEDDisplay
             return AddChapter(num, time, wait);
         }
 
-        public int Do_AddChapterEx(ushort num, UInt32 time, ushort wait, ushort kind, ushort week, ref TTimeStamp fromtime, ref TTimeStamp totime)
+        public int Do_AddChapterEx(ushort num, UInt32 time, ushort wait, ushort priority, ushort kind, ushort week, ref TTimeStamp fromtime, ref TTimeStamp totime)
         {
-            return AddChapterEx(num, time, wait, kind, week, ref fromtime, ref totime);
+            return AddChapterEx(num, time, wait, priority, kind, week, ref fromtime, ref totime);
         }
 
         public int Do_AddRegion(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 border)
@@ -1380,6 +1774,31 @@ namespace LEDDisplay
                 inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime);
         }
 
+        public int Do_AddChildScheduleWindow(ushort num, UInt32 dc, Int32 width, Int32 height, Int32 alignment,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime, ushort kind, ushort week, string fromtime, string totime)
+        {
+            return AddChildScheduleWindow(num, dc, width, height, alignment, inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime, kind, week, fromtime, totime);
+        }
+
+        public int Do_AddChildSchedulePicture(ushort num, string filename, Int32 alignment,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime, ushort kind, ushort week, string fromtime, string totime)
+        {
+            return AddChildSchedulePicture(num, filename, alignment, inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime, kind, week, fromtime, totime);
+        }
+
+        public int Do_AddChildScheduleText(ushort num, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 wordwrap, Int32 alignment,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime, ushort kind, ushort week, string fromtime, string totime)
+        {
+            return AddChildScheduleText(num, str, fontname, fontsize, fontcolor, fontstyle, wordwrap, alignment, inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime, kind, week, fromtime, totime);
+        }
+
+        public int Do_AddChildScheduleTextEx(ushort num, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 wordwrap, Int32 alignment, Int32 verticalspace,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime, ushort kind, ushort week, string fromtime, string totime)
+        {
+            return AddChildScheduleTextEx(num, str, fontname, fontsize, fontcolor, fontstyle, 0, wordwrap, 0, alignment, verticalspace, 0,
+                inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime, kind, week, fromtime, totime);
+        }
+
         public int Do_AddStrings(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 border)
         {
             return AddStrings(num, left, top, width, height, transparent, border);
@@ -1407,6 +1826,13 @@ namespace LEDDisplay
                 inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime);
         }
 
+        public int Do_AddPictureEx(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 border, string filename, Int32 alignment, Int32 stretch,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime)
+        {
+            return AddPictureEx(num, left, top, width, height, transparent, border, filename, alignment, stretch,
+                inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime);
+        }
+
         public int Do_AddTable(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, string profile, string content,
             Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime)
         {
@@ -1427,9 +1853,16 @@ namespace LEDDisplay
             string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 wordwrap, Int32 vertical, Int32 alignment, Int32 verticalspace,
             Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime)
         {
-            return AddTextEx3(num, left, top, width, height, transparent, 0, 
-                str, fontname, fontsize, fontcolor, fontstyle, 0, 0, wordwrap, vertical, alignment, verticalspace, 0,
+            return AddTextEx4(num, left, top, width, height, transparent, 0, 
+                str, 0, fontname, fontsize, fontcolor, fontstyle, 0, 1, wordwrap, vertical, alignment, verticalspace, 0,
                 inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime);
+        }
+
+        public int Do_AddRtf(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, 
+                    string filename, Int32 alignment, Int32 wordwrap, Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime)
+        {
+            return AddRtf(num, left, top, width, height, transparent, 0,
+                filename, alignment, wordwrap, inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime);
         }
 
         public int Do_AddString(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 border, 
@@ -1450,6 +1883,52 @@ namespace LEDDisplay
             string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle)
         {
             return AddHumidity(num, left, top, width, height, transparent, border, fontname, fontsize, fontcolor, fontstyle);
+        }
+
+        public int Do_UserCanvas_Init(Int32 width, Int32 height)
+        {
+            return UserCanvas_Init(width, height);
+        }
+
+        public int Do_UserCanvas_Draw_Line(Int32 X, Int32 Y, Int32 X1, Int32 Y1, Int32 linewidth, Int32 linecolor)
+        {
+            return UserCanvas_Draw_Line(X, Y, X1, Y1, linewidth, linecolor);
+        }
+
+        public int Do_UserCanvas_Draw_Rectangle(Int32 X, Int32 Y, Int32 X1, Int32 Y1, Int32 linewidth, Int32 linecolor, Int32 fillcolor)
+        {
+            return UserCanvas_Draw_Rectangle(X, Y, X1, Y1, linewidth, linecolor, fillcolor);
+        }
+
+        public int Do_UserCanvas_Draw_Ellipse(Int32 X, Int32 Y, Int32 X1, Int32 Y1, Int32 linewidth, Int32 linecolor, Int32 fillcolor)
+        {
+            return UserCanvas_Draw_Ellipse(X, Y, X1, Y1, linewidth, linecolor, fillcolor);
+        }
+
+        public int Do_UserCanvas_Draw_RoundRect(Int32 X, Int32 Y, Int32 X1, Int32 Y1, Int32 linewidth, Int32 linecolor, Int32 fillcolor, Int32 roundx, Int32 roundy)
+        {
+            return UserCanvas_Draw_RoundRect(X, Y, X1, Y1, linewidth, linecolor, fillcolor, roundx, roundy);
+        }
+
+        public int Do_UserCanvas_Draw_Text(Int32 left, Int32 top, Int32 width, Int32 height, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 alignment)
+        {
+            return UserCanvas_Draw_Text(left, top, width, height, str, fontname, fontsize, fontcolor, fontstyle, alignment);
+        }
+
+        public int Do_UserCanvas_Calc_MatrixHeight(Int32 width, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle)
+        {
+            return UserCanvas_Calc_MatrixHeight(width, str, fontname, fontsize, fontcolor, fontstyle);
+        }
+
+        public int Do_UserCanvas_Draw_TextEx(Int32 left, Int32 top, Int32 width, Int32 height, string str, string fontname, Int32 fontsize, Int32 fontcolor, Int32 fontstyle, Int32 alignment)
+        {
+            return UserCanvas_Draw_TextEx(left, top, width, height, str, fontname, fontsize, fontcolor, fontstyle, alignment);
+        }
+
+        public int Do_AddUserCanvas(ushort num, Int32 left, Int32 top, Int32 width, Int32 height, Int32 transparent, Int32 border,
+            Int32 inmethod, Int32 inspeed, Int32 outmethod, Int32 outspeed, Int32 stopmethod, Int32 stopspeed, Int32 stoptime)
+        {
+            return AddUserCanvas(num, left, top, width, height, transparent, border, inmethod, inspeed, outmethod, outspeed, stopmethod, stopspeed, stoptime);
         }
 
     }

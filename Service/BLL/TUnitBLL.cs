@@ -26,10 +26,5 @@ namespace BLL
         {
             return this.CreateDAL().GetGridData();
         }
-
-        public ArrayList UploadUnitAndBusy(List<TUnitModel> uList, List<TBusinessModel> bList)
-        {
-            return this.CreateDAL().UploadUnitAndBusy(uList, bList);
-        }
     }
 }

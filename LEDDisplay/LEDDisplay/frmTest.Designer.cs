@@ -72,6 +72,7 @@
             this.btnClock2 = new System.Windows.Forms.Button();
             this.btnPicFile2 = new System.Windows.Forms.Button();
             this.btnDateTime2 = new System.Windows.Forms.Button();
+            this.btnPowerOn2 = new System.Windows.Forms.Button();
             this.btnString2 = new System.Windows.Forms.Button();
             this.btnDib2 = new System.Windows.Forms.Button();
             this.btnText2 = new System.Windows.Forms.Button();
@@ -80,9 +81,9 @@
             this.btnSetBright2 = new System.Windows.Forms.Button();
             this.btnGetPower2 = new System.Windows.Forms.Button();
             this.btnPowerOff2 = new System.Windows.Forms.Button();
-            this.btnPowerOn2 = new System.Windows.Forms.Button();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnRegion = new System.Windows.Forms.Button();
             this.btnObject = new System.Windows.Forms.Button();
             this.btnLeaf = new System.Windows.Forms.Button();
@@ -91,13 +92,21 @@
             this.btnOnlineServerCleanup = new System.Windows.Forms.Button();
             this.btnOnlineGetList = new System.Windows.Forms.Button();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.txtip = new System.Windows.Forms.TextBox();
+            this.txtport = new System.Windows.Forms.TextBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtposition = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmbDevType
@@ -472,6 +481,7 @@
             this.groupBox4.Controls.Add(this.btnClock2);
             this.groupBox4.Controls.Add(this.btnPicFile2);
             this.groupBox4.Controls.Add(this.btnDateTime2);
+            this.groupBox4.Controls.Add(this.btnPowerOn2);
             this.groupBox4.Controls.Add(this.btnString2);
             this.groupBox4.Controls.Add(this.btnDib2);
             this.groupBox4.Controls.Add(this.btnText2);
@@ -480,7 +490,6 @@
             this.groupBox4.Controls.Add(this.btnSetBright2);
             this.groupBox4.Controls.Add(this.btnGetPower2);
             this.groupBox4.Controls.Add(this.btnPowerOff2);
-            this.groupBox4.Controls.Add(this.btnPowerOn2);
             this.groupBox4.Location = new System.Drawing.Point(12, 348);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(466, 168);
@@ -557,6 +566,16 @@
             this.btnDateTime2.Text = "发送日期时间";
             this.btnDateTime2.UseVisualStyleBackColor = true;
             this.btnDateTime2.Click += new System.EventHandler(this.btnDateTime2_Click);
+            // 
+            // btnPowerOn2
+            // 
+            this.btnPowerOn2.Location = new System.Drawing.Point(7, 20);
+            this.btnPowerOn2.Name = "btnPowerOn2";
+            this.btnPowerOn2.Size = new System.Drawing.Size(66, 23);
+            this.btnPowerOn2.TabIndex = 0;
+            this.btnPowerOn2.Text = "打开电源";
+            this.btnPowerOn2.UseVisualStyleBackColor = true;
+            this.btnPowerOn2.Click += new System.EventHandler(this.btnPowerOn2_Click);
             // 
             // btnString2
             // 
@@ -638,16 +657,6 @@
             this.btnPowerOff2.UseVisualStyleBackColor = true;
             this.btnPowerOff2.Click += new System.EventHandler(this.btnPowerOff2_Click);
             // 
-            // btnPowerOn2
-            // 
-            this.btnPowerOn2.Location = new System.Drawing.Point(6, 20);
-            this.btnPowerOn2.Name = "btnPowerOn2";
-            this.btnPowerOn2.Size = new System.Drawing.Size(66, 23);
-            this.btnPowerOn2.TabIndex = 0;
-            this.btnPowerOn2.Text = "打开电源";
-            this.btnPowerOn2.UseVisualStyleBackColor = true;
-            this.btnPowerOn2.Click += new System.EventHandler(this.btnPowerOn2_Click);
-            // 
             // pictureBox
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
@@ -670,6 +679,16 @@
             this.groupBox5.TabIndex = 7;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "局部更新例程";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(7, 136);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(110, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "闪烁";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnRegion
             // 
@@ -745,21 +764,89 @@
             // 
             this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
             // 
-            // button1
+            // button2
             // 
-            this.button1.Location = new System.Drawing.Point(7, 136);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "闪烁";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button2.Location = new System.Drawing.Point(62, 117);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(66, 23);
+            this.button2.TabIndex = 11;
+            this.button2.Text = "发送";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // txtip
+            // 
+            this.txtip.Location = new System.Drawing.Point(62, 20);
+            this.txtip.Name = "txtip";
+            this.txtip.Size = new System.Drawing.Size(132, 21);
+            this.txtip.TabIndex = 12;
+            this.txtip.Text = "192.168.0.25";
+            // 
+            // txtport
+            // 
+            this.txtport.Location = new System.Drawing.Point(62, 51);
+            this.txtport.Name = "txtport";
+            this.txtport.Size = new System.Drawing.Size(132, 21);
+            this.txtport.TabIndex = 13;
+            this.txtport.Text = "8889";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label7);
+            this.groupBox6.Controls.Add(this.txtposition);
+            this.groupBox6.Controls.Add(this.label5);
+            this.groupBox6.Controls.Add(this.label6);
+            this.groupBox6.Controls.Add(this.button2);
+            this.groupBox6.Controls.Add(this.txtport);
+            this.groupBox6.Controls.Add(this.txtip);
+            this.groupBox6.Location = new System.Drawing.Point(648, 15);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(200, 492);
+            this.groupBox6.TabIndex = 14;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "测试";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(27, 81);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(29, 12);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "位置";
+            // 
+            // txtposition
+            // 
+            this.txtposition.Location = new System.Drawing.Point(62, 78);
+            this.txtposition.Name = "txtposition";
+            this.txtposition.Size = new System.Drawing.Size(132, 21);
+            this.txtposition.TabIndex = 16;
+            this.txtposition.Text = "0,1,0,2";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 53);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 12);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "本地端口";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 23);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 12);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "控制卡IP";
             // 
             // frmTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(615, 557);
+            this.ClientSize = new System.Drawing.Size(890, 557);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.btnOnlineGetList);
             this.Controls.Add(this.btnOnlineServerCleanup);
             this.Controls.Add(this.btnOnlineServerStartup);
@@ -782,6 +869,8 @@
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.groupBox5.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -850,6 +939,14 @@
         private System.Windows.Forms.Button btnGetTemperature;
         private System.Windows.Forms.Button btnMultiCard;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox txtip;
+        private System.Windows.Forms.TextBox txtport;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox txtposition;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }
 

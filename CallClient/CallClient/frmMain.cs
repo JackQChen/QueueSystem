@@ -38,6 +38,7 @@ namespace CallClient
         FCallStateModel stateModel;
         List<BQueueModel> qList;
         string userId = "";
+        LockAction action = new LockAction();
         public frmMain()
         {
             InitializeComponent();
@@ -81,16 +82,23 @@ namespace CallClient
                 return;
             }
             qList = new List<BQueueModel>();
-            windowModel = wBll.GetModelList().Where(w => w.State == "1" && w.Number == windowNo).FirstOrDefault();
-            if (windowModel == null)
+            try
             {
-                frmConfig frm = new frmConfig();
-                frm.ShowDialog();
-                Application.ExitThread();
-                return;
+                windowModel = wBll.GetModelList().Where(w => w.State == "1" && w.Number == windowNo).FirstOrDefault();
+                if (windowModel == null)
+                {
+                    frmConfig frm = new frmConfig();
+                    frm.ShowDialog();
+                    Application.ExitThread();
+                    return;
+                }
+                wbList = wbBll.GetModelList();
+                baList = baBll.GetModelList();
             }
-            wbList = wbBll.GetModelList();
-            baList = baBll.GetModelList();
+            catch (Exception ex)
+            {
+                MessageBox.Show("服务器连接失败，请核查网络：" + ex.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             windowBusys = new List<TWindowBusinessModel>();
             windowBusyGreens = new List<TWindowBusinessModel>();
             var busyList = wbList.Where(b => b.WindowID == windowModel.ID).ToList().OrderBy(o => o.priorityLevel).ToList();
@@ -318,7 +326,7 @@ namespace CallClient
         {
             lock (objLock)
             {
-                LockAction.RunWindowLock(windowNo, () =>
+                action.lockWin(windowNo, () =>
                 {
                     stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
@@ -326,13 +334,14 @@ namespace CallClient
                         stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
-                        csBll.Insert(stateModel);
+                        stateModel = csBll.Insert(stateModel);
                     }
                     if (stateModel.workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         stateModel.workState = stateModel.pauseState;
                         csBll.Update(stateModel);
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + windowNo + "号窗口恢复服务"); }));
                     }
                     if (stateModel.workState == (int)WorkState.Defalt || stateModel.workState == (int)WorkState.Evaluate)
                     {
@@ -350,7 +359,7 @@ namespace CallClient
                                 stateModel.callId = model.ID;
                                 stateModel.reCallTimes = 0;
                                 csBll.Update(stateModel);
-                                this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
+                                this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + callString); }));
                                 //SendTicket(adress, model.ticketNumber.Substring(model.ticketNumber.Length - 3, 3));
                                 WriterCallLog(0, callString);
                             }
@@ -368,7 +377,7 @@ namespace CallClient
         {
             lock (objLock)
             {
-                LockAction.RunWindowLock(windowNo, () =>
+                action.lockWin(windowNo, () =>
                 {
                     stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
@@ -381,6 +390,7 @@ namespace CallClient
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         stateModel.workState = stateModel.pauseState;
                         csBll.Update(stateModel);
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + windowNo + "号窗口恢复服务"); }));
                     }
                     if (stateModel.workState == (int)WorkState.Call)
                     {
@@ -400,7 +410,7 @@ namespace CallClient
                         }
                         var callString = "请" + model.ticketNumber + "号到 " + windowNo + "号窗口办理(重呼) ";
                         client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = windowNo, AreaNo = windowModel.AreaName.ToString(), IsLEDMessage = true, IsSoundMessage = true });
-                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + callString); }));
                         //SendTicket(adress, wModel[adress].ticketNumber.Substring(wModel[adress].ticketNumber.Length - 3, 3));
                         WriterCallLog(1, callString);
                     }
@@ -413,7 +423,7 @@ namespace CallClient
         {
             lock (objLock)
             {
-                LockAction.RunWindowLock(windowNo, () =>
+                action.lockWin(windowNo, () =>
                 {
                     stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
@@ -421,13 +431,14 @@ namespace CallClient
                         stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
-                        csBll.Insert(stateModel);
+                        stateModel = csBll.Insert(stateModel);
                     }
                     if (stateModel.workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         stateModel.workState = stateModel.pauseState;
                         csBll.Update(stateModel);
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + windowNo + "号窗口恢复服务"); }));
                     }
                     if (stateModel.workState == (int)WorkState.Call)
                     {
@@ -441,7 +452,7 @@ namespace CallClient
                             model.state = 1;
                             cBll.Update(model);
                             stateModel.workState = (int)WorkState.Evaluate;
-                            //stateModel.callId = 0;
+                            stateModel.callId = 0;
                             stateModel.ticketNo = "";
                             csBll.Update(stateModel);
                             client.SendMessage(new RateMessage() //发送评价请求
@@ -456,7 +467,7 @@ namespace CallClient
                             );
                             //SendWait(adress);
                             string mess = " [" + model.ticketNumber + "]号已评价。";
-                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : [" + model.ticketNumber + "]号已评价。"); }));
+                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : [" + model.ticketNumber + "]号已评价。"); }));
                             WriterCallLog(2, mess);
                         }
                         catch (Exception ex)
@@ -480,7 +491,7 @@ namespace CallClient
         {
             lock (objLock)
             {
-                LockAction.RunWindowLock(windowNo, () =>
+                action.lockWin(windowNo, () =>
                 {
                     stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
@@ -492,6 +503,7 @@ namespace CallClient
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         stateModel.workState = stateModel.pauseState;
                         csBll.Update(stateModel);
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + windowNo + "号窗口恢复服务"); }));
                     }
                     if (stateModel.workState == (int)WorkState.Call)
                     {
@@ -509,7 +521,7 @@ namespace CallClient
                             stateModel.callId = 0;
                             stateModel.ticketNo = "";
                             csBll.Update(stateModel);
-                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
+                            this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + mess); }));
                             this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                             //SendWait(adress);
                             WriterCallLog(4, mess);
@@ -527,7 +539,7 @@ namespace CallClient
         {
             lock (objLock)
             {
-                LockAction.RunWindowLock(windowNo, () =>
+                action.lockWin(windowNo, () =>
                 {
                     stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
@@ -535,13 +547,13 @@ namespace CallClient
                         stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
-                        csBll.Insert(stateModel);
+                        stateModel = csBll.Insert(stateModel);
                     }
                     if (stateModel.workState != (int)WorkState.PauseService)
                     {
                         string mess = windowNo + "号窗口暂停服务";
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Pause });
-                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + mess); }));
                         stateModel.pauseState = stateModel.workState;
                         stateModel.workState = (int)WorkState.PauseService;
                         csBll.Update(stateModel);
@@ -555,7 +567,7 @@ namespace CallClient
         {
             lock (objLock)
             {
-                LockAction.RunWindowLock(windowNo, () =>
+                action.lockWin(windowNo, () =>
                 {
                     stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
@@ -563,13 +575,14 @@ namespace CallClient
                         stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
-                        csBll.Insert(stateModel);
+                        stateModel = csBll.Insert(stateModel);
                     }
                     if (stateModel.workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         stateModel.workState = stateModel.pauseState;
                         csBll.Update(stateModel);
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + windowNo + "号窗口恢复服务"); }));
                     }
                     if (stateModel.workState == (int)WorkState.Call)
                     {
@@ -582,7 +595,7 @@ namespace CallClient
                         cBll.Transfer(model);
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         var callString = model.ticketNumber + "号已转移(重置) ";
-                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + callString); }));
                         //SendWait(adress);
                         stateModel.workState = (int)WorkState.Defalt;
                         stateModel.callId = 0;
@@ -599,7 +612,7 @@ namespace CallClient
         {
             lock (objLock)
             {
-                LockAction.RunWindowLock(windowNo, () =>
+                action.lockWin(windowNo, () =>
                 {
                     stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
@@ -607,13 +620,14 @@ namespace CallClient
                         stateModel = new FCallStateModel();
                         stateModel.windowNo = windowNo;
                         stateModel.workState = (int)WorkState.Defalt;
-                        csBll.Insert(stateModel);
+                        stateModel = csBll.Insert(stateModel);
                     }
                     if (stateModel.workState == (int)WorkState.PauseService)
                     {
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         stateModel.workState = stateModel.pauseState;
                         csBll.Update(stateModel);
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + windowNo + "号窗口恢复服务"); }));
                     }
                     if (stateModel.workState == (int)WorkState.Call)
                     {
@@ -625,7 +639,7 @@ namespace CallClient
                         model.state = 3;
                         cBll.Update(model);
                         var callString = model.ticketNumber + "号已挂起";
-                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + callString); }));
                         //SendWait(adress);
                         stateModel.workState = (int)WorkState.Defalt;
                         stateModel.hangId = model.ID;
@@ -643,7 +657,7 @@ namespace CallClient
         {
             lock (objLock)
             {
-                LockAction.RunWindowLock(windowNo, () =>
+                action.lockWin(windowNo, () =>
                 {
                     stateModel = csBll.GetModelByWindowNo(windowNo);
                     if (stateModel == null)
@@ -655,6 +669,7 @@ namespace CallClient
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         stateModel.workState = stateModel.pauseState;
                         csBll.Update(stateModel);
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + windowNo + "号窗口恢复服务"); }));
                     }
                     if (stateModel.workState == (int)WorkState.Defalt || stateModel.workState == (int)WorkState.Evaluate)
                     {
@@ -676,7 +691,7 @@ namespace CallClient
                         cBll.Update(model);
                         var callString = model.ticketNumber + "号回呼";
                         client.SendMessage(new CallMessage() { TicketNo = model.ticketNumber, WindowNo = windowNo, AreaNo = windowModel.AreaName.ToString(), IsLEDMessage = true, IsSoundMessage = true });
-                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + callString); }));
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + callString); }));
                         //SendTicket(adress, wHang[adress].ticketNumber.Substring(wHang[adress].ticketNumber.Length - 3, 3));
                         stateModel.workState = (int)WorkState.Call;
                         stateModel.ticketNo = model.ticketNumber;
@@ -778,61 +793,49 @@ namespace CallClient
             RefreshInfo();
         }
 
-        int x = 0;
         void RefreshInfo()
         {
-            this.txtWindow.Text = windowName;
-            this.lblWindow.Text = windowNo;
-            this.txtUserCode.Text = userId;
-            stateModel = csBll.GetModelByWindowNo(windowNo);
-            if (stateModel != null)
+            try
             {
-                this.txtTicket.Text = stateModel.workState == (int)WorkState.Call ? stateModel.ticketNo : "";
-                this.txtHangCount.Text = (stateModel.hangId > 0 ? 1 : 0).ToString();
-            }
-            else
-            {
-                this.txtHangCount.Text = "0";
-                this.txtTicket.Text = "";
-            }
-
-            //查询当前窗口排队等候人数
-            var list = qBll.GetModelList(windowBusys, 0).OrderBy(o => o.ticketTime).ToList();//排队中
-            var list2 = qBll.GetModelList(windowBusys, 1);//已完成
-            this.txtQueueCount.Text = (list.Count + list2.Count).ToString();
-            this.txtWait.Text = list.Count.ToString();
-            this.txtAlready.Text = list2.Count.ToString();
-            foreach (var l in list.OrderByDescending(o => o.ticketTime).ToList())
-            {
-                if (qList.FirstOrDefault(q => q.ID == l.ID) == null)
+                this.txtWindow.Text = windowName;
+                this.lblWindow.Text = windowNo;
+                this.txtUserCode.Text = userId;
+                stateModel = csBll.GetModelByWindowNo(windowNo);
+                if (stateModel != null)
                 {
-                    frmMsg frm = new frmMsg();
-                    frm.Ticket = l.qNumber;
-                    frm.Show();
-                    break;
+                    this.txtTicket.Text = stateModel.workState == (int)WorkState.Call ? stateModel.ticketNo : "";
+                    this.txtHangCount.Text = (stateModel.hangId > 0 ? 1 : 0).ToString();
                 }
-            }
-            qList = list;
+                else
+                {
+                    this.txtHangCount.Text = "0";
+                    this.txtTicket.Text = "";
+                }
 
-            //if (x > 3)
-            //{
-            //    frmMsg frm = new frmMsg();
-            //    frm.Ticket = "AB016";
-            //    frm.Show();
-            //    x = 0;
-            //}
-            //x++;
-            //listView2.Items.Clear();
-            //foreach (var item in list)
-            //{
-            //    ListViewItem lvItem = new ListViewItem();
-            //    lvItem.Tag = item;
-            //    lvItem.SubItems[0].Text = item.ticketNumber;
-            //    lvItem.SubItems.Add(item.ticketTime.ToString("yyyy-MM-dd HH:mm:ss"));
-            //    lvItem.SubItems.Add(item.qNmae);
-            //    listView2.Items.Add(lvItem);
-            //}
-            //listView2.Refresh();
+                //查询当前窗口排队等候人数
+                var list = qBll.GetModelList(windowBusys, 0).OrderBy(o => o.ticketTime).ToList();//排队中
+                var list2 = qBll.GetModelList(windowBusys, 1);//已完成
+                this.txtQueueCount.Text = (list.Count + list2.Count).ToString();
+                this.txtWait.Text = list.Count.ToString();
+                this.txtAlready.Text = list2.Count.ToString();
+                foreach (var l in list.OrderByDescending(o => o.ticketTime).ToList())
+                {
+                    if (qList.FirstOrDefault(q => q.ID == l.ID) == null)
+                    {
+                        frmMsg frm = new frmMsg();
+                        frm.Ticket = l.qNumber;
+                        frm.Show();
+                        break;
+                    }
+                }
+                qList = list;
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\Exception.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " : " + ex.Message + "\r\n");
+                this.messageIndicator1.SetState(StateType.Error, "数据刷新异常,请核查网络!");
+            }
+
         }
 
         private void btnGiveUpAll_Click(object sender, EventArgs e)
@@ -854,7 +857,7 @@ namespace CallClient
                 {
                     string mess = "批量弃号：窗口[" + t.windowNumber + "]票号[" + t.ticketNumber + "]已完成弃号";
                     this.client.SendMessage(new OperateMessage() { WindowNo = t.windowNumber, Operate = Operate.Reset });
-                    this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
+                    this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("MM-dd HH:mm:ss") + " : " + mess); }));
                     WriterCallLog(4, mess);
                 }
             }
