@@ -1,0 +1,169 @@
+﻿<!DOCTYPE HTML>
+<html>
+    
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    
+    <body>
+        <script src="highcharts.js">
+        </script>
+        <div id="chart1">
+        </div>
+        <script type="text/javascript">
+            var uprateb = 0;
+            var downrateb = 0;
+            function setRate(downrate, uprate) {
+                downrateb = downrate;
+                uprateb = uprate;
+            }
+            var timestamp = function() {
+                return new Date().getTime();
+            }
+            function initRate(chartHeight) {
+                chartFlowSerials = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'chart1',
+                        height: chartHeight - 16,
+                        type: 'spline',
+                        marginRight: 10,
+                        events: {
+                            load: function() {
+                                // set up the updating of the chart each second
+                                var series1 = this.series[0];
+                                var series2 = this.series[1];
+                                setInterval(function() {
+                                    var date = timestamp();
+                                    series1.addPoint([date, uprateb], true, true);
+                                    series2.addPoint([date, downrateb], true, true);
+                                },
+                                1000);
+                            }
+                        }
+                    },
+                    title: {
+                        align: 'right',
+                        text: ''
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        gridLineWidth: 1,
+                        gridLineColor: "#808080",
+                        tickPixelInterval: 100,
+                        labels: {
+                            formatter: function() {
+                                var val = this.value;
+                                var datetime = new Date(val);
+                                var hours = datetime.getHours();
+                                var minutes = datetime.getMinutes();
+                                var seconds = datetime.getSeconds();
+                                return (hours < 10 ? ("0" + hours) : hours) + ":" + (minutes < 10 ? ("0"
+
+                                + minutes) : minutes) + ":" + (seconds < 10 ? ("0" + seconds) : seconds);
+                            }
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: null
+                        },
+                        labels: {
+                            formatter: function() {
+                                if (this.value > 1000000) {
+                                    return Math.round(100 * this.value / 1024 / 1024) / 100 + 'MB/s';
+                                } else if (this.value > 1000) {
+                                    return Math.round(100 * this.value / 1024) / 100 + 'KB/s';
+                                } else {
+                                    return this.value + 'B/s';
+                                }
+                            }
+                        },
+                        min: 0,
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        crosshairs: [{
+                            color: '#808080'
+                        }],
+                        formatter: function() {
+                            var val;
+                            if (this.y > 1000000) {
+                                val = Math.round(100 * this.y / 1024 / 1024) / 100 + ' MB/s';
+                            } else if (this.y > 1000) {
+                                val = Math.round(100 * this.y / 1024) / 100 + ' KB/s';
+                            } else {
+                                val = this.y + ' B/s';
+                            }
+
+                            var val2 = this.x;
+                            var datetime = new Date(val2);
+                            var hours = datetime.getHours();
+                            var minutes = datetime.getMinutes();
+                            var seconds = datetime.getSeconds();
+                            val2 = (hours < 10 ? ("0" + hours) : hours) + ":" + (minutes < 10 ? ("0" +
+
+                            minutes) : minutes) + ":" + (seconds < 10 ? ("0" + seconds) : seconds);
+
+                            return '<b>' + this.series.name + ': ' + val + '</b><br/>' + val2 + '<br/>';
+                        }
+                    },
+                    legend: {
+                        align: 'center',
+                        verticalAlign: 'top',
+                        floating: true,
+                        borderWidth: 0
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: '发送速率',
+                        marker: {
+                            radius: 0
+                        },
+                        color: '#FEAE51',
+                        data: (function() {
+                            // generate an array of random data
+                            var data = [],
+                            time = timestamp();
+                            for (var i = -119; i <= 0; i = i + 3) {
+                                data.push({
+                                    x: time + i * 1000,
+                                    y: 0
+                                });
+                            }
+                            return data;
+                        })()
+                    },
+                    {
+                        name: '接收速率',
+                        marker: {
+                            radius: 0
+                        },
+                        color: '#46A8F9',
+                        data: (function() {
+                            // generate an array of random data
+                            var data = [],
+                            time = timestamp();
+                            for (var i = -119; i <= 0; i = i + 3) {
+                                data.push({
+                                    x: time + i * 1000,
+                                    y: 0
+                                });
+                            }
+                            return data;
+                        })()
+                    }]
+                });
+            }
+            initRate(400);
+        </script>
+    </body>
+
+</html>
