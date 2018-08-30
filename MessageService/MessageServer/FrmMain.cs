@@ -21,6 +21,7 @@ namespace MessageServer
         Extra<string, Extra<string, string>> clientList = new Extra<string, Extra<string, string>>();
         int lastSelectedIndex = -1;
         Action<string, string> actServiceState, actLog;
+        ViewerHost viewerHost;
 
         private void FrmMain_Shown(object sender, EventArgs e)
         {
@@ -69,9 +70,23 @@ namespace MessageServer
                             DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                             name, log));
             };
-            //handleCreate 
+            var position = this.tabServer.Location;
+            position.Offset(this.tabPerformance.Bounds.Location);
+            this.viewerHost = new ViewerHost();
+            this.viewerHost.Visible = false;
+            this.viewerHost.Location = position;
+            this.viewerHost.Size = this.tabPerformance.Size;
+            this.viewerHost.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            this.Controls.Add(this.viewerHost);
+            this.viewerHost.BringToFront();
+            this.viewerHost.InitAction = () =>
+            {
+                this.viewerHost.SendMessage(1, System.Diagnostics.Process.GetCurrentProcess().Id.ToString());
+            };
+            this.viewerHost.AppFileName = AppDomain.CurrentDomain.BaseDirectory + "Viewer\\FlowViewer.exe";
+            this.viewerHost.Start();
+            //handleCreate
             this.tabServer.SelectedTab = this.tabLog;
-            this.tabServer.SelectedTab = this.tabPerformance;
             this.tabServer.SelectedTab = this.tabMain;
             this.lvClient.ListViewItemSorter = new ListViewItemComparer<int>(0);
             this.InitService();
@@ -324,11 +339,14 @@ namespace MessageServer
                 return;
             UpdateClientList();
             var si = this.lvService.Items[lastSelectedIndex].Tag as ServiceInfo;
-            si.接收速率 = FormatFileSize(si.totalRecv - si.lastRecv) + "/s";
-            si.发送速率 = FormatFileSize(si.totalSend - si.lastSend) + "/s";
+            var recvRate = si.totalRecv - si.lastRecv;
+            var sendRate = si.totalSend - si.lastSend;
+            si.接收速率 = FormatFileSize(recvRate) + "/s";
+            si.发送速率 = FormatFileSize(sendRate) + "/s";
             si.lastRecv = si.totalRecv;
             si.lastSend = si.totalSend;
             this.pgService.SelectedObject = si;
+            this.viewerHost.SendMessage(recvRate + "," + sendRate);
         }
 
         internal class ServiceInfo
@@ -378,11 +396,6 @@ namespace MessageServer
 
         }
 
-        /// <summary>
-        /// 转换文件大小格式
-        /// </summary>
-        /// <param name="fileSize">文件大小</param>
-        /// <returns></returns>
         internal static string FormatFileSize(long fileSize)
         {
             if (fileSize < 0)
@@ -399,6 +412,7 @@ namespace MessageServer
 
         private void tabServer_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.viewerHost.Visible = this.tabServer.SelectedTab == this.tabPerformance;
             if (this.tabServer.SelectedTab == this.tabLog)
                 this.txtLog.ScrollToCaret();
         }

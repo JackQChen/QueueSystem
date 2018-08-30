@@ -65,6 +65,9 @@
     <Compile Include="TabControlEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ViewerHost.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
