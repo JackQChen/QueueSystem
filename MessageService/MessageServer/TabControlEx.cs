@@ -11,6 +11,11 @@ namespace MessageServer
                        , true);
         }
 
+        protected override bool ShowFocusCues
+        {
+            get { return false; }
+        }
+
         protected override CreateParams CreateParams
         {
             get
