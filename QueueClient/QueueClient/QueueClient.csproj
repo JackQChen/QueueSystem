@@ -131,6 +131,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="function\WndProcHooker.cs" />
+    <Compile Include="uc\ucBusyCard.cs" />
     <Compile Include="uc\ucEvaluateCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -142,6 +143,12 @@
     </Compile>
     <Compile Include="uc\ucpnSelectUnitArea.Designer.cs">
       <DependentUpon>ucpnSelectUnitArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="uc\ucpnSelectBusyPhoto.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="uc\ucpnSelectBusyPhoto.Designer.cs">
+      <DependentUpon>ucpnSelectBusyPhoto.cs</DependentUpon>
     </Compile>
     <Compile Include="ui\frmBroadcast.cs">
       <SubType>Form</SubType>
@@ -239,11 +246,17 @@
     <EmbeddedResource Include="function\AsyncWork.resx">
       <DependentUpon>AsyncWork.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="uc\ucBusyCard.resx">
+      <DependentUpon>ucBusyCard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="uc\ucEvaluateCard.resx">
       <DependentUpon>ucEvaluateCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="uc\ucpnSelectUnitArea.resx">
       <DependentUpon>ucpnSelectUnitArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\ucpnSelectBusyPhoto.resx">
+      <DependentUpon>ucpnSelectBusyPhoto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\frmBroadcast.resx">
       <DependentUpon>frmBroadcast.cs</DependentUpon>
@@ -358,6 +371,11 @@
     <Content Include="bin\Debug\img\FloorDistribution\1.jpg" />
     <Content Include="bin\Debug\img\FloorDistribution\2.jpg" />
     <Content Include="bin\Debug\img\FloorDistribution\3.jpg" />
+    <Content Include="bin\Debug\img\itemPhoto\1\00001.png" />
+    <Content Include="bin\Debug\img\itemPhoto\1\00002.png" />
+    <Content Include="bin\Debug\img\itemPhoto\1\00003.png" />
+    <Content Include="bin\Debug\img\itemPhoto\1\00004.png" />
+    <Content Include="bin\Debug\img\itemPhoto\1\00006.png" />
     <Content Include="bin\Debug\img\title.png" />
     <Content Include="bin\Debug\RemotingConfig.xml" />
     <Content Include="bin\Debug\sdtapi.dll" />
@@ -366,6 +384,7 @@
     <Content Include="bin\Debug\UnPack.dll" />
     <Content Include="bin\Debug\wrapper.dll" />
     <Content Include="queue.ico" />
+    <None Include="Resources\长按钮.png" />
     <None Include="Resources\矩形 16 拷贝 2.png" />
     <None Include="Resources\评价 拷贝 3.png" />
     <None Include="Resources\L首页按钮.png" />

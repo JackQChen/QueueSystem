@@ -10,6 +10,7 @@ using BLL;
 using MessageClient;
 using Model;
 using QueueMessage;
+using System.Linq;
 
 namespace LEDDisplay
 {
@@ -34,7 +35,8 @@ namespace LEDDisplay
 
         Client client = new Client();
         int fontColor = 0, fontSize = 0, fontStyle = 0;
-        string fontName = "";
+        string[] fullColorList;
+        string fontName = "", pauseText = "", resumeText = "";
         Rectangle rectText = Rectangle.Empty;
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -44,6 +46,9 @@ namespace LEDDisplay
             fontColor = Convert.ToInt32(ConfigurationManager.AppSettings["FontColor"], 16);
             fontSize = Convert.ToInt32(ConfigurationManager.AppSettings["FontSize"]);
             fontStyle = Convert.ToInt32(ConfigurationManager.AppSettings["FontStyle"]);
+            pauseText = ConfigurationManager.AppSettings["PauseText"];
+            resumeText = ConfigurationManager.AppSettings["ResumeText"];
+            fullColorList = ConfigurationManager.AppSettings["FullColorWindow"].Split(',');
             var position = ConfigurationManager.AppSettings["Position"].Split(',');
             rectText = new Rectangle(
                 Convert.ToInt32(position[0]),
@@ -74,6 +79,7 @@ namespace LEDDisplay
 
         class ledSendInfo
         {
+            public int colorMode = 3;
             public string ip, port, deviceAddr, position, text;
             public bool isFlash;
         }
@@ -126,6 +132,7 @@ namespace LEDDisplay
                                     {
                                         ip = ctl.IP,
                                         port = ctl.Port,
+                                        colorMode = fullColorList.Contains(win.WindowNumber) ? 4 : 3,
                                         deviceAddr = ctl.DeviceAddress,
                                         position = win.Position,
                                         text = win.DisplayText.Replace("{Number}", msg.TicketNo)
@@ -155,9 +162,10 @@ namespace LEDDisplay
                                 {
                                     ip = ctl.IP,
                                     port = ctl.Port,
+                                    colorMode = fullColorList.Contains(win.WindowNumber) ? 4 : 3,
                                     deviceAddr = ctl.DeviceAddress,
                                     position = win.Position,
-                                    text = "热情为您服务"
+                                    text = this.resumeText
                                 });
                             }
                         }
@@ -176,13 +184,14 @@ namespace LEDDisplay
                                     {
                                         ip = ctl.IP,
                                         port = ctl.Port,
+                                        colorMode = fullColorList.Contains(win.WindowNumber) ? 4 : 3,
                                         deviceAddr = ctl.DeviceAddress,
                                         position = win.Position
                                     };
                                 if (msg.Operate == Operate.Pause)
-                                    sendInfo.text = "  暂 停 服 务";
+                                    sendInfo.text = this.pauseText;
                                 else if (msg.Operate == Operate.Reset)
-                                    sendInfo.text = "热情为您服务";
+                                    sendInfo.text = this.resumeText;
                                 Task.Factory.StartNew(arg =>
                                 {
                                     this.trySend(arg as ledSendInfo);
@@ -210,15 +219,15 @@ namespace LEDDisplay
 
         int SendLEDMessage(ledSendInfo sendInfo)
         {
-            return this.SendLEDMessage(sendInfo.ip, ushort.Parse(sendInfo.port), sendInfo.deviceAddr, sendInfo.position, sendInfo.text, sendInfo.isFlash);
+            return this.SendLEDMessage(sendInfo.ip, ushort.Parse(sendInfo.port), sendInfo.colorMode, sendInfo.deviceAddr, sendInfo.position, sendInfo.text, sendInfo.isFlash);
         }
 
-        int SendLEDMessage(string ip, ushort port, string deviceAddr, string position, string text)
+        int SendLEDMessage(string ip, ushort port, int colorMode, string deviceAddr, string position, string text)
         {
-            return this.SendLEDMessage(ip, port, deviceAddr, position, text, false);
+            return this.SendLEDMessage(ip, port, colorMode, deviceAddr, position, text, false);
         }
 
-        int SendLEDMessage(string ip, ushort port, string deviceAddr, string position, string text, bool isFlash)
+        int SendLEDMessage(string ip, ushort port, int colorMode, string deviceAddr, string position, string text, bool isFlash)
         {
             LogService.Debug(string.Format("SendLEDMessage->Start:Text={0}", text));
             var strArr = position.Split(',');
@@ -240,8 +249,7 @@ namespace LEDDisplay
             //以此类推 
             ushort K = (ushort)LEDSender.Do_MakeObject(LEDSender.ROOT_PLAY_OBJECT, LEDSender.ACTMODE_REPLACE,
                 ChapterIndex, RegionIndex, LeafIndex, ObjectIndex,
-                //全彩无灰度
-                LEDSender.COLOR_MODE_THREE);
+                colorMode);
             LEDSender.Do_AddText(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0,
                 text, this.fontName, this.fontSize, this.fontColor, this.fontStyle, LEDSender.V_FALSE, 1,
                 1, 5, 1, 5, isFlash ? 1 : 0, 1000, 10000);

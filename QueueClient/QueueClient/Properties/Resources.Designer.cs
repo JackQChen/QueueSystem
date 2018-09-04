@@ -662,6 +662,20 @@ namespace QueueClient.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap 长按钮 {
+            get {
+                object obj = ResourceManager.GetObject("长按钮", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap 长按钮1 {
+            get {
+                object obj = ResourceManager.GetObject("长按钮1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap 预约下一页 {
             get {
                 object obj = ResourceManager.GetObject("预约下一页", resourceCulture);

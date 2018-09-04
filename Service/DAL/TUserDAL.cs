@@ -47,7 +47,6 @@ namespace DAL
                          u2.unitName,
                          Sex = s.Name,
                          State = d.Name,
-                         u.Photo,
                          u.Remark,
                          Model = u
                      })

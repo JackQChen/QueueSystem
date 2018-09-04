@@ -7,7 +7,7 @@ namespace MessageServer
 {
     public class ViewerHost : Panel
     {
-        public Action InitAction;
+        public event Action OnEmbed;
 
         public ViewerHost()
         {
@@ -24,8 +24,7 @@ namespace MessageServer
                 ProcessStartInfo info = new ProcessStartInfo(this.m_AppFileName);
                 info.UseShellExecute = true;
                 info.WindowStyle = ProcessWindowStyle.Minimized;
-                m_AppProcess = System.Diagnostics.Process.Start(info);
-                m_AppProcess.WaitForInputIdle();
+                m_AppProcess = Process.Start(info);
                 Application.Idle += Application_Idle;
             }
             catch (Exception ex)
@@ -43,16 +42,12 @@ namespace MessageServer
                 Application.Idle -= Application_Idle;
                 return;
             }
-            if (m_AppProcess.MainWindowHandle == IntPtr.Zero) return;
+            if (m_AppProcess.MainWindowHandle == IntPtr.Zero)
+                return;
             Application.Idle -= Application_Idle;
             EmbedProcess(m_AppProcess, this);
-            if (this.InitAction != null)
-                this.InitAction();
-        }
-
-        void m_AppProcess_Exited(object sender, EventArgs e)
-        {
-            m_AppProcess = null;
+            if (this.OnEmbed != null)
+                this.OnEmbed();
         }
 
         public void Stop()
@@ -219,25 +214,17 @@ namespace MessageServer
 
         private void EmbedProcess(Process app, Control control)
         {
-            if (app == null || app.MainWindowHandle == IntPtr.Zero || control == null) return;
+            if (app == null || app.MainWindowHandle == IntPtr.Zero || control == null)
+                return;
             try
             {
                 SetParent(app.MainWindowHandle, control.Handle);
-            }
-            catch (Exception)
-            { }
-            try
-            {
                 SetWindowLong(new HandleRef(this, app.MainWindowHandle), GWL_STYLE, WS_VISIBLE);
-            }
-            catch (Exception)
-            { }
-            try
-            {
                 MoveWindow(app.MainWindowHandle, 0, 0, control.Width, control.Height, true);
             }
-            catch (Exception)
-            { }
+            catch
+            {
+            }
         }
     }
 }

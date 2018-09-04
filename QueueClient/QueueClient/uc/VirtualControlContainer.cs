@@ -29,7 +29,7 @@ namespace QueueClient
             }
         }
 
-        List<VirtualControl> controls = new List<VirtualControl>();
+        internal List<VirtualControl> controls = new List<VirtualControl>();
 
         public Image Image { get; set; }
 

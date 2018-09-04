@@ -118,158 +118,26 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="background" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\background.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="back_button1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\back button1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="back_button2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\back button2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="buttonmain1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\buttonmain1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="buttonmain2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\buttonmain2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="home_button_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\home button 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="home_button_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\home button 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="loading361" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\loading361.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="loading_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\loading-0.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="nubmer_button_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\nubmer button 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="nubmer_button_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\nubmer button 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="queue_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\queue.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="弹窗新" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\弹窗新.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="弹窗新__1_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\弹窗新 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="返回按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\返回按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="按键3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\按键3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="L返回按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L返回按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="按键890" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\按键890.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="按键lol" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\按键lol.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="提示框1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\提示框1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="提示框2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\提示框2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="提示框新" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\提示框新.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="数字按键" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\数字按键.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="数字新" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\数字新.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="背景" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\背景.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="边框123" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\边框123.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="button_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\button_11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="button_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\button_21.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="buttonok1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\buttonok1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="buttonok2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\buttonok2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="button_m2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\button 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="button_m1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\button_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="background_ev" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\background_ev.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="button_active" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\button active.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="button_normal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\button normal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="提交_button1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\提交 button1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="提交_button2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\提交 button2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="条框" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\条框.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="评价界面效果图" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\评价界面效果图.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="button_read" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\button_read.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="刷卡区域" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\刷卡区域.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="上一页_button1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\上一页 button1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="勾选框" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\勾选框.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="对勾" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\对勾.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="矩形" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\矩形.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="确认_button1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\确认 button1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="确认_button2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\确认 button2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="勾选框2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\勾选框2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="title" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\title.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="办事" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\办事.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="确认按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\确认按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="办事指南" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\办事指南.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="咨询" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\咨询.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="L领证" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L领证.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="预约勾选框1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约勾选框1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="底部黑色" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\底部黑色.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -277,139 +145,277 @@
   <data name="评价" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\评价.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="请选择您要办理的类型" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\请选择您要办理的类型.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="L评价_拷贝_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L评价 拷贝 3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="领证" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\领证.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="提示框2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\提示框2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="下一页" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\下一页.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="下一页点击后" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\下一页点击后.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="未选中" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\未选中.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="满意灰色按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\满意灰色按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="满意蓝色按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\满意蓝色按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="评价背景" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\评价背景.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="返回按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\返回按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="首页按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\首页按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="感谢您的评价" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\感谢您的评价.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约下一页" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约下一页.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约下一页点击后" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约下一页点击后.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约勾选框" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约勾选框.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约勾选框1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约勾选框1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约提交" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约提交.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约提交_蓝色按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约提交 蓝色按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约未选中" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约未选中.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约背景" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约背景.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="预约选中" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\预约选中.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="部门下一页" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\部门下一页.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="部门下一页_蓝色" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\部门下一页 蓝色.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="部门蓝色背景_拷贝_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\部门蓝色背景 拷贝 11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="返回按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\返回按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="首页按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\首页按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="弹窗确认按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\弹窗确认按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="弹窗确认按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\弹窗确认按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="弹窗背景" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\弹窗背景.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="部门点击后_灰色方框" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\点击后 灰色方框.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="数字按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\数字按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="数字按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\数字按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="确认按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\确认按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="确认按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\确认按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="loading_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loading-0.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="请输入身份证号码" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\请输入身份证号码.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="蓝色_点击前1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\蓝色-点击前1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="感谢您的评价" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\感谢您的评价.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="银色_点击后1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\银色-点击后1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="按键3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\按键3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="招商引资" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\招商引资.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="预约下一页点击后" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约下一页点击后.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="L办事" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L办事.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L招商引资_拷贝" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L招商引资 拷贝.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L评价_拷贝_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L评价 拷贝 3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L返回按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L返回按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="L领证" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\L领证.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="loading361" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\loading361.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="L首页按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\L首页按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="评价界面效果图" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\评价界面效果图.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="满意灰色按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\满意灰色按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="预约勾选框" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约勾选框.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonok1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonok1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="边框123" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\边框123.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="办事" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\办事.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="queue_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\queue.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonmain2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonmain2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="back_button1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\back button1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="预约下一页" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约下一页.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="预约提交" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约提交.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonok2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonok2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="返回按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\返回按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="提交_button1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\提交 button1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="预约提交_蓝色按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约提交 蓝色按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="数字新" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\数字新.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="矩形" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\矩形.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="background" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\background.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="弹窗背景" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\弹窗背景.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="蓝色_点击前1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\蓝色-点击前1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="首页按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\首页按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="满意蓝色按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\满意蓝色按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="未选中" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\未选中.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="数字按键" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\数字按键.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="background_ev" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\background_ev.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="确认按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\确认按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="提示框1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\提示框1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="部门下一页" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\部门下一页.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="预约未选中" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约未选中.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="条框" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\条框.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_active" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\button active.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="招商引资" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\招商引资.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="提示框新" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\提示框新.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="L评价_拷贝_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\评价 拷贝 3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="评价背景" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\评价背景.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonmain1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buttonmain1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="领证" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\领证.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="按键lol" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\按键lol.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="确认_button2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\确认 button2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_m2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\button 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="矩形_16_拷贝_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\矩形 16 拷贝 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nubmer_button_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\nubmer button 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="提交_button2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\提交 button2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="back_button2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\back button2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="勾选框2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\勾选框2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="L招商引资_拷贝" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L招商引资 拷贝.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\button_21.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_m1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\button_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="请选择您要办理的类型" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\请选择您要办理的类型.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="长按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\长按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="L办事" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\L办事.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="下一页" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\下一页.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="弹窗新" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\弹窗新.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="home_button_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\home button 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="背景" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\背景.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="预约选中" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约选中.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="弹窗确认按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\弹窗确认按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="对勾" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\对勾.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="下一页点击后" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\下一页点击后.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="弹窗新__1_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\弹窗新 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nubmer_button_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\nubmer button 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_read" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\button_read.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="部门下一页_蓝色" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\部门下一页 蓝色.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="预约背景" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\预约背景.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\button_11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="上一页_button1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\上一页 button1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="数字按钮2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\数字按钮2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="刷卡区域" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\刷卡区域.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="咨询" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\咨询.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_normal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\button normal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="按键890" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\按键890.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="银色_点击后1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\银色-点击后1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="首页按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\首页按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="title" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\title.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="部门蓝色背景_拷贝_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\部门蓝色背景 拷贝 11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="部门点击后_灰色方框" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\点击后 灰色方框.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="勾选框" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\勾选框.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="数字按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\数字按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="弹窗确认按钮" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\弹窗确认按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="确认_button1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\确认 button1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="home_button_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\home button 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="长按钮1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\长按钮.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

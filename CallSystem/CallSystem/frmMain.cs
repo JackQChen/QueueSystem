@@ -720,6 +720,7 @@ namespace CallSystem
                             {
                                 return;
                             }
+                            model.finishTime = DateTime.Now;
                             model.state = 1;
                             cBll.Update(model);
                             csState[adress].workState = (int)WorkState.Evaluate;
@@ -786,6 +787,7 @@ namespace CallSystem
                             }
                             string mess = model.ticketNumber + "号已弃号。";
                             model.state = -1;
+                            model.finishTime = DateTime.Now;
                             cBll.Update(model);
                             csState[adress].workState = (int)WorkState.Evaluate;
                             csState[adress].callId = 0;
@@ -861,6 +863,7 @@ namespace CallSystem
                             return;
                         }
                         //转移号码
+                        model.finishTime = DateTime.Now;
                         cBll.Transfer(model);
                         this.client.SendMessage(new OperateMessage() { WindowNo = wNum[adress], Operate = Operate.Reset });
                         var callString = model.ticketNumber + "号已转移(重置) ";
@@ -1196,7 +1199,7 @@ namespace CallSystem
             frmQueueSet frm = new frmQueueSet();
             frm.ShowDialog();
         }
-
+        LockBLL lbll = new LockBLL();
         private void timer1_Tick(object sender, EventArgs e)
         {
             string[] cle = clearTime.Split(',');
@@ -1207,6 +1210,7 @@ namespace CallSystem
                     var tList = cBll.GiveUpAll();
                     foreach (var t in tList.Select(s => s.windowNumber).Distinct())
                     {
+                        lbll.releaseWin(t);
                         var stateModel = csBll.GetModelByWindowNo(t);
                         if (stateModel != null)
                         {
@@ -1287,7 +1291,45 @@ namespace CallSystem
             }
         }
 
-
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            if (DialogResult.Cancel == MessageBox.Show("确认进行清号？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question))
+                return;
+            try
+            {
+                var tList = cBll.GiveUpAll();
+                if (tList != null && tList.Count != 0)
+                {
+                    foreach (var t in tList.Select(s => s.windowNumber).Distinct())
+                    {
+                        lbll.releaseWin(t);
+                        var stateModel = csBll.GetModelByWindowNo(t);
+                        if (stateModel != null)
+                        {
+                            stateModel.callId = 0;
+                            stateModel.workState = 0;
+                            stateModel.hangId = 0;
+                            stateModel.pauseState = 0;
+                            stateModel.ticketNo = "";
+                            csBll.Update(stateModel);
+                        }
+                    }
+                    foreach (var t in tList)
+                    {
+                        string mess = "自动批量弃号：窗口[" + t.windowNumber + "]票号[" + t.ticketNumber + "]已完成弃号";
+                        this.client.SendMessage(new OperateMessage() { WindowNo = t.windowNumber, Operate = Operate.Reset });
+                        this.Invoke(new Action(() => { this.listView1.Items.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff") + " : " + mess); }));
+                        if (wCall.Keys.Contains(t.windowNumber))
+                            wState[wCall[t.windowNumber]] = WorkState.Defalt;
+                        WriterCallLog(4, mess, 0);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 
     public enum WorkState

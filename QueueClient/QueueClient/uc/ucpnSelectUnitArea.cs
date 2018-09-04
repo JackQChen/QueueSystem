@@ -25,60 +25,43 @@ namespace QueueClient
         public event Action SelectBusy;
         public TUnitModel selectUnit { get; set; }
         public int pageCount = 30;//
-        public int cureentPage = 0;//目前按照固定2个页面 。如果页码为0 加载图1 ，页面为2加载图2
-        string[] units1 = null;
-        string[] units2 = null;
+        public int cureentPage = 0;//以配置为准
+        string[] units = null;
+        string[] pos = null;
+        string[] size = null;
         Image[] imgList = null;
         //动态创建部门
         public void CreateUnit()
         {
-            units1 = System.Configuration.ConfigurationManager.AppSettings["Units1"].ToString().Split(',');//页面1固定部门编号 
-            units2 = System.Configuration.ConfigurationManager.AppSettings["Units2"].ToString().Split(',');//页面2固定部门编号 
+            units = System.Configuration.ConfigurationManager.AppSettings["Units"].ToString().Split('|');
+            pos = System.Configuration.ConfigurationManager.AppSettings["Position"].ToString().Split('#');
+            size = System.Configuration.ConfigurationManager.AppSettings["Size"].ToString().Split('|');
+            var uns = units[cureentPage].Split(',');
+            var siz = size[cureentPage].Split(',');
+            var posi = pos[cureentPage].Split('|');
             this.pnUnit.ClearControl();
             pnUnit.BackgroundImage = imgList[cureentPage];
-            if (cureentPage == 0)
+            pnUnit.MouseUp += this.pb_MouseUp;
+            for (int i = 0; i < uns.Count(); i++)
             {
-                pnUnit.MouseUp += this.pb_MouseUp;
-                var u1 = uList.Where(u => u.unitSeq == units1[0]).FirstOrDefault();
-                var u2 = uList.Where(u => u.unitSeq == units1[1]).FirstOrDefault();
-                var u3 = uList.Where(u => u.unitSeq == units1[2]).FirstOrDefault();
-                var u4 = uList.Where(u => u.unitSeq == units1[3]).FirstOrDefault();
-                Size size1 = new Size(300, 75);
-                Size size2 = new Size(237, 75);
-                Size size3 = new Size(324, 75);
-                Size size4 = new Size(440, 75);
-                UnitCard pb1 = SetUnit("pb_u_1", u1, size1);
-                UnitCard pb2 = SetUnit("pb_u_2", u2, size2);
-                UnitCard pb3 = SetUnit("pb_u_3", u3, size3);
-                UnitCard pb4 = SetUnit("pb_u_4", u4, size4);
-                pb1.Rectangle.Location = new Point(390, 31);
-                pb2.Rectangle.Location = new Point(208, 119);
-                pb3.Rectangle.Location = new Point(646, 137);
-                pb4.Rectangle.Location = new Point(764, 326);
-                this.pnUnit.AddControl(pb1);
-                this.pnUnit.AddControl(pb2);
-                this.pnUnit.AddControl(pb3);
-                this.pnUnit.AddControl(pb4);
-
-            }
-            else if (cureentPage == 1)
-            {
-
-            }
-            else if (cureentPage == 2)
-            {
-
+                var dep = uList.Where(q => q.unitSeq == uns[i]).FirstOrDefault();
+                var width = Convert.ToInt32(siz[i]);
+                var posx = Convert.ToInt32(posi[i].Split(',')[0]);
+                var posy = Convert.ToInt32(posi[i].Split(',')[1]);
+                UnitCard pb = SetUnit("pb_u_" + (i + 1).ToString(), dep, new Size(width, 75), posx, posy);
+                this.pnUnit.AddControl(pb);
             }
             this.pnUnit.Draw();
         }
 
-        UnitCard SetUnit(string name, object tag, Size size)
+        UnitCard SetUnit(string name, object tag, Size size,int x,int y)
         {
             UnitCard pb = new UnitCard();
             pb.Name = name;
             pb.Tag = tag;
             pb.Image = Properties.Resources.蓝色_点击前1;
             pb.Rectangle.Size = size;
+            pb.Rectangle.Location = new Point(x, y);
             pb.MouseClick += pb_Click;
             pb.MouseDown += pb_MouseDown;
             pb.MouseEnter += (s, e) =>

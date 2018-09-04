@@ -158,33 +158,33 @@ namespace QueueClient
         {
             g.DrawImage(Image, Rectangle, 0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel);
             TBusinessModel busy = this.Tag as TBusinessModel;
-            Font font = new Font("黑体", 22, FontStyle.Bold);
+            Font font = new Font("黑体", 18, FontStyle.Bold);
             if (Brush == null)
                 Brush = new SolidBrush(Color.Black);
             string busiName = busy.busiName;
-            if (busy.busiName.Trim().Length > 8)
-                busiName = busiName.Substring(0, 8);
-            int rowLength = 4;
-            int cX = 23;
+            if (busy.busiName.Trim().Length > 21)
+                busiName = busiName.Substring(0, 21);
+            int rowLength = 7;
+            int cX = 10;
             if (busiName.Length <= rowLength)
-                g.DrawString(busiName, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 32);//只有三个字，那就居中
+                g.DrawString(busiName, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 40);//只有一行字，那就居中
             else
             {
                 var firstLine = busiName.Substring(0, rowLength);
                 var remain = busiName.Substring(rowLength, busiName.Length - rowLength);
                 if (remain.Length <= rowLength)
                 {
-                    g.DrawString(firstLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 15);
+                    g.DrawString(firstLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 25);
                     g.DrawString(remain, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 55);
                 }
-                //else
-                //{
-                //    g.DrawString(firstLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 13);
-                //    var secondLine = remain.Substring(0, rowLength);
-                //    g.DrawString(secondLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 58);
-                //    var last = remain.Substring(rowLength, remain.Length - rowLength);
-                //    g.DrawString(last, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 103);
-                //}
+                else
+                {
+                    g.DrawString(firstLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 10);
+                    var secondLine = remain.Substring(0, rowLength);
+                    g.DrawString(secondLine, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 40);
+                    var last = remain.Substring(rowLength, remain.Length - rowLength);
+                    g.DrawString(last, font, Brush, this.Rectangle.X + cX, this.Rectangle.Y + 70);
+                }
             }
         }
     }

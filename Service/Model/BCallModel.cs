@@ -72,6 +72,10 @@ namespace Model
         /// 预约号
         /// </summary>
         public string reserveSeq { get; set; }
+        /// <summary>
+        /// 完成时间(完成/弃号/转移)
+        /// </summary>
+        public  DateTime finishTime{get;set;}
 
     }
 }

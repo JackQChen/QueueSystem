@@ -37,6 +37,7 @@ namespace CallClient
         FCallStateBLL csBll = new FCallStateBLL();
         FCallStateModel stateModel;
         List<BQueueModel> qList;
+        LockBLL lbll = new LockBLL();
         string userId = "";
         LockAction action = new LockAction();
         public frmMain()
@@ -450,6 +451,7 @@ namespace CallClient
                                 return;
                             }
                             model.state = 1;
+                            model.finishTime = DateTime.Now;
                             cBll.Update(model);
                             stateModel.workState = (int)WorkState.Evaluate;
                             stateModel.callId = 0;
@@ -516,6 +518,7 @@ namespace CallClient
                             }
                             string mess = model.ticketNumber + "号已弃号。";
                             model.state = -1;
+                            model.finishTime = DateTime.Now;
                             cBll.Update(model);
                             stateModel.workState = (int)WorkState.Evaluate;
                             stateModel.callId = 0;
@@ -592,6 +595,7 @@ namespace CallClient
                             return;
                         }
                         //转移号码
+                        model.finishTime = DateTime.Now;
                         cBll.Transfer(model);
                         this.client.SendMessage(new OperateMessage() { WindowNo = windowNo, Operate = Operate.Reset });
                         var callString = model.ticketNumber + "号已转移(重置) ";
@@ -842,6 +846,7 @@ namespace CallClient
         {
             if (DialogResult.OK == MessageBox.Show("确定对当前窗口所有业务的排队票进行批量弃号？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question))
             {
+                lbll.releaseWin(windowNo);
                 stateModel = csBll.GetModelByWindowNo(windowNo);
                 if (stateModel != null)
                 {

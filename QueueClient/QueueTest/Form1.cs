@@ -29,7 +29,7 @@ namespace QueueTest
        
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-
+             
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)

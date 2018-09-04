@@ -84,6 +84,7 @@ namespace DAL
             {
                 lock (obj)
                 {
+                    db.Session.BeginTransaction();
                     var dal = new BLineUpMaxNoDAL(this.db, this.areaNo);
                     var maxNo = dal.GetModelList().Where(a => a.AreaNo == this.areaNo).Where(l => l.unitSeq == selectUnit.unitSeq && l.busiSeq == selectBusy.busiSeq).FirstOrDefault();
                     int ticketNo = maxNo == null ? 1 : maxNo.lineDate.Date != DateTime.Now.Date ? 1 : maxNo.maxNo + 1;
@@ -127,10 +128,12 @@ namespace DAL
                         dal.Update(maxNo);
                     }
                     qModel = line;
+                    db.Session.CommitTransaction();
                 }
             }
             catch
             {
+                db.Session.RollbackTransaction();
                 return null;
             }
             return qModel;
@@ -153,6 +156,7 @@ namespace DAL
             {
                 lock (obj)
                 {
+                    db.Session.BeginTransaction();
                     var dal = new BLineUpMaxNoDAL(this.db, this.areaNo);
                     var maxNo = dal.GetModelList().Where(a => a.AreaNo == this.areaNo).Where(l => l.unitSeq == unitSeq && l.busiSeq == busiSeq).FirstOrDefault();
                     int ticketNo = maxNo == null ? 1 : maxNo.lineDate.Date != DateTime.Now.Date ? 1 : maxNo.maxNo + 1;
@@ -197,10 +201,12 @@ namespace DAL
                         dal.Update(maxNo);
                     }
                     qModel = line;
+                    db.Session.CommitTransaction();
                 }
             }
             catch
             {
+                db.Session.RollbackTransaction();
                 return null;
             }
             return qModel;

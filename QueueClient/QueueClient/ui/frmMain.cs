@@ -161,6 +161,9 @@ namespace QueueClient
             ucpnSelectBusy busy = new ucpnSelectBusy();
             busy.Size = new Size(1920, 1080);
             busy.Location = new Point(0, 0);
+            ucpnSelectBusyPhoto busyn = new ucpnSelectBusyPhoto();
+            busyn.Size = new Size(1920, 1080);
+            busyn.Location = new Point(0, 0);
             ucpnEvaluate evaluate = new ucpnEvaluate();
             evaluate.Size = new Size(1920, 1080);
             evaluate.Location = new Point(0, 0);
@@ -180,6 +183,7 @@ namespace QueueClient
             card.ProcessIdCard += new Action<string>(ProcessIdCard);
             unit.SelectBusy += new Action(unit_SelectedUnit);
             busy.SelectedBusy += new Action(busy_SelectedBusy);
+            busyn.SelectedBusy += new Action(busyn_SelectedBusy);
             evaluate.enterEvaluate += new Action<BEvaluateModel>(evaluate_enterEvaluate);
             //evaluate.enter += new Action(evaluate_enter);
             evaluate.previous += new Action<object>(evaluate_previous);
@@ -188,11 +192,15 @@ namespace QueueClient
             unit.previous += new Action<object>(unit_previous);
             unit.next += new Action<object>(unit_previous);
             busy.previous += new Action<object>(busy_previous);
+            busy.next += new Action<object>(busy_previous);
+            busyn.next += new Action<object>(busyn_previous);
+            busyn.previous += new Action<object>(busyn_previous);
             pwd.Exit += new Action(pwd_Exit);
 
             pnMain.Controls.Add(pwd);
             pnMain.Controls.Add(evaluate);
             pnMain.Controls.Add(busy);
+            pnMain.Controls.Add(busyn);
             pnMain.Controls.Add(unit);
             pnMain.Controls.Add(card);
             pnMain.Controls.Add(readCard);
@@ -201,6 +209,7 @@ namespace QueueClient
             uc.Add("pwd", pwd);
             uc.Add("evaluate", evaluate);
             uc.Add("busy", busy);
+            uc.Add("busyn", busyn);
             uc.Add("unit", unit);
             uc.Add("readcard", readCard);
             uc.Add("card", card);
@@ -221,11 +230,12 @@ namespace QueueClient
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            FloorImgCount = GetFloorImgCount();
             SetConfigValue("MainTime", "20");//
             SetConfigValue("BroadcastInterval", "5");
-            SetConfigValue("Units1", "2,3,1,5");
-            SetConfigValue("Units2", "6,7");
+            SetConfigValue("Units", "1,2,3,4,5|6,7,8,9");
+            SetConfigValue("Position", "390,31|208,119|646,137|764,326|555,326#390,31|208,119|646,137|764,326|555,326");
+            SetConfigValue("Size", "300,237,324,440,400|300,237,324,440");
+            FloorImgCount = GetMaxFloorCount();
             MainTime = System.Configuration.ConfigurationManager.AppSettings["MainTime"];
             //页面停留时间 单位：秒
             ucTimer.Add("main", Convert.ToInt32(MainTime));
@@ -233,6 +243,7 @@ namespace QueueClient
             ucTimer.Add("evaluate", Convert.ToInt32(EvaluateTime));
             ucTimer.Add("appoint", Convert.ToInt32(AppointTime));
             ucTimer.Add("busy", Convert.ToInt32(BusyTime));
+            ucTimer.Add("busyn", Convert.ToInt32(BusyTime));
             ucTimer.Add("unit", Convert.ToInt32(UnitTime));
             ucTimer.Add("readcard", Convert.ToInt32(ReadcardTime));
             ucTimer.Add("card", Convert.ToInt32(CardTime));
@@ -492,14 +503,10 @@ namespace QueueClient
             ctl.CreateUnit();
         }
 
-        int GetFloorImgCount()
+        int GetMaxFloorCount()
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory + "img\\FloorDistribution";
-            DirectoryInfo root = new DirectoryInfo(path);
-            FileInfo[] files = root.GetFiles();
-            if (files.Count() > 0)
-                return files.Count();
-            return 1;
+            var units = System.Configuration.ConfigurationManager.AppSettings["Units"].ToString().Split('|');
+            return units.Count();
         }
         void busy_previous(object sender)
         {
@@ -531,17 +538,60 @@ namespace QueueClient
             ctl.CreateBusiness();
         }
 
+        void busyn_previous(object sender)
+        {
+            var ctl = ((ucpnSelectBusyPhoto)uc["busyn"]);
+            pageStopTime = ucTimer["busyn"];
+            var count = bList.Where(b => b.unitSeq == selectUnit.unitSeq).Count();
+            int max = count / ctl.pageCount;
+            if ((count % ctl.pageCount) > 0)
+                max++;
+            PictureBox pb = sender as PictureBox;
+            if (pb.Name == "pbPrevious")
+            {
+                if (ctl.cureentPage == 0)
+                    return;
+                else
+                {
+                    ctl.cureentPage--;
+                }
+            }
+            else
+            {
+                if (max == ctl.cureentPage + 1)
+                    return;
+                else
+                {
+                    ctl.cureentPage++;
+                }
+            }
+            ctl.CreateBusiness();
+        }
+
         void unit_SelectedUnit()
         {
             var ucUnit = ((ucpnSelectUnitArea)uc["unit"]);
-            var ucBusy = ((ucpnSelectBusy)uc["busy"]);
             selectUnit = ucUnit.selectUnit;
-            ucBusy.cureentPage = 0;
             var list = new List<TBusinessModel>();
             list = bList.Where(b => b.unitSeq == selectUnit.unitSeq).ToList();
-            ucBusy.bList = list;
-            ucBusy.BringToFront();
-            ucBusy.CreateBusiness();
+            if (isPhoto(selectUnit.unitSeq))
+            {
+                var ucBusyn = ((ucpnSelectBusyPhoto)uc["busyn"]);
+                ucBusyn.cureentPage = 0;
+                ucBusyn.bList = list;
+                ucBusyn.BringToFront();
+                ucBusyn.CreateBusiness();
+                pageStopTime = ucTimer["busyn"];
+            }
+            else
+            {
+                var ucBusy = ((ucpnSelectBusy)uc["busy"]);
+                ucBusy.cureentPage = 0;
+                ucBusy.bList = list;
+                ucBusy.BringToFront();
+                ucBusy.CreateBusiness();
+                pageStopTime = ucTimer["busy"];
+            }
             pbReturnMain.BringToFront();
             pbLastPage.BringToFront();
             if (busyType == BusyType.Work)
@@ -550,7 +600,28 @@ namespace QueueClient
                 pageLocation = PageLocation.InvestmentSelectBusy;
             else
                 pageLocation = PageLocation.ConsultSelectBusy;
-            pageStopTime = ucTimer["busy"];
+
+        }
+
+        bool isPhoto(string unitSeq)
+        {
+            try
+            {
+                var path = AppDomain.CurrentDomain.BaseDirectory + "img\\ItemPhoto\\" + unitSeq;
+                if (Directory.Exists(path))
+                {
+                    string[] files = Directory.GetFiles(path);
+                    if (files.Length > 0)
+                        return true;
+                    else
+                        return false;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         void busy_SelectedBusy()
@@ -558,6 +629,19 @@ namespace QueueClient
             if (selectUnit == null)
                 return;
             selectBusy = ((ucpnSelectBusy)uc["busy"]).selectBusy;
+            if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq))
+            {
+                pbReturn_Click(null, null);
+                return;
+            }
+            OutQueueNo(); //出号
+            pbReturn_Click(null, null);
+        }
+        void busyn_SelectedBusy()
+        {
+            if (selectUnit == null)
+                return;
+            selectBusy = ((ucpnSelectBusyPhoto)uc["busyn"]).selectBusy;
             if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq))
             {
                 pbReturn_Click(null, null);

@@ -45,12 +45,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnEv = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnReCall1 = new System.Windows.Forms.Button();
+            this.btnHank = new System.Windows.Forms.Button();
+            this.btnMove = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnMove = new System.Windows.Forms.Button();
-            this.btnHank = new System.Windows.Forms.Button();
-            this.btnReCall1 = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -71,12 +72,12 @@
             this.btnConfig,
             this.btnExit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 70);
             // 
             // btnSet
             // 
             this.btnSet.Name = "btnSet";
-            this.btnSet.Size = new System.Drawing.Size(124, 22);
+            this.btnSet.Size = new System.Drawing.Size(118, 22);
             this.btnSet.Text = "高级选项";
             this.btnSet.Visible = false;
             this.btnSet.Click += new System.EventHandler(this.btnSet_Click);
@@ -84,14 +85,14 @@
             // btnConfig
             // 
             this.btnConfig.Name = "btnConfig";
-            this.btnConfig.Size = new System.Drawing.Size(124, 22);
+            this.btnConfig.Size = new System.Drawing.Size(118, 22);
             this.btnConfig.Text = "系统配置";
             this.btnConfig.Click += new System.EventHandler(this.btnConfig_Click);
             // 
             // btnExit
             // 
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(124, 22);
+            this.btnExit.Size = new System.Drawing.Size(118, 22);
             this.btnExit.Text = "退出系统";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
@@ -133,7 +134,7 @@
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(784, 328);
+            this.listView1.Size = new System.Drawing.Size(870, 328);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -148,7 +149,7 @@
             this.messageIndicator1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.messageIndicator1.Location = new System.Drawing.Point(0, 404);
             this.messageIndicator1.Name = "messageIndicator1";
-            this.messageIndicator1.Size = new System.Drawing.Size(784, 30);
+            this.messageIndicator1.Size = new System.Drawing.Size(870, 30);
             this.messageIndicator1.TabIndex = 7;
             // 
             // cmbAdress
@@ -198,6 +199,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnClear);
             this.panel1.Controls.Add(this.btnReCall1);
             this.panel1.Controls.Add(this.btnHank);
             this.panel1.Controls.Add(this.btnMove);
@@ -211,8 +213,38 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(784, 76);
+            this.panel1.Size = new System.Drawing.Size(870, 76);
             this.panel1.TabIndex = 11;
+            // 
+            // btnReCall1
+            // 
+            this.btnReCall1.Location = new System.Drawing.Point(676, 30);
+            this.btnReCall1.Name = "btnReCall1";
+            this.btnReCall1.Size = new System.Drawing.Size(88, 36);
+            this.btnReCall1.TabIndex = 14;
+            this.btnReCall1.Text = "回呼";
+            this.btnReCall1.UseVisualStyleBackColor = true;
+            this.btnReCall1.Click += new System.EventHandler(this.btnReCall1_Click);
+            // 
+            // btnHank
+            // 
+            this.btnHank.Location = new System.Drawing.Point(582, 30);
+            this.btnHank.Name = "btnHank";
+            this.btnHank.Size = new System.Drawing.Size(88, 36);
+            this.btnHank.TabIndex = 13;
+            this.btnHank.Text = "挂起";
+            this.btnHank.UseVisualStyleBackColor = true;
+            this.btnHank.Click += new System.EventHandler(this.btnHank_Click);
+            // 
+            // btnMove
+            // 
+            this.btnMove.Location = new System.Drawing.Point(488, 30);
+            this.btnMove.Name = "btnMove";
+            this.btnMove.Size = new System.Drawing.Size(88, 36);
+            this.btnMove.TabIndex = 12;
+            this.btnMove.Text = "转移";
+            this.btnMove.UseVisualStyleBackColor = true;
+            this.btnMove.Click += new System.EventHandler(this.btnMove_Click);
             // 
             // btnPause
             // 
@@ -230,7 +262,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 76);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(784, 328);
+            this.panel2.Size = new System.Drawing.Size(870, 328);
             this.panel2.TabIndex = 12;
             // 
             // timer1
@@ -239,41 +271,21 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // btnMove
+            // btnClear
             // 
-            this.btnMove.Location = new System.Drawing.Point(488, 30);
-            this.btnMove.Name = "btnMove";
-            this.btnMove.Size = new System.Drawing.Size(88, 36);
-            this.btnMove.TabIndex = 12;
-            this.btnMove.Text = "转移";
-            this.btnMove.UseVisualStyleBackColor = true;
-            this.btnMove.Click += new System.EventHandler(this.btnMove_Click);
-            // 
-            // btnHank
-            // 
-            this.btnHank.Location = new System.Drawing.Point(582, 30);
-            this.btnHank.Name = "btnHank";
-            this.btnHank.Size = new System.Drawing.Size(88, 36);
-            this.btnHank.TabIndex = 13;
-            this.btnHank.Text = "挂起";
-            this.btnHank.UseVisualStyleBackColor = true;
-            this.btnHank.Click += new System.EventHandler(this.btnHank_Click);
-            // 
-            // btnReCall1
-            // 
-            this.btnReCall1.Location = new System.Drawing.Point(676, 30);
-            this.btnReCall1.Name = "btnReCall1";
-            this.btnReCall1.Size = new System.Drawing.Size(88, 36);
-            this.btnReCall1.TabIndex = 14;
-            this.btnReCall1.Text = "回呼";
-            this.btnReCall1.UseVisualStyleBackColor = true;
-            this.btnReCall1.Click += new System.EventHandler(this.btnReCall1_Click);
+            this.btnClear.Location = new System.Drawing.Point(770, 30);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(88, 36);
+            this.btnClear.TabIndex = 15;
+            this.btnClear.Text = "清号";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 434);
+            this.ClientSize = new System.Drawing.Size(870, 434);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.messageIndicator1);
@@ -316,6 +328,7 @@
         private System.Windows.Forms.Button btnReCall1;
         private System.Windows.Forms.Button btnHank;
         private System.Windows.Forms.Button btnMove;
+        private System.Windows.Forms.Button btnClear;
     }
 }
 

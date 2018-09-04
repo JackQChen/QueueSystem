@@ -90,12 +90,12 @@
             this.btnConfig,
             this.btnExit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 70);
             // 
             // btnSet
             // 
             this.btnSet.Name = "btnSet";
-            this.btnSet.Size = new System.Drawing.Size(124, 22);
+            this.btnSet.Size = new System.Drawing.Size(118, 22);
             this.btnSet.Text = "高级选项";
             this.btnSet.Visible = false;
             this.btnSet.Click += new System.EventHandler(this.btnSet_Click);
@@ -103,14 +103,14 @@
             // btnConfig
             // 
             this.btnConfig.Name = "btnConfig";
-            this.btnConfig.Size = new System.Drawing.Size(124, 22);
+            this.btnConfig.Size = new System.Drawing.Size(118, 22);
             this.btnConfig.Text = "系统配置";
             this.btnConfig.Click += new System.EventHandler(this.btnConfig_Click);
             // 
             // btnExit
             // 
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(124, 22);
+            this.btnExit.Size = new System.Drawing.Size(118, 22);
             this.btnExit.Text = "退出系统";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
@@ -119,6 +119,7 @@
             this.messageIndicator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.messageIndicator1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.messageIndicator1.Location = new System.Drawing.Point(4, 466);
+            this.messageIndicator1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.messageIndicator1.Name = "messageIndicator1";
             this.messageIndicator1.Size = new System.Drawing.Size(614, 40);
             this.messageIndicator1.TabIndex = 7;

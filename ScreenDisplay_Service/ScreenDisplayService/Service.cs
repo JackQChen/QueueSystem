@@ -169,7 +169,7 @@ namespace ScreenDisplayService
             string[] areaList = areas.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             var winList = wList.Where(q => areaList.Contains(q.AreaName.ToString())).Select(s => s.Number).ToList();
             var callList = aList.Where(q => winList.Contains(q.windowNumber)).ToList();
-            var arr = callList.OrderBy(o => o.handleTime).Select(s => new { ticketNo = s.ticketNumber, winNo = s.windowNumber }).ToArray();
+            var arr = callList.OrderByDescending(o => o.handleTime).Select(s => new { ticketNo = s.ticketNumber, winNo = s.windowNumber }).ToArray();
             return arr;
         }
 

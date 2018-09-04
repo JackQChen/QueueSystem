@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Chloe;
 using Model;
+using System.IO;
 
 namespace DAL
 {
@@ -51,6 +52,7 @@ namespace DAL
             {
                 lock (obj)
                 {
+                    db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                     if (gwlBusy == null)
                         gwlBusy = new List<TWindowBusinessModel>();
                     var busyList = wlBusy.Select(w => w.busiSeq).ToList();
@@ -87,12 +89,15 @@ namespace DAL
                     call.unitSeq = line.unitSeq;
                     call.windowNumber = windowNumber;
                     call.windowUser = windowUser;
+                    call.finishTime = DateTime.MinValue;
                     var ret = this.Insert(call);
                     tcModel = ret;
+                    db.Session.CommitTransaction();
                 }
             }
             catch
             {
+                db.Session.RollbackTransaction();
                 return null;
             }
             return tcModel;
@@ -117,6 +122,7 @@ namespace DAL
                 var list = db.Query<BCallModel>().Where(a => a.AreaNo == this.areaNo).Where(q => (q.state == 0 || q.state == 3)).ToList();
                 foreach (var l in list)
                 {
+                    l.finishTime = DateTime.Now;
                     l.state = -1;
                     this.Update(l);
                     tList.Add(l);
@@ -124,10 +130,15 @@ namespace DAL
                 this.db.Session.CommitTransaction();
                 return tList;
             }
-            catch
+            catch (Exception ex)
             {
                 this.db.Session.RollbackTransaction();
-                return null;
+                if (ex.InnerException != null)
+                {
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "s_Exception.txt", ex.InnerException.Message + "\r\n" + ex.InnerException.StackTrace + "\r\n");
+                    throw ex.InnerException;
+                }
+                throw ex;
             }
             finally
             {
@@ -157,6 +168,7 @@ namespace DAL
                 var list = db.Query<BCallModel>().Where(a => a.AreaNo == this.areaNo).Where(q => busyList.Contains(q.busiSeq) && unitList.Contains(q.unitSeq) && (q.state == 0 || q.state == 3)).ToList();
                 foreach (var l in list)
                 {
+                    l.finishTime = DateTime.Now;
                     l.state = -1;
                     this.Update(l);
                     tList.Add(l);
@@ -249,6 +261,7 @@ namespace DAL
             {
                 this.db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                 call.state = 2;
+                call.finishTime = DateTime.Now;
                 this.Update(call);
                 BQueueDAL dal = new BQueueDAL(this.db, this.areaNo);
                 var model = dal.GetModel(call.qId);

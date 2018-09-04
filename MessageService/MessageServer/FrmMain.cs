@@ -79,7 +79,7 @@ namespace MessageServer
             this.viewerHost.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
             this.Controls.Add(this.viewerHost);
             this.viewerHost.BringToFront();
-            this.viewerHost.InitAction = () =>
+            this.viewerHost.OnEmbed += () =>
             {
                 this.viewerHost.SendMessage(1, System.Diagnostics.Process.GetCurrentProcess().Id.ToString());
             };
@@ -260,6 +260,7 @@ namespace MessageServer
                 var cList = this.clientList.Get(srvName);
                 cList.Changed = true;
                 this.lvService.Items[curIndex].SubItems[0].Text = "●";
+                (this.lvService.Items[curIndex].Tag as ServiceInfo).Refresh();
                 if (this.lastSelectedIndex != -1)
                     this.lvService.Items[lastSelectedIndex].SubItems[0].Text = "";
                 lastSelectedIndex = curIndex;
@@ -346,7 +347,7 @@ namespace MessageServer
             si.lastRecv = si.totalRecv;
             si.lastSend = si.totalSend;
             this.pgService.SelectedObject = si;
-            this.viewerHost.SendMessage(recvRate + "," + sendRate);
+            this.viewerHost.SendMessage(2, si.connCount + "," + recvRate + "," + sendRate);
         }
 
         internal class ServiceInfo
@@ -354,21 +355,39 @@ namespace MessageServer
             private TcpServer server;
             internal long lastRecv, lastSend;
             internal long totalRecv, totalSend;
+            internal uint connCount;
 
             public ServiceInfo(TcpServer srv)
             {
                 this.server = srv;
             }
 
+            public void Refresh()
+            {
+                this.totalRecv = this.server.TotalRecvCount;
+                this.totalSend = this.server.TotalSendCount;
+                this.lastRecv = this.totalRecv;
+                this.lastSend = this.totalSend;
+            }
+
             [Category("服务状态")]
-            public string 当前连接数 { get { return this.server.ConnectionCount.ToString(); } set { } }
+            public string 当前连接数
+            {
+                get
+                {
+                    this.connCount = this.server.ConnectionCount;
+                    return this.connCount.ToString();
+                }
+                set { }
+            }
+
             [Category("服务状态")]
             public string 累计发送
             {
                 get
                 {
                     this.totalSend = this.server.TotalSendCount;
-                    return FormatFileSize(this.server.TotalSendCount);
+                    return FormatFileSize(this.totalSend);
                 }
                 set { }
             }
@@ -378,7 +397,7 @@ namespace MessageServer
                 get
                 {
                     this.totalRecv = this.server.TotalRecvCount;
-                    return FormatFileSize(this.server.TotalRecvCount);
+                    return FormatFileSize(this.totalRecv);
                 }
                 set { }
             }
@@ -401,11 +420,11 @@ namespace MessageServer
             if (fileSize < 0)
                 return "ErrorSize";
             else if (fileSize >= 1024 * 1024 * 1024)
-                return string.Format("{0:########0.00} GB", ((Double)fileSize) / (1024 * 1024 * 1024));
+                return string.Format("{0:########0.00} GB", fileSize / (1024 * 1024 * 1024));
             else if (fileSize >= 1024 * 1024)
-                return string.Format("{0:####0.00} MB", ((Double)fileSize) / (1024 * 1024));
+                return string.Format("{0:####0.00} MB", fileSize / (1024 * 1024));
             else if (fileSize >= 1024)
-                return string.Format("{0:####0.00} KB", ((Double)fileSize) / 1024);
+                return string.Format("{0:####0.00} KB", fileSize / 1024);
             else
                 return string.Format("{0} Bytes", fileSize);
         }
