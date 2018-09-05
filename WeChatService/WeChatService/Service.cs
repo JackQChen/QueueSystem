@@ -92,9 +92,9 @@ namespace WeChatService
             }
             catch (Exception ex)
             {
-                this.SDK_OnError(this, connId, ex);
                 msg.Data = null;
                 msg.Position = 0;
+                throw ex;
             }
             return HandleResult.Ok;
         }

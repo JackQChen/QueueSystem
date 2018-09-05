@@ -85,81 +85,74 @@ namespace ScreenDisplayService
 
         HandleResult Service_OnWSMessageBody(IntPtr connId, byte[] data)
         {
+            if (BitConverter.ToString(data) == BitConverter.ToString(btDisConn))
+                return HandleResult.Ignore;
+            var strData = Encoding.UTF8.GetString(data);
+            RequestData requestData = null;
             try
             {
-                if (BitConverter.ToString(data) == BitConverter.ToString(btDisConn))
-                    return HandleResult.Ignore;
-                var strData = Encoding.UTF8.GetString(data);
-                RequestData requestData = null;
-                try
-                {
-                    requestData = convert.Deserialize<RequestData>(strData);
-                }
-                catch
-                {
-                    return HandleResult.Ignore;
-                }
-                var method = requestData.method.Trim().ToLower();
-                switch (method)
-                {
-                    case "gethtml":
-                        {
-                            var rData = new ResponseData
-                            {
-                                method = requestData.method,
-                                code = "0",
-                                result = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ScreenDisplay.html")
-                            };
-                            this.SendWSMessage(connId, rData.ToBytes());
-                        }
-                        break;
-                    case "getconfig":
-                        {
-                            var rData = new ResponseData { code = "0", method = requestData.method, result = "" };
-                            var device = this.deviceList.Get(connId);
-                            var ip = device.IP;
-                            var config = screeList.Where(s => s.IP == ip).FirstOrDefault();
-                            if (config != null)
-                            {
-                                device.DeviceName = config.Name;
-                                this.deviceList.Set(connId, device);
-                                rData.result = convert.DeserializeObject(config.Config);
-                                this.SendWSMessage(connId, rData.ToBytes());
-                            }
-                            else
-                            {
-                                device.DeviceName = "未配置的设备";
-                                this.deviceList.Set(connId, device);
-                                rData.code = "-1";
-                                rData.result = "未获取到该设备的配置内容";
-                                this.SendWSMessage(connId, rData.ToBytes());
-                            }
-                        }
-                        break;
-                    case "getqueuelist":
-                        {
-                            var rData = new ResponseData { code = "0", method = requestData.method, result = "" };
-                            var param = requestData.param as Dictionary<string, object>;
-                            rData.result = GetCallByArea(param["winArea"].ToString());
-                            this.SendWSMessage(connId, rData.ToBytes());
-                        }
-                        break;
-                    default:
-                        {
-                            var rData = new ResponseData
-                            {
-                                method = requestData.method,
-                                code = "999",
-                                result = "未知指令"
-                            };
-                            this.SendWSMessage(connId, rData.ToBytes());
-                        }
-                        break;
-                }
+                requestData = convert.Deserialize<RequestData>(strData);
             }
-            catch (Exception ex)
+            catch
             {
-                this.SDK_OnError(this, connId, ex);
+                return HandleResult.Ignore;
+            }
+            var method = requestData.method.Trim().ToLower();
+            switch (method)
+            {
+                case "gethtml":
+                    {
+                        var rData = new ResponseData
+                        {
+                            method = requestData.method,
+                            code = "0",
+                            result = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ScreenDisplay.html")
+                        };
+                        this.SendWSMessage(connId, rData.ToBytes());
+                    }
+                    break;
+                case "getconfig":
+                    {
+                        var rData = new ResponseData { code = "0", method = requestData.method, result = "" };
+                        var device = this.deviceList.Get(connId);
+                        var ip = device.IP;
+                        var config = screeList.Where(s => s.IP == ip).FirstOrDefault();
+                        if (config != null)
+                        {
+                            device.DeviceName = config.Name;
+                            this.deviceList.Set(connId, device);
+                            rData.result = convert.DeserializeObject(config.Config);
+                            this.SendWSMessage(connId, rData.ToBytes());
+                        }
+                        else
+                        {
+                            device.DeviceName = "未配置的设备";
+                            this.deviceList.Set(connId, device);
+                            rData.code = "-1";
+                            rData.result = "未获取到该设备的配置内容";
+                            this.SendWSMessage(connId, rData.ToBytes());
+                        }
+                    }
+                    break;
+                case "getqueuelist":
+                    {
+                        var rData = new ResponseData { code = "0", method = requestData.method, result = "" };
+                        var param = requestData.param as Dictionary<string, object>;
+                        rData.result = GetCallByArea(param["winArea"].ToString());
+                        this.SendWSMessage(connId, rData.ToBytes());
+                    }
+                    break;
+                default:
+                    {
+                        var rData = new ResponseData
+                        {
+                            method = requestData.method,
+                            code = "999",
+                            result = "未知指令"
+                        };
+                        this.SendWSMessage(connId, rData.ToBytes());
+                    }
+                    break;
             }
             return HandleResult.Ok;
         }
