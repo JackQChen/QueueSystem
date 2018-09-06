@@ -33,6 +33,7 @@ namespace MessageServer
                     MessageBox.Show("非授权的机构编码，请核对！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     this.FormClosing -= this.FrmMain_FormClosing;
                     Application.Exit();
+                    return;
                 }
                 else
                 {
@@ -47,6 +48,7 @@ namespace MessageServer
             {
                 this.FormClosing -= this.FrmMain_FormClosing;
                 Application.Exit();
+                return;
             }
             new Thread(() =>
             {
