@@ -1,0 +1,25 @@
+﻿<!doctype html>
+<html>
+    <head>
+        <script src="jquery-1.10.2.min.js"></script>
+        <script>
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: "http://localhost:5567/TWindowBLL/RS_GetModel",
+                data: {
+		type :1 , 
+		start:'123',
+		end:'321'
+		},
+                success: function(e) {
+                    $('body')[0].innerHTML = JSON.stringify(e);
+                },
+                error: function(e) {
+                    $('body')[0].innerHTML = JSON.stringify(e);
+                }
+            });
+        </script>
+    </head>
+    <body></body>
+</html>

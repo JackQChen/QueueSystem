@@ -116,7 +116,7 @@ namespace QueueService
                         else
                         {
                             var bytes = this.process.FormatterMessageBytes(message);
-                            var listWin = allClient.Where(p => p.Type == ClientType.Window.ToString() && p.ID == msg.QueryClientID);
+                            var listWin = allClient.Where(p => p.Type == ClientType.CallSystem.ToString() && p.ID == msg.QueryClientID);
                             foreach (var client in listWin)
                                 this.Send(client.ID, bytes, bytes.Length);
                         }
@@ -129,7 +129,7 @@ namespace QueueService
                         var msg = message as ClientChangedMessage;
                         var bytes = this.process.FormatterMessageBytes(message);
                         var allClient = this.clientList.Dictionary.Values.ToArray();
-                        var listWin = allClient.Where(p => p.Type == ClientType.Window.ToString());
+                        var listWin = allClient.Where(p => p.Type == ClientType.CallSystem.ToString());
                         foreach (var client in listWin)
                             this.Send(client.ID, bytes, bytes.Length);
                     }

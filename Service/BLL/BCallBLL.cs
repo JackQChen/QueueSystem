@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DAL;
 using Model;
+using System;
 
 namespace BLL
 {
@@ -71,6 +72,11 @@ namespace BLL
         public bool Transfer(BCallModel call)
         {
             return new BCallDAL().Transfer(call);
+        }
+
+        public object GetWaitFor(DateTime start, DateTime end)
+        {
+            return new BCallDAL().GetWaitFor(start,end);
         }
     }
 }

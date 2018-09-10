@@ -77,7 +77,7 @@ namespace DAL
                     call.ID = this.GetMaxId();
                     call.AreaNo = this.areaNo;
                     call.busiSeq = line.busTypeSeq;
-                    call.handleId = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    call.handleId = DateTime.Now.ToString("yyyyMMddHHmmssfff");
                     call.handleTime = DateTime.Now;
                     call.idCard = line.idCard;
                     call.qId = line.ID;
@@ -279,6 +279,41 @@ namespace DAL
             {
                 this.db.Dispose();
             }
+        }
+
+        /// <summary>
+        /// 查询已叫号业务的平均等候时间
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public object GetWaitFor(DateTime start, DateTime end)
+        {
+
+            try
+            {
+                db.Session.BeginTransaction();
+                var obj = db.Session.ExecuteScalar(@"select a.unitSeq,a.unitName,a.busiSeq,a.busiName,AVG(time) avgMinute from 
+                                                    (select a.unitSeq,a.busiSeq,b.unitName,c.busiName,a.handleTime,a.ticketTime,MINUTE(timediff(a.handleTime, a.ticketTime))+1 time from b_call  a
+                                                    LEFT JOIN t_unit b on a.areaNo =b.areaNo and a.unitSeq=b.unitSeq
+                                                    LEFT JOIN t_business c on c.areaNo =a.areaNo and a.busiSeq=c.busiSeq
+                                                    where a.ticketTime>=@start and a.ticketTime<=@end
+                                                    ) a  
+                                                    GROUP BY a.busiName,a.busiSeq,a.unitName,a.unitSeq
+                                                    ORDER BY a.unitSeq,a.busiSeq",
+                          new DbParam[] 
+                          { 
+                              new DbParam("start", start),
+                              new DbParam("end", start)
+                          });
+                db.Session.CommitTransaction();
+                return obj;
+            }
+            catch
+            {
+                return null;
+            }
+
         }
     }
 }

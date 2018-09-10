@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -81,12 +82,8 @@ namespace MessageServer
             this.viewerHost.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
             this.Controls.Add(this.viewerHost);
             this.viewerHost.BringToFront();
-            this.viewerHost.OnEmbed += () =>
-            {
-                this.viewerHost.SendMessage(1, System.Diagnostics.Process.GetCurrentProcess().Id.ToString());
-            };
             this.viewerHost.AppFileName = AppDomain.CurrentDomain.BaseDirectory + "Viewer\\FlowViewer.exe";
-            this.viewerHost.Start();
+            this.viewerHost.Start(Process.GetCurrentProcess().Id.ToString());
             //handleCreate
             this.tabServer.SelectedTab = this.tabLog;
             this.tabServer.SelectedTab = this.tabMain;
@@ -349,7 +346,7 @@ namespace MessageServer
             si.lastRecv = si.totalRecv;
             si.lastSend = si.totalSend;
             this.pgService.SelectedObject = si;
-            this.viewerHost.SendMessage(2, si.connCount + "," + recvRate + "," + sendRate);
+            this.viewerHost.SendMessage(1, si.connCount + "," + recvRate + "," + sendRate);
         }
 
         internal class ServiceInfo

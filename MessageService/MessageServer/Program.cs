@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
-using System.Runtime.Remoting;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -15,8 +14,8 @@ namespace MessageServer
         [STAThread]
         static void Main()
         {
-            bool createdNew;
-            Mutex instance = new Mutex(true, Convert.ToBase64String(Encoding.UTF8.GetBytes(AppDomain.CurrentDomain.BaseDirectory)), out createdNew);
+            bool createdNew = false;
+            Mutex instance = new Mutex(true, Process.GetCurrentProcess().MainModule.FileName.Replace("\\", "/"), out createdNew);
             if (createdNew)
             {
                 Application.EnableVisualStyles();
@@ -28,9 +27,7 @@ namespace MessageServer
                     File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "Exception.txt",
                         string.Format("{0}\r\n{1}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), err));
                 };
-                var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "Service.xml";
-                if (File.Exists(remotingConfigPath))
-                    RemotingConfiguration.Configure(remotingConfigPath, false);
+                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "ServiceHost\\ServiceHost.exe", Process.GetCurrentProcess().Id.ToString());
                 Application.Run(new FrmMain());
                 instance.ReleaseMutex();
             }

@@ -15,6 +15,11 @@ namespace MessageServer
 
         public void Start()
         {
+            Start(string.Empty);
+        }
+
+        public void Start(string args)
+        {
             if (m_AppProcess != null)
             {
                 Stop();
@@ -24,6 +29,7 @@ namespace MessageServer
                 ProcessStartInfo info = new ProcessStartInfo(this.m_AppFileName);
                 info.UseShellExecute = true;
                 info.WindowStyle = ProcessWindowStyle.Minimized;
+                info.Arguments = args;
                 m_AppProcess = Process.Start(info);
                 Application.Idle += Application_Idle;
             }

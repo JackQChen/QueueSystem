@@ -29,7 +29,7 @@ namespace MessageClientTest
             });
             client.ServerIP = "127.0.0.1";
             client.ServerPort = ushort.Parse("3347");
-            client.ClientType = ClientType.Window;
+            client.ClientType = ClientType.CallSystem;
             client.ClientName = "张三";
             client.OnResult += new Action<string, string>(client_OnResult);
             client.OnMessage += new Action<QueueMessage.Message>(client_OnMessage);
@@ -56,7 +56,7 @@ namespace MessageClientTest
         private void button1_Click(object sender, EventArgs e)
         {
             this.Log("登录中...");
-            client.ClientType = ClientType.Window;
+            client.ClientType = ClientType.CallSystem;
             client.ClientName = "张三";
             client.Start();
         }

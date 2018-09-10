@@ -155,7 +155,7 @@ namespace CallSystem
             }
             client.ServerIP = ip;
             client.ServerPort = ushort.Parse(port);
-            client.ClientType = ClientType.Window;
+            client.ClientType = ClientType.CallSystem;
             client.ClientName = clientName;
             this.client.OnResult += (msgType, msgText) =>
             {

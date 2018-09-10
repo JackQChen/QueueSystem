@@ -100,8 +100,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bin\FastReport.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="MessageClient">
+      <HintPath>..\..\Bin\MessageClient.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageLib">
+      <HintPath>..\..\Lib\MessageLib.dll</HintPath>
+    </Reference>
     <Reference Include="Model">
       <HintPath>..\..\Service\Model\bin\Debug\Model.dll</HintPath>
+    </Reference>
+    <Reference Include="QueueMessage">
+      <HintPath>..\..\Bin\QueueMessage.dll</HintPath>
     </Reference>
     <Reference Include="Register">
       <HintPath>..\..\Lib\Register.dll</HintPath>

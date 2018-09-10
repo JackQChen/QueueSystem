@@ -15,6 +15,8 @@ using System.Printing;
 using System.Linq.Expressions;
 using System.Xml;
 using System.IO;
+using MessageClient;
+using QueueMessage;
 
 namespace QueueClient
 {
@@ -34,9 +36,12 @@ namespace QueueClient
         string CardTime = System.Configuration.ConfigurationManager.AppSettings["Card"];
         string MainTime = "";// System.Configuration.ConfigurationManager.AppSettings["MainTime"];
         int CanNotUseCard = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CanNotUseCard"]);
+        string ip;
+        string port;
         #endregion
 
         #region
+        Client client = new Client();
         JavaScriptSerializer script = new JavaScriptSerializer();
         HttpHelper http = new HttpHelper();
         BEvaluateBLL eBll = new BEvaluateBLL();
@@ -120,7 +125,7 @@ namespace QueueClient
             xml.Save(configPath);
         }
 
-        protected override void WndProc(ref Message m)
+        protected override void WndProc(ref System.Windows.Forms.Message m)
         {
             if (m.Msg == 0x0014) // 禁掉清除背景消息
                 return;
@@ -230,6 +235,8 @@ namespace QueueClient
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            SetConfigValue("IP", "192.168.0.253");
+            SetConfigValue("Port", "3347");
             SetConfigValue("MainTime", "20");//
             SetConfigValue("BroadcastInterval", "5");
             SetConfigValue("Units", "1,2,3,4,5|6,7,8,9");
@@ -237,6 +244,8 @@ namespace QueueClient
             SetConfigValue("Size", "300,237,324,440,400|300,237,324,440");
             FloorImgCount = GetMaxFloorCount();
             MainTime = System.Configuration.ConfigurationManager.AppSettings["MainTime"];
+            ip = System.Configuration.ConfigurationManager.AppSettings["IP"];
+            port = System.Configuration.ConfigurationManager.AppSettings["Port"];
             //页面停留时间 单位：秒
             ucTimer.Add("main", Convert.ToInt32(MainTime));
             ucTimer.Add("pwd", Convert.ToInt32(ExitTime));
@@ -274,6 +283,16 @@ namespace QueueClient
                 }
             }
             AsyncGetBasic();
+            client.ServerIP = ip;
+            client.ServerPort = ushort.Parse(port);
+            client.ClientType = ClientType.QueueClient;
+            client.ClientName = ClientName;
+            this.client.OnMessage += new Action<QueueMessage.Message>(client_OnMessage);
+            client.Start();
+        }
+        void client_OnMessage(QueueMessage.Message obj)
+        {
+            
         }
 
         void AsyncGetBasic()

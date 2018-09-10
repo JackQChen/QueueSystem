@@ -4,11 +4,12 @@ namespace QueueMessage
     public enum ClientType
     {
         Service = 0,
-        Window = 1,
+        CallSystem = 1,
         CallClient = 2,
         SoundPlayer = 3,
         LEDDisplay = 4,
-        ScreenDisplay = 5
+        ScreenDisplay = 5,
+        QueueClient = 6
     }
 
     public enum ClientQueryType

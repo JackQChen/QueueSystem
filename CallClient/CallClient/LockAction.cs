@@ -30,8 +30,11 @@ namespace CallClient
                             {
                                 Interlocked.Increment(ref count);
                                 Thread.Sleep(100);
-                                if (count > 100)
-                                    break;
+                                if (count > 600)
+                                { 
+                                    //等1分钟无响应 就手动释放窗口 防止被锁死。
+                                    bll.releaseWin(windowNo);
+                                }
                             }
                         }
                         if (winLock)

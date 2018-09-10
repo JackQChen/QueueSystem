@@ -31,7 +31,15 @@ namespace QueueClient
             if (!string.IsNullOrEmpty(IdCard))
             {
                 Font font = new Font("黑体", 40, FontStyle.Bold);
-                e.Graphics.DrawString(IdCard, font, new SolidBrush(col), 5, 6);
+                var id = "";
+                for (int i = 0; i < IdCard.Length; i++)
+                {
+                    if (i > 9 && i < 14)
+                        id += "*";
+                    else
+                        id = id + IdCard.Substring(i, 1);
+                }
+                e.Graphics.DrawString(id, font, new SolidBrush(col), 5, 6);
             }
         }
 

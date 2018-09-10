@@ -37,7 +37,7 @@ namespace LEDDisplay
                 //有新的更新内容
                 if (bool.Parse(args[1]))
                 {
-                    var config = File.ReadAllText(remotingConfigPath).Replace("0.0.0.0:0000", string.Format("{0}:{1}", ConfigurationManager.AppSettings["IP"], ConfigurationManager.AppSettings["Port"]));
+                    var config = File.ReadAllText(remotingConfigPath).Replace("0.0.0.0:0000", ConfigurationManager.AppSettings["RemotingConfig"]);
                     File.WriteAllText(remotingConfigPath, config);
                 }
             }
