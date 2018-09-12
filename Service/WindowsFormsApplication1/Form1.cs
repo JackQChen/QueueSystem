@@ -58,7 +58,22 @@ namespace WindowsFormsApplication1
 
         private void button3_Click(object sender, EventArgs e)
         {
-           
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            BEvaluateBLL eBll = new BEvaluateBLL();
+            var obj = eBll.GetSatisfied(2, DateTime.Parse("2017-01-01"), DateTime.Now);
+            var objx = eBll.GetSatisfied(1, DateTime.Parse("2017-01-01"), DateTime.Now);
+
+            BCallBLL cBll = new BCallBLL();
+            var obj2 = cBll.GetWaitFor(DateTime.Parse("2017-01-01"), DateTime.Now);
+
+            var obj3 = eBll.GetEvaluate(DateTime.Parse("2017-01-01"), DateTime.Now);
+            var obj4=eBll.GetFavorableComment(DateTime.Parse("2017-01-01"), DateTime.Now);
+
+
         }
     }
 }

@@ -9,6 +9,7 @@ using ReportManager;
 using Register;
 using System.Runtime.Remoting;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace QueueClient
 {
@@ -51,9 +52,21 @@ namespace QueueClient
             string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
+            bool read = false;
+            System.Diagnostics.Process[] processList = System.Diagnostics.Process.GetProcesses();
+            foreach (System.Diagnostics.Process process in processList)
+            {
+                if (process.ProcessName.ToUpper() == "READIDCARD")
+                {
+                    read = true;
+                }
+            }
+            if (!read)
+                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "ReadIdCard.exe", Process.GetCurrentProcess().Id.ToString());
             RemotingConfiguration.Configure(remotingConfigPath, false);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             Application.Run(new frmMain());
+            
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

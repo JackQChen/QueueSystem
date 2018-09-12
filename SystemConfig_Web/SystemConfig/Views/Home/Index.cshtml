@@ -172,57 +172,63 @@
         <div class="main-container-inner">
             <a class="menu-toggler" id="menu-toggler" href="#"><span class="menu-text"></span>
             </a>
-            <div class="sidebar" id="sidebar">
-                <script type="text/javascript">
-                    try { ace.settings.check('sidebar', 'fixed') } catch (e) { }
-                </script>
-                <div class="sidebar-shortcuts" id="sidebar-shortcuts">
-                    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-                        <button class="btn btn-success">
-                            <i class="icon-file"></i>
-                        </button>
-                        <button class="btn btn-info">
-                            <i class="icon-pencil"></i>
-                        </button>
-                        <button class="btn btn-warning">
-                            <i class="icon-group"></i>
-                        </button>
-                        <button class="btn btn-danger">
-                            <i class="icon-cogs"></i>
-                        </button>
+            <div>
+                <div class="sidebar" id="sidebar">
+                    <script type="text/javascript">
+                        try { ace.settings.check('sidebar', 'fixed') } catch (e) { }
+                    </script>
+                    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+                        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                            <button class="btn btn-success">
+                                <i class="icon-file"></i>
+                            </button>
+                            <button class="btn btn-info">
+                                <i class="icon-pencil"></i>
+                            </button>
+                            <button class="btn btn-warning">
+                                <i class="icon-group"></i>
+                            </button>
+                            <button class="btn btn-danger">
+                                <i class="icon-time"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                            <span class="btn btn-success"></span><span class="btn btn-info"></span><span class="btn btn-warning">
+                            </span><span class="btn btn-danger"></span>
+                        </div>
                     </div>
-                    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-                        <span class="btn btn-success"></span><span class="btn btn-info"></span><span class="btn btn-warning">
-                        </span><span class="btn btn-danger"></span>
+                    <!-- #sidebar-shortcuts -->
+                    <ul class="nav nav-list">
+                        <li class="active"><a href="#" class="dropdown-toggle"><i class="icon-cogs"></i><span
+                            class="menu-text">数据维护 </span><b class="arrow icon-angle-down"></b></a>
+                            <ul class="submenu">
+                                @foreach (KeyValuePair<string, string> menu in @Model[0])
+                                {
+                                    <li><a href="javascript:void(0)" target="@menu.Key"><i class="icon-chevron-right"></i>
+                                        <span class='menu-text'>@menu.Value</span></a></li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="active"><a href="#" class="dropdown-toggle"><i class="icon-signal"></i><span
+                            class="menu-text">统计分析 </span><b class="arrow icon-angle-down"></b></a>
+                            <ul class="submenu">
+                                @foreach (KeyValuePair<string, string> menu in @Model[1])
+                                {
+                                    <li><a href="javascript:void(0)" target="@menu.Key"><i class="icon-chevron-right"></i>
+                                        <span class='menu-text'>@menu.Value</span></a></li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- /.nav-list -->
+                    <div class="sidebar-collapse" id="sidebar-collapse">
+                        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right">
+                        </i>
                     </div>
+                    <script type="text/javascript">
+                        try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
+                    </script>
                 </div>
-                <!-- #sidebar-shortcuts -->
-                <ul class="nav nav-list">
-                    @foreach (KeyValuePair<string, string> menu in @Model[0])
-                    {
-                        <li><a href="javascript:void(0)" target="@menu.Key"><i class="icon-chevron-right"></i>
-                            <span class='menu-text'>@menu.Value</span></a></li>
-                    }
-                    <li class="active"><a href="#" class="dropdown-toggle"><i class="icon-signal"></i><span
-                        class="menu-text">统计分析 <span class="badge badge-primary ">@Model[1].Count</span>
-                    </span><b class="arrow icon-angle-down"></b></a>
-                        <ul class="submenu">
-                            @foreach (KeyValuePair<string, string> menu in @Model[1])
-                            {
-                                <li><a href="javascript:void(0)" target="@menu.Key"><i class="icon-chevron-right"></i>
-                                    <span class='menu-text'>@menu.Value</span></a></li>
-                            }
-                        </ul>
-                    </li>
-                </ul>
-                <!-- /.nav-list -->
-                <div class="sidebar-collapse" id="sidebar-collapse">
-                    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right">
-                    </i>
-                </div>
-                <script type="text/javascript">
-                    try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
-                </script>
             </div>
             <div class="main-content">
                 <div class="breadcrumbs" id="breadcrumbs">
@@ -231,7 +237,8 @@
                     </script>
                     <ul class="breadcrumb">
                         <li><i class="icon-home home-icon"></i><a href="#">首页</a> </li>
-                        <li class="active">基础数据维护</li>
+                        <li class="active">数据维护</li>
+                        <li class="active">单位管理</li>
                     </ul>
                     <!-- .breadcrumb -->
                     <div class="nav-search" id="nav-search">
@@ -361,11 +368,20 @@
             $('.nav-list li a').on('click', function (e) {
                 var obj = $(e.currentTarget);
                 var objParent = obj.parent();
+                var title = $('.main-content .breadcrumb li');
+                title[1].innerText = objParent.parents('li').find('.dropdown-toggle .menu-text')[0].innerText;
+                title[2].innerText = objParent[0].innerText;
                 if (obj.hasClass("dropdown-toggle")) {
-                    if (objParent.hasClass("active"))
+                    var b = objParent.find('b');
+                    b.removeClass();
+                    if (objParent.hasClass("active")) {
                         objParent.removeClass("active");
-                    else
+                        b.addClass("arrow icon-angle-up");
+                    }
+                    else {
                         objParent.addClass('active');
+                        b.addClass("arrow icon-angle-down");
+                    }
                     return false;
                 }
                 var target = obj.attr('target');
@@ -382,7 +398,7 @@
                 $('#frameContent').attr('src', lastTarget);
                 return false;
             });
-            $('.nav-list li:eq(0)').addClass('active');
+            $('.nav-list li:eq(1)').addClass('active');
             $('#frameContent').attr('src', lastTarget);
         });
 

@@ -39,6 +39,8 @@ namespace SystemConfig.Controllers
                 menu[1] = new Dictionary<string, string>();
                 menu[1]["Statistics/SWaitTime"] = "平均等候时间统计";
                 menu[1]["Statistics/SSatisfaction"] = "满意度统计";
+                menu[1]["Statistics/SEvaluate"] = "评价数据统计";
+                menu[1]["Statistics/SComment"] = "好评率统计";
             }
             return View(menu);
         }

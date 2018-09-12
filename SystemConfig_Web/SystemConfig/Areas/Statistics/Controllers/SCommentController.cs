@@ -8,13 +8,13 @@ using System;
 
 namespace SystemConfig.Areas.Statistics.Controllers
 {
-    public class SWaitTimeController : BaseController
+    public class SCommentController : BaseController
     {
-        BCallBLL bll;
+        BEvaluateBLL bll;
 
-        public SWaitTimeController()
+        public SCommentController()
         {
-            this.bll = new BCallBLL("MySQL", this.AreaNo);
+            this.bll = new BEvaluateBLL("MySQL", this.AreaNo);
         }
 
         public ActionResult Index()
@@ -28,7 +28,7 @@ namespace SystemConfig.Areas.Statistics.Controllers
         {
             var data = new
             {
-                rows = this.bll.GetWaitFor(startTime, endTime)
+                rows = this.bll.GetFavorableComment(startTime, endTime)
             };
             return Content(JsonConvert.SerializeObject(data));
         }

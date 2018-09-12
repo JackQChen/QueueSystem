@@ -136,6 +136,10 @@ namespace DAL
                 db.Session.RollbackTransaction();
                 return null;
             }
+            finally
+            {
+                db.Session.Dispose();
+            }
             return qModel;
         }
 
@@ -208,6 +212,10 @@ namespace DAL
             {
                 db.Session.RollbackTransaction();
                 return null;
+            }
+            finally
+            {
+                db.Session.Dispose();
             }
             return qModel;
         }

@@ -24,7 +24,7 @@ namespace SystemConfig.Areas.Statistics.Controllers
             return View();
         }
 
-        public ActionResult GetGridData(int type, DateTime startTime, DateTime endTime)
+        public ActionResult GetGridData(Pagination p, int type, DateTime startTime, DateTime endTime)
         {
             var data = new
             {

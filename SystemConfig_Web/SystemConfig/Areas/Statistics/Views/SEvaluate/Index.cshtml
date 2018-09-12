@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStatistics.cshtml";
+}
+<style>
+    .ui-jqgrid-hbox table tr:nth-child(2)
+    {
+        height: 40px !important;
+    }
+</style>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    $(function () {
+        $(grid_selector).jqGrid({
+            url: "/SEvaluate/GetGridData",
+            datatype: "json",
+            postData: {
+                startTime: $('#dpStart').val(),
+                endTime: $('#dpEnd').val()
+            },
+            autowidth: true,
+            pager: pager_selector,
+            loadonce: true,
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            height: $(document).height() - 127,
+            colModel: [{
+                label: '单位编码',
+                name: 'unitSeq',
+                width: 20
+            },
+        {
+            label: '单位名称',
+            name: 'unitName',
+            width: 30
+        },
+        {
+            label: '人员姓名',
+            name: 'Name',
+            width: 20
+        },
+
+        {
+            label: '1星',
+            name: 'a1',
+            width: 10
+        },
+        {
+            label: '2星',
+            name: 'a2',
+            width: 10
+        },
+        {
+            label: '3星',
+            name: 'a3',
+            width: 10
+        },
+        {
+            label: '4星',
+            name: 'a4',
+            width: 10
+        },
+        {
+            label: '5星',
+            name: 'a5',
+            width: 10
+        },
+
+        {
+            label: '1星',
+            name: 'q1',
+            width: 10
+        },
+        {
+            label: '2星',
+            name: 'q2',
+            width: 10
+        },
+        {
+            label: '3星',
+            name: 'q3',
+            width: 10
+        },
+        {
+            label: '4星',
+            name: 'q4',
+            width: 10
+        },
+        {
+            label: '5星',
+            name: 'q5',
+            width: 10
+        },
+
+        {
+            label: '1星',
+            name: 'e1',
+            width: 10
+        },
+        {
+            label: '2星',
+            name: 'e2',
+            width: 10
+        },
+        {
+            label: '3星',
+            name: 'e3',
+            width: 10
+        },
+        {
+            label: '4星',
+            name: 'e4',
+            width: 10
+        },
+        {
+            label: '5星',
+            name: 'e5',
+            width: 10
+        },
+
+        {
+            label: '1星',
+            name: 'h1',
+            width: 10
+        },
+        {
+            label: '2星',
+            name: 'h2',
+            width: 10
+        },
+        {
+            label: '3星',
+            name: 'h3',
+            width: 10
+        },
+        {
+            label: '4星',
+            name: 'h4',
+            width: 10
+        },
+        {
+            label: '5星',
+            name: 'h5',
+            width: 10
+        },
+
+        {
+            label: '整体评价率',
+            name: 'evaluate',
+            width: 20
+        }],
+            loadComplete: function () {
+                var table = this;
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                },
+            0);
+                $(grid_selector).selectFirstRow();
+            }
+        });
+        $(grid_selector).setGroupHeaders({
+            useColSpanStyle: true,
+            groupHeaders: [
+                { startColumnName: 'a1', numberOfColumns: 5, titleText: '服务态度' },
+                { startColumnName: 'q1', numberOfColumns: 5, titleText: '完成质量' },
+                { startColumnName: 'e1', numberOfColumns: 5, titleText: '处理效率' },
+                { startColumnName: 'h1', numberOfColumns: 5, titleText: '廉洁自律' }
+                ]
+        });
+    });
+
+    function Refresh() {
+        $(grid_selector).setGridParam({
+            datatype: "json",
+            postData: {
+                startTime: $('#dpStart').val(),
+                endTime: $('#dpEnd').val()
+            },
+            page: 1
+        }).trigger('reloadGrid');
+    }
+</script>
+<div class="btn-group">
+    <label class="col-sm-1">
+        开始时间</label>
+    <div class="input-group col-sm-2">
+        <input class="form-control date-picker" id="dpStart" value="@ViewBag.dtStart" type="text" />
+        <span class="input-group-addon"><i class="icon-calendar bigger-110"></i></span>
+    </div>
+    <label class="col-sm-1">
+        结束时间</label>
+    <div class="input-group col-sm-2">
+        <input class="form-control date-picker" id="dpEnd" value="@ViewBag.dtEnd" type="text" />
+        <span class="input-group-addon"><i class="icon-calendar bigger-110"></i></span>
+    </div>
+    <div class="col-sm-3">
+        <button class="btn btn-sm btn-yellow" onclick="Refresh()">
+            <i class="icon-search bigger-110"></i>查询</button>
+    </div>
+</div>
+<table id="grid-table">
+</table>
+<div id="grid-pager">
+</div>

@@ -32,5 +32,27 @@ namespace BLL
         {
             return new BEvaluateDAL().GetSatisfied(type, start, end);
         }
+
+        /// <summary>
+        /// 获取好评率与量化分数
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public object GetFavorableComment(DateTime start, DateTime end)
+        {
+            return new BEvaluateDAL().GetFavorableComment(start, end);
+        }
+
+        /// <summary>
+        /// 获取评价数据以及评价率
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public object GetEvaluate(DateTime start, DateTime end)
+        {
+            return new BEvaluateDAL().GetEvaluate(start, end);
+        }
     }
 }

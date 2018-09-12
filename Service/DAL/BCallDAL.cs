@@ -11,7 +11,7 @@ namespace DAL
 {
     public class BCallDAL : DALBase<BCallModel>
     {
-        static object obj = new object();
+        static object lockObj = new object();
         public BCallDAL()
             : base()
         {
@@ -50,7 +50,7 @@ namespace DAL
             BCallModel tcModel = null;
             try
             {
-                lock (obj)
+                lock (lockObj)
                 {
                     db.Session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                     if (gwlBusy == null)
@@ -100,6 +100,10 @@ namespace DAL
                 db.Session.RollbackTransaction();
                 return null;
             }
+            finally 
+            {
+                db.Session.Dispose();
+            }
             return tcModel;
         }
 
@@ -142,7 +146,7 @@ namespace DAL
             }
             finally
             {
-                this.db.Dispose();
+                this.db.Session.Dispose();
             }
         }
 
@@ -183,7 +187,7 @@ namespace DAL
             }
             finally
             {
-                this.db.Dispose();
+                db.Session.Dispose();
             }
         }
 
@@ -277,7 +281,7 @@ namespace DAL
             }
             finally
             {
-                this.db.Dispose();
+                db.Session.Dispose();
             }
         }
 
@@ -289,29 +293,44 @@ namespace DAL
         /// <returns></returns>
         public object GetWaitFor(DateTime start, DateTime end)
         {
-
+            ArrayList list = new ArrayList();
             try
             {
-                db.Session.BeginTransaction();
-                var obj = db.Session.ExecuteScalar(@"select a.unitSeq,a.unitName,a.busiSeq,a.busiName,AVG(time) avgMinute from 
-                                                    (select a.unitSeq,a.busiSeq,b.unitName,c.busiName,a.handleTime,a.ticketTime,MINUTE(timediff(a.handleTime, a.ticketTime))+1 time from b_call  a
-                                                    LEFT JOIN t_unit b on a.areaNo =b.areaNo and a.unitSeq=b.unitSeq
-                                                    LEFT JOIN t_business c on c.areaNo =a.areaNo and a.busiSeq=c.busiSeq
-                                                    where a.ticketTime>=@start and a.ticketTime<=@end
-                                                    ) a  
-                                                    GROUP BY a.busiName,a.busiSeq,a.unitName,a.unitSeq
-                                                    ORDER BY a.unitSeq,a.busiSeq",
+                using (var reader = db.Session.ExecuteReader(@"select a.unitSeq,a.unitName,a.busiSeq,a.busiName,AVG(time) avgMinute from 
+                                                                    (select a.unitSeq,a.busiSeq,b.unitName,c.busiName,a.handleTime,a.ticketTime,MINUTE(timediff(a.handleTime, a.ticketTime))+1 time from b_call  a
+                                                                    LEFT JOIN t_unit b on a.areaNo =b.areaNo and a.unitSeq=b.unitSeq
+                                                                    LEFT JOIN t_business c on c.areaNo =a.areaNo and a.busiSeq=c.busiSeq
+                                                                    where a.ticketTime>=@start and a.ticketTime<=@end
+                                                                    ) a  
+                                                                    GROUP BY a.busiName,a.busiSeq,a.unitName,a.unitSeq
+                                                                    ORDER BY a.unitSeq,a.busiSeq",
                           new DbParam[] 
-                          { 
-                              new DbParam("start", start),
-                              new DbParam("end", start)
-                          });
-                db.Session.CommitTransaction();
-                return obj;
+                                          { 
+                                              new DbParam("start", start),
+                                              new DbParam("end", end)
+                                          }))
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new
+                        {
+                            unitSeq = reader["unitSeq"],
+                            unitName = reader["unitName"],
+                            busiSeq = reader["busiSeq"],
+                            busiName = reader["busiName"],
+                            avgMinute = reader["avgMinute"]
+                        });
+                    }
+                }
+                return list;
             }
             catch
             {
                 return null;
+            }
+            finally
+            {
+                db.Session.Dispose();
             }
 
         }

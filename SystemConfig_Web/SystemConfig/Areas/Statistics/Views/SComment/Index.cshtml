@@ -7,10 +7,9 @@
     var pager_selector = "#grid-pager";
     $(function () {
         $(grid_selector).jqGrid({
-            url: "/SSatisfaction/GetGridData",
+            url: "/SComment/GetGridData",
             datatype: "json",
             postData: {
-                type: $('#iType').val(),
                 startTime: $('#dpStart').val(),
                 endTime: $('#dpEnd').val()
             },
@@ -31,44 +30,24 @@
             width: 100
         },
         {
-            label: '人员姓名',
-            name: 'Name',
+            label: '服务态度好评率',
+            name: 'AttitudePercent',
             width: 70
         },
         {
-            label: '评价总次数',
-            name: 'count',
-            width: 100
+            label: '完成质量好评率',
+            name: 'QualityPercent',
+            width: 70
         },
         {
-            label: '满意',
-            name: 'count5',
-            width: 100
+            label: '处理效率好评率',
+            name: 'EfficiencyPercent',
+            width: 70
         },
         {
-            label: '较满意',
-            name: 'count4',
-            width: 100
-        },
-        {
-            label: '一般',
-            name: 'count3',
-            width: 100
-        },
-        {
-            label: '不满意',
-            name: 'count2',
-            width: 100
-        },
-        {
-            label: '很不满意',
-            name: 'count1',
-            width: 100
-        },
-        {
-            label: '满意率',
-            name: 'satisfied',
-            width: 100
+            label: '廉洁自律好评率',
+            name: 'HonestPercent',
+            width: 70
         }],
             loadComplete: function () {
                 var table = this;
@@ -85,7 +64,6 @@
         $(grid_selector).setGridParam({
             datatype: "json",
             postData: {
-                type: $('#iType').val(),
                 startTime: $('#dpStart').val(),
                 endTime: $('#dpEnd').val()
             },
@@ -94,16 +72,6 @@
     }
 </script>
 <div class="btn-group">
-    <label class="col-sm-1">
-        类型</label>
-    <div class="col-sm-2">
-        <select class="form-control" id="iType">
-            <option value="1">服务态度</option>
-            <option value="2">完成质量</option>
-            <option value="3">处理效率</option>
-            <option value="4">廉洁自律</option>
-        </select>
-    </div>
     <label class="col-sm-1">
         开始时间</label>
     <div class="input-group col-sm-2">

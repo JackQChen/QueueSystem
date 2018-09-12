@@ -17,6 +17,8 @@ using System.Xml;
 using System.IO;
 using MessageClient;
 using QueueMessage;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace QueueClient
 {
@@ -62,6 +64,7 @@ namespace QueueClient
         List<TBusinessModel> bList = new List<TBusinessModel>();//业务列表
         List<TBusinessAttributeModel> baList = new List<TBusinessAttributeModel>();
         AutoResetEvent are = new AutoResetEvent(false);
+        ShareMemory2 share = new ShareMemory2();
         PageLocation pageLocation;
         BusyType busyType;
         Person person;
@@ -70,6 +73,7 @@ namespace QueueClient
         int iRetUSB = 0;
         int FloorImgCount = 2;
         string idCard = "";//身份证号码
+        byte[] nbyte = new byte[1024 * 10];
         TUnitModel selectUnit;
         TBusinessModel selectBusy;
         Dictionary<string, Control> uc = new Dictionary<string, Control>();
@@ -234,6 +238,7 @@ namespace QueueClient
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            share.Init();
             SetConfigValue("IP", "192.168.0.253");
             SetConfigValue("Port", "3347");
             SetConfigValue("MainTime", "20");//
@@ -261,24 +266,24 @@ namespace QueueClient
             timer3.Start();
             if (CanNotUseCard == 0)
             {
-                int iPort;
-                for (iPort = 1001; iPort <= 1016; iPort++)
-                {
-                    iRetUSB = CVRSDK.CVR_InitComm(iPort);
-                    if (iRetUSB == 1)
-                        break;
-                }
-                if (iRetUSB != 1)
-                {
-                    frmMsg frm = new frmMsg();
-                    frm.msgInfo = "身份证读卡器初始化失败！";
-                    frm.ShowDialog();
-                }
-                else
-                {
-                    suppend = true;
-                    new Thread(new ThreadStart(ReadIDCard)) { IsBackground = true }.Start();
-                }
+                //int iPort;
+                //for (iPort = 1001; iPort <= 1016; iPort++)
+                //{
+                //    iRetUSB = CVRSDK.CVR_InitComm(iPort);
+                //    if (iRetUSB == 1)
+                //        break;
+                //}
+                //if (iRetUSB != 1)
+                //{
+                //    frmMsg frm = new frmMsg();
+                //    frm.msgInfo = "身份证读卡器初始化失败！";
+                //    frm.ShowDialog();
+                //}
+                //else
+                //{
+                suppend = true;
+                new Thread(new ThreadStart(ProcessRead)) { IsBackground = true }.Start();
+                //}
             }
             AsyncGetBasic();
             client.ServerIP = ip;
@@ -929,9 +934,9 @@ namespace QueueClient
             else
                 suppend = true;
         }
-        private void ReadIDCard()
+
+        private void ProcessRead()
         {
-            int time = 0;
             while (true)
             {
                 if (suppend)
@@ -939,75 +944,119 @@ namespace QueueClient
                     are.WaitOne(-1, false);
                     suppend = false;
                 }
-                time++;
-                int isHaveCard = CVRSDK.CVR_Authenticate();
-                if (isHaveCard == 1)
+                var bytes = new byte[1024 * 10];
+                share.Read(ref bytes, 0, 1024 * 10);
+                if (!share.BytesCompare(nbyte, bytes))
                 {
-                    int readOk = CVRSDK.CVR_Read_Content(4);
-                    if (readOk == 1)
+                    var p = FormatterBytes(bytes);
+                    if (p != null)
                     {
-                        #region
-                        byte[] name = new byte[30];
-                        int length = 30;
-                        CVRSDK.GetPeopleName(ref name[0], ref length);
-                        byte[] number = new byte[30];
-                        length = 36;
-                        CVRSDK.GetPeopleIDCode(ref number[0], ref length);
-                        byte[] address = new byte[30];
-                        length = 70;
-                        CVRSDK.GetPeopleAddress(ref address[0], ref length);
-                        #region
-                        //byte[] people = new byte[30];
-                        //length = 3;
-                        //CVRSDK.GetPeopleNation(ref people[0], ref length);
-                        //byte[] validtermOfStart = new byte[30];
-                        //length = 16;
-                        //CVRSDK.GetStartDate(ref validtermOfStart[0], ref length);
-                        //byte[] birthday = new byte[30];
-                        //length = 16;
-                        //CVRSDK.GetPeopleBirthday(ref birthday[0], ref length);
-                        //byte[] validtermOfEnd = new byte[30];
-                        //length = 16;
-                        //CVRSDK.GetEndDate(ref validtermOfEnd[0], ref length);
-                        //byte[] signdate = new byte[30];
-                        //length = 30;
-                        //CVRSDK.GetDepartment(ref signdate[0], ref length);
-                        //byte[] sex = new byte[30];
-                        //length = 3;
-                        //CVRSDK.GetPeopleSex(ref sex[0], ref length);
-                        //byte[] samid = new byte[32];
-                        //CVRSDK.CVR_GetSAMID(ref samid[0]);
-                        #endregion
-                        var iCard = System.Text.Encoding.GetEncoding("GB2312").GetString(number).Replace("\0", "").Trim();
-                        var iName = System.Text.Encoding.GetEncoding("GB2312").GetString(name).Replace("\0", "").Trim();
-                        var iAdress = System.Text.Encoding.GetEncoding("GB2312").GetString(address).Replace("\0", "").Trim();
-                        if (person == null)
-                            person = new Person();
-                        person.name = iName;
-                        person.address = iAdress;
-                        person.idcard = iCard;
-                        if (iCard != "")
+                        person = p;
+                        idCard = person.idcard;
+                        Start(false);
+                        new Thread(() =>
                         {
-                            idCard = iCard;
-                            Start(false);
-                            time = 0;
-                            new Thread(() =>
+                            BeginInvoke(new Action(() =>
                             {
-                                BeginInvoke(new Action(() =>
-                                {
-                                    DrawCard(idCard);
-                                    LogHelper.WriterReadIdCardLog(string.Format("身份证读卡成功：本次读卡循环读取了{3}次，证件号码{0} 姓名{1} 地址{2}", idCard, iName, iAdress, time));
-                                }));
-                            }) { IsBackground = true }.Start();
-                            continue;
-                        }
+                                DrawCard(idCard);
+                                LogHelper.WriterReadIdCardLog(string.Format("身份证读卡成功：证件号码{0} 姓名{1} 地址{2}", idCard, person.name, person.address));
+                            }));
+                        }) { IsBackground = true }.Start();
 
-                        #endregion
                     }
                 }
-                Thread.Sleep(200);
+                Thread.Sleep(250);
             }
         }
+        Person FormatterBytes(byte[] bytes)
+        {
+            using (var ms = new MemoryStream(bytes))
+            {
+                IFormatter iFormatter = new BinaryFormatter();
+                var obj = iFormatter.Deserialize(ms);
+                var per = obj as Person;
+                return per;
+            }
+        }
+        //private void ReadIDCard()
+        //{
+        //    int time = 0;
+        //    while (true)
+        //    {
+        //        if (suppend)
+        //        {
+        //            are.WaitOne(-1, false);
+        //            suppend = false;
+        //        }
+        //        time++;
+        //        int isHaveCard = CVRSDK.CVR_Authenticate();
+        //        if (isHaveCard == 1)
+        //        {
+        //            int readOk = CVRSDK.CVR_Read_Content(4);
+        //            if (readOk == 1)
+        //            {
+        //                #region
+        //                byte[] name = new byte[30];
+        //                int length = 30;
+        //                CVRSDK.GetPeopleName(ref name[0], ref length);
+        //                byte[] number = new byte[30];
+        //                length = 36;
+        //                CVRSDK.GetPeopleIDCode(ref number[0], ref length);
+        //                byte[] address = new byte[30];
+        //                length = 70;
+        //                CVRSDK.GetPeopleAddress(ref address[0], ref length);
+        //                #region
+        //                //byte[] people = new byte[30];
+        //                //length = 3;
+        //                //CVRSDK.GetPeopleNation(ref people[0], ref length);
+        //                //byte[] validtermOfStart = new byte[30];
+        //                //length = 16;
+        //                //CVRSDK.GetStartDate(ref validtermOfStart[0], ref length);
+        //                //byte[] birthday = new byte[30];
+        //                //length = 16;
+        //                //CVRSDK.GetPeopleBirthday(ref birthday[0], ref length);
+        //                //byte[] validtermOfEnd = new byte[30];
+        //                //length = 16;
+        //                //CVRSDK.GetEndDate(ref validtermOfEnd[0], ref length);
+        //                //byte[] signdate = new byte[30];
+        //                //length = 30;
+        //                //CVRSDK.GetDepartment(ref signdate[0], ref length);
+        //                //byte[] sex = new byte[30];
+        //                //length = 3;
+        //                //CVRSDK.GetPeopleSex(ref sex[0], ref length);
+        //                //byte[] samid = new byte[32];
+        //                //CVRSDK.CVR_GetSAMID(ref samid[0]);
+        //                #endregion
+        //                var iCard = System.Text.Encoding.GetEncoding("GB2312").GetString(number).Replace("\0", "").Trim();
+        //                var iName = System.Text.Encoding.GetEncoding("GB2312").GetString(name).Replace("\0", "").Trim();
+        //                var iAdress = System.Text.Encoding.GetEncoding("GB2312").GetString(address).Replace("\0", "").Trim();
+        //                if (person == null)
+        //                    person = new Person();
+        //                person.name = iName;
+        //                person.address = iAdress;
+        //                person.idcard = iCard;
+        //                if (iCard != "")
+        //                {
+        //                    idCard = iCard;
+        //                    Start(false);
+        //                    time = 0;
+        //                    new Thread(() =>
+        //                    {
+        //                        BeginInvoke(new Action(() =>
+        //                        {
+        //                            DrawCard(idCard);
+        //                            LogHelper.WriterReadIdCardLog(string.Format("身份证读卡成功：本次读卡循环读取了{3}次，证件号码{0} 姓名{1} 地址{2}", idCard, iName, iAdress, time));
+        //                        }));
+        //                    }) { IsBackground = true }.Start();
+        //                    continue;
+        //                }
+
+        //                #endregion
+        //            }
+        //        }
+        //        Thread.Sleep(200);
+        //    }
+        //}
         private void DrawCard(string idNo)
         {
             var uCard = ((ucpnReadCard)uc["readcard"]);
@@ -1057,6 +1106,8 @@ namespace QueueClient
                 pageLocation = PageLocation.GetCardReadCard;//投资读卡
             idCard = "";
             person = new Person();
+            byte[] bt = new byte[nbyte.Length];
+            share.Write(bt, 0, bt.Length);//先清空共享内存
             Start(true);
         }
 

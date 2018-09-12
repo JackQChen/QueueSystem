@@ -135,7 +135,6 @@
     <Compile Include="function\BoShiPrinter.cs" />
     <Compile Include="function\BusyType.cs" />
     <Compile Include="function\CardIdentity.cs" />
-    <Compile Include="function\CVRSDK.cs" />
     <Compile Include="uc\MouseAwareButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -181,7 +180,6 @@
     <Compile Include="function\HttpHelper.cs" />
     <Compile Include="function\LogHelper.cs" />
     <Compile Include="function\PageLocation.cs" />
-    <Compile Include="function\Person.cs" />
     <Compile Include="uc\ucpnCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -494,6 +492,10 @@
     <Folder Include="bin\Debug\log\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Library\Library.csproj">
+      <Project>{ee7b8d5c-51e6-4dc4-93db-0e65b4b8c0ed}</Project>
+      <Name>Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ReportManager\ReportManager.csproj">
       <Project>{d2e27729-8b36-40a2-af65-d9b2d02131a7}</Project>
       <Name>ReportManager</Name>
