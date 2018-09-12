@@ -24,5 +24,16 @@ namespace BLL
         {
             return this.CreateDAL().GetGridData();
         }
+
+
+        public object GetUnitList()
+        {
+            return this.CreateDAL().GetUnitList();
+        }
+
+        public object GetGridDataByUnitSeq(string unitSeq)
+        {
+            return this.CreateDAL().GetGridDataByUnitSeq(unitSeq);
+        }
     }
 }

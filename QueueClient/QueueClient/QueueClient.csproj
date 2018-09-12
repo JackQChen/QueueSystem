@@ -140,6 +140,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="function\WndProcHooker.cs" />
+    <Compile Include="uc\ucNumberCard.cs" />
     <Compile Include="uc\ucBusyCard.cs" />
     <Compile Include="uc\ucEvaluateCard.cs">
       <SubType>UserControl</SubType>
@@ -254,6 +255,9 @@
     </Compile>
     <EmbeddedResource Include="function\AsyncWork.resx">
       <DependentUpon>AsyncWork.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\ucNumberCard.resx">
+      <DependentUpon>ucNumberCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="uc\ucBusyCard.resx">
       <DependentUpon>ucBusyCard.cs</DependentUpon>

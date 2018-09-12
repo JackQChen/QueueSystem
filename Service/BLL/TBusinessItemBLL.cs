@@ -1,21 +1,26 @@
-﻿using DAL;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using DAL;
 using Model;
 
 namespace BLL
 {
-    public class TBusinessAttributeBLL : BLLBase<TBusinessAttributeDAL, TBusinessAttributeModel>
+    public class TBusinessItemBLL : BLLBase<TBusinessItemDAL, TBusinessItemModel>
     {
-        public TBusinessAttributeBLL()
+
+        public TBusinessItemBLL()
             : base()
         {
         }
 
-        public TBusinessAttributeBLL(string connName)
+        public TBusinessItemBLL(string connName)
             : base(connName)
         {
         }
 
-        public TBusinessAttributeBLL(string connName, string areaNo)
+        public TBusinessItemBLL(string connName, string areaNo)
             : base(connName, areaNo)
         {
         }

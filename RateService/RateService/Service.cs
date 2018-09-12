@@ -226,6 +226,13 @@ namespace RateService
                         this.SendWSMessage(connId, rData.ToResultData());
                     }
                     break;
+                case "getitemlist"://根据窗口获取事项列表
+                    {
+                        var param = requestData.param as Dictionary<string, object>;
+                        var rData = new ResponseData { code = "0", request = requestData.method, result = this.rateProcess.RS_GetItemListByWindowNo(param["winNum"].ToString()) };
+                        this.SendWSMessage(connId, rData.ToResultData());
+                    }
+                    break;
                 case "getupdateinfo":
                     {
                         var rData = new ResponseData

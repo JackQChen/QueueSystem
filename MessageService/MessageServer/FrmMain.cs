@@ -32,9 +32,7 @@ namespace MessageServer
                 if (regInfo.RegBase.OrganizationCode != ConfigurationManager.AppSettings["AreaNo"])
                 {
                     MessageBox.Show("非授权的机构编码，请核对！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.FormClosing -= this.FrmMain_FormClosing;
-                    Application.Exit();
-                    return;
+                    Environment.Exit(0);
                 }
                 else
                 {
@@ -47,9 +45,7 @@ namespace MessageServer
             }
             else
             {
-                this.FormClosing -= this.FrmMain_FormClosing;
-                Application.Exit();
-                return;
+                Environment.Exit(0);
             }
             new Thread(() =>
             {
@@ -57,10 +53,7 @@ namespace MessageServer
                 {
                     Thread.Sleep(1000 * 60 * 60 * 24);
                     if (!Register.Validate.Check(false))
-                    {
-                        this.FormClosing -= this.FrmMain_FormClosing;
-                        Application.Exit();
-                    }
+                        Environment.Exit(0);
                 }
             }) { IsBackground = true }.Start();
             actServiceState = (name, state) =>

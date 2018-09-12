@@ -47,8 +47,7 @@ namespace DAL
                          u2.unitName,
                          Sex = s.Name,
                          State = d.Name,
-                         u.Remark,
-                         Model = u
+                         u.Remark
                      })
                      .OrderBy(k => k.ID).ToList();
         }

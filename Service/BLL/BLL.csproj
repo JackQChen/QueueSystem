@@ -75,6 +75,7 @@
     <Compile Include="FCallstateBLL.cs" />
     <Compile Include="FDictionaryBLL.cs" />
     <Compile Include="BEvaluateBLL.cs" />
+    <Compile Include="TBusinessItemBLL.cs" />
     <Compile Include="TLedControllerBLL.cs" />
     <Compile Include="TLedWindowBLL.cs" />
     <Compile Include="BLineUpMaxNoBLL.cs" />

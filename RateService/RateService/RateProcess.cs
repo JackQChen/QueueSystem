@@ -28,6 +28,10 @@ namespace RateService
             return this.winBll.RS_GetUserListByWindowNo(winNum);
         }
 
+        public object RS_GetItemListByWindowNo(string winNum)
+        {
+            return this.winBll.RS_GetItemListByWindowNo(winNum); 
+        }
         public object GetUserPhoto(string userCode)
         {
             return this.winBll.RS_GetUserPhoto(userCode);

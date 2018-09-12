@@ -1,20 +1,20 @@
 ﻿using System.Web.Mvc;
 using BLL;
 using Model;
-using Newtonsoft.Json;
 using SystemConfig.Controllers;
+using Newtonsoft.Json;
 
 namespace SystemConfig.Areas.SystemConfig.Controllers
 {
-    public class TBusinessAttributeController : BaseController
+    public class TBusinessItemController : BaseController
     {
-        TBusinessAttributeBLL bll;
+        TBusinessItemBLL bll;
         TUnitBLL unitBll;
         TBusinessBLL busiBll;
 
-        public TBusinessAttributeController()
+        public TBusinessItemController()
         {
-            this.bll = new TBusinessAttributeBLL("MySQL", this.AreaNo);
+            this.bll = new TBusinessItemBLL("MySQL", this.AreaNo);
             this.unitBll = new TUnitBLL("MySQL", this.AreaNo);
             this.busiBll = new TBusinessBLL("MySQL", this.AreaNo);
         }
@@ -50,13 +50,12 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         {
             var model = this.bll.GetModel(id);
             if (model == null)
-                model = new TBusinessAttributeModel()
+                model = new TBusinessItemModel()
                 {
                     ID = -1,
                     unitSeq = unitSeq,
                     busiSeq = busiSeq
                 };
-            this.ViewBag.GreenChannel = model.isGreenChannel == 1;
             this.ViewBag.UnitName = this.unitBll.GetModel(p => p.unitSeq == model.unitSeq).unitName;
             this.ViewBag.BusiName = this.busiBll.GetModel(p => p.unitSeq == model.unitSeq && p.busiSeq == model.busiSeq).busiName;
             return View(model);
@@ -64,9 +63,8 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(TBusinessAttributeModel model)
+        public ActionResult SubmitForm(TBusinessItemModel model)
         {
-            model.isGreenChannel = bool.Parse(this.Request["greenChannel"]) ? 1 : 0;
             if (model.ID == -1)
                 this.bll.Insert(model);
             else

@@ -1,0 +1,225 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+
+    var grid1 = "#grid-table_1";
+    var grid2 = "#grid-table_2";
+    var grid3 = "#grid-table_3";
+
+    $(function () {
+        $('body').layout({
+            west__size: 0.4,
+            west__childOptions: {
+                north__size: 0.5,
+                north__closable: false
+            }
+        });
+        initBusiData();
+        initItemData();
+        $(grid1).jqGrid({
+            url: "/TBusinessItem/GetGridData",
+            datatype: "json",
+            height: $(document).height() / 2 - 46,
+            colModel: [
+                { label: '单位编码', name: 'unitSeq', key: true },
+                { label: '单位名称', name: 'unitName' }
+        ],
+            rowNum: -1,
+            autowidth: true,
+            loadComplete: function () {
+                var table = this;
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                }, 0);
+                $(grid1).selectFirstRow();
+            },
+            onSelectRow: function (id) {
+                $.ajax({
+                    url: "/TBusinessItem/GetGridDataByUnitSeq?unitSeq=" + $(grid1).jqGrid('getRowData', id).unitSeq,
+                    dataType: "json",
+                    success: function (data) {
+                        refreshBusiData(data);
+                    }
+                });
+            }
+        });
+    });
+
+    function initBusiData() {
+        $(grid2).jqGrid({
+            datatype: 'local',
+            data: [],
+            height: $(document).height() / 2 - 62,
+            colModel: [
+                { label: '预约业务流水号', name: 'busiSeq', key: true, width: 120 },
+                { label: '预约业务编号', name: 'busiCode', width: 100 },
+                { label: '预约业务名称', name: 'busiName' },
+                { label: '预约类型', name: 'busiType', width: 70 },
+                { label: '预约办件', name: 'acceptBusi', width: 70 },
+                { label: '预约领件', name: 'getBusi', width: 70 },
+                { label: '预约咨询', name: 'askBusi', width: 70 }
+        ],
+            loadComplete: function () {
+                var table = this;
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                }, 0);
+                $(grid2).selectFirstRow();
+            },
+            onSelectRow: function (id) {
+                var unitSeq = $(grid1).jqGrid('getGridParam', 'selrow');
+                $.ajax({
+                    url: "/TBusinessItem/GetGridDetailData?unitSeq=" + unitSeq + "&busiSeq=" + id,
+                    dataType: "json",
+                    success: function (data) {
+                        refreshItemData(data);
+                    }
+                });
+            }
+        });
+    }
+
+    function initItemData() {
+        $(grid3).jqGrid({
+            autowidth: true,
+            datatype: 'local',
+            data: [],
+            height: $(document).height() - 89,
+            colModel: [
+                { label: 'ID', name: 'ID', key: true, width: 80 },
+                { label: '事项名称', name: 'itemName' },
+                { label: '备注', name: 'remark' }
+        ],
+            loadComplete: function () {
+                var table = this;
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                }, 0);
+                $(grid3).selectFirstRow();
+            }
+        });
+    }
+
+    function refreshBusiData(griddata) {
+        $(grid2).jqGrid('clearGridData');
+        $(grid2).jqGrid('setGridParam', {
+            datatype: 'local',
+            data: griddata
+        }).trigger("reloadGrid");
+    }
+
+    function refreshItemData(griddata) {
+        $(grid3).jqGrid('clearGridData');
+        $(grid3).jqGrid('setGridParam', {
+            datatype: 'local',
+            data: griddata
+        }).trigger("reloadGrid");
+    }
+
+    function Add() {
+        var unitSeq = $(grid1).jqGrid('getGridParam', 'selrow');
+        if (unitSeq == null) {
+            alert("没有选中单位！");
+            return;
+        }
+        var busiSeq = $(grid2).jqGrid('getGridParam', 'selrow');
+        if (busiSeq == null) {
+            alert("没有选中业务！");
+            return;
+        }
+        $.modalOpen({
+            title: "业务事项 - 新增",
+            url: "SystemConfig/TBusinessItem/Form?id=-1&unitSeq=" + unitSeq + "&busiSeq=" + busiSeq,
+            callback: function () {
+                $.modalContent().submitForm(function () {
+                    Refresh();
+                });
+            }
+        });
+    }
+
+    function Edit() {
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
+        if (sid == null) {
+            alert("没有任何选中行！");
+            return;
+        }
+        $.modalOpen({
+            title: "业务事项 - 编辑",
+            url: "SystemConfig/TBusinessItem/Form?id=" + sid,
+            callback: function () {
+                $.modalContent().submitForm(function () {
+                    Refresh();
+                });
+            }
+        });
+    }
+
+    function Delete() {
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
+        if (sid == null) {
+            alert("没有任何选中行！");
+            return;
+        }
+        $.modalConfirm({
+            text: "确定删除该记录吗？",
+            callback: function () {
+                $.deleteForm({
+                    url: "TBusinessItem/DeleteForm?id=" + sid,
+                    callback: function () {
+                        Refresh();
+                    }
+                });
+            }
+        });
+    }
+
+    function View() {
+        var sid = $(grid3).jqGrid('getGridParam', 'selrow');
+        if (sid == null) {
+            alert("没有任何选中行！");
+            return;
+        }
+        $.modalOpen({
+            title: "业务事项 - 查看",
+            url: "SystemConfig/TBusinessItem/Form?id=" + sid,
+            view: true
+        });
+    }
+
+    function Refresh() {
+        var id = $(grid2).jqGrid('getGridParam', 'selrow');
+        $(grid2).setSelection(id);
+    }
+
+</script>
+<div class="ui-layout-west">
+    <div class="ui-layout-north">
+        <table id="grid-table_1">
+        </table>
+    </div>
+    <div class="ui-layout-center">
+        <table id="grid-table_2">
+        </table>
+    </div>
+</div>
+<div class="ui-layout-center">
+    <div class="btn-group">
+        <button class="btn btn-sm btn-primary" onclick="Add()">
+            <i class="icon-plus-sign bigger-110"></i>新增</button>
+        <button class="btn btn-sm btn-success" onclick="Edit()">
+            <i class="icon-pencil bigger-110"></i>编辑</button>
+        <button class="btn btn-sm btn-danger" onclick="Delete()">
+            <i class="icon-minus-sign bigger-110"></i>删除</button>
+        <button class="btn btn-sm btn-yellow" onclick="View()">
+            <i class="icon-zoom-in bigger-110"></i>查看</button>
+        <button class="btn btn-sm btn-info" onclick="Refresh()">
+            <i class="icon-refresh bigger-110"></i>刷新</button>
+    </div>
+    <div style="overflow: scroll">
+        <table id="grid-table_3">
+        </table>
+    </div>
+</div>

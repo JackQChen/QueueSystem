@@ -119,8 +119,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Statistics\Controllers\SSatisfactionController.cs" />
+    <Compile Include="Areas\Statistics\Controllers\SWaitTimeController.cs" />
+    <Compile Include="Areas\Statistics\StatisticsAreaRegistration.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TBusinessAttributeController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TBusinessController.cs" />
+    <Compile Include="Areas\SystemConfig\Controllers\TBusinessItemController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TLedControllerController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TLedWindowController.cs" />
     <Compile Include="Areas\SystemConfig\Controllers\TScreenConfigController.cs" />
@@ -255,15 +259,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Statistics\Models\" />
     <Folder Include="Areas\SystemConfig\Models\" />
-    <Folder Include="Areas\SystemConfig\Views\Shared\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\SystemConfig\Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\SystemConfig\Views\TUnit\Form.cshtml" />
@@ -290,6 +291,12 @@
     <Content Include="Areas\SystemConfig\Views\TLedWindow\Index.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TScreenConfig\Form.cshtml" />
     <Content Include="Areas\SystemConfig\Views\TScreenConfig\Index.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TBusinessItem\Form.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\TBusinessItem\Index.cshtml" />
+    <Content Include="Areas\Statistics\Views\SWaitTime\Index.cshtml" />
+    <Content Include="Areas\SystemConfig\Views\Web.config" />
+    <Content Include="Areas\Statistics\Views\Web.config" />
+    <Content Include="Areas\Statistics\Views\SSatisfaction\Index.cshtml" />
     <None Include="Content\font\font.woff2" />
     <None Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -297,6 +304,7 @@
     <Content Include="Views\Shared\_LayoutForm.cshtml" />
     <Content Include="Views\Shared\_LayoutIndex.cshtml" />
     <Content Include="Views\Error\Error500.cshtml" />
+    <Content Include="Views\Shared\_LayoutStatistics.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

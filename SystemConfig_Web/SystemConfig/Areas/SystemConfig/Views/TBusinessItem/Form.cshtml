@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script>
+    function submitForm(callback) {
+        $.submitForm({
+            url: "SubmitForm",
+            data: $('form').serializeForm(),
+            callback: callback
+        });
+    }
+</script>
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" style="margin-top: 30px">
+            <input  type="hidden" name= "ID" value="@Model.ID" />
+            <input  type="hidden" name= "AreaNo" value="@Model.AreaNo" />
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    ID
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input id="txtId" readonly type="text" class="col-xs-10 col-sm-10" />
+                    <script>
+                        var id = $("form input[name='ID']").val();
+                        if (id == -1)
+                            $("#txtId").val("新增");
+                        else
+                            $("#txtId").val(id);
+                    </script>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    所属部门
+                </label>
+                <input  type="hidden" name= "unitSeq" value="@Model.unitSeq" />
+                <div class="col-sm-9 col-xs-9">
+                    <input readonly type="text" name="Name" value="@ViewBag.UnitName"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    所属业务
+                </label>
+                <input  type="hidden" name= "busiSeq" value="@Model.busiSeq" />
+                <div class="col-sm-9 col-xs-9">
+                    <input readonly type="text" name="Number" value="@ViewBag.BusiName" autocomplete="off" class="col-xs-10 col-sm-10"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    事项名称
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="itemName" value="@Model.itemName"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-xs-3">
+                    备注
+                </label>
+                <div class="col-sm-9 col-xs-9">
+                    <input type="text" name="remark" value="@Model.remark"  autocomplete="off" class="col-xs-10 col-sm-10" />
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

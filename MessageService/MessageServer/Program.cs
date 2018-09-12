@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using System.Runtime.Remoting;
 
 namespace MessageServer
 {
@@ -27,7 +28,9 @@ namespace MessageServer
                     File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "Exception.txt",
                         string.Format("{0}\r\n{1}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), err));
                 };
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "ServiceHost\\ServiceHost.exe", Process.GetCurrentProcess().Id.ToString());
+                var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "Service.xml";
+                RemotingConfiguration.Configure(remotingConfigPath, false);
+                //Process.Start(AppDomain.CurrentDomain.BaseDirectory + "ServiceHost\\ServiceHost.exe", Process.GetCurrentProcess().Id.ToString());
                 Application.Run(new FrmMain());
                 instance.ReleaseMutex();
             }

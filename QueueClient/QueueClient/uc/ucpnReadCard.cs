@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace QueueClient
 {
@@ -51,8 +52,23 @@ namespace QueueClient
 
         private void pbGotoInput_Click(object sender, EventArgs e)
         {
+            this.pbGotoInput.Enabled = false;
             if (GotoInput != null)
                 GotoInput();
+            new Thread(() =>
+            {
+                int i = 0;
+                while (true)
+                {
+                    if (i > 4)
+                    {
+                        BeginInvoke(new Action(() => { this.pbGotoInput.Enabled = true; }));
+                        break;
+                    }
+                    i++;
+                    Thread.Sleep(200);
+                }
+            }) { IsBackground = true }.Start();
         }
     }
 }

@@ -179,7 +179,7 @@
                 <div class="sidebar-shortcuts" id="sidebar-shortcuts">
                     <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
                         <button class="btn btn-success">
-                            <i class="icon-signal"></i>
+                            <i class="icon-file"></i>
                         </button>
                         <button class="btn btn-info">
                             <i class="icon-pencil"></i>
@@ -198,22 +198,20 @@
                 </div>
                 <!-- #sidebar-shortcuts -->
                 <ul class="nav nav-list">
-                    @foreach (KeyValuePair<string, string> menu in @Model)
+                    @foreach (KeyValuePair<string, string> menu in @Model[0])
                     {
                         <li><a href="javascript:void(0)" target="@menu.Key"><i class="icon-chevron-right"></i>
                             <span class='menu-text'>@menu.Value</span></a></li>
                     }
-                    <li><a href="#" class="dropdown-toggle"><i class="icon-file-alt"></i><span class="menu-text">
-                        其他页面 <span class="badge badge-primary ">5</span> </span><b class="arrow icon-angle-down">
-                        </b></a>
+                    <li class="active"><a href="#" class="dropdown-toggle"><i class="icon-signal"></i><span
+                        class="menu-text">统计分析 <span class="badge badge-primary ">@Model[1].Count</span>
+                    </span><b class="arrow icon-angle-down"></b></a>
                         <ul class="submenu">
-                            <li><a href="faq.html"><i class="icon-double-angle-right"></i>帮助 </a></li>
-                            <li><a href="error-404.html"><i class="icon-double-angle-right"></i>404错误页面 </a>
-                            </li>
-                            <li><a href="error-500.html"><i class="icon-double-angle-right"></i>500错误页面 </a>
-                            </li>
-                            <li><a href="grid.html"><i class="icon-double-angle-right"></i>网格 </a></li>
-                            <li><a href="blank.html"><i class="icon-double-angle-right"></i>空白页面 </a></li>
+                            @foreach (KeyValuePair<string, string> menu in @Model[1])
+                            {
+                                <li><a href="javascript:void(0)" target="@menu.Key"><i class="icon-chevron-right"></i>
+                                    <span class='menu-text'>@menu.Value</span></a></li>
+                            }
                         </ul>
                     </li>
                 </ul>
@@ -352,7 +350,7 @@
             $('#content-Loading').css("display", "none");
         }
 
-        var lastTarget = "TUnit";
+        var lastTarget = "SystemConfig/TUnit";
         $(function () {
             var fc = $('#frameContent');
             fc.height($(window).height() - fc.offset().top);
@@ -362,19 +360,30 @@
             });
             $('.nav-list li a').on('click', function (e) {
                 var obj = $(e.currentTarget);
+                var objParent = obj.parent();
+                if (obj.hasClass("dropdown-toggle")) {
+                    if (objParent.hasClass("active"))
+                        objParent.removeClass("active");
+                    else
+                        objParent.addClass('active');
+                    return false;
+                }
                 var target = obj.attr('target');
                 if (lastTarget == target)
                     return false;
                 else
                     lastTarget = target;
                 $('#content-Loading').css("display", "block");
-                $('.nav-list li.active').removeClass('active');
-                obj.parent().addClass('active');
-                $('#frameContent').attr('src', "SystemConfig/" + lastTarget);
+                $('.nav-list li.active').each(function (i, o) {
+                    if (!$(o.firstChild).hasClass("dropdown-toggle"))
+                        $(o).removeClass('active');
+                });
+                objParent.addClass('active');
+                $('#frameContent').attr('src', lastTarget);
                 return false;
             });
             $('.nav-list li:eq(0)').addClass('active');
-            $('#frameContent').attr('src', "SystemConfig/" + lastTarget);
+            $('#frameContent').attr('src', lastTarget);
         });
 
         $(function () {

@@ -61,6 +61,7 @@
     <Compile Include="FCallstateDAL.cs" />
     <Compile Include="FDictionaryDAL.cs" />
     <Compile Include="BEvaluateDAL.cs" />
+    <Compile Include="TBusinessItemDAL.cs" />
     <Compile Include="TLedControllerDAL.cs" />
     <Compile Include="TLedWindowDAL.cs" />
     <Compile Include="BLineUpMaxNoDAL.cs" />

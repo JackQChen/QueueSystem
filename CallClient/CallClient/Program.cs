@@ -46,6 +46,7 @@ namespace CallClient
                     //有新的更新内容
                     if (bool.Parse(args[1]))
                     {
+                        frmMain.SetConfigValue("RemotingConfig", "192.168.0.253:5566");
                         var config = File.ReadAllText(remotingConfigPath).Replace("0.0.0.0:0000", ConfigurationManager.AppSettings["RemotingConfig"]);
                         File.WriteAllText(remotingConfigPath, config);
                     }

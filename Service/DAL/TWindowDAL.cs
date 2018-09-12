@@ -46,7 +46,7 @@ namespace DAL
             var window = db.Query<TWindowModel>().Where(a => a.AreaNo == this.areaNo).Where(q => areaList.Contains(q.AreaName.ToString())).Select(s => s.Number).ToList();
             return window;
         }
- 
+
         public object GetGridData()
         {
             var dic = new FDictionaryDAL(this.db, this.areaNo).GetModelQueryByName(FDictionaryString.WorkState);
@@ -128,6 +128,27 @@ namespace DAL
                   .InnerJoin(userQuery, (m, w, u) => m.unitSeq == u.unitSeq)
                   .Where((m, w, u) => w.Number == winNum && u.Code == userCode)
                   .Select((m, w, u) => u).FirstOrDefault();
+        }
+
+        public object RS_GetItemListByWindowNo(string winNo)
+        {
+            var win = this.GetQuery().Where(q => q.Number == winNo).FirstOrDefault();
+            if (win == null)
+                return null;
+            var winBusi = new TWindowBusinessDAL(this.db, this.areaNo).GetQuery().Where(q => q.WindowID == win.ID).OrderByDesc(o => o.ID).FirstOrDefault();
+            if (winBusi == null)
+                return null;
+            var busiItem = new TBusinessItemDAL(this.db, this.areaNo).GetQuery().Where(q => q.unitSeq == winBusi.unitSeq && q.busiSeq == winBusi.busiSeq)
+                .Select(s => new
+                {
+                    winNum = win.Number,
+                    unitSeq = s.unitSeq,
+                    busiSeq = s.busiSeq,
+                    item = s.itemName,
+                    remark = s.remark,
+                }).ToList();
+            return busiItem;
+
         }
     }
 }

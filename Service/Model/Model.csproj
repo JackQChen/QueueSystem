@@ -53,6 +53,7 @@
     <Compile Include="Common\FLockModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TBusinessAttributeModel.cs" />
+    <Compile Include="TBusinessitemModel.cs" />
     <Compile Include="TBusinessModel.cs" />
     <Compile Include="BCallModel.cs" />
     <Compile Include="FCallStateModel.cs" />

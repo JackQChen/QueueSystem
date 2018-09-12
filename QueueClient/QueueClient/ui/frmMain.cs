@@ -70,8 +70,6 @@ namespace QueueClient
         int iRetUSB = 0;
         int FloorImgCount = 2;
         string idCard = "";//身份证号码
-        Thread thread;
-        Thread wait;
         TUnitModel selectUnit;
         TBusinessModel selectBusy;
         Dictionary<string, Control> uc = new Dictionary<string, Control>();
@@ -160,6 +158,7 @@ namespace QueueClient
             ucpnCard card = new ucpnCard();
             card.Size = new Size(1920, 1080);
             card.Location = new Point(0, 0);
+            card.CreateIdCard();
             ucpnSelectUnitArea unit = new ucpnSelectUnitArea();
             unit.Size = new Size(1920, 1080);
             unit.Location = new Point(0, 0);
@@ -277,9 +276,8 @@ namespace QueueClient
                 }
                 else
                 {
-                    thread = new Thread(new ThreadStart(ReadIDCard));
-                    thread.IsBackground = true;
-                    thread.Start();
+                    suppend = true;
+                    new Thread(new ThreadStart(ReadIDCard)) { IsBackground = true }.Start();
                 }
             }
             AsyncGetBasic();
@@ -292,7 +290,7 @@ namespace QueueClient
         }
         void client_OnMessage(QueueMessage.Message obj)
         {
-            
+
         }
 
         void AsyncGetBasic()
@@ -983,30 +981,31 @@ namespace QueueClient
                         var iCard = System.Text.Encoding.GetEncoding("GB2312").GetString(number).Replace("\0", "").Trim();
                         var iName = System.Text.Encoding.GetEncoding("GB2312").GetString(name).Replace("\0", "").Trim();
                         var iAdress = System.Text.Encoding.GetEncoding("GB2312").GetString(address).Replace("\0", "").Trim();
-                        person = new Person();
+                        if (person == null)
+                            person = new Person();
                         person.name = iName;
                         person.address = iAdress;
                         person.idcard = iCard;
                         if (iCard != "")
                         {
                             idCard = iCard;
-                            this.Invoke(new Action(() =>
-                            {
-                                DrawCard(idCard);
-                            }));
-                            //this.Invoke(new Action(() => { txtCard.Text = iCard; }));
                             Start(false);
-                            LogHelper.WriterReadIdCardLog(string.Format("身份证读卡成功：本次读卡循环读取了{3}次，证件号码{0} 姓名{1} 地址{2}", idCard, iName, iAdress, time));
+                            time = 0;
+                            new Thread(() =>
+                            {
+                                BeginInvoke(new Action(() =>
+                                {
+                                    DrawCard(idCard);
+                                    LogHelper.WriterReadIdCardLog(string.Format("身份证读卡成功：本次读卡循环读取了{3}次，证件号码{0} 姓名{1} 地址{2}", idCard, iName, iAdress, time));
+                                }));
+                            }) { IsBackground = true }.Start();
                             continue;
                         }
+
                         #endregion
                     }
-                    //else
-                    //    LogHelper.WriterReadIdCardLog("身份证读卡miss:读卡失败");
                 }
-                //else
-                //    LogHelper.WriterReadIdCardLog("身份证读卡miss:无卡");
-                Thread.Sleep(100);
+                Thread.Sleep(200);
             }
         }
         private void DrawCard(string idNo)
@@ -1016,24 +1015,22 @@ namespace QueueClient
             var pen = ((ucpnReadCard)uc["readcard"]).pnCard.CreateGraphics();
             Font font = new Font("黑体", 40, FontStyle.Bold);
             pen.DrawString(idNo, font, new SolidBrush(Color.White), 5, 6);
-            wait = new Thread(new ThreadStart(Wait));
-            wait.IsBackground = true;
-            wait.Start();
-        }
-        private void Wait()
-        {
-            int index = 0;
-            while (true)
+            new Thread(() =>
             {
-                if (index > 1)
+                int index = 0;
+                while (true)
                 {
-                    this.Invoke(new Action(() => { ProcessIdCard(idCard); }));
-                    break;
+                    if (index > 1)
+                    {
+                        BeginInvoke(new Action(() => { ProcessIdCard(idCard); }));
+                        break;
+                    }
+                    index++;
+                    Thread.Sleep(200);
                 }
-                index++;
-                Thread.Sleep(200);
-            }
+            }) { IsBackground = true }.Start();
         }
+
         #endregion
 
         #region 页面跳转 刷身份证 读身份证 ******** 入口
@@ -1106,7 +1103,7 @@ namespace QueueClient
             }
             else if (busyType == BusyType.Evaluate)
             {
-                //#region 评价读身份证
+                #region 评价读身份证
                 //var requestStr = CheckUser.Replace("@paperCode", idNo);
                 //var jsonString = http.HttpGet(requestStr, "");
                 //var Card = script.DeserializeObject(jsonString) as Dictionary<string, object>;
@@ -1175,7 +1172,7 @@ namespace QueueClient
 
                 //    }
                 //}
-                //#endregion
+                #endregion
             }
             Start(false);
         }
@@ -1249,26 +1246,16 @@ namespace QueueClient
             pwd.BringToFront();
             pageLocation = PageLocation.Exit;
             pageStopTime = ucTimer["pwd"];
-
         }
 
         void ExitThread()
         {
             try
             {
-                if (thread != null)
-                    thread.Abort();
-            }
-            catch
-            {
-            }
-            try
-            {
                 CVRSDK.CVR_CloseComm();
             }
             catch
             {
-
             }
         }
 

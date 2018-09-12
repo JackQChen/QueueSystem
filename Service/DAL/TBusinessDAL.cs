@@ -59,5 +59,39 @@ namespace DAL
                 .OrderBy(k => k.ID)
                 .ToList();
         }
+
+        public object GetUnitList()
+        {
+            var busiQuery = new TBusinessDAL(this.db, this.areaNo).GetQuery();
+            var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
+            return busiQuery
+                .GroupBy(k => k.unitSeq)
+                .Select(s => new { s.unitSeq })
+                .LeftJoin(unitQuery, (b, u) => b.unitSeq == u.unitSeq)
+                .Select((b, u) => u)
+            .OrderBy(k => k.unitSeq)
+            .ToList();
+        }
+
+        public object GetGridDataByUnitSeq(string unitSeq)
+        {
+            var busiQuery = new TBusinessDAL(this.db, this.areaNo).GetQuery();
+            var dicType = new FDictionaryDAL(this.db, this.areaNo).GetModelQueryByName(FDictionaryString.AppointmentType);
+            return busiQuery.LeftJoin(dicType, (m, t) => m.busiType.ToString() == t.Value)
+                .Where((m, t) => m.unitSeq == unitSeq)
+                .Select((m, t) => new
+                {
+                    m.unitSeq,
+                    m.busiSeq,
+                    m.busiCode,
+                    m.busiName,
+                    busiType = t.Name,
+                    acceptBusi = m.acceptBusi ? "是" : "否",
+                    getBusi = m.getBusi ? "是" : "否",
+                    askBusi = m.askBusi ? "是" : "否"
+                })
+                .OrderBy(k => k.unitSeq)
+                .ToList();
+        }
     }
 }

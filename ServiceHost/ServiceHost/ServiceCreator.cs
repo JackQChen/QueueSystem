@@ -22,7 +22,7 @@ namespace ServiceHost
                 FieldBuilder fieldBuilder = typeBuilder.DefineField("_serviceObj", serviceType, FieldAttributes.Private);
                 ConstructorBuilder ctorBuilder = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, Type.EmptyTypes);
                 ILGenerator ilg = ctorBuilder.GetILGenerator();
-                //OpCodes.Ldarg_0 = base
+                //OpCodes.Ldarg_0 = base 
                 //ApiController.ctor();
                 ilg.Emit(OpCodes.Ldarg_0);
                 ilg.Emit(OpCodes.Call, typeof(ApiController).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null));

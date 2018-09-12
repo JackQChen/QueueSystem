@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- basic styles -->
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/css/font-awesome.min.css")" rel="stylesheet" />
+    <!--[if IE 7]>
+		  <link rel="stylesheet" href="@Url.Content("~/Content/css/font-awesome-ie7.min.css")" />
+		<![endif]-->
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ui.jqgrid.css")" />
+    <!-- fonts -->
+    <link href="@Url.Content("~/Content/font/font.css")" rel="stylesheet" />
+    <!-- ace styles -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ace.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ace-rtl.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/ace-skins.min.css")" />
+    <!--[if lte IE 8]>
+		  <link rel="stylesheet" href="@Url.Content("~/Content/css/ace-ie.min.css")" />
+		<![endif]-->
+    <!-- inline styles related to this page -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/layout.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/datepicker.css")" />
+    <style>
+        body
+        {
+            font-family: '微软雅黑';
+            background: white;
+            overflow-y: hidden;
+        }
+        label
+        {
+            margin-top: 6px;
+            text-align: right;
+        }
+        select
+        {
+            height: 34px !important;
+        }
+        i
+        {
+            pointer-events: none;
+        }
+    </style>
+    <script src="@Url.Content("~/Content/js/jquery-2.0.3.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jquery-ui-1.10.3.custom.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jquery.layout.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jqGrid/jquery.jqGrid.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jqGrid/i18n/grid.locale-cn.js")"></script>
+    <script src="@Url.Content("~/Content/js/date-time/bootstrap-datepicker.min.js")"></script>
+    <script type="text/javascript">
+        if ("ontouchend" in document) document.write("<script src='@Url.Content("~/Content/js/jquery.mobile.custom.min.js")'>" + "</" + "script>"); 
+    </script>
+    <script>
+        //replace icons with FontAwesome icons like above
+        function updatePagerIcons(table) {
+            var replacement = {
+                'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+                'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+                'ui-icon-seek-next': 'icon-angle-right bigger-140',
+                'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+            };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+                if ($class in replacement)
+                    icon.attr('class', 'ui-icon ' + replacement[$class]);
+            })
+        }
+
+        $.fn.extend({
+            selectFirstRow: function (dataGrid) {
+                var ids = this.jqGrid('getDataIDs');
+                if (ids.length > 0)
+                    this.setSelection(ids[0]);
+            }
+        });
+
+        $.showMask = function (pCtl) {
+            window.parent.showMask(pCtl);
+        };
+        $.removeMask = function () {
+            window.parent.removeMask();
+        }
+    </script>
+</head>
+<body>
+    @RenderBody()
+    @Html.AntiForgeryToken()
+    <script type="text/javascript">
+        $.fn.datepicker.dates['cn'] = {   //切换为中文显示
+            days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+            daysShort: ["日", "一", "二", "三", "四", "五", "六", "七"],
+            daysMin: ["日", "一", "二", "三", "四", "五", "六", "七"],
+            months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+            monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+            today: "今天",
+            clear: "清除"
+        };
+
+        $('.date-picker').datepicker({
+            language: 'cn',
+            autoclose: true,
+            initialDate: new Date(),
+            format: 'yyyy-mm-dd',
+            todayHighlight: true
+        });
+        $('.input-group-addon').on('click', function (e) {
+            $(e.target.parentElement.firstElementChild).focus();
+            $(e.target.parentElement.firstElementChild).datepicker('show');
+        });
+    </script>
+</body>
+</html>

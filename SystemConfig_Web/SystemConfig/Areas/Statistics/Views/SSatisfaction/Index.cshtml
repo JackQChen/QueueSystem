@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStatistics.cshtml";
+}
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    $(function () {
+        $(grid_selector).jqGrid({
+            autowidth: true,
+            datatype: 'local',
+            data: [],
+            height: $(document).height() - 127,
+            colModel: [{
+                label: '单位编码',
+                name: 'unitSeq',
+                width: 70
+            },
+        {
+            label: '单位名称',
+            name: 'unitName',
+            width: 100
+        },
+        {
+            label: '业务编码',
+            name: 'busiSeq',
+            width: 70
+        },
+        {
+            label: '业务名称',
+            name: 'busiName',
+            width: 100
+        },
+        {
+            label: '平均时间(分钟)',
+            name: 'avgMinute',
+            width: 100
+        }],
+            loadComplete: function () {
+                var table = this;
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                },
+            0);
+                $(grid_selector).selectFirstRow();
+            }
+        });
+        Refresh();
+    });
+
+    function Refresh() {
+        $.ajax({
+            url: "/SSatisfaction/GetGridData?type=" + $('#iType').val() + "&startTime=" + $('#dpStart').val() + "&endTime=" + $('#dpEnd').val(),
+            dataType: "json",
+            success: function (griddata) {
+                $(grid_selector).jqGrid('clearGridData');
+                $(grid_selector).jqGrid('setGridParam', {
+                    datatype: 'local',
+                    data: griddata
+                }).trigger("reloadGrid");
+            }
+        });
+    }
+</script>
+<div class="btn-group">
+    <label class="col-sm-1">
+        类型</label>
+    <div class="col-sm-2">
+        <select class="form-control" id="iType">
+            <option value="1">服务态度</option>
+            <option value="2">完成质量</option>
+            <option value="3">处理效率</option>
+            <option value="4">廉洁自律</option>
+        </select>
+    </div>
+    <label class="col-sm-1">
+        开始时间</label>
+    <div class="input-group col-sm-2">
+        <input class="form-control date-picker" id="dpStart" value="@ViewBag.dtStart" type="text" />
+        <span class="input-group-addon"><i class="icon-calendar bigger-110"></i></span>
+    </div>
+    <label class="col-sm-1">
+        结束时间</label>
+    <div class="input-group col-sm-2">
+        <input class="form-control date-picker" id="dpEnd" value="@ViewBag.dtEnd" type="text" />
+        <span class="input-group-addon"><i class="icon-calendar bigger-110"></i></span>
+    </div>
+    <div class="col-sm-3">
+        <button class="btn btn-sm btn-yellow" onclick="Refresh()">
+            <i class="icon-search bigger-110"></i>查询</button>
+    </div>
+</div>
+<table id="grid-table">
+</table>
+<div id="grid-pager">
+</div>

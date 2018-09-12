@@ -57,5 +57,10 @@ namespace BLL
         {
             return this.CreateDAL().RS_GetModel(winNum, userCode);
         }
+
+        public object RS_GetItemListByWindowNo(string winNo)
+        {
+            return this.CreateDAL().RS_GetItemListByWindowNo(winNo);
+        }
     }
 }

@@ -8,29 +8,29 @@ using Model;
 
 namespace DAL
 {
-    public class TBusinessAttributeDAL : DALBase<TBusinessAttributeModel>
+    public class TBusinessItemDAL : DALBase<TBusinessItemModel>
     {
-        public TBusinessAttributeDAL()
+        public TBusinessItemDAL()
             : base()
         {
         }
 
-        public TBusinessAttributeDAL(string connName)
+        public TBusinessItemDAL(string connName)
             : base(connName)
         {
         }
 
-        public TBusinessAttributeDAL(string connName, string areaNo)
+        public TBusinessItemDAL(string connName, string areaNo)
             : base(connName, areaNo)
         {
         }
 
-        public TBusinessAttributeDAL(DbContext db)
+        public TBusinessItemDAL(DbContext db)
             : base(db)
         {
         }
 
-        public TBusinessAttributeDAL(DbContext db, string areaNo)
+        public TBusinessItemDAL(DbContext db, string areaNo)
             : base(db, areaNo)
         {
         }
@@ -47,19 +47,8 @@ namespace DAL
                 .Select((m, u, b) => new
                 {
                     m.ID,
-                    u.unitSeq,
-                    u.unitName,
-                    b.busiSeq,
-                    b.busiCode,
-                    b.busiName,
-                    m.timeInterval,
-                    m.ticketRestriction,
-                    m.lineUpMax,
-                    m.lineUpWarningMax,
-                    m.ticketPrefix,
-                    isGreenChannel = m.isGreenChannel == 1 ? "是" : "否",
-                    m.remark,
-                    Model = m
+                    m.itemName,
+                    m.remark
                 })
                 .OrderBy(k => k.ID)
                 .ToList();
