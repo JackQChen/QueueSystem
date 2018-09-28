@@ -135,10 +135,31 @@
     <Compile Include="function\BoShiPrinter.cs" />
     <Compile Include="function\BusyType.cs" />
     <Compile Include="function\CardIdentity.cs" />
+    <Compile Include="uc\busy\ucBusyPhoneContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="uc\busy\ucBusyPhone.cs" />
+    <Compile Include="uc\busy\ucBusy.cs" />
+    <Compile Include="uc\busy\ucBusyContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="uc\idcard\ucReadCard.cs" />
+    <Compile Include="uc\idcard\ucReadCardContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="uc\idinput\ucInput.cs" />
+    <Compile Include="uc\idinput\ucInputContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="uc\MouseAwareButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="function\WndProcHooker.cs" />
+    <Compile Include="uc\main\ucMain.cs" />
+    <Compile Include="uc\pwd\ucPwd.cs" />
+    <Compile Include="uc\pwd\ucPwdContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="uc\ucNumberCard.cs" />
     <Compile Include="uc\ucBusyCard.cs" />
     <Compile Include="uc\ucEvaluateCard.cs">
@@ -159,11 +180,21 @@
     <Compile Include="uc\ucpnSelectBusyPhoto.Designer.cs">
       <DependentUpon>ucpnSelectBusyPhoto.cs</DependentUpon>
     </Compile>
+    <Compile Include="uc\unit\ucUnitContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="uc\unit\ucUnit.cs" />
     <Compile Include="ui\frmBroadcast.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ui\frmBroadcast.Designer.cs">
       <DependentUpon>frmBroadcast.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ui\frmMainPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ui\frmMainPage.Designer.cs">
+      <DependentUpon>frmMainPage.cs</DependentUpon>
     </Compile>
     <Compile Include="ui\frmMsg.cs">
       <SubType>Form</SubType>
@@ -251,8 +282,29 @@
     <Compile Include="ui\frmRePrint.Designer.cs">
       <DependentUpon>frmRePrint.cs</DependentUpon>
     </Compile>
+    <Compile Include="uc\main\ucMainContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="function\AsyncWork.resx">
       <DependentUpon>AsyncWork.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\busy\ucBusyPhone.resx">
+      <DependentUpon>ucBusyPhone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\busy\ucBusy.resx">
+      <DependentUpon>ucBusy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\idcard\ucReadCard.resx">
+      <DependentUpon>ucReadCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\idinput\ucInput.resx">
+      <DependentUpon>ucInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\main\ucMain.resx">
+      <DependentUpon>ucMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc\pwd\ucPwd.resx">
+      <DependentUpon>ucPwd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="uc\ucNumberCard.resx">
       <DependentUpon>ucNumberCard.cs</DependentUpon>
@@ -269,8 +321,14 @@
     <EmbeddedResource Include="uc\ucpnSelectBusyPhoto.resx">
       <DependentUpon>ucpnSelectBusyPhoto.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="uc\unit\ucUnit.resx">
+      <DependentUpon>ucUnit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ui\frmBroadcast.resx">
       <DependentUpon>frmBroadcast.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui\frmMainPage.resx">
+      <DependentUpon>frmMainPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\frmMsg.resx">
       <DependentUpon>frmMsg.cs</DependentUpon>

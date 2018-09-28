@@ -40,7 +40,7 @@ namespace QueueClient
             IdCard pb9 = SetId("pb91", 1, size, xp + xpos + xpos, yp + ypos + ypos);
             IdCard pbX = SetId("pbX1", 1, size, xp, yp + ypos + ypos + ypos);
             IdCard pb0 = SetId("pb01", 1, size, xp + xpos, yp + ypos + ypos + ypos);
-            IdCard pbback = SetId("pbback1", 1, size, 1 + xpos + xpos, yp + ypos + ypos + ypos);
+            IdCard pbback = SetId("pbback1", 1, size, xp + xpos + xpos, yp + ypos + ypos + ypos);
             IdCard pbfinish = SetId("pbfinish1", 2, new Size(903, 115), xp, yp + ypos + ypos + ypos + ypos);
             this.pnNumber.AddControl(pb);
             this.pnNumber.AddControl(pb1);

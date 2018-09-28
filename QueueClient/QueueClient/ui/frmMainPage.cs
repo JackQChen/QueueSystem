@@ -19,10 +19,11 @@ using MessageClient;
 using QueueMessage;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using QueueClient.Properties;
 
 namespace QueueClient
 {
-    public partial class frmMain : Form
+    public partial class frmMainPage : Form
     {
         #region
         string ClientName = System.Configuration.ConfigurationManager.AppSettings["ClientName"];
@@ -127,95 +128,87 @@ namespace QueueClient
             xml.Save(configPath);
         }
 
-        protected override void WndProc(ref System.Windows.Forms.Message m)
+        public frmMainPage()
         {
-            if (m.Msg == 0x0014) // 禁掉清除背景消息
-                return;
-            base.WndProc(ref m);
-        }
-
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams paras = base.CreateParams;
-                paras.ExStyle |= 0x02000000;
-                return paras;
-            }
-        }
-
-        public frmMain()
-        {
-            this.SetStyle(
-                ControlStyles.AllPaintingInWmPaint | //不擦除背景 ,减少闪烁
-                ControlStyles.OptimizedDoubleBuffer | //双缓冲
-                ControlStyles.UserPaint, //使用自定义的重绘事件,减少闪烁
-                true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | //不擦除背景 ,减少闪烁
+                          ControlStyles.OptimizedDoubleBuffer | //双缓冲
+                          ControlStyles.UserPaint, //使用自定义的重绘事件,减少闪烁
+                          true);
             InitializeComponent();
             busyType = BusyType.Default;
-            ucpnMain main = new ucpnMain();
+            ucMainContainer main = new ucMainContainer();
+            main.Work += Work;
             main.Size = new Size(1920, 1080);
             main.Location = new Point(0, 0);
-            ucpnReadCard readCard = new ucpnReadCard();
+            pnMain.Height = 912;
+            pnMain.Width = 1920;
+            this.MouseClick += (s, e) =>
+            {
+                if (e.Location.X > 0 && e.Location.X < 150 && e.Location.Y > 0 && e.Location.Y < 100)
+                {
+                    var pwd = (ucPwdContainer)uc["pwd"];
+                    pwd.InputPwd = "";
+                    pwd.ExitPwd = ExitPwd;
+                    pwd.BringToFront();
+                    pageLocation = PageLocation.Exit;
+                    pageStopTime = ucTimer["pwd"];
+                }
+            };
+            var bgImg = new Bitmap(main.Width, main.Height);
+            Graphics.FromImage(bgImg).DrawImage(Resources.背景, pnMain.ClientRectangle, pnMain.Bounds, GraphicsUnit.Pixel);
+            main.BackgroundImage = bgImg;
+            main.Draw();
+            ucReadCardContainer readCard = new ucReadCardContainer();
             readCard.Size = new Size(1920, 1080);
             readCard.Location = new Point(0, 0);
-            ucpnCard card = new ucpnCard();
+            readCard.InputCard += new Action(GotoInput);
+            readCard.BackgroundImage = bgImg;
+            readCard.Draw();
+            ucInputContainer card = new ucInputContainer();
             card.Size = new Size(1920, 1080);
             card.Location = new Point(0, 0);
-            card.CreateIdCard();
-            ucpnSelectUnitArea unit = new ucpnSelectUnitArea();
-            unit.Size = new Size(1920, 1080);
-            unit.Location = new Point(0, 0);
-            ucpnSelectBusy busy = new ucpnSelectBusy();
-            busy.Size = new Size(1920, 1080);
-            busy.Location = new Point(0, 0);
-            ucpnSelectBusyPhoto busyn = new ucpnSelectBusyPhoto();
-            busyn.Size = new Size(1920, 1080);
-            busyn.Location = new Point(0, 0);
-            ucpnEvaluate evaluate = new ucpnEvaluate();
-            evaluate.Size = new Size(1920, 1080);
-            evaluate.Location = new Point(0, 0);
-            ucpnPwd pwd = new ucpnPwd();
-            pwd.Size = new Size(1920, 1080);
-            pwd.Location = new Point(0, 0);
-
-            main.Work += new Action(Work);
-            //main.GetCard += new Action(GetCardAction);
-            //main.Consult += new Action(Consult);
-            //main.Investment += new Action(Investment);
-            //main.Evaluate += new Action(Evaluate);
-            //main.UserGuide += new Action(UserGuide);
-
-            readCard.GotoInput += new Action(GotoInput);
             card.clickAction += cardClick;
             card.ProcessIdCard += new Action<string>(ProcessIdCard);
+            card.BackgroundImage = bgImg;
+            card.Draw();
+            ucUnitContainer unit = new ucUnitContainer();
+            unit.Size = new Size(1920, 1080);
+            unit.Location = new Point(0, 0);
             unit.SelectBusy += new Action(unit_SelectedUnit);
-            busy.SelectedBusy += new Action(busy_SelectedBusy);
-            busyn.SelectedBusy += new Action(busyn_SelectedBusy);
-            evaluate.enterEvaluate += new Action<BEvaluateModel>(evaluate_enterEvaluate);
-            //evaluate.enter += new Action(evaluate_enter);
-            evaluate.previous += new Action<object>(evaluate_previous);
-            evaluate.next += new Action<object>(evaluate_previous);
-
             unit.previous += new Action<object>(unit_previous);
             unit.next += new Action<object>(unit_previous);
+            unit.BackgroundImage = bgImg;
+            unit.Draw();
+            ucPwdContainer upwd = new ucPwdContainer();
+            upwd.BackgroundImage = bgImg;
+            upwd.Size = new Size(1920, 1080);
+            upwd.Location = new Point(0, 0);
+            upwd.Exit += new Action(pwd_Exit);
+            upwd.Draw();
+            ucBusyContainer busy = new ucBusyContainer();
+            busy.Size = new Size(1920, 1080);
+            busy.Location = new Point(0, 0);
+            busy.SelectedBusy += new Action(busy_SelectedBusy);
             busy.previous += new Action<object>(busy_previous);
             busy.next += new Action<object>(busy_previous);
+            busy.BackgroundImage = bgImg;
+            busy.Draw();
+            ucBusyPhoneContainer busyn = new ucBusyPhoneContainer();
+            busyn.Size = new Size(1920, 1080);
+            busyn.Location = new Point(0, 0);
+            busyn.SelectedBusy += new Action(busyn_SelectedBusy);
             busyn.next += new Action<object>(busyn_previous);
             busyn.previous += new Action<object>(busyn_previous);
-            pwd.Exit += new Action(pwd_Exit);
-
-            pnMain.Controls.Add(pwd);
-            pnMain.Controls.Add(evaluate);
+            busyn.BackgroundImage = bgImg;
+            busyn.Draw();
+            pnMain.Controls.Add(upwd);
             pnMain.Controls.Add(busy);
             pnMain.Controls.Add(busyn);
             pnMain.Controls.Add(unit);
             pnMain.Controls.Add(card);
             pnMain.Controls.Add(readCard);
             pnMain.Controls.Add(main);
-
-            uc.Add("pwd", pwd);
-            uc.Add("evaluate", evaluate);
+            uc.Add("pwd", upwd);
             uc.Add("busy", busy);
             uc.Add("busyn", busyn);
             uc.Add("unit", unit);
@@ -227,13 +220,11 @@ namespace QueueClient
                 Image img = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "img\\title.png");
                 if (img != null)
                 {
-                    pntitle.BackgroundImage = img;
+                    imgTitle = img;
                 }
             }
             catch
-            {
-
-            }
+            { }
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -266,24 +257,8 @@ namespace QueueClient
             timer3.Start();
             if (CanNotUseCard == 0)
             {
-                //int iPort;
-                //for (iPort = 1001; iPort <= 1016; iPort++)
-                //{
-                //    iRetUSB = CVRSDK.CVR_InitComm(iPort);
-                //    if (iRetUSB == 1)
-                //        break;
-                //}
-                //if (iRetUSB != 1)
-                //{
-                //    frmMsg frm = new frmMsg();
-                //    frm.msgInfo = "身份证读卡器初始化失败！";
-                //    frm.ShowDialog();
-                //}
-                //else
-                //{
                 suppend = true;
                 new Thread(new ThreadStart(ProcessRead)) { IsBackground = true }.Start();
-                //}
             }
             AsyncGetBasic();
             client.ServerIP = ip;
@@ -500,7 +475,7 @@ namespace QueueClient
 
         void unit_previous(object sender)
         {
-            var ctl = ((ucpnSelectUnitArea)uc["unit"]);
+            var ctl = ((ucUnitContainer)uc["unit"]);
             pageStopTime = ucTimer["unit"];
             int max = FloorImgCount;
             PictureBox pb = sender as PictureBox;
@@ -532,7 +507,7 @@ namespace QueueClient
         }
         void busy_previous(object sender)
         {
-            var ctl = ((ucpnSelectBusy)uc["busy"]);
+            var ctl = ((ucBusyContainer)uc["busy"]);
             pageStopTime = ucTimer["busy"];
             var count = bList.Where(b => b.unitSeq == selectUnit.unitSeq).Count();
             int max = count / ctl.pageCount;
@@ -562,7 +537,7 @@ namespace QueueClient
 
         void busyn_previous(object sender)
         {
-            var ctl = ((ucpnSelectBusyPhoto)uc["busyn"]);
+            var ctl = ((ucBusyPhoneContainer)uc["busyn"]);
             pageStopTime = ucTimer["busyn"];
             var count = bList.Where(b => b.unitSeq == selectUnit.unitSeq).Count();
             int max = count / ctl.pageCount;
@@ -592,13 +567,13 @@ namespace QueueClient
 
         void unit_SelectedUnit()
         {
-            var ucUnit = ((ucpnSelectUnitArea)uc["unit"]);
+            var ucUnit = ((ucUnitContainer)uc["unit"]);
             selectUnit = ucUnit.selectUnit;
             var list = new List<TBusinessModel>();
             list = bList.Where(b => b.unitSeq == selectUnit.unitSeq).ToList();
             if (isPhoto(selectUnit.unitSeq))
             {
-                var ucBusyn = ((ucpnSelectBusyPhoto)uc["busyn"]);
+                var ucBusyn = ((ucBusyPhoneContainer)uc["busyn"]);
                 ucBusyn.cureentPage = 0;
                 ucBusyn.bList = list;
                 ucBusyn.BringToFront();
@@ -607,7 +582,7 @@ namespace QueueClient
             }
             else
             {
-                var ucBusy = ((ucpnSelectBusy)uc["busy"]);
+                var ucBusy = ((ucBusyContainer)uc["busy"]);
                 ucBusy.cureentPage = 0;
                 ucBusy.bList = list;
                 ucBusy.BringToFront();
@@ -650,7 +625,7 @@ namespace QueueClient
         {
             if (selectUnit == null)
                 return;
-            selectBusy = ((ucpnSelectBusy)uc["busy"]).selectBusy;
+            selectBusy = ((ucBusyContainer)uc["busy"]).selectBusy;
             if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq))
             {
                 pbReturn_Click(null, null);
@@ -663,7 +638,7 @@ namespace QueueClient
         {
             if (selectUnit == null)
                 return;
-            selectBusy = ((ucpnSelectBusyPhoto)uc["busyn"]).selectBusy;
+            selectBusy = ((ucBusyPhoneContainer)uc["busyn"]).selectBusy;
             if (!CheckLimit(selectUnit.unitSeq, selectBusy.busiSeq))
             {
                 pbReturn_Click(null, null);
@@ -709,33 +684,6 @@ namespace QueueClient
                 return;
             busyType = BusyType.GetCard;
             GotoReadCard(2);
-        }
-
-        void Consult()
-        {
-            busyType = BusyType.Consult;
-            SelectUnit();
-        }
-
-        void Evaluate()
-        {
-            if (!IsOk())
-                return;
-            busyType = BusyType.Evaluate;
-            GotoReadCard(1);
-        }
-
-        void Investment()
-        {
-            if (!IsOk())
-                return;
-            busyType = BusyType.Investment;
-            GotoReadCard(3);
-        }
-
-        void UserGuide()
-        {
-            //SelectUnit();
         }
 
         bool IsOk()
@@ -978,92 +926,11 @@ namespace QueueClient
                 return per;
             }
         }
-        //private void ReadIDCard()
-        //{
-        //    int time = 0;
-        //    while (true)
-        //    {
-        //        if (suppend)
-        //        {
-        //            are.WaitOne(-1, false);
-        //            suppend = false;
-        //        }
-        //        time++;
-        //        int isHaveCard = CVRSDK.CVR_Authenticate();
-        //        if (isHaveCard == 1)
-        //        {
-        //            int readOk = CVRSDK.CVR_Read_Content(4);
-        //            if (readOk == 1)
-        //            {
-        //                #region
-        //                byte[] name = new byte[30];
-        //                int length = 30;
-        //                CVRSDK.GetPeopleName(ref name[0], ref length);
-        //                byte[] number = new byte[30];
-        //                length = 36;
-        //                CVRSDK.GetPeopleIDCode(ref number[0], ref length);
-        //                byte[] address = new byte[30];
-        //                length = 70;
-        //                CVRSDK.GetPeopleAddress(ref address[0], ref length);
-        //                #region
-        //                //byte[] people = new byte[30];
-        //                //length = 3;
-        //                //CVRSDK.GetPeopleNation(ref people[0], ref length);
-        //                //byte[] validtermOfStart = new byte[30];
-        //                //length = 16;
-        //                //CVRSDK.GetStartDate(ref validtermOfStart[0], ref length);
-        //                //byte[] birthday = new byte[30];
-        //                //length = 16;
-        //                //CVRSDK.GetPeopleBirthday(ref birthday[0], ref length);
-        //                //byte[] validtermOfEnd = new byte[30];
-        //                //length = 16;
-        //                //CVRSDK.GetEndDate(ref validtermOfEnd[0], ref length);
-        //                //byte[] signdate = new byte[30];
-        //                //length = 30;
-        //                //CVRSDK.GetDepartment(ref signdate[0], ref length);
-        //                //byte[] sex = new byte[30];
-        //                //length = 3;
-        //                //CVRSDK.GetPeopleSex(ref sex[0], ref length);
-        //                //byte[] samid = new byte[32];
-        //                //CVRSDK.CVR_GetSAMID(ref samid[0]);
-        //                #endregion
-        //                var iCard = System.Text.Encoding.GetEncoding("GB2312").GetString(number).Replace("\0", "").Trim();
-        //                var iName = System.Text.Encoding.GetEncoding("GB2312").GetString(name).Replace("\0", "").Trim();
-        //                var iAdress = System.Text.Encoding.GetEncoding("GB2312").GetString(address).Replace("\0", "").Trim();
-        //                if (person == null)
-        //                    person = new Person();
-        //                person.name = iName;
-        //                person.address = iAdress;
-        //                person.idcard = iCard;
-        //                if (iCard != "")
-        //                {
-        //                    idCard = iCard;
-        //                    Start(false);
-        //                    time = 0;
-        //                    new Thread(() =>
-        //                    {
-        //                        BeginInvoke(new Action(() =>
-        //                        {
-        //                            DrawCard(idCard);
-        //                            LogHelper.WriterReadIdCardLog(string.Format("身份证读卡成功：本次读卡循环读取了{3}次，证件号码{0} 姓名{1} 地址{2}", idCard, iName, iAdress, time));
-        //                        }));
-        //                    }) { IsBackground = true }.Start();
-        //                    continue;
-        //                }
 
-        //                #endregion
-        //            }
-        //        }
-        //        Thread.Sleep(200);
-        //    }
-        //}
         private void DrawCard(string idNo)
         {
-            var uCard = ((ucpnReadCard)uc["readcard"]);
-            uCard.IdCard = idNo;
-            var pen = ((ucpnReadCard)uc["readcard"]).pnCard.CreateGraphics();
-            Font font = new Font("黑体", 40, FontStyle.Bold);
-            pen.DrawString(idNo, font, new SolidBrush(Color.White), 5, 6);
+            var uCard = ((ucReadCardContainer)uc["readcard"]);
+            uCard.DrawIdCard(idNo);
             new Thread(() =>
             {
                 int index = 0;
@@ -1071,7 +938,11 @@ namespace QueueClient
                 {
                     if (index > 1)
                     {
-                        BeginInvoke(new Action(() => { ProcessIdCard(idCard); }));
+                        BeginInvoke(new Action(() =>
+                        {
+                            uCard.DrawIdCard("");
+                            ProcessIdCard(idCard);
+                        }));
                         break;
                     }
                     index++;
@@ -1090,8 +961,7 @@ namespace QueueClient
         /// <param name="type"></param>
         private void GotoReadCard(int type)
         {
-            var read = (ucpnReadCard)uc["readcard"];
-            read.IdCard = "";
+            var read = (ucReadCardContainer)uc["readcard"];
             read.BringToFront();
             pbReturnMain.BringToFront();
             pbLastPage.BringToFront();
@@ -1118,7 +988,7 @@ namespace QueueClient
         private void GotoInputCard(int type)
         {
             Start(false);
-            var sCard = ((ucpnCard)uc["card"]);
+            var sCard = ((ucInputContainer)uc["card"]);
             sCard.BringToFront();
             sCard.CardId = "";
             pbReturnMain.BringToFront();
@@ -1152,79 +1022,6 @@ namespace QueueClient
             {
                 SelectUnit();//
             }
-            else if (busyType == BusyType.Evaluate)
-            {
-                #region 评价读身份证
-                //var requestStr = CheckUser.Replace("@paperCode", idNo);
-                //var jsonString = http.HttpGet(requestStr, "");
-                //var Card = script.DeserializeObject(jsonString) as Dictionary<string, object>;
-                //if (Card != null)
-                //{
-                //    var status = Card["status"].ToString();
-                //    var data = Card["data"] as Dictionary<string, object>;
-                //    if (data == null)
-                //    {
-                //        frmMsg frm = new frmMsg();
-                //        frm.msgInfo = "当前身份证未注册，获取不到用户编号！";
-                //        frm.ShowDialog();
-                //        return;
-                //    }
-                //    else
-                //    {
-                //        var uCode = data["userCode"] == null ? "" : data["userCode"].ToString();
-                //        var exist = data["exist"].ToString();
-                //        if (exist == "0")
-                //        {
-                //            frmMsg frm = new frmMsg();
-                //            frm.msgInfo = "当前身份证未注册平台账户！";
-                //            frm.ShowDialog();
-                //            return;
-                //        }
-                //        userCode = uCode;
-                //        var rStr = GetEvaluate.Replace("@custCardId", idNo);
-                //        var jString = http.HttpGet(rStr, "");
-                //        var evaList = script.DeserializeObject(jString) as Dictionary<string, object>;
-                //        if (evaList != null)
-                //        {
-                //            var dQuery = evaList["data"] as Dictionary<string, object>;
-                //            var dArr = dQuery["dataList"] as object[];
-                //            if (dArr == null || dArr.Count() == 0)
-                //            {
-                //                frmMsg frm = new frmMsg();
-                //                frm.msgInfo = "该身份证用户没有可评价的业务信息！";
-                //                frm.ShowDialog();
-                //                return;
-                //            }
-                //            else
-                //            {
-                //                eList = new List<BEvaluateModel>();
-                //                foreach (Dictionary<string, object> dat in dArr)
-                //                {
-                //                    var controlSeq = dat["controlSeq"] == null ? "" : dat["controlSeq"].ToString();
-                //                    var approveName = dat["approveName"] == null ? "" : dat["approveName"].ToString();
-                //                    var approveSeq = dat["approveSeq"] == null ? "" : dat["approveSeq"].ToString();
-                //                    var unitSeq = dat["unitSeq"] == null ? "" : dat["unitSeq"].ToString();
-                //                    var unitName = dat["unitName"] == null ? "" : dat["unitName"].ToString();
-                //                    eList.Add(new BEvaluateModel()
-                //                    {
-                //                        type = 0,
-                //                        approveName = approveName,
-                //                        controlSeq = controlSeq,
-                //                        approveSeq = approveSeq,
-                //                        custCardId = idCard,
-                //                        unitSeq = unitSeq,
-                //                        unitName = unitName,
-                //                    });
-
-                //                }
-                //                ShowEvaluate();
-                //            }
-                //        }
-
-                //    }
-                //}
-                #endregion
-            }
             Start(false);
         }
 
@@ -1234,18 +1031,16 @@ namespace QueueClient
         //主页
         private void pbReturn_Click(object sender, EventArgs e)
         {
-            var sUnit = ((ucpnSelectUnitArea)uc["unit"]);
-            var sBusy = ((ucpnSelectBusy)uc["busy"]);
-            var sCard = ((ucpnCard)uc["card"]);
-            var uCard = ((ucpnReadCard)uc["readcard"]);
-            uCard.IdCard = "";
+            var sUnit = ((ucUnitContainer)uc["unit"]);
+            var sBusy = ((ucBusyContainer)uc["busy"]);
+            var sCard = ((ucInputContainer)uc["card"]);
+            var uCard = ((ucReadCardContainer)uc["readcard"]);
             sCard.CardId = "";
             sUnit.cureentPage = 0;
             sBusy.cureentPage = 0;
             //sUnit.CreateUnit();
             Start(false);
             uc["main"].BringToFront();
-            lblMes.Visible = false;
             idCard = "";
             selectBusy = null;
             selectUnit = null;
@@ -1288,16 +1083,6 @@ namespace QueueClient
         #endregion
 
         #region 退出密码框
-
-        private void pnexit_Click(object sender, EventArgs e)
-        {
-            var pwd = (ucpnPwd)uc["pwd"];
-            pwd.InputPwd = "";
-            pwd.ExitPwd = ExitPwd;
-            pwd.BringToFront();
-            pageLocation = PageLocation.Exit;
-            pageStopTime = ucTimer["pwd"];
-        }
 
         void ExitThread()
         {
@@ -1371,7 +1156,7 @@ namespace QueueClient
         private void SelectUnit()
         {
             Start(false);
-            var ucUnit = ((ucpnSelectUnitArea)uc["unit"]);
+            var ucUnit = ((ucUnitContainer)uc["unit"]);
             ucUnit.uList = uList;
             ucUnit.cureentPage = 0;
             ucUnit.CreateUnit();
@@ -1543,10 +1328,15 @@ namespace QueueClient
 
         #endregion
 
+        Font font = new Font("黑体", 26.25F, FontStyle.Bold);
+        string strTime = "", strMessage = "";
+        Image imgTitle;
+
         #region 其他
         private void timer2_Tick(object sender, EventArgs e)
         {
-            lblTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss dddd");
+            strTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss dddd");
+            this.Invalidate();
         }
         frmBroadcast frmB = new frmBroadcast();
         //页面停留
@@ -1569,8 +1359,7 @@ namespace QueueClient
             }
             else
             {
-                lblMes.Visible = true;
-                lblMes.Text = string.Format("剩余操作时间：{0}秒", pageStopTime.ToString("00"));
+                strMessage = string.Format("剩余操作时间：{0}秒", pageStopTime.ToString("00"));
                 pageStopTime--;
             }
         }
@@ -1619,6 +1408,15 @@ namespace QueueClient
             }
         }
         #endregion
+
+        private void frmMainPage_Paint(object sender, PaintEventArgs e)
+        {
+            if (imgTitle != null)
+                e.Graphics.DrawImage(imgTitle, Point.Empty);
+            e.Graphics.FillRectangle(Brushes.Black, 0, this.pnMain.Bottom, this.Width, this.Height - this.pnMain.Bottom);
+            e.Graphics.DrawString(strTime, font, Brushes.White, 10, this.pnMain.Bottom + 10);
+            e.Graphics.DrawString(strMessage, font, Brushes.White, 1500, this.pnMain.Bottom + 10);
+        }
 
         #endregion
     }

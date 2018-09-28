@@ -7,11 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using QueueClient.Properties;
+using Model;
 
 namespace QueueClient
 {
-    public partial class ucBusyCard : VirtualControl
+    public partial class ucBusyPhone : VirtualControl
     {
+        public ucBusyPhone()
+        {
+            this.ButtonRectangle = new Rectangle();
+            this.ButtonClick += new Action(ucBusyCard_ButtonClick);
+        }
+
         public Action<object> action;
         public string unitSeq { get; set; }
         public string busiSeq { get; set; }
@@ -20,12 +27,6 @@ namespace QueueClient
 
         public Rectangle ButtonRectangle;
         public event Action ButtonClick;
-
-        public ucBusyCard()
-        {
-            this.ButtonRectangle = new Rectangle();
-            this.ButtonClick += new Action(ucBusyCard_ButtonClick);
-        }
 
         public void OnButtonClick()
         {

@@ -32,6 +32,7 @@ namespace QueueClient
         internal List<VirtualControl> controls = new List<VirtualControl>();
 
         public Image Image { get; set; }
+        public new Image BackgroundImage { get; set; }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -55,10 +56,12 @@ namespace QueueClient
             this.controls.Clear();
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
             this.Image = new Bitmap(this.Width, this.Height);
             this.graphics = Graphics.FromImage(this.Image);
+            if (this.BackgroundImage != null)
+                this.graphics.DrawImage(this.BackgroundImage, this.ClientRectangle);
             foreach (var ctl in this.controls)
             {
                 ctl.Draw(graphics);

@@ -17,26 +17,6 @@ namespace QueueClient
         }
 
         public event Action Work;
-        public event Action GetCard;
-        public event Action Consult;
-        public event Action Evaluate;
-        public event Action UserGuide;
-        public event Action Investment;
-        private void pbWork_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void pbWork_MouseUp(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void pbInvestment_Click(object sender, EventArgs e)
-        {
-            if (Investment != null)
-                Investment();
-        }
 
         private void pbWork_Click(object sender, EventArgs e)
         {
@@ -48,30 +28,6 @@ namespace QueueClient
         {
             if (Work != null)
                 Work();
-        }
-
-        private void pbGetCard_Click(object sender, EventArgs e)
-        {
-            if (GetCard != null)
-                GetCard();
-        }
-
-        private void pbConsult_Click(object sender, EventArgs e)
-        {
-            if (Work != null)
-                Work();
-        }
-
-        private void pbEvaluate_Click(object sender, EventArgs e)
-        {
-            if (Evaluate != null)
-                Evaluate();
-        }
-
-        private void pbWorkGuide_Click(object sender, EventArgs e)
-        {
-            if (UserGuide != null)
-                UserGuide();
         }
 
         private void pbWork_Paint(object sender, PaintEventArgs e)

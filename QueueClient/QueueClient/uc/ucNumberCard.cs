@@ -10,7 +10,7 @@ using QueueClient.Properties;
 
 namespace QueueClient
 {
-    public partial class ucBusyCard : VirtualControl
+    public partial class ucNumberCard : VirtualControl
     {
         public Action<object> action;
         public string unitSeq { get; set; }
@@ -21,7 +21,7 @@ namespace QueueClient
         public Rectangle ButtonRectangle;
         public event Action ButtonClick;
 
-        public ucBusyCard()
+        public ucNumberCard()
         {
             this.ButtonRectangle = new Rectangle();
             this.ButtonClick += new Action(ucBusyCard_ButtonClick);
@@ -59,6 +59,29 @@ namespace QueueClient
             {
                 g.DrawImage(img, this.Rectangle.X, 90, this.Rectangle.Width, this.Rectangle.Height - 90);
             }
+        }
+
+        private void pbWorking_Click(object sender, EventArgs e)
+        {
+            if (action != null)
+                action(this);
+        }
+
+        private void pbWorking_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void pbWorking_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void pbWorking_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pic = sender as PictureBox;
+            Font fontMain = new Font("黑体", 24, FontStyle.Bold);
+            e.Graphics.DrawString("取    号", fontMain, new SolidBrush(Color.White), 70, 10);
         }
     }
 }
