@@ -1,13 +1,13 @@
 ﻿# QueueSystem
 已投入使用的排队叫号系统<br>
 部分项目现场效果
-![](https://github.com/chen365409389/QueueSystem/blob/master/Img/1.png)<br>
-![](https://github.com/chen365409389/QueueSystem/blob/master/Img/2.png)<br>
-![](https://github.com/chen365409389/QueueSystem/blob/master/Img/3.png)<br>
-![](https://github.com/chen365409389/QueueSystem/blob/master/Img/4.png)<br>
-![](https://github.com/chen365409389/QueueSystem/blob/master/Img/5.png)<br>
-![](https://github.com/chen365409389/QueueSystem/blob/master/Img/6.png)<br>
-![](https://github.com/chen365409389/QueueSystem/blob/master/Img/7.png)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/1.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/2.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/3.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/4.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/5.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/6.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/7.jpg)<br>
 #### Bin - 生成的程序集<br>
 #### CallClient - 叫号客户端（独立叫号程序）<br>
 #### CallSystem - 叫号系统（集成叫号器和评价器）<br>
