@@ -478,7 +478,7 @@ namespace CallSystem
                     }
 
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(25);
             }
         }
 

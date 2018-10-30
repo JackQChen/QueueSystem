@@ -93,17 +93,21 @@ namespace DAL
             var winBusiQuery = new TWindowBusinessDAL(this.db, this.areaNo).GetQuery();
             var winQuery = this.GetQuery();
             var userQuery = new TUserDAL(this.db, this.areaNo).GetQuery();
+            var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
             return winBusiQuery
                 .InnerJoin(winQuery, (m, w) => m.WindowID == w.ID)
                 .Where((m, w) => w.Number == winNum)
                 .Select((m, w) => m)
                 .GroupBy(k => k.unitSeq)
                 .Select(s => s.unitSeq)
-                .InnerJoin(userQuery, (s, u) => s == u.unitSeq)
-                .Select((s, u) => new
+                .InnerJoin(userQuery, (s, user) => s == user.unitSeq)
+                .InnerJoin(unitQuery, (s, user, unit) => s == unit.unitSeq)
+                .Select((s, user, unit) => new
                 {
-                    UserCode = u.Code,
-                    UserName = u.Name
+                    UserCode = user.Code,
+                    UserName = user.Name,
+                    UnitSeq = unit.unitSeq,
+                    UnitName = unit.unitName
                 })
                 .OrderBy(k => k.UserCode)
                 .ToList();

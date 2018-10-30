@@ -35,7 +35,6 @@ namespace LEDDisplay
 
         Client client = new Client();
         int fontColor = 0, fontSize = 0, fontStyle = 0;
-        string[] fullColorList;
         string fontName = "", pauseText = "", resumeText = "";
         Rectangle rectText = Rectangle.Empty;
 
@@ -48,7 +47,6 @@ namespace LEDDisplay
             fontStyle = Convert.ToInt32(ConfigurationManager.AppSettings["FontStyle"]);
             pauseText = ConfigurationManager.AppSettings["PauseText"];
             resumeText = ConfigurationManager.AppSettings["ResumeText"];
-            fullColorList = ConfigurationManager.AppSettings["FullColorWindow"].Split(',');
             var position = ConfigurationManager.AppSettings["Position"].Split(',');
             rectText = new Rectangle(
                 Convert.ToInt32(position[0]),
@@ -79,7 +77,9 @@ namespace LEDDisplay
 
         class ledSendInfo
         {
-            public int colorMode = 3;
+            //COLOR_MODE_THREE = 3;  --全彩无灰度
+            //COLOR_MODE_FULLCOLOR = 4; --全彩
+            public int colorMode = 4;
             public string ip, port, deviceAddr, position, text;
             public bool isFlash;
         }
@@ -132,7 +132,6 @@ namespace LEDDisplay
                                     {
                                         ip = ctl.IP,
                                         port = ctl.Port,
-                                        colorMode = fullColorList.Contains(win.WindowNumber) ? 4 : 3,
                                         deviceAddr = ctl.DeviceAddress,
                                         position = win.Position,
                                         text = win.DisplayText.Replace("{Number}", msg.TicketNo)
@@ -162,7 +161,6 @@ namespace LEDDisplay
                                 {
                                     ip = ctl.IP,
                                     port = ctl.Port,
-                                    colorMode = fullColorList.Contains(win.WindowNumber) ? 4 : 3,
                                     deviceAddr = ctl.DeviceAddress,
                                     position = win.Position,
                                     text = this.resumeText
@@ -184,7 +182,6 @@ namespace LEDDisplay
                                     {
                                         ip = ctl.IP,
                                         port = ctl.Port,
-                                        colorMode = fullColorList.Contains(win.WindowNumber) ? 4 : 3,
                                         deviceAddr = ctl.DeviceAddress,
                                         position = win.Position
                                     };
