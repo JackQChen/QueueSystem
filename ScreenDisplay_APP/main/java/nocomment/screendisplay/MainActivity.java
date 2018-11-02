@@ -1,5 +1,6 @@
 package nocomment.screendisplay;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,9 +24,16 @@ public class MainActivity extends AppCompatActivity {
         WebView webView = (WebView) this.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
+        webView.addJavascriptInterface(this, "app");
         webView.loadUrl("file:///android_asset/index.html");
     }
 
+    //invoke as app.fullScreen() in js
+    @JavascriptInterface
+    public void fullScreen() {
+        //make window get focus
+        new AlertDialog.Builder(this).show().dismiss();
+    }
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
