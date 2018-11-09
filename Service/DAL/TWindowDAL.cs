@@ -107,7 +107,8 @@ namespace DAL
                     UserCode = user.Code,
                     UserName = user.Name,
                     UnitSeq = unit.unitSeq,
-                    UnitName = unit.unitName
+                    UnitName = unit.unitName,
+                    State = user.State
                 })
                 .OrderBy(k => k.UserCode)
                 .ToList();

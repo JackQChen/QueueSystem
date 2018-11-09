@@ -1325,7 +1325,7 @@ namespace LEDDisplay
             //以此类推 
             ushort K = (ushort)LEDSender.Do_MakeObject(LEDSender.ROOT_PLAY_OBJECT, LEDSender.ACTMODE_REPLACE,
                 ChapterIndex, RegionIndex, LeafIndex, ObjectIndex,
-                LEDSender.COLOR_MODE_THREE
+                LEDSender.COLOR_MODE_FULLCOLOR
                 );
 
             LEDSender.Do_AddText(K, rectText.Left, rectText.Top, rectText.Width, rectText.Height, LEDSender.V_TRUE, 0,

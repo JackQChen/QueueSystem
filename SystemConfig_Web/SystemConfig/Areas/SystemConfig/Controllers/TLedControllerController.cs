@@ -9,10 +9,12 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
     public class TLedControllerController : BaseController
     {
         TLedControllerBLL bll;
+        TLedWindowBLL winBll;
 
         public TLedControllerController()
         {
             this.bll = new TLedControllerBLL("MySQL", this.AreaNo);
+            this.winBll = new TLedWindowBLL("MySQL", this.AreaNo);
         }
 
         //
@@ -55,7 +57,9 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id)); 
+            foreach (var win in this.winBll.GetModelList(p => p.ControllerID == id))
+                this.winBll.Delete(win);
+            this.bll.Delete(this.bll.GetModel(id));
             return Content("操作成功！");
         }
 

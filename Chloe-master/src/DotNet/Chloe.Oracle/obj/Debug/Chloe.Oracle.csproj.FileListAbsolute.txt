@@ -2,6 +2,6 @@ D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Oracle\bin\Debug\Chloe.O
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Oracle\bin\Debug\Chloe.Oracle.pdb
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Oracle\bin\Debug\Chloe.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Oracle\bin\Debug\Chloe.pdb
+D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Oracle\obj\Debug\Chloe.Oracle.csprojResolveAssemblyReference.cache
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Oracle\obj\Debug\Chloe.Oracle.dll
 D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Oracle\obj\Debug\Chloe.Oracle.pdb
-D:\SourceCode\QueueSystem\Chloe-master\src\DotNet\Chloe.Oracle\obj\Debug\Chloe.Oracle.csprojResolveAssemblyReference.cache
