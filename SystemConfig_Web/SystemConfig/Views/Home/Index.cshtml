@@ -402,7 +402,7 @@
                     lastTarget = target;
                 $('#content-Loading').css("display", "block");
                 $('.nav-list li.active').each(function (i, o) {
-                    if (!$(o.firstChild).hasClass("dropdown-toggle"))
+                    if (!$(o.firstElementChild).hasClass("dropdown-toggle"))
                         $(o).removeClass('active');
                 });
                 objParent.addClass('active');
