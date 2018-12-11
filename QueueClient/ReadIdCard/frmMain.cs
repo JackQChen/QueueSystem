@@ -68,7 +68,11 @@ namespace ReadIdCard
                 while (true)
                 {
                     Thread.Sleep(60 * 2 * 1000);//每2分钟清空一次
-                    BeginInvoke(new Action(() => { txtSoundMesInfo.Text = ""; }));
+                    BeginInvoke(new Action(() =>
+                    {
+                        GC.Collect();
+                        txtSoundMesInfo.Text = "";
+                    }));
                 }
             }) { IsBackground = true }.Start();
         }

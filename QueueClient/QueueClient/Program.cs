@@ -10,6 +10,7 @@ using Register;
 using System.Runtime.Remoting;
 using System.Configuration;
 using System.Diagnostics;
+using System.Threading;
 
 namespace QueueClient
 {
@@ -52,21 +53,28 @@ namespace QueueClient
             string dir = AppDomain.CurrentDomain.BaseDirectory + "log\\" + DateTime.Now.ToString("yyyy-MM-dd");
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
-            bool read = false;
-            System.Diagnostics.Process[] processList = System.Diagnostics.Process.GetProcesses();
-            foreach (System.Diagnostics.Process process in processList)
+            new Thread(() =>
             {
-                if (process.ProcessName.ToUpper() == "READIDCARD")
+                while (true)
                 {
-                    read = true;
+                    bool read = false;
+                    System.Diagnostics.Process[] processList = System.Diagnostics.Process.GetProcesses();
+                    foreach (System.Diagnostics.Process process in processList)
+                    {
+                        if (process.ProcessName.ToUpper().Trim() == "READIDCARD")
+                        {
+                            read = true;
+                        }
+                    }
+                    if (!read)
+                        Process.Start(AppDomain.CurrentDomain.BaseDirectory + "ReadIdCard.exe", Process.GetCurrentProcess().Id.ToString());
+                    Thread.Sleep(2000);
                 }
-            }
-            if (!read)
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "ReadIdCard.exe", Process.GetCurrentProcess().Id.ToString());
+            }) { IsBackground = true }.Start();
             RemotingConfiguration.Configure(remotingConfigPath, false);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            Application.Run(new frmMain());
-            
+            Application.Run(new frmMainPage());
+
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

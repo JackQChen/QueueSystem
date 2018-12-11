@@ -1,0 +1,232 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStatistics.cshtml";
+}
+<script src="@Url.Content("~/Content/js/search.js")"></script>
+<script src="@Url.Content("~/Content/js/highcharts/highcharts.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        initSearchControl({
+            id: 'unitSearch',
+            name: 'unitSeq',
+            value :'',
+            displayText : '',
+            height:280,
+            dataSource: @Html.Raw(this.ViewBag.unitList),
+            colModel: [{
+                        label: 'ID',
+                        name: 'ID',
+                        width: 30,
+                        key: true
+                    }, {
+                        label: '单位编码',
+                        width: 50,
+                        name: 'unitSeq'
+                    }, {
+                        label: '单位名称',
+                        name: 'unitName'
+                    }]
+        });
+        initSearchControl({
+            id: 'userSearch',
+            name: 'userId',
+            value :'',
+            displayText : '',
+            height:280,
+            dataSource: @Html.Raw(this.ViewBag.userList),
+            colModel: [{
+                        label: 'ID',
+                        name: 'ID',
+                        width: 30,
+                        key: true
+                    }, {
+                        label: '员工ID',
+                        width: 50,
+                        name: 'ID'
+                    }, {
+                        label: '员工姓名',
+                        name: 'Name'
+                    }]
+        });
+        Refresh();
+    });
+
+    function Refresh() {
+        $.ajax({
+            url: "/SRate/GetChartData",
+            type: "POST",
+            data: {
+                type: $('#iType').val(),
+                startTime: $('#dpStart').val(),
+                endTime: $('#dpEnd').val(),
+                unitSeq: $("input[name='unitSeq']").val(),
+                userId :$("input[name='userId']").val()
+            },
+            dataType: "json",
+            success: function (result) {
+                //showPie(result.pie);
+            var data = result[0];
+            var columnData = {
+            v1:data.value1,
+            v2:data.value2,
+            v3:data.value3,
+            v4:data.value4,
+            v5:data.value5
+            };
+            showColumn(columnData);
+            }
+        });
+    }
+
+    function showPie(data) {
+        Highcharts.chart('pie', {
+            credits: {
+                enabled: false
+            },
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: '评价星级占比'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: '星级',
+                colorByPoint: true,
+                data: [{
+                    name: '一星评价',
+                    y: data.v1
+                }, {
+                    name: '二星评价',
+                    y: data.v2
+                }, {
+                    name: '三星评价',
+                    y: data.v3
+                }, {
+                    name: '四星评价',
+                    y: data.v4
+                }, {
+                    name: '五星评价',
+                    selected: true,
+                    sliced: true,
+                    y: data.v5
+                }]
+            }]
+        });
+    }
+
+    function showColumn(data) {
+        Highcharts.chart('column', {
+            credits: {
+                enabled: false
+            },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '评价星级数据'
+            },
+            subtitle: {
+                text: '评价星级数据统计'
+            },
+            xAxis: {
+                categories: [
+            '一星评价',
+            '二星评价',
+            '三星评价',
+            '四星评价',
+            '五星评价'
+        ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '评价数量'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '评价数量',
+                data: [data.v1, data.v2, data.v3, data.v4, data.v5]
+            }]
+        });
+    }
+</script>
+<div class="btn-group">
+    <label class="col-sm-1" style="width: 80px">
+        类型</label>
+    <div class="col-sm-1" style="width: 120px">
+        <select class="form-control" id="iType">
+            <option value="1">服务态度</option>
+            <option value="2">完成质量</option>
+            <option value="3">处理效率</option>
+            <option value="4">廉洁自律</option>
+        </select>
+    </div>
+    <label class="col-sm-1" style="width: 80px">
+        开始时间</label>
+    <div class="input-group col-sm-1" style="width: 170px">
+        <input class="form-control date-picker" id="dpStart" value="@ViewBag.dtStart" type="text" />
+        <span class="input-group-addon"><i class="icon-calendar bigger-110"></i></span>
+    </div>
+    <label class="col-sm-1" style="width: 80px">
+        结束时间</label>
+    <div class="input-group col-sm-1" style="width: 170px">
+        <input class="form-control date-picker" id="dpEnd" value="@ViewBag.dtEnd" type="text" />
+        <span class="input-group-addon"><i class="icon-calendar bigger-110"></i></span>
+    </div>
+    <label class="col-sm-1" style="width: 80px">
+        部门
+    </label>
+    <div class="col-sm-1" style="width: 170px">
+        <input type="text" id="unitSearch" displaymember='unitName' valuemember='unitSeq'
+            autocomplete="off" class="col-xs-10 col-sm-10" />
+    </div>
+    <label class="col-sm-1" style="width: 80px">
+        员工
+    </label>
+    <div class="col-sm-1" style="width: 170px">
+        <input type="text" id="userSearch" displaymember='Name' valuemember='ID' autocomplete="off"
+            class="col-xs-10 col-sm-10" />
+    </div>
+    <div class="col-sm-1">
+        <button class="btn btn-sm btn-yellow" onclick="Refresh()">
+            <i class="icon-search bigger-110"></i>查询</button>
+    </div>
+</div>
+@*<div id="pie" style="float: left; height: 500px; margin: 0 auto">
+</div>*@
+<div id="column" style="height: 500px; margin: 0 auto">
+</div>

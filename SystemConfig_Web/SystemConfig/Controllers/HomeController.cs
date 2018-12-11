@@ -37,10 +37,14 @@ namespace SystemConfig.Controllers
                 menu[0]["SystemConfig/TScreenConfig"] = "综合屏配置";
 
                 menu[1] = new Dictionary<string, string>();
-                menu[1]["Statistics/SWaitTime"] = "平均等候时间统计";
-                menu[1]["Statistics/SSatisfaction"] = "满意度统计";
-                menu[1]["Statistics/SEvaluate"] = "评价数据统计";
-                menu[1]["Statistics/SComment"] = "好评率统计";
+                menu[1]["Statistics/SSatisfaction"] = "评价满意度统计";
+                menu[1]["Statistics/SEvaluate"] = "窗口评价数据统计";
+                menu[1]["Statistics/SComment"] = "区域评价数据统计";
+                menu[1]["Statistics/SRate"] = "整体评价占比统计";
+                menu[1]["Statistics/SRate2"] = "评价星级数量统计";
+                menu[1]["Statistics/SCase"] = "区域排队叫号统计";
+                menu[1]["Statistics/SCase2"] = "窗口排队叫号统计";
+                menu[1]["Statistics/SWaitTime"] = "排队叫号等候时间统计";
             }
             return View(menu);
         }

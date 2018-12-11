@@ -377,8 +377,11 @@
                 var obj = $(e.currentTarget);
                 var objParent = obj.parent();
                 var title = $('.main-content .breadcrumb li');
-                title[1].innerText = objParent.parents('li').find('.dropdown-toggle .menu-text')[0].innerText;
-                title[2].innerText = objParent[0].innerText;
+                var menuText = objParent.parents('li').find('.dropdown-toggle .menu-text')[0];
+                if (menuText != null) {
+                    title[1].innerText = menuText.innerText;
+                    title[2].innerText = objParent[0].innerText;
+                }
                 if (obj.hasClass("dropdown-toggle")) {
                     var b = objParent.find('b');
                     b.removeClass();

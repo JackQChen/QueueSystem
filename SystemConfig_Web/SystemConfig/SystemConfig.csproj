@@ -119,7 +119,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Statistics\Controllers\SCaseController.cs" />
+    <Compile Include="Areas\Statistics\Controllers\SCaseController2.cs" />
     <Compile Include="Areas\Statistics\Controllers\SCommentController.cs" />
+    <Compile Include="Areas\Statistics\Controllers\SRate2Controller.cs" />
+    <Compile Include="Areas\Statistics\Controllers\SRateController.cs" />
     <Compile Include="Areas\Statistics\Controllers\SSatisfactionController.cs" />
     <Compile Include="Areas\Statistics\Controllers\SEvaluateController.cs" />
     <Compile Include="Areas\Statistics\Controllers\SWaitTimeController.cs" />
@@ -214,6 +218,7 @@
     <Content Include="Content\js\fuelux\fuelux.tree.min.js" />
     <Content Include="Content\js\fuelux\fuelux.wizard.min.js" />
     <Content Include="Content\js\fullcalendar.min.js" />
+    <Content Include="Content\js\highcharts\highcharts.js" />
     <Content Include="Content\js\html5shiv.js" />
     <Content Include="Content\js\jqGrid\i18n\grid.locale-cn.js" />
     <Content Include="Content\js\jqGrid\i18n\grid.locale-en.js" />
@@ -301,6 +306,10 @@
     <Content Include="Areas\Statistics\Views\SSatisfaction\Index.cshtml" />
     <Content Include="Areas\Statistics\Views\SEvaluate\Index.cshtml" />
     <Content Include="Areas\Statistics\Views\SComment\Index.cshtml" />
+    <Content Include="Areas\Statistics\Views\SRate\Index.cshtml" />
+    <Content Include="Areas\Statistics\Views\SRate2\Index.cshtml" />
+    <Content Include="Areas\Statistics\Views\SCase\Index.cshtml" />
+    <Content Include="Areas\Statistics\Views\SCase2\Index.cshtml" />
     <None Include="Content\font\font.woff2" />
     <None Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Views\Home\Index.cshtml" />

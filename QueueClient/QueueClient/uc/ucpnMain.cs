@@ -26,8 +26,8 @@ namespace QueueClient
 
         private void pbWorking2_Click(object sender, EventArgs e)
         {
-            if (Work != null)
-                Work();
+            //if (Work != null)
+            //    Work();
         }
 
         private void pbWork_Paint(object sender, PaintEventArgs e)

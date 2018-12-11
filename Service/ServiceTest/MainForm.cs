@@ -10,6 +10,7 @@ using System.Threading;
 using DAL;
 using BLL;
 using System.Runtime.Remoting;
+using System.Web.Script.Serialization;
 
 namespace ServiceTest
 {
@@ -73,7 +74,8 @@ namespace ServiceTest
             var obj3 = eBll.GetEvaluate(DateTime.Parse("2017-01-01"), DateTime.Now);
             var obj4 = eBll.GetFavorableComment(DateTime.Parse("2017-01-01"), DateTime.Now);
 
-
+            var obj5 = eBll.GetWorkPercent(1, DateTime.Parse("2018-11-01"), DateTime.Parse("2018-11-11"), null, null);
+            this.richTextBox1.Text = new JavaScriptSerializer().Serialize(obj5);
         }
     }
 }

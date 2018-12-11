@@ -309,5 +309,160 @@ namespace DAL
             }
 
         }
+
+        /// <summary>
+        /// 获取评价星级百分比（柱状图、饼状图）
+        /// </summary>
+        /// <param name="type">1:服务态度  2:完成质量 3:处理效率 4:廉洁自律</param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="unitSeq">部门编号（可空）</param>
+        /// <param name="userId">用户id（可空）</param>
+        /// <returns></returns>
+        public object GetEvaluatePercent(int type, DateTime start, DateTime end, string unitSeq, string userId)
+        {
+            ArrayList list = new ArrayList();
+            try
+            {
+                string strtype = type == 1 ? "a.evaluateAttitude" : type == 2 ? "a.evaluateQuality" : type == 3 ? "a.evaluateEfficiency" : "a.evaluateHonest";
+                string struser = string.IsNullOrEmpty(userId) ? "" : " and a.windowUser=@userid";
+                string strunit = string.IsNullOrEmpty(unitSeq) ? "" : " and a.unitSeq=@unitseq ";
+                int maxPar = 2;
+                if (string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(unitSeq))
+                    maxPar = 2;
+                else if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(unitSeq))
+                    maxPar = 4;
+                else
+                    maxPar = 3;
+                DbParam[] pars = new DbParam[maxPar];
+                pars[0] = new DbParam("start", start);
+                pars[1] = new DbParam("end", end);
+                if (maxPar == 3)
+                {
+                    if (string.IsNullOrEmpty(userId))
+                        pars[2] = new DbParam("unitseq", unitSeq);
+                    else
+                        pars[2] = new DbParam("userid", userId);
+                }
+                else if (maxPar > 3)
+                {
+                    pars[2] = new DbParam("userid", userId);
+                    pars[3] = new DbParam("unitseq", unitSeq);
+                }
+                using (var reader = db.Session.ExecuteReader(@"select a.ev1,b.ev2,c.ev3,d.ev4,e.ev5 from 
+                                                              (select sum(1) ev1 from b_evaluate a where " + strtype + @"=1  and a.handleTime>=@start and a.handleTime<=@end " + strunit + struser + @" ) a,
+                                                              (select sum(1) ev2 from b_evaluate a where " + strtype + @"=2  and a.handleTime>=@start and a.handleTime<=@end " + strunit + struser + @" ) b,
+                                                              (select sum(1) ev3 from b_evaluate a where " + strtype + @"=3  and a.handleTime>=@start and a.handleTime<=@end " + strunit + struser + @" ) c,
+                                                              (select sum(1) ev4 from b_evaluate a where " + strtype + @"=4  and a.handleTime>=@start and a.handleTime<=@end " + strunit + struser + @" ) d,
+                                                              (select sum(1) ev5 from b_evaluate a where " + strtype + @"=5  and a.handleTime>=@start and a.handleTime<=@end " + strunit + struser + @" ) e "
+                   , pars))
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new
+                        {
+                            value1 = reader["ev1"],
+                            value2 = reader["ev2"],
+                            value3 = reader["ev3"],
+                            value4 = reader["ev4"],
+                            value5 = reader["ev5"],
+                        });
+                    }
+                }
+                return list;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                db.Session.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// 获取已评价的办件数比例（柱状、饼状）
+        /// </summary>
+        /// <param name="type">
+        /// 1：按部门统计         （此时X轴为部门）
+        /// 2：按部门业务类型     （此时X轴为业务类型，此时部门不能为空,否则数据量大展示不全，并且跨部门的同样名称业务类型也无法区分）
+        /// </param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="unitSeq"></param>
+        /// <param name="busiSeq"></param>
+        /// <returns></returns>
+        public object GetWorkPercent(int type, DateTime start, DateTime end, string unitSeq, string busiSeq)
+        {
+            ArrayList list = new ArrayList();
+            try
+            {
+                string strbusi = string.IsNullOrEmpty(busiSeq) ? "" : " and a.approveSeq=@busiseq";
+                string strunit = string.IsNullOrEmpty(unitSeq) ? "" : " and a.unitSeq=@unitseq ";
+                int maxPar = 2;
+                if (string.IsNullOrEmpty(busiSeq) && string.IsNullOrEmpty(unitSeq))
+                    maxPar = 2;
+                else if (!string.IsNullOrEmpty(busiSeq) && !string.IsNullOrEmpty(unitSeq))
+                    maxPar = 4;
+                else
+                    maxPar = 3;
+                DbParam[] pars = new DbParam[maxPar];
+                pars[0] = new DbParam("start", start);
+                pars[1] = new DbParam("end", end);
+                if (maxPar == 3)
+                {
+                    if (string.IsNullOrEmpty(busiSeq))
+                        pars[2] = new DbParam("unitseq", unitSeq);
+                    else
+                        pars[2] = new DbParam("busiseq", busiSeq);
+                }
+                else if (maxPar > 3)
+                {
+                    pars[2] = new DbParam("busiseq", busiSeq);
+                    pars[3] = new DbParam("unitseq", unitSeq);
+                }
+                string sql = "";
+                if (type == 1)
+                {
+                    sql = @"select c.unitName name,count(a.id) count from  b_evaluate a 
+                            LEFT JOIN t_unit c on a.areaNo=c.areaNo and a.unitSeq=c.unitSeq 
+                            where  a.handleTime>=@start and a.handleTime<=@end " + strunit + strbusi + @" 
+                            group by a.unitSeq;";
+                }
+                else
+                {
+                    sql = @"select a.busiName name,a.count from 
+                            (
+                                select c.unitName,d.busiName,count(a.id) count from  b_evaluate a 
+                                LEFT JOIN t_unit c on a.areaNo=c.areaNo and a.unitSeq=c.unitSeq 
+                                LEFT JOIN t_business d on a.areaNo=d.areaNo and a.approveSeq=d.busiSeq 
+                                where  a.handleTime>=@start and a.handleTime<=@end " + strunit + strbusi + @" 
+                                group by a.unitSeq,a.approveSeq
+                            ) a ";
+                }
+                using (var reader = db.Session.ExecuteReader(sql, pars))
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new
+                        {
+                            name = reader["name"],
+                            count = reader["count"],
+                        });
+                    }
+                }
+                return list;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                db.Session.Dispose();
+            }
+
+        }
     }
 }

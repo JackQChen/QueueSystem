@@ -67,7 +67,7 @@ namespace DAL
             return busiQuery
                 .GroupBy(k => k.unitSeq)
                 .Select(s => new { s.unitSeq })
-                .LeftJoin(unitQuery, (b, u) => b.unitSeq == u.unitSeq)
+                .InnerJoin(unitQuery, (b, u) => b.unitSeq == u.unitSeq)
                 .Select((b, u) => u)
             .OrderBy(k => k.unitSeq)
             .ToList();

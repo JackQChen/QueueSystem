@@ -35,8 +35,8 @@ namespace QueueClient
         }
         public void OnButton2Click()
         {
-            if (Button2Click != null)
-                Button2Click();
+            //if (Button2Click != null)
+            //    Button2Click();
         }
 
         void Work_ButtonClick()

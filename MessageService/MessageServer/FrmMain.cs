@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using MessageLib;
+using System.Threading;
 using Register;
 
 namespace MessageServer
@@ -58,7 +58,7 @@ namespace MessageServer
             }) { IsBackground = true }.Start();
             actServiceState = (name, state) =>
             {
-                this.lvService.Items[name].SubItems[4].Text = state;
+                this.lvService.Items[name].SubItems[3].Text = state;
             };
             actLog = (name, log) =>
             {
@@ -131,8 +131,7 @@ namespace MessageServer
                     + cfg.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     continue;
                 }
-                ListViewItem serviceItem = this.lvService.Items.Add(cfg.Name, "", -1);
-                serviceItem.SubItems.Add("TCP");
+                ListViewItem serviceItem = this.lvService.Items.Add(cfg.Name, "TCP", -1);
                 serviceItem.SubItems.Add(cfg.Port);
                 serviceItem.SubItems.Add(cfg.Name);
                 serviceItem.SubItems.Add("准备就绪");
@@ -251,10 +250,10 @@ namespace MessageServer
                 var srvName = this.lvService.Items[curIndex].Name;
                 var cList = this.clientList.Get(srvName);
                 cList.Changed = true;
-                this.lvService.Items[curIndex].SubItems[0].Text = "●";
+                this.lvService.Items[curIndex].ImageIndex = 0;
                 (this.lvService.Items[curIndex].Tag as ServiceInfo).Refresh();
                 if (this.lastSelectedIndex != -1)
-                    this.lvService.Items[lastSelectedIndex].SubItems[0].Text = "";
+                    this.lvService.Items[lastSelectedIndex].ImageIndex = -1;
                 lastSelectedIndex = curIndex;
                 UpdateClientList();
                 this.btnServicePanel.Enabled = this.serverList.Get(srvName) as IServiceUI != null;
