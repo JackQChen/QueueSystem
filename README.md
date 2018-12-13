@@ -1,6 +1,5 @@
 ﻿# QueueSystem
-项目介绍
-![](https://github.com/chen365409389/QueueSystem/blob/master/Doc/排队取号系统培训资料.pdf)<br>
+[项目介绍文档](https://github.com/chen365409389/QueueSystem/blob/master/Doc/排队取号系统培训资料.pdf)<br>
 已投入使用的排队叫号系统<br>
 部分项目现场效果
 ![](https://github.com/chen365409389/QueueSystem/blob/master/Img/1.jpg)<br>
