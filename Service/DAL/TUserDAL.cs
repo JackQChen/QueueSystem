@@ -36,7 +36,7 @@ namespace DAL
             var dicSex = new FDictionaryDAL(this.db, this.areaNo).GetModelQueryByName(FDictionaryString.UserSex);
             var unitQuery = new TUnitDAL(this.db, this.areaNo).GetQuery();
             return this.GetQuery()
-                .Where(p => p.Name.Contains(key) || p.Code.Contains(key))
+                .Where(p => p.Name.Contains(key) || p.Code.Contains(key) || p.Remark.Contains(key))
                 .LeftJoin(dicState, (u, d) => u.State == d.Value)
                 .LeftJoin(dicSex, (u, d, s) => u.Sex == s.Value)
                 .LeftJoin(unitQuery, (u, d, s, u2) => u.unitSeq == u2.unitSeq)
