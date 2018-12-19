@@ -20,9 +20,9 @@ namespace BLL
         {
         }
 
-        public object GetGridData()
+        public object GetGridData(string key)
         {
-            return this.CreateDAL().GetGridData();
+            return this.CreateDAL().GetGridData(key);
         }
     }
 }

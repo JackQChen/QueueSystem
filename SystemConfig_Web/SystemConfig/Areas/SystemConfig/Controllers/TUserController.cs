@@ -27,11 +27,11 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
             return View();
         }
 
-        public ActionResult GetGridData(Pagination p)
+        public ActionResult GetGridData(Pagination p, string key)
         {
             var data = new
             {
-                rows = bll.GetGridData()
+                rows = bll.GetGridData(key)
             };
             return Content(JsonConvert.SerializeObject(data));
         }
@@ -82,7 +82,7 @@ namespace SystemConfig.Areas.SystemConfig.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(int id)
         {
-            this.bll.Delete(this.bll.GetModel(id)); 
+            this.bll.Delete(this.bll.GetModel(id));
             return Content("操作成功！");
         }
 
