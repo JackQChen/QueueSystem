@@ -101,9 +101,9 @@
                             <i class="icon-minus-sign bigger-110"></i>
                         </button>
                     </div>
-                    <input id="avatarSelect" type="file" style="display: none">
-                    <input name="avatar" type="hidden" />
-                    <img id="avatarPreview" @(string.IsNullOrEmpty(@ViewBag.avatar) ? "" : Html.Raw("src=" + @ViewBag.avatar))  style="width: 90px; height: 90px; border: 1px solid #d5d5d5;" />
+                    <input id="avatarSelect" type="file" style="display: none" />
+                    <input name="avatar" type="hidden" value=@ViewBag.avatar  />
+                    <img alt="" id="avatarPreview" src=@ViewBag.avatar  style="width: 90px; height: 90px; border: 1px solid #d5d5d5;" />
                 </div>
             </div>
             <div class="form-group">
