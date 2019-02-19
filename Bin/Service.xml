@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <system.runtime.remoting>
+    <application>
+      <service>
+        <wellknown mode="SingleCall" type="BLL.BLineUpMaxNoBLL,BLL" objectUri="BLineUpMaxNoBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TBusinessItemBLL,BLL" objectUri="TBusinessItemBLL"/>
+        <wellknown mode="SingleCall" type="BLL.BEvaluateBLL,BLL" objectUri="BEvaluateBLL"/>
+        <wellknown mode="SingleCall" type="BLL.FDictionaryBLL,BLL" objectUri="FDictionaryBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TWindowAreaBLL,BLL" objectUri="TWindowAreaBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TWindowBLL,BLL" objectUri="TWindowBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TUserBLL,BLL" objectUri="TUserBLL"/>
+        <wellknown mode="SingleCall" type="BLL.LockBLL,BLL" objectUri="LockBLL"/>
+        <wellknown mode="SingleCall" type="BLL.BQueueBLL,BLL" objectUri="BQueueBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TBusinessAttributeBLL,BLL" objectUri="TBusinessAttributeBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TScreenConfigBLL,BLL" objectUri="TScreenConfigBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TLedControllerBLL,BLL" objectUri="TLedControllerBLL"/>
+        <wellknown mode="SingleCall" type="BLL.FCallStateBLL,BLL" objectUri="FCallStateBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TOprateLogBLL,BLL" objectUri="TOprateLogBLL"/>
+        <wellknown mode="SingleCall" type="BLL.BCallBLL,BLL" objectUri="BCallBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TWindowBusinessBLL,BLL" objectUri="TWindowBusinessBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TUnitBLL,BLL" objectUri="TUnitBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TLedWindowBLL,BLL" objectUri="TLedWindowBLL"/>
+        <wellknown mode="SingleCall" type="BLL.TBusinessBLL,BLL" objectUri="TBusinessBLL"/>
+      </service>
+      <channels>
+        <channel ref="tcp" secure="false" port="5566"/>
+      </channels>
+    </application>
+    <customErrors mode="off" />
+  </system.runtime.remoting>
+</configuration>
