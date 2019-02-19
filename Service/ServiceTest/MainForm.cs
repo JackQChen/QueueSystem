@@ -53,8 +53,8 @@ namespace ServiceTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "Service.xml";
-            RemotingConfiguration.Configure(remotingConfigPath, false);
+            //var remotingConfigPath = AppDomain.CurrentDomain.BaseDirectory + "Service.xml";
+            //RemotingConfiguration.Configure(remotingConfigPath, false);
         }
 
         private void button3_Click(object sender, EventArgs e)
