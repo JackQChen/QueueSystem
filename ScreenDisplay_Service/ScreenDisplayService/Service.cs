@@ -106,7 +106,7 @@ namespace ScreenDisplayService
                         {
                             method = requestData.method,
                             code = "0",
-                            result = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ScreenDisplay.html")
+                            result = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ScreenDisplay.html").Replace("0.0.0.0:0000", requestData.param.ToString())
                         };
                         this.SendWSMessage(connId, rData.ToBytes());
                     }
