@@ -1,0 +1,144 @@
+﻿<!doctype html>
+<html>
+    
+    <head>
+        <script language="javascript" type="text/javascript">
+            var uri = "0.0.0.0:0000";
+            var webSocket;
+            var config;
+            String.prototype.format = function(args) {
+                var result = this;
+                if (arguments.length > 0) {
+                    if (arguments.length == 1 && typeof(args) == "object") {
+                        for (var key in args) {
+                            var reg = new RegExp("({" + key + "})", "g");
+                            result = result.replace(reg, args[key] == undefined ? '': args[key]);
+                        }
+                    } else {
+                        for (var i = 0; i < arguments.length; i++) {
+                            if (arguments[i] != undefined) {
+                                var reg = new RegExp("({)" + i + "(})", "g");
+                                result = result.replace(reg, arguments[i] == undefined ? '': arguments[i]);
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            function getData() {
+                if (websocket.readyState != WebSocket.OPEN) return;
+                var data = {
+                    method: 'GetQueueList',
+                    param: {
+                        winArea: config.winArea
+                    }
+                };
+                websocket.send(JSON.stringify(data));
+            }
+            var maxRowCount = 17;
+            var currRowIndex = 0;
+            var dataList = null;
+            var template = "<tr><td>请</td><td>{ticketNo}</td><td>到</td><td>{winNo}</td><td>号窗口办理</td></tr>";
+            function showData() {
+                if (dataList.length == 0) {
+                    setTimeout(getData, 2000);
+                    document.getElementById('tbData').innerHTML = "";
+                    return;
+                }
+                var remainCount = dataList.length - currRowIndex;
+                if (remainCount > 0) {
+                    if (remainCount > maxRowCount) remainCount = maxRowCount;
+                    //display
+                    var msg = "<tbody>";
+                    for (var i = 0; i < remainCount; i++) {
+                        msg += template.format(dataList[currRowIndex + i]);
+                    }
+                    msg += "</tbody>";
+                    document.getElementById('tbData').innerHTML = msg;
+                    currRowIndex += remainCount;
+                    setTimeout(showData, 2000);
+                } else {
+                    getData();
+                }
+            }
+            function addNewStyle(newStyle) {
+                var styleElement = document.createElement('style');
+                styleElement.type = 'text/css';
+                document.getElementsByTagName('head')[0].appendChild(styleElement);
+                styleElement.appendChild(document.createTextNode(newStyle));
+            }
+            function setConfig() {
+                var txtScroll = document.getElementById('txtScroll');
+                txtScroll.style.color = config.scrollColor;
+                txtScroll.style.fontSize = config.scrollSize + "px";
+                txtScroll.innerHTML = config.scrollText;
+                txtScroll.parentNode.setAttribute("scrollamount", config.scrollSpeed);
+                addNewStyle("tr {height: " + config.lineHeight + "px;}");
+                document.getElementById('tbData').style.fontSize = config.fontSize + "px";
+                addNewStyle("td:nth-child(2) {color:" + config.ticketColor + "; } td:nth-child(4){color:" + config.winColor + ";} td {color:" + config.otherColor + ";}");
+                addNewStyle("tr {height: " + config.lineHeight + "px;}");
+                addNewStyle("tr:nth-child(odd) {background-color:" + config.oddBackColor + ";} tr:nth-child(odd) td {border:2px solid " + config.oddBackColor + ";}");
+                addNewStyle("tr:nth-child(even) {background-color:" + config.evenBackColor + ";} tr:nth-child(even) td {border:2px solid " + config.evenBackColor + ";}");
+                var clms = config.columnSize.split(',');
+                addNewStyle("td:nth-child(1) { width:" + clms[0] + "; } td:nth-child(2) { width:" + clms[1] + "; } td:nth-child(3) { width:" + clms[2] + "; } td:nth-child(4) { width:" + clms[3] + "; } td:nth-child(5) { width:" + clms[4] + "; }");
+                //maxRowCount = document.body.scrollHeight/document.getElementById('tbData').rows[0].offsetHeight;
+            }
+            function init() {
+                websocket = new WebSocket("ws://" + uri);
+                websocket.onopen = function(evt) {
+                    console.log("CONNECTED");
+                    websocket.send(JSON.stringify({
+                        method: 'GetConfig'
+                    }));
+                };
+                websocket.onclose = function(evt) {
+                    console.log("DISCONNECTED");
+                };
+                websocket.onmessage = function(evt) {
+                    var data = JSON.parse(evt.data);
+                    if (data.method == "GetConfig") {
+                        if (data.code != 0) {
+                            document.getElementById('tbData').innerHTML = data.result;
+                            return;
+                        }
+                        config = data.result;
+                        setConfig();
+                        getData();
+                    } else if (data.method == "Restart") {
+                        window.parent.location.reload();
+                    } else if (data.method == "GetQueueList") {
+                        dataList = data.result;
+                        currRowIndex = 0;
+                        showData();
+                    }
+                };
+                websocket.onerror = function(evt) {
+                    console.log('ERROR:' + evt.data);
+                };
+            }
+            function reconnect() {
+                setInterval(function() {
+                    if (websocket.readyState != WebSocket.OPEN) init();
+                },
+                10000);
+            }
+        </script>
+    </head>
+    
+    <body style="background-color: black;margin: 0px" onload="init();reconnect();">
+        <div style="font-size:70px;color:white;text-align: center;">
+            排队信息显示屏
+        </div>
+        <table id="tbData" style="color:white;width:100%;font-size:50px;text-align:center;table-layout: fixed;border-collapse: collapse;">
+            <tr>
+                <td>
+                    正在初始化...
+                </td>
+        </table>
+        <marquee style="bottom:0px;position:fixed;" scrollamount="10000">
+            <span id="txtScroll" style="font-weight: bolder;">
+            </span>
+        </marquee>
+    </body>
+
+</html>
