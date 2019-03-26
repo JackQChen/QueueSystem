@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <system.runtime.remoting>
+    <application>
+      <client>
+        <wellknown type="BLL.TUnitBLL,BLL" url="tcp://cysoft.uicp.net:5566/TUnitBLL"/>
+        <wellknown type="BLL.TScreenConfigBLL,BLL" url="tcp://cysoft.uicp.net:5566/TScreenConfigBLL"/>
+        <wellknown type="BLL.BQueueBLL,BLL" url="tcp://cysoft.uicp.net:5566/BQueueBLL"/>
+        <wellknown type="BLL.TWindowBusinessBLL,BLL" url="tcp://cysoft.uicp.net:5566/TWindowBusinessBLL"/>
+        <wellknown type="BLL.FCallStateBLL,BLL" url="tcp://cysoft.uicp.net:5566/FCallStateBLL"/>
+        <wellknown type="BLL.TOprateLogBLL,BLL" url="tcp://cysoft.uicp.net:5566/TOprateLogBLL"/>
+        <wellknown type="BLL.TBusinessBLL,BLL" url="tcp://cysoft.uicp.net:5566/TBusinessBLL"/>
+        <wellknown type="BLL.TWindowBLL,BLL" url="tcp://cysoft.uicp.net:5566/TWindowBLL"/>
+        <wellknown type="BLL.TLedWindowBLL,BLL" url="tcp://cysoft.uicp.net:5566/TLedWindowBLL"/>
+        <wellknown type="BLL.TUserBLL,BLL" url="tcp://cysoft.uicp.net:5566/TUserBLL"/>
+        <wellknown type="BLL.BLineUpMaxNoBLL,BLL" url="tcp://cysoft.uicp.net:5566/BLineUpMaxNoBLL"/>
+        <wellknown type="BLL.TBusinessAttributeBLL,BLL" url="tcp://cysoft.uicp.net:5566/TBusinessAttributeBLL"/>
+        <wellknown type="BLL.TLedControllerBLL,BLL" url="tcp://cysoft.uicp.net:5566/TLedControllerBLL"/>
+        <wellknown type="BLL.BEvaluateBLL,BLL" url="tcp://cysoft.uicp.net:5566/BEvaluateBLL"/>
+        <wellknown type="BLL.FDictionaryBLL,BLL" url="tcp://cysoft.uicp.net:5566/FDictionaryBLL"/>
+        <wellknown type="BLL.TWindowAreaBLL,BLL" url="tcp://cysoft.uicp.net:5566/TWindowAreaBLL"/>
+        <wellknown type="BLL.BCallBLL,BLL" url="tcp://cysoft.uicp.net:5566/BCallBLL"/>
+        <wellknown type="BLL.LockBLL,BLL" url="tcp://cysoft.uicp.net:5566/LockBLL"/>
+      </client>
+    </application>
+  </system.runtime.remoting>
+</configuration>
