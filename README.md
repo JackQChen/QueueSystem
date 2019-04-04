@@ -9,6 +9,9 @@
 ![](https://github.com/chen365409389/QueueSystem/blob/master/Img/5.jpg)<br>
 ![](https://github.com/chen365409389/QueueSystem/blob/master/Img/9.jpg)<br>
 ![](https://github.com/chen365409389/QueueSystem/blob/master/Img/6.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/WeChat1.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/WeChat2.jpg)<br>
+![](https://github.com/chen365409389/QueueSystem/blob/master/Img/WeChat3.jpg)<br>
 ![](https://github.com/chen365409389/QueueSystem/blob/master/Img/7.jpg)<br>
 ![](https://github.com/chen365409389/QueueSystem/blob/master/Img/8.jpg)<br>
 #### 系统主要功能包含了智能排队叫号，流程包含预约、取号、微信取号、绿色通道、服务评价、数据统计分析等，整合了多个硬件显示及控制端，包含了取号端，硬件叫号器（涉密机器不联机），软件叫号器，LED条屏端，综合显示屏端，消息服务端及语音端等，主要模块使用C/S架构，数据服务使用Remoting通信(可发布并兼容WebAPI)，消息使用Socket及WebSocket通信,并可基于消息服务自由进行业务扩展。<br>
