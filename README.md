@@ -1,5 +1,5 @@
 ﻿# QueueSystem
-欢迎了解我们<br>[vbp.cn](http://vbp.cn)<br><br>
+欢迎了解我们<br>[host.eastasia.cloudapp.azure.com](http://host.eastasia.cloudapp.azure.com)<br><br>
 [项目介绍文档](https://github.com/chen365409389/QueueSystem/blob/master/Doc/排队取号系统培训资料.pdf)<br><br>
 已投入使用的排队叫号系统<br>
 部分项目现场效果
